@@ -300,6 +300,165 @@ def add_strength_of_schedule(df: pd.DataFrame, team_stats: pd.DataFrame,
 # Dynasty Rating (power rankings)
 # ---------------------------------------------------------------------------
 
+def compute_rating_history(df: pd.DataFrame, teams: list, weights: dict = None) -> pd.DataFrame:
+    """
+    Recomputes the Dynasty Rating as of every completed week (using the
+    same as_of_week_sort mechanism used for trend arrows), producing a
+    full season trajectory per team. No snapshot persistence needed since
+    ratings are fully re-derivable from the game log at any point in time.
+    Returns columns: Week_Sort, Week, Team, User, Dynasty_Rating, Rank.
+    """
+    completed_weeks = sorted(df.loc[df["Completed"], "Week_Sort"].unique())
+    week_label_map = {w: df.loc[df["Week_Sort"] == w, "Week"].iloc[0] for w in completed_weeks}
+
+    rows = []
+    for w in completed_weeks:
+        stats = compute_team_stats(df, teams, as_of_week_sort=w)
+        stats = add_strength_of_schedule(df, stats, as_of_week_sort=w)
+        week_rated = compute_dynasty_rating(stats, weights)
+        for team, row in week_rated.iterrows():
+            rows.append({
+                "Week_Sort": w,
+                "Week": week_label_map[w],
+                "Team": team,
+                "User": row["User"],
+                "Dynasty_Rating": row["Dynasty_Rating"],
+                "Rank": row["Rank"],
+            })
+    return pd.DataFrame(rows)
+
+
+# ---------------------------------------------------------------------------
+# Shareable recap text
+# ---------------------------------------------------------------------------
+
+def format_weekly_recap_text(recap: dict, week_label) -> str:
+    """Formats the weekly_recap() dict into a copy-paste-ready text blurb
+    (Discord/group-chat friendly markdown)."""
+    if not recap:
+        return ""
+
+    lines = [f"🏈 **WEEK {week_label} RECAP** 🏈", ""]
+
+    g = recap.get("game_of_week")
+    if g:
+        lines += ["🎮 **Game of the Week**", f"{g['winner']} def. {g['loser']}, {g['score']}", ""]
+
+    if recap.get("upset"):
+        lines += ["😱 **Upset Alert**", recap["upset"], ""]
+
+    hs = recap.get("highest_scoring")
+    if hs:
+        lines += [
+            "🔢 **Highest Scoring**",
+            f"{hs['team_a']} {hs['score_a']:.0f} - {hs['score_b']:.0f} {hs['team_b']}",
+            "",
+        ]
+
+    bd = recap.get("best_defense")
+    if bd:
+        lines += [
+            "🛡️ **Defensive Performance**",
+            f"{bd['team']} held {bd['opponent']} to {bd['points_allowed']:.0f} points",
+            "",
+        ]
+
+    return "\n".join(lines).strip()
+
+
+def compute_multi_season_rating_history(df_all: pd.DataFrame, weights: dict = None) -> pd.DataFrame:
+    """
+    Stitches together a season-by-season Dynasty Rating history across every
+    season present in df_all into one continuous timeline. Ratings reset at
+    the start of each season (computed fresh from that season's game log
+    only) since that matches the game itself -- everyone starts 0-0 at
+    kickoff each year.
+    """
+    frames = []
+    seasons = sorted(df_all["Season"].dropna().unique())
+    for season in seasons:
+        season_df = df_all[df_all["Season"] == season]
+        season_teams = sorted(season_df["Team"].unique())
+        if not season_teams:
+            continue
+        hist = compute_rating_history(season_df, season_teams, weights)
+        if hist.empty:
+            continue
+        hist = hist.copy()
+        hist["Season"] = season
+        frames.append(hist)
+
+    cols = ["Season", "Week_Sort", "Week", "Team", "User", "Dynasty_Rating", "Rank",
+            "Global_Order", "Season_Week_Label"]
+    if not frames:
+        return pd.DataFrame(columns=cols)
+
+    combined = pd.concat(frames, ignore_index=True)
+    combined["Global_Order"] = combined["Season"].astype(int) * 10000 + combined["Week_Sort"]
+    combined["Season_Week_Label"] = combined["Season"].astype(int).astype(str) + " Wk" + combined["Week"].astype(str)
+    combined = combined.sort_values("Global_Order").reset_index(drop=True)
+    return combined[cols]
+
+
+def compute_career_stats(df_all: pd.DataFrame, rating_history: pd.DataFrame = None) -> pd.DataFrame:
+    """
+    Aggregates stats per User (coach) across every season in df_all, since
+    the team a person controls can change from year to year. Optionally
+    joins in each user's best season (by final Dynasty Rating that season)
+    if a multi-season rating_history is supplied.
+    """
+    completed = df_all[df_all["Completed"]]
+    users = sorted(u for u in completed["User"].dropna().unique() if u and u != "nan")
+
+    rows = []
+    for user in users:
+        ug = completed[completed["User"] == user]
+        seasons = sorted(ug["Season"].dropna().unique().tolist())
+
+        teams_by_season = (
+            ug.drop_duplicates(["Season", "Team"])
+            .groupby("Season")["Team"]
+            .apply(lambda s: ", ".join(sorted(s.unique())))
+            .to_dict()
+        )
+        teams_str = "; ".join(f"{int(s)}: {t}" for s, t in sorted(teams_by_season.items()))
+
+        wins = int((ug["Outcome"] == "W").sum())
+        losses = int((ug["Outcome"] == "L").sum())
+        ranked_wins = int(((ug["Outcome"] == "W") & ug["Ranked_Game"]).sum())
+        uu = ug[ug["Opponent_Is_User"]]
+        uu_w = int((uu["Outcome"] == "W").sum())
+        uu_l = int((uu["Outcome"] == "L").sum())
+
+        rows.append({
+            "User": user,
+            "Seasons_Played": len(seasons),
+            "Teams_By_Season": teams_str,
+            "Career_W": wins,
+            "Career_L": losses,
+            "Win_Pct": (wins / (wins + losses)) if (wins + losses) else np.nan,
+            "Ranked_Wins": ranked_wins,
+            "UU_W": uu_w,
+            "UU_L": uu_l,
+        })
+
+    base_cols = ["Seasons_Played", "Teams_By_Season", "Career_W", "Career_L",
+                 "Win_Pct", "Ranked_Wins", "UU_W", "UU_L"]
+    stats = pd.DataFrame(rows).set_index("User") if rows else pd.DataFrame(columns=base_cols)
+
+    if rating_history is not None and not rating_history.empty and not stats.empty:
+        idx = rating_history.groupby(["User", "Season"])["Global_Order"].idxmax()
+        season_finals = rating_history.loc[idx]
+        best_idx = season_finals.groupby("User")["Dynasty_Rating"].idxmax()
+        best = season_finals.loc[best_idx].set_index("User")[["Season", "Team", "Dynasty_Rating"]]
+        best = best.rename(columns={
+            "Season": "Best_Season", "Team": "Best_Season_Team", "Dynasty_Rating": "Best_Season_Rating",
+        })
+        stats = stats.join(best, how="left")
+
+    return stats.sort_values("Win_Pct", ascending=False)
+
+
 DEFAULT_RATING_WEIGHTS = {
     "win_pct": 0.35,
     "sos": 0.20,

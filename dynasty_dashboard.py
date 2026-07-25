@@ -1,18 +1,23 @@
 """
 CFB Dynasty Command Center
 ===========================
-A Streamlit dashboard for tracking an online College Football dynasty
-league: standings, power rankings, schedules, head-to-head records,
-league stats, weekly recaps, and fun stats.
+A Streamlit dashboard for tracking a multi-season online College Football
+dynasty league: standings, power rankings, schedules, head-to-head records,
+league stats, weekly recaps, fun stats, and career/historical stats.
 
 Run with:
     streamlit run dynasty_dashboard.py
 
-By default it loads "dynasty_data.csv" from the same folder. You can also
-upload a fresh export any time from the sidebar.
+Data files: drop one CSV export per season in this same folder, named like
+"dynasty_data_2026.csv", "dynasty_data_2027.csv", etc. Any file matching
+"dynasty_data*.csv" here is auto-loaded and combined -- no manual merging
+needed. You can also upload file(s) for a one-off session from the sidebar.
 """
+import glob
+import io
 import os
 
+import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
 import plotly.express as px
@@ -71,26 +76,46 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-DEFAULT_CSV_PATH = os.path.join(os.path.dirname(__file__), "dynasty_data.csv")
+SCRIPT_DIR = os.path.dirname(__file__)
 
 
 # ---------------------------------------------------------------------------
-# Data loading (cached)
+# Multi-season data loading (cached)
 # ---------------------------------------------------------------------------
 
-@st.cache_data(show_spinner=False)
-def _load(file_bytes_or_path, is_upload: bool):
-    if is_upload:
-        import io
-        return dl.load_and_prepare(io.BytesIO(file_bytes_or_path))
-    return dl.load_and_prepare(file_bytes_or_path)
+def discover_local_season_files() -> list:
+    """Every file in this folder matching dynasty_data*.csv -- one per season."""
+    return sorted(glob.glob(os.path.join(SCRIPT_DIR, "dynasty_data*.csv")))
 
 
-def get_data() -> pd.DataFrame:
-    uploaded = st.session_state.get("uploaded_csv_bytes")
-    if uploaded is not None:
-        return _load(uploaded, is_upload=True)
-    return _load(DEFAULT_CSV_PATH, is_upload=False)
+@st.cache_data(show_spinner="Loading season data...")
+def _load_combined(file_specs: tuple, is_upload: bool) -> pd.DataFrame:
+    """file_specs: tuple of (name, bytes) if is_upload else tuple of paths."""
+    frames = []
+    for spec in file_specs:
+        if is_upload:
+            name, content = spec
+            raw = dl.load_raw_dataframe(io.BytesIO(content))
+        else:
+            raw = dl.load_raw_dataframe(spec)
+        frames.append(dl.clean_dataframe(raw))
+    if not frames:
+        return pd.DataFrame()
+    combined = pd.concat(frames, ignore_index=True)
+    return dl.add_derived_columns(combined)
+
+
+def get_all_seasons_data():
+    """Returns (combined_df, loaded_file_labels, is_upload)."""
+    uploaded = st.session_state.get("uploaded_season_files")
+    if uploaded:
+        specs = tuple(sorted(uploaded.items()))
+        return _load_combined(specs, is_upload=True), list(uploaded.keys()), True
+
+    local_files = discover_local_season_files()
+    specs = tuple(local_files)
+    labels = [os.path.basename(f) for f in local_files]
+    return _load_combined(specs, is_upload=False), labels, False
 
 
 def trend_arrow(change: int) -> str:
@@ -117,38 +142,78 @@ PAGES = [
     "📈 League Stats",
     "🔥 Weekly Recap",
     "🎲 Fun Stats",
+    "📜 Career",
     "⚙️ Settings",
 ]
-page = st.sidebar.radio("Navigate", PAGES, label_visibility="collapsed")
+page = st.sidebar.radio("Navigate", PAGES, label_visibility="collapsed", key="nav_radio")
 
 st.sidebar.divider()
-with st.sidebar.expander("📤 Update data"):
-    up = st.file_uploader("Upload a new export CSV", type=["csv"])
-    if up is not None:
-        st.session_state["uploaded_csv_bytes"] = up.getvalue()
-        st.cache_data.clear()
-        st.success("Loaded new file.")
-    if st.session_state.get("uploaded_csv_bytes") is not None:
-        if st.button("Revert to default file"):
-            del st.session_state["uploaded_csv_bytes"]
+
+try:
+    df_all, loaded_file_labels, using_uploads = get_all_seasons_data()
+except Exception as e:
+    st.error(f"Couldn't load season data: {e}")
+    st.stop()
+
+if df_all.empty:
+    st.error(
+        "No season data files found. Place one or more files named like "
+        "`dynasty_data_2026.csv` in this folder, or upload one below."
+    )
+    with st.sidebar.expander("📤 Update data", expanded=True):
+        ups = st.file_uploader("Upload season file(s)", type=["csv"], accept_multiple_files=True)
+        if ups:
+            st.session_state["uploaded_season_files"] = {u.name: u.getvalue() for u in ups}
             st.cache_data.clear()
             st.rerun()
+    st.stop()
+
+seasons_available = sorted(df_all["Season"].dropna().unique().tolist(), reverse=True)
+if "selected_season" not in st.session_state or st.session_state["selected_season"] not in seasons_available:
+    st.session_state["selected_season"] = seasons_available[0]
+
+selected_season = st.sidebar.selectbox(
+    "Season", seasons_available,
+    index=seasons_available.index(st.session_state["selected_season"]),
+    key="season_selectbox",
+)
+st.session_state["selected_season"] = selected_season
+
+with st.sidebar.expander("📤 Update data"):
+    st.caption(
+        "Auto-loads every `dynasty_data*.csv` file in this folder — one per "
+        "season. Name new exports like `dynasty_data_2027.csv` and drop them "
+        "in; no merging needed."
+    )
+    if loaded_file_labels:
+        st.caption("Currently loaded: " + ", ".join(loaded_file_labels))
+
+    ups = st.file_uploader("Or upload season file(s) for this session", type=["csv"], accept_multiple_files=True)
+    if ups:
+        st.session_state["uploaded_season_files"] = {u.name: u.getvalue() for u in ups}
+        st.cache_data.clear()
+        st.success(f"Loaded {len(ups)} uploaded file(s).")
+        st.rerun()
+    if using_uploads:
+        if st.button("Revert to local season files"):
+            del st.session_state["uploaded_season_files"]
+            st.cache_data.clear()
+            st.rerun()
+    if st.button("🔄 Reload data files"):
+        st.cache_data.clear()
+        st.rerun()
 
 if "rating_weights" not in st.session_state:
     st.session_state["rating_weights"] = dict(dl.DEFAULT_RATING_WEIGHTS)
 
 # ---------------------------------------------------------------------------
-# Load & compute shared data
+# Load & compute shared data (scoped to the selected season)
 # ---------------------------------------------------------------------------
 
-try:
-    df = get_data()
-except Exception as e:
-    st.error(f"Couldn't load the dynasty data file: {e}")
-    st.stop()
+df = df_all[df_all["Season"] == selected_season].copy()
+weights = st.session_state["rating_weights"]
 
 TEAMS = sorted(df["Team"].unique())
-weights = st.session_state["rating_weights"]
 
 team_stats = dl.compute_team_stats(df, TEAMS)
 team_stats = dl.add_strength_of_schedule(df, team_stats)
@@ -161,11 +226,15 @@ last_completed_week_sort = completed_weeks[-1] if completed_weeks else None
 
 # "Current week" = the week shown under "This Week" on Home. By default this
 # is auto-detected as the earliest week that still has an unplayed game; it
-# can be manually overridden from ⚙️ Settings.
+# can be manually overridden from ⚙️ Settings. Reset if it doesn't apply to
+# the currently selected season.
 week_sort_options = sorted(df["Week_Sort"].unique())
 week_sort_label_map = {w: df.loc[df["Week_Sort"] == w, "Week"].iloc[0] for w in week_sort_options}
 
 if "current_week_override" not in st.session_state:
+    st.session_state["current_week_override"] = None
+if (st.session_state["current_week_override"] is not None
+        and st.session_state["current_week_override"] not in week_sort_options):
     st.session_state["current_week_override"] = None
 
 auto_current_week_sort = dl.default_current_week_sort(df)
@@ -382,6 +451,44 @@ elif page == "🏆 Power Rankings":
     )
     fig.update_layout(height=500, showlegend=False, coloraxis_showscale=False)
     st.plotly_chart(fig, use_container_width=True)
+
+    st.divider()
+    st.subheader("📈 Rating History")
+    st.caption("Dynasty Rating (or rank) recomputed as of each completed week, so you can see trajectories over the season.")
+
+    rating_history = dl.compute_rating_history(df, TEAMS, weights)
+    if rating_history.empty:
+        st.caption("Rating history will appear once at least one week is completed.")
+    else:
+        hc1, hc2 = st.columns([1, 3])
+        with hc1:
+            view_mode = st.radio("View", ["Rating", "Rank"], horizontal=True, key="rating_history_view")
+        with hc2:
+            default_teams = list(ranked_display.sort_values("Rank")["Team"].head(8))
+            team_filter_hist = st.multiselect(
+                "Teams to show", TEAMS, default=default_teams, format_func=team_display,
+                key="rating_history_teams",
+            )
+
+        plot_df = rating_history[rating_history["Team"].isin(team_filter_hist)] if team_filter_hist else rating_history
+        week_order_sorts = sorted(rating_history[["Week_Sort", "Week"]].drop_duplicates()["Week_Sort"])
+        week_label_order = [
+            rating_history.loc[rating_history["Week_Sort"] == w, "Week"].iloc[0] for w in week_order_sorts
+        ]
+
+        y_col = "Dynasty_Rating" if view_mode == "Rating" else "Rank"
+        if plot_df.empty:
+            st.caption("Pick at least one team to plot.")
+        else:
+            fig_hist = px.line(
+                plot_df.sort_values("Week_Sort"), x="Week", y=y_col, color="Team",
+                category_orders={"Week": week_label_order}, markers=True,
+                hover_data={"User": True},
+            )
+            if view_mode == "Rank":
+                fig_hist.update_yaxes(autorange="reversed", dtick=1)
+            fig_hist.update_layout(height=500, legend_title_text="")
+            st.plotly_chart(fig_hist, use_container_width=True)
 
 
 # ============================================================================
@@ -619,6 +726,12 @@ elif page == "🔥 Weekly Recap":
                 bd = recap["best_defense"]
                 st.markdown(f"**{bd['team']}** held **{bd['opponent']}** to {bd['points_allowed']:.0f} points")
 
+            st.divider()
+            st.subheader("📋 Shareable Recap")
+            st.caption("Copy-paste ready for your group chat / Discord — use the copy icon in the top-right of the box.")
+            recap_text = dl.format_weekly_recap_text(recap, week_labels[sel_week_sort])
+            st.code(recap_text, language=None)
+
 
 # ============================================================================
 # PAGE: FUN STATS
@@ -651,6 +764,85 @@ elif page == "🎲 Fun Stats":
                     st.markdown(f"### {fmt(fs[key])}")
                 else:
                     st.caption("Not enough data yet")
+
+
+# ============================================================================
+# PAGE: CAREER (multi-season)
+# ============================================================================
+elif page == "📜 Career":
+    st.title("📜 Career Stats")
+
+    if len(seasons_available) <= 1:
+        st.info(
+            "Only one season is currently loaded, so career stats match this "
+            "season's numbers. This page comes into its own once more season "
+            "files are dropped in the folder (see ⚙️ Settings for details)."
+        )
+    st.caption(
+        "Aggregated by **coach (user)** rather than by team, since who "
+        "controls a given team can change season to season. "
+        f"Seasons loaded: {', '.join(str(int(s)) for s in sorted(seasons_available))}."
+    )
+
+    multi_hist = dl.compute_multi_season_rating_history(df_all, weights)
+    career = dl.compute_career_stats(df_all, multi_hist)
+
+    st.subheader("Career Standings")
+    career_display = career.reset_index()
+    career_display["Record"] = (
+        career_display["Career_W"].astype(int).astype(str) + "-" + career_display["Career_L"].astype(int).astype(str)
+    )
+    career_display["UU Record"] = (
+        career_display["UU_W"].astype(int).astype(str) + "-" + career_display["UU_L"].astype(int).astype(str)
+    )
+    career_display["Win %"] = (career_display["Win_Pct"] * 100).round(1)
+    if "Best_Season" in career_display.columns:
+        career_display["Best Season"] = career_display.apply(
+            lambda r: (
+                f"{int(r['Best_Season'])} ({r['Best_Season_Team']}, {r['Best_Season_Rating']:.1f})"
+                if pd.notna(r.get("Best_Season")) else "—"
+            ),
+            axis=1,
+        )
+    else:
+        career_display["Best Season"] = "—"
+
+    show_cols = ["User", "Seasons_Played", "Teams_By_Season", "Record", "Win %",
+                 "Ranked_Wins", "UU Record", "Best Season"]
+    career_display = career_display[show_cols].rename(columns={
+        "Seasons_Played": "Seasons", "Teams_By_Season": "Teams By Season", "Ranked_Wins": "Ranked Wins",
+    })
+    st.dataframe(career_display, use_container_width=True, hide_index=True, height=500)
+
+    st.divider()
+    st.subheader("📈 Career Rating History")
+    st.caption("Dynasty Rating recomputed fresh within each season, stitched into one continuous career timeline per coach.")
+
+    if multi_hist.empty:
+        st.caption("Not enough completed games yet.")
+    else:
+        all_users = sorted(multi_hist["User"].dropna().unique())
+        default_users = list(career.sort_values("Win_Pct", ascending=False).index[:8])
+        chosen_users = st.multiselect("Coaches to show", all_users, default=default_users, key="career_users")
+
+        plot_hist = multi_hist[multi_hist["User"].isin(chosen_users)] if chosen_users else multi_hist
+        if plot_hist.empty:
+            st.caption("Pick at least one coach to plot.")
+        else:
+            label_order = (
+                multi_hist[["Global_Order", "Season_Week_Label"]]
+                .drop_duplicates()
+                .sort_values("Global_Order")["Season_Week_Label"]
+                .tolist()
+            )
+            fig_career = px.line(
+                plot_hist.sort_values("Global_Order"), x="Season_Week_Label", y="Dynasty_Rating",
+                color="User", markers=True, hover_data={"Team": True, "Season": True},
+                category_orders={"Season_Week_Label": label_order},
+                labels={"Season_Week_Label": "Season / Week"},
+            )
+            fig_career.update_layout(height=520, legend_title_text="")
+            st.plotly_chart(fig_career, use_container_width=True)
 
 
 # ============================================================================
@@ -717,12 +909,22 @@ elif page == "⚙️ Settings":
     st.caption(f"Auto-detected value right now: Week {auto_label}")
 
     st.divider()
-    st.subheader("Data Source")
-    if st.session_state.get("uploaded_csv_bytes") is not None:
-        st.info("Currently using an uploaded file (see sidebar to revert).")
+    st.subheader("Data Source & Seasons")
+    if using_uploads:
+        st.info(f"Using {len(loaded_file_labels)} uploaded file(s) for this session: " + ", ".join(loaded_file_labels))
+    elif loaded_file_labels:
+        st.info(f"Auto-loaded from this folder: {', '.join(loaded_file_labels)}")
     else:
-        st.info(f"Currently using: `{DEFAULT_CSV_PATH}`")
-    st.caption(f"Last export timestamp in file: {df['Last_Updated'].iloc[0] if 'Last_Updated' in df.columns and len(df) else '—'}")
+        st.warning("No season files currently loaded.")
+    st.caption(
+        f"Seasons detected: {', '.join(str(int(s)) for s in sorted(seasons_available))}  ·  "
+        f"Currently viewing: **{int(selected_season)}** (switch seasons from the sidebar)"
+    )
+    st.caption(
+        "To add a new season: drop a file named like `dynasty_data_2027.csv` in this "
+        "folder and click \"🔄 Reload data files\" in the sidebar (or restart the app)."
+    )
+    st.caption(f"Last export timestamp in current season's file: {df['Last_Updated'].iloc[0] if 'Last_Updated' in df.columns and len(df) else '—'}")
 
     st.divider()
     st.subheader("About the Dynasty Rating")
