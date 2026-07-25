@@ -44,6 +44,30 @@ st.markdown("""
     .rank-flat { color: #888; font-weight: 600; }
     div[data-testid="stMetricValue"] { font-size: 1.6rem; }
     .stat-label { color: #9aa0a6; font-size: 0.82rem; text-transform: uppercase; letter-spacing: 0.03em; }
+    .user-game-card {
+        border: 1px solid #d4af37;
+        border-radius: 8px;
+        padding: 10px 14px;
+        margin-bottom: 8px;
+        background: rgba(212, 175, 55, 0.12);
+    }
+    .user-badge {
+        display: inline-block;
+        background: #d4af37;
+        color: #111;
+        font-size: 0.68rem;
+        font-weight: 700;
+        padding: 1px 8px;
+        border-radius: 10px;
+        margin-right: 8px;
+        letter-spacing: 0.03em;
+        vertical-align: middle;
+    }
+    .cpu-game-row {
+        padding: 6px 4px;
+        margin-bottom: 2px;
+        border-bottom: 1px solid #22262f;
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -133,16 +157,70 @@ h2h_matrix = dl.build_h2h_matrix(df, TEAMS)
 summary = dl.league_summary(df)
 
 completed_weeks = sorted(df.loc[df["Completed"], "Week_Sort"].unique())
-current_week_sort = completed_weeks[-1] if completed_weeks else None
-current_week_label = None
-if current_week_sort is not None:
-    match = df.loc[df["Week_Sort"] == current_week_sort, "Week"]
-    current_week_label = match.iloc[0] if not match.empty else str(current_week_sort)
+last_completed_week_sort = completed_weeks[-1] if completed_weeks else None
+
+# "Current week" = the week shown under "This Week" on Home. By default this
+# is auto-detected as the earliest week that still has an unplayed game; it
+# can be manually overridden from ⚙️ Settings.
+week_sort_options = sorted(df["Week_Sort"].unique())
+week_sort_label_map = {w: df.loc[df["Week_Sort"] == w, "Week"].iloc[0] for w in week_sort_options}
+
+if "current_week_override" not in st.session_state:
+    st.session_state["current_week_override"] = None
+
+auto_current_week_sort = dl.default_current_week_sort(df)
+effective_current_week_sort = (
+    st.session_state["current_week_override"]
+    if st.session_state["current_week_override"] is not None
+    else auto_current_week_sort
+)
+effective_current_week_label = week_sort_label_map.get(effective_current_week_sort)
 
 
 def team_display(team: str) -> str:
     user = team_stats.loc[team, "User"] if team in team_stats.index else ""
     return f"{team} ({user})" if user else team
+
+
+def render_week_games(week_sort, empty_message: str):
+    """Renders the game list for a given Week_Sort, highlighting User vs
+    User matchups. Shared by the 'This Week' and 'Upcoming Week' sections."""
+    if week_sort is None:
+        st.caption("No data yet.")
+        return
+    wk_games = df[df["Week_Sort"] == week_sort]
+    wk_games = wk_games[wk_games["Status"] != "BYE"].drop_duplicates(subset="Game_Id")
+    if wk_games.empty:
+        st.caption(empty_message)
+        return
+
+    # User vs User matchups float to the top
+    wk_games = wk_games.sort_values(by="Opponent_Is_User", ascending=False)
+    for _, g in wk_games.iterrows():
+        loc = "vs" if g["Location"] == "Home" else "@"
+        rank_tag = f"#{int(g['Opponent_Rank_Num'])} " if pd.notna(g["Opponent_Rank_Num"]) else ""
+        result_tag = ""
+        if g["Status"] == "Completed":
+            result_tag = f" &nbsp;·&nbsp; <b>{g['Outcome']}</b> {g['Team_Score']:.0f}-{g['Opponent_Score']:.0f}"
+
+        if g["Opponent_Is_User"]:
+            st.markdown(
+                f'<div class="user-game-card">'
+                f'<span class="user-badge">USER MATCHUP</span>'
+                f'<b>{g["Team"]}</b> <span class="stat-label">({g["User"]})</span> '
+                f'{loc} '
+                f'<b>{g["Opponent"]}</b> <span class="stat-label">({g["Opponent_User"]})</span>'
+                f'{result_tag}</div>',
+                unsafe_allow_html=True,
+            )
+        else:
+            st.markdown(
+                f'<div class="cpu-game-row">'
+                f'<b>{g["Team"]}</b> <span class="stat-label">({g["User"]})</span> '
+                f'{loc} {rank_tag}{g["Opponent"]}'
+                f'{result_tag}</div>',
+                unsafe_allow_html=True,
+            )
 
 
 # ============================================================================
@@ -151,7 +229,7 @@ def team_display(team: str) -> str:
 if page == "🏈 Home":
     st.title("🏈 CFB 27 Dynasty Command Center")
     season = df["Season"].dropna().iloc[0] if df["Season"].notna().any() else "—"
-    st.caption(f"Season {season} · Week {current_week_label or '—'}")
+    st.caption(f"Season {season} · Week {effective_current_week_label or '—'}")
 
     c1, c2, c3, c4 = st.columns(4)
     c1.metric("Games Completed", f"{summary['games_completed']} / {summary['total_games']}")
@@ -191,25 +269,20 @@ if page == "🏈 Home":
             st.caption("No games completed yet.")
 
     with col2:
-        st.subheader(f"📅 This Week — Week {current_week_label or '—'}")
-        if current_week_sort is not None:
-            upcoming_next = sorted([w for w in df["Week_Sort"].unique() if w > current_week_sort])
-            next_week = upcoming_next[0] if upcoming_next else None
-        else:
-            next_week = sorted(df["Week_Sort"].unique())[0] if len(df) else None
+        st.subheader(f"📅 This Week — Week {effective_current_week_label or '—'}")
+        render_week_games(effective_current_week_sort, "No games scheduled this week.")
 
-        if next_week is not None:
-            wk_games = df[(df["Week_Sort"] == next_week) & (df["Status"] == "Upcoming")]
-            wk_games = wk_games.drop_duplicates(subset="Game_Id")
-            if wk_games.empty:
-                st.caption("No upcoming games scheduled.")
-            for _, g in wk_games.iterrows():
-                loc = "vs" if g["Location"] == "Home" else "@"
-                rank_tag = f"#{int(g['Opponent_Rank_Num'])} " if pd.notna(g["Opponent_Rank_Num"]) else ""
-                st.markdown(f"**{g['Team']}** {loc} {rank_tag}{g['Opponent']}")
-        else:
-            st.caption("Season complete or no data yet.")
+        st.divider()
 
+        next_week_sort = next(
+            (w for w in week_sort_options if effective_current_week_sort is not None and w > effective_current_week_sort),
+            None,
+        )
+        next_week_label = week_sort_label_map.get(next_week_sort)
+        st.subheader(f"⏭️ Upcoming Week — Week {next_week_label or '—'}")
+        render_week_games(next_week_sort, "No games scheduled next week.")
+
+        st.divider()
         st.subheader("🏆 Top 5 Power Rankings")
         top5 = rated.head(5).reset_index()
         for i, r in top5.iterrows():
@@ -258,22 +331,47 @@ elif page == "🏆 Power Rankings":
     )
 
     ranked_display = rated.reset_index()
-    for _, row in ranked_display.iterrows():
-        team = row["Team"]
-        with st.container(border=True):
-            c1, c2, c3, c4 = st.columns([0.5, 2, 1, 1])
-            c1.markdown(f"### {int(row['Rank'])}")
-            c2.markdown(f"**{team}**  \n*{row['User']}*")
-            c3.metric("Rating", f"{row['Dynasty_Rating']:.1f}", label_visibility="collapsed")
-            c4.markdown(trend_arrow(int(row["Rank_Change"])), unsafe_allow_html=True)
+    ranked_display["Record"] = (
+        ranked_display["W"].fillna(0).astype(int).astype(str)
+        + "-" + ranked_display["L"].fillna(0).astype(int).astype(str)
+    )
+    ranked_display["Trend"] = ranked_display["Rank_Change"].apply(
+        lambda c: f"▲{c}" if c > 0 else (f"▼{abs(c)}" if c < 0 else "—")
+    )
+    table = ranked_display[["Rank", "Team", "User", "Record", "Dynasty_Rating", "Trend"]].rename(
+        columns={"Dynasty_Rating": "Rating"}
+    )
 
-            with st.expander("Why this ranking?"):
-                bullets = dl.rating_explanation(team, rated)
-                if bullets:
-                    for b in bullets:
-                        st.markdown(f"- {b}")
-                else:
-                    st.caption("Not enough completed games yet.")
+    def _trend_color(val):
+        if isinstance(val, str) and val.startswith("▲"):
+            return "color: #2ecc71; font-weight: 600"
+        if isinstance(val, str) and val.startswith("▼"):
+            return "color: #e74c3c; font-weight: 600"
+        return "color: #888; font-weight: 600"
+
+    try:
+        styled_table = table.style.map(_trend_color, subset=["Trend"])
+    except AttributeError:
+        styled_table = table.style.applymap(_trend_color, subset=["Trend"])
+
+    row_height = 35
+    st.dataframe(
+        styled_table, use_container_width=True, hide_index=True,
+        height=min(row_height * (len(table) + 1) + 3, 640),
+    )
+
+    st.divider()
+    st.subheader("Why this ranking?")
+    detail_team = st.selectbox(
+        "Pick a team to see the reasoning behind its rating",
+        ranked_display["Team"], format_func=team_display,
+    )
+    bullets = dl.rating_explanation(detail_team, rated)
+    if bullets:
+        for b in bullets:
+            st.markdown(f"- {b}")
+    else:
+        st.caption("Not enough completed games yet.")
 
     st.divider()
     st.subheader("Rating Distribution")
@@ -317,9 +415,9 @@ elif page == "📅 Schedule":
 
     sched = sched.sort_values("Week_Sort")
     sched_display = sched[[
-        "Week", "Date", "Team", "Location", "Opponent", "Opponent_Rank",
-        "Status", "Outcome", "Team_Score", "Opponent_Score",
-    ]].rename(columns={"Opponent_Rank": "Opp Rank"})
+        "Week", "Date", "Team", "User", "Location", "Opponent", "Opponent_User",
+        "Opponent_Rank", "Status", "Outcome", "Team_Score", "Opponent_Score",
+    ]].rename(columns={"Opponent_Rank": "Opp Rank", "Opponent_User": "Opponent User"})
     st.dataframe(sched_display, use_container_width=True, hide_index=True, height=650)
 
 
@@ -382,7 +480,7 @@ elif page == "🤝 Head-to-Head":
     st.subheader("User vs User Records")
     uu_display = uu_records.copy()
     uu_display["Record"] = uu_display["UU_W"].astype(str) + "-" + uu_display["UU_L"].astype(str)
-    uu_display = uu_display[["Record", "Wins_Over", "Losses_To"]].sort_values(
+    uu_display = uu_display[["User", "Record", "Wins_Over", "Losses_To"]].sort_values(
         "Record", key=lambda s: s.map(lambda r: -int(r.split("-")[0]))
     )
     st.dataframe(uu_display, use_container_width=True)
@@ -390,6 +488,10 @@ elif page == "🤝 Head-to-Head":
     st.divider()
     st.subheader("League Matrix")
     st.caption("Row team's result vs. column team (W / L / — no game yet).")
+
+    team_user_map = team_stats["User"].to_dict()
+    matrix_labels = {t: (f"{t} ({team_user_map[t]})" if team_user_map.get(t) else t) for t in TEAMS}
+    matrix_display = h2h_matrix.rename(index=matrix_labels, columns=matrix_labels)
 
     def _color_cell(val):
         if val == "W":
@@ -399,9 +501,9 @@ elif page == "🤝 Head-to-Head":
         return ""
 
     try:
-        styled = h2h_matrix.style.map(_color_cell)  # pandas >= 2.1
+        styled = matrix_display.style.map(_color_cell)  # pandas >= 2.1
     except AttributeError:
-        styled = h2h_matrix.style.applymap(_color_cell)  # older pandas
+        styled = matrix_display.style.applymap(_color_cell)  # older pandas
     st.dataframe(styled, use_container_width=True, height=600)
 
 
@@ -588,6 +690,31 @@ elif page == "⚙️ Settings":
         st.session_state["rating_weights"] = dict(dl.DEFAULT_RATING_WEIGHTS)
         st.success("Reset.")
         st.rerun()
+
+    st.divider()
+    st.subheader("Current Week")
+    st.caption(
+        "This controls what shows under \"This Week\" on the Home page. By default "
+        "it's auto-detected as the earliest week that still has an unplayed game."
+    )
+
+    week_choice_labels = ["Auto-detect"] + [week_sort_label_map[w] for w in week_sort_options]
+    current_override = st.session_state["current_week_override"]
+    if current_override is None:
+        current_index = 0
+    else:
+        lbl = week_sort_label_map.get(current_override)
+        current_index = week_choice_labels.index(lbl) if lbl in week_choice_labels else 0
+
+    chosen_label = st.selectbox("Current Week", week_choice_labels, index=current_index)
+    if chosen_label == "Auto-detect":
+        st.session_state["current_week_override"] = None
+    else:
+        matched = [w for w in week_sort_options if week_sort_label_map[w] == chosen_label]
+        st.session_state["current_week_override"] = matched[0] if matched else None
+
+    auto_label = week_sort_label_map.get(auto_current_week_sort, "—") if auto_current_week_sort is not None else "—"
+    st.caption(f"Auto-detected value right now: Week {auto_label}")
 
     st.divider()
     st.subheader("Data Source")

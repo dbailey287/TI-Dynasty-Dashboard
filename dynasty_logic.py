@@ -149,6 +149,18 @@ def load_and_prepare(file_like_or_path) -> pd.DataFrame:
     return derived
 
 
+def default_current_week_sort(df: pd.DataFrame):
+    """
+    Auto-detects the 'active' week: the earliest week that still has at
+    least one game with Status == 'Upcoming'. Returns None if every game
+    in the export has already been played (or there's no data).
+    """
+    upcoming = df[df["Status"] == "Upcoming"]
+    if upcoming.empty:
+        return None
+    return int(upcoming["Week_Sort"].min())
+
+
 def get_unique_games(df: pd.DataFrame, completed_only: bool = True) -> pd.DataFrame:
     """One row per actual game (dedupes User-vs-User games)."""
     subset = df[df["Completed"]] if completed_only else df
@@ -423,15 +435,24 @@ def build_h2h_matrix(df: pd.DataFrame, teams: list) -> pd.DataFrame:
 
 def user_vs_user_records(df: pd.DataFrame, teams: list) -> pd.DataFrame:
     uu = df[(df["Completed"]) & (df["Opponent_Is_User"])]
+    team_user_map = df.drop_duplicates("Team").set_index("Team")["User"].to_dict()
+
+    def _label(opp_team: str) -> str:
+        user = team_user_map.get(opp_team)
+        return f"{opp_team} ({user})" if user else opp_team
+
     rows = []
     for team in teams:
         tg = uu[uu["Team"] == team]
+        wins = sorted(tg.loc[tg["Outcome"] == "W", "Opponent"].tolist())
+        losses = sorted(tg.loc[tg["Outcome"] == "L", "Opponent"].tolist())
         rows.append({
             "Team": team,
+            "User": team_user_map.get(team, ""),
             "UU_W": int((tg["Outcome"] == "W").sum()),
             "UU_L": int((tg["Outcome"] == "L").sum()),
-            "Wins_Over": ", ".join(sorted(tg.loc[tg["Outcome"] == "W", "Opponent"].tolist())),
-            "Losses_To": ", ".join(sorted(tg.loc[tg["Outcome"] == "L", "Opponent"].tolist())),
+            "Wins_Over": ", ".join(_label(o) for o in wins),
+            "Losses_To": ", ".join(_label(o) for o in losses),
         })
     return pd.DataFrame(rows).set_index("Team")
 
