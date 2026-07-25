@@ -73,6 +73,13 @@ st.markdown("""
         margin-bottom: 2px;
         border-bottom: 1px solid #22262f;
     }
+    .footer-note {
+        text-align: center;
+        color: #7a8290;
+        font-size: 0.82rem;
+        line-height: 1.5;
+        padding: 6px 12px 2px 12px;
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -90,14 +97,24 @@ def discover_local_season_files() -> list:
 
 @st.cache_data(show_spinner="Loading season data...")
 def _load_combined(file_specs: tuple, is_upload: bool) -> pd.DataFrame:
-    """file_specs: tuple of (name, bytes) if is_upload else tuple of paths."""
+    """
+    file_specs: tuple of (name, bytes) if is_upload,
+                tuple of (path, mtime) if loading from local disk.
+    Local specs include each file's modification time specifically so
+    that editing a CSV's contents (e.g. after running a data-correction
+    script) busts the cache automatically -- without mtime, Streamlit's
+    cache key is just the file path, so an edited-in-place file with the
+    same name would silently keep serving the stale cached version until
+    someone manually cleared the cache.
+    """
     frames = []
     for spec in file_specs:
         if is_upload:
             name, content = spec
             raw = dl.load_raw_dataframe(io.BytesIO(content))
         else:
-            raw = dl.load_raw_dataframe(spec)
+            path, _mtime = spec
+            raw = dl.load_raw_dataframe(path)
         frames.append(dl.clean_dataframe(raw))
     if not frames:
         return pd.DataFrame()
@@ -113,7 +130,7 @@ def get_all_seasons_data():
         return _load_combined(specs, is_upload=True), list(uploaded.keys()), True
 
     local_files = discover_local_season_files()
-    specs = tuple(local_files)
+    specs = tuple((f, os.path.getmtime(f)) for f in local_files)
     labels = [os.path.basename(f) for f in local_files]
     return _load_combined(specs, is_upload=False), labels, False
 
@@ -215,9 +232,27 @@ weights = st.session_state["rating_weights"]
 
 TEAMS = sorted(df["Team"].unique())
 
-team_stats = dl.compute_team_stats(df, TEAMS)
-team_stats = dl.add_strength_of_schedule(df, team_stats)
-rated = dl.compute_rating_trend(df, TEAMS, weights)
+# Two ranking philosophies, both computed:
+#   "at_game" -- a win over the #1 team stays a win over the #1 team,
+#                even after that opponent later slips in the rankings.
+#                This is the primary/default view used everywhere.
+#   "live"    -- opponents' CURRENT rank, which can retroactively make a
+#                past win look stronger or weaker. Secondary/opt-in view,
+#                shown folded away on the Power Rankings page.
+# Older seasons scraped before rank-freezing existed won't have usable
+# at-game data -- fall back to live as the primary view for those rather
+# than showing an empty/degenerate "at time of game" ranking.
+HAS_AT_GAME_DATA = dl.has_at_game_rank_data(df)
+PRIMARY_RANK_BASIS = "at_game" if HAS_AT_GAME_DATA else "live"
+
+team_stats = dl.compute_team_stats(df, TEAMS, rank_basis=PRIMARY_RANK_BASIS)
+team_stats = dl.add_strength_of_schedule(df, team_stats, rank_basis=PRIMARY_RANK_BASIS)
+rated = dl.compute_rating_trend(df, TEAMS, weights, rank_basis=PRIMARY_RANK_BASIS)
+
+team_stats_live = dl.compute_team_stats(df, TEAMS, rank_basis="live")
+team_stats_live = dl.add_strength_of_schedule(df, team_stats_live, rank_basis="live")
+rated_live = dl.compute_rating_trend(df, TEAMS, weights, rank_basis="live")
+
 h2h_matrix = dl.build_h2h_matrix(df, TEAMS)
 summary = dl.league_summary(df)
 
@@ -251,6 +286,18 @@ def team_display(team: str) -> str:
     return f"{team} ({user})" if user else team
 
 
+def team_logo_tag(team: str, size: int = 22) -> str:
+    """Small inline <img> tag for a team's logo, or '' if unrecognized."""
+    url = dl.logo_url(team)
+    if not url:
+        return ""
+    return (
+        f'<img src="{url}" style="height:{size}px;width:{size}px;'
+        f'vertical-align:middle;object-fit:contain;margin-right:6px;" '
+        f'onerror="this.style.display=\'none\'">'
+    )
+
+
 def render_week_games(week_sort, empty_message: str):
     """Renders the game list for a given Week_Sort, highlighting User vs
     User matchups. Shared by the 'This Week' and 'Upcoming Week' sections."""
@@ -267,26 +314,29 @@ def render_week_games(week_sort, empty_message: str):
     wk_games = wk_games.sort_values(by="Opponent_Is_User", ascending=False)
     for _, g in wk_games.iterrows():
         loc = "vs" if g["Location"] == "Home" else "@"
-        rank_tag = f"#{int(g['Opponent_Rank_Num'])} " if pd.notna(g["Opponent_Rank_Num"]) else ""
+        rank_tag = f"#{int(g['Opponent_Rank_Display_Num'])} " if pd.notna(g["Opponent_Rank_Display_Num"]) else ""
         result_tag = ""
         if g["Status"] == "Completed":
             result_tag = f" &nbsp;·&nbsp; <b>{g['Outcome']}</b> {g['Team_Score']:.0f}-{g['Opponent_Score']:.0f}"
+
+        team_logo = team_logo_tag(g["Team"])
+        opp_logo = team_logo_tag(g["Opponent"])
 
         if g["Opponent_Is_User"]:
             st.markdown(
                 f'<div class="user-game-card">'
                 f'<span class="user-badge">USER MATCHUP</span>'
-                f'<b>{g["Team"]}</b> <span class="stat-label">({g["User"]})</span> '
+                f'{team_logo}<b>{g["Team"]}</b> <span class="stat-label">({g["User"]})</span> '
                 f'{loc} '
-                f'<b>{g["Opponent"]}</b> <span class="stat-label">({g["Opponent_User"]})</span>'
+                f'{opp_logo}<b>{g["Opponent"]}</b> <span class="stat-label">({g["Opponent_User"]})</span>'
                 f'{result_tag}</div>',
                 unsafe_allow_html=True,
             )
         else:
             st.markdown(
                 f'<div class="cpu-game-row">'
-                f'<b>{g["Team"]}</b> <span class="stat-label">({g["User"]})</span> '
-                f'{loc} {rank_tag}{g["Opponent"]}'
+                f'{team_logo}<b>{g["Team"]}</b> <span class="stat-label">({g["User"]})</span> '
+                f'{loc} {rank_tag}{opp_logo}{g["Opponent"]}'
                 f'{result_tag}</div>',
                 unsafe_allow_html=True,
             )
@@ -315,8 +365,20 @@ if page == "🏈 Home":
         if not rated.empty:
             top = rated.iloc[0]
             top_team = rated.index[0]
-            st.markdown(f"### {top_team}")
-            st.caption(team_stats.loc[top_team, "User"])
+            primary = dl.team_primary_color(top_team)
+            logo = dl.logo_url(top_team)
+
+            lc1, lc2 = st.columns([1, 2])
+            with lc1:
+                if logo:
+                    st.image(logo, width=90)
+            with lc2:
+                st.markdown(
+                    f'<div style="border-left: 5px solid {primary}; padding-left: 10px;">'
+                    f'<h3 style="margin:0;">{top_team}</h3>'
+                    f'<span class="stat-label">{team_stats.loc[top_team, "User"]}</span></div>',
+                    unsafe_allow_html=True,
+                )
             st.metric("Record", f"{int(top['W'])}-{int(top['L'])}")
             st.metric("Dynasty Rating", f"{top['Dynasty_Rating']:.1f}")
             for b in dl.rating_explanation(top_team, rated)[:3]:
@@ -324,16 +386,26 @@ if page == "🏈 Home":
 
         st.subheader("💥 Largest Upset")
         blowout = dl.biggest_blowout(df)
+        upset_rank_col = "Ranked_Win_AtGame" if PRIMARY_RANK_BASIS == "at_game" else "Ranked_Win"
+        upset_num_col = "Opponent_Rank_At_Game_Num" if PRIMARY_RANK_BASIS == "at_game" else "Opponent_Rank_Num"
         upset_found = None
         for _, row in dl.get_unique_games(df).iterrows():
-            if row["Ranked_Win"] and pd.notna(row["Opponent_Rank_Num"]) and row["Opponent_Rank_Num"] <= 10:
+            if row[upset_rank_col] and pd.notna(row[upset_num_col]) and row[upset_num_col] <= 10:
                 upset_found = row
                 break
         if upset_found is not None:
             w, l, ws, ls = dl._winner_loser(upset_found)
-            st.markdown(f"**{w}** {ws:.0f}-{ls:.0f} over **#{int(upset_found['Opponent_Rank_Num'])} {l}**")
+            st.markdown(
+                f"{team_logo_tag(w, 26)}**{w}** {ws:.0f}-{ls:.0f} over "
+                f"{team_logo_tag(l, 26)}**#{int(upset_found[upset_num_col])} {l}**",
+                unsafe_allow_html=True,
+            )
         elif blowout:
-            st.markdown(f"**{blowout['winner']}** {blowout['score']} over **{blowout['loser']}**")
+            st.markdown(
+                f"{team_logo_tag(blowout['winner'], 26)}**{blowout['winner']}** {blowout['score']} over "
+                f"{team_logo_tag(blowout['loser'], 26)}**{blowout['loser']}**",
+                unsafe_allow_html=True,
+            )
         else:
             st.caption("No games completed yet.")
 
@@ -356,8 +428,9 @@ if page == "🏈 Home":
         top5 = rated.head(5).reset_index()
         for i, r in top5.iterrows():
             arrow = trend_arrow(int(r["Rank_Change"]))
+            logo = team_logo_tag(r["Team"], 22)
             st.markdown(
-                f"**{int(r['Rank'])}. {r['Team']}** — {r['Dynasty_Rating']:.1f} {arrow}",
+                f"**{int(r['Rank'])}.** {logo}**{r['Team']}** — {r['Dynasty_Rating']:.1f} {arrow}",
                 unsafe_allow_html=True,
             )
 
@@ -383,9 +456,13 @@ elif page == "📊 Standings":
     display = display.reset_index()[["Team"] + show_cols].sort_values(
         ["Team"], key=lambda s: s.map(lambda t: -team_stats.loc[t, "Win_Pct"] if pd.notna(team_stats.loc[t, "Win_Pct"]) else 999)
     )
+    display.insert(0, "Logo", display["Team"].apply(dl.logo_url))
 
     st.caption("Click any column header to sort.")
-    st.dataframe(display, use_container_width=True, hide_index=True, height=600)
+    st.dataframe(
+        display, use_container_width=True, hide_index=True, height=600,
+        column_config={"Logo": st.column_config.ImageColumn("", width="small")},
+    )
 
 
 # ============================================================================
@@ -407,7 +484,8 @@ elif page == "🏆 Power Rankings":
     ranked_display["Trend"] = ranked_display["Rank_Change"].apply(
         lambda c: f"▲{c}" if c > 0 else (f"▼{abs(c)}" if c < 0 else "—")
     )
-    table = ranked_display[["Rank", "Team", "User", "Record", "Dynasty_Rating", "Trend"]].rename(
+    ranked_display["Logo"] = ranked_display["Team"].apply(dl.logo_url)
+    table = ranked_display[["Rank", "Logo", "Team", "User", "Record", "Dynasty_Rating", "Trend"]].rename(
         columns={"Dynasty_Rating": "Rating"}
     )
 
@@ -427,6 +505,9 @@ elif page == "🏆 Power Rankings":
     st.dataframe(
         styled_table, use_container_width=True, hide_index=True,
         height=min(row_height * (len(table) + 1) + 3, 640),
+        column_config={
+            "Logo": st.column_config.ImageColumn("", width="small"),
+        },
     )
 
     st.divider()
@@ -523,9 +604,17 @@ elif page == "📅 Schedule":
     sched = sched.sort_values("Week_Sort")
     sched_display = sched[[
         "Week", "Date", "Team", "User", "Location", "Opponent", "Opponent_User",
-        "Opponent_Rank", "Status", "Outcome", "Team_Score", "Opponent_Score",
-    ]].rename(columns={"Opponent_Rank": "Opp Rank", "Opponent_User": "Opponent User"})
-    st.dataframe(sched_display, use_container_width=True, hide_index=True, height=650)
+        "Opponent_Rank_Display", "Status", "Outcome", "Team_Score", "Opponent_Score",
+    ]].rename(columns={"Opponent_Rank_Display": "Opp Rank", "Opponent_User": "Opponent User"})
+    sched_display.insert(2, "Logo", sched_display["Team"].apply(dl.logo_url))
+    sched_display.insert(7, "Opp Logo", sched_display["Opponent"].apply(dl.logo_url))
+    st.dataframe(
+        sched_display, use_container_width=True, hide_index=True, height=650,
+        column_config={
+            "Logo": st.column_config.ImageColumn("", width="small"),
+            "Opp Logo": st.column_config.ImageColumn("", width="small"),
+        },
+    )
 
 
 # ============================================================================
@@ -539,7 +628,22 @@ elif page == "👤 Teams":
         row = team_stats.loc[selected_team]
         rating_row = rated.loc[selected_team] if selected_team in rated.index else None
 
-        st.subheader(f"{selected_team}  ·  {row['User']}")
+        primary = dl.team_primary_color(selected_team)
+        secondary = dl.team_secondary_color(selected_team)
+        logo = dl.logo_url(selected_team)
+
+        hc1, hc2 = st.columns([1, 5])
+        with hc1:
+            if logo:
+                st.image(logo, width=80)
+        with hc2:
+            st.markdown(
+                f'<div style="border-left: 6px solid {primary}; '
+                f'border-bottom: 2px solid {secondary}; padding: 4px 0 6px 12px; margin-top: 4px;">'
+                f'<span style="font-size:1.5rem; font-weight:700;">{selected_team}</span>'
+                f'<span class="stat-label">&nbsp;&nbsp;{row["User"]}</span></div>',
+                unsafe_allow_html=True,
+            )
         if rating_row is not None:
             st.caption(f"Dynasty Rank #{int(rating_row['Rank'])}  ·  Rating {rating_row['Dynasty_Rating']:.1f}")
 
@@ -565,10 +669,14 @@ elif page == "👤 Teams":
         st.subheader("Game Log")
         log = df[df["Team"] == selected_team].sort_values("Week_Sort")
         log_display = log[[
-            "Week", "Date", "Location", "Opponent", "Opponent_Rank",
+            "Week", "Date", "Location", "Opponent", "Opponent_Rank_Display",
             "Status", "Outcome", "Team_Score", "Opponent_Score",
-        ]].rename(columns={"Opponent_Rank": "Opp Rank"})
-        st.dataframe(log_display, use_container_width=True, hide_index=True, height=450)
+        ]].rename(columns={"Opponent_Rank_Display": "Opp Rank"})
+        log_display.insert(3, "Opp Logo", log_display["Opponent"].apply(dl.logo_url))
+        st.dataframe(
+            log_display, use_container_width=True, hide_index=True, height=450,
+            column_config={"Opp Logo": st.column_config.ImageColumn("", width="small")},
+        )
 
         if rating_row is not None:
             st.divider()
@@ -587,10 +695,15 @@ elif page == "🤝 Head-to-Head":
     st.subheader("User vs User Records")
     uu_display = uu_records.copy()
     uu_display["Record"] = uu_display["UU_W"].astype(str) + "-" + uu_display["UU_L"].astype(str)
-    uu_display = uu_display[["User", "Record", "Wins_Over", "Losses_To"]].sort_values(
+    uu_display = uu_display.reset_index()
+    uu_display["Logo"] = uu_display["Team"].apply(dl.logo_url)
+    uu_display = uu_display[["Logo", "Team", "User", "Record", "Wins_Over", "Losses_To"]].sort_values(
         "Record", key=lambda s: s.map(lambda r: -int(r.split("-")[0]))
     )
-    st.dataframe(uu_display, use_container_width=True)
+    st.dataframe(
+        uu_display, use_container_width=True, hide_index=True,
+        column_config={"Logo": st.column_config.ImageColumn("", width="small")},
+    )
 
     st.divider()
     st.subheader("League Matrix")
@@ -630,13 +743,13 @@ elif page == "📈 League Stats":
     with c1:
         st.markdown("#### Best Offense")
         if best_off:
-            st.markdown(f"**{best_off}** — {team_stats.loc[best_off, 'PF']:.1f} PPG")
+            st.markdown(f"{team_logo_tag(best_off, 28)}**{best_off}** — {team_stats.loc[best_off, 'PF']:.1f} PPG", unsafe_allow_html=True)
         else:
             st.caption("No data yet")
     with c2:
         st.markdown("#### Best Defense")
         if best_def:
-            st.markdown(f"**{best_def}** — {team_stats.loc[best_def, 'PA']:.1f} PA/G")
+            st.markdown(f"{team_logo_tag(best_def, 28)}**{best_def}** — {team_stats.loc[best_def, 'PA']:.1f} PA/G", unsafe_allow_html=True)
         else:
             st.caption("No data yet")
 
@@ -644,13 +757,21 @@ elif page == "📈 League Stats":
     with c3:
         st.markdown("#### Biggest Blowout")
         if blowout:
-            st.markdown(f"**{blowout['score']}** — {blowout['winner']} vs {blowout['loser']}")
+            st.markdown(
+                f"**{blowout['score']}** — {team_logo_tag(blowout['winner'], 24)}{blowout['winner']} vs "
+                f"{team_logo_tag(blowout['loser'], 24)}{blowout['loser']}",
+                unsafe_allow_html=True,
+            )
         else:
             st.caption("No data yet")
     with c4:
         st.markdown("#### Closest Game")
         if closest:
-            st.markdown(f"**{closest['score']}** — {closest['winner']} over {closest['loser']}")
+            st.markdown(
+                f"**{closest['score']}** — {team_logo_tag(closest['winner'], 24)}{closest['winner']} over "
+                f"{team_logo_tag(closest['loser'], 24)}{closest['loser']}",
+                unsafe_allow_html=True,
+            )
         else:
             st.caption("No data yet")
 
@@ -700,7 +821,7 @@ elif page == "🔥 Weekly Recap":
             format_func=lambda w: f"Week {week_labels[w]}",
         )
 
-        recap = dl.weekly_recap(df, rated, sel_week_sort)
+        recap = dl.weekly_recap(df, rated, sel_week_sort, rank_basis=PRIMARY_RANK_BASIS)
         if not recap:
             st.caption("No completed games that week.")
         else:
@@ -709,7 +830,11 @@ elif page == "🔥 Weekly Recap":
             with st.container(border=True):
                 st.markdown("##### 🎮 Game of the Week")
                 g = recap["game_of_week"]
-                st.markdown(f"**{g['winner']}** def. **{g['loser']}**, {g['score']}")
+                st.markdown(
+                    f"{team_logo_tag(g['winner'], 26)}**{g['winner']}** def. "
+                    f"{team_logo_tag(g['loser'], 26)}**{g['loser']}**, {g['score']}",
+                    unsafe_allow_html=True,
+                )
 
             if recap["upset"]:
                 with st.container(border=True):
@@ -719,12 +844,20 @@ elif page == "🔥 Weekly Recap":
             with st.container(border=True):
                 st.markdown("##### 🔢 Highest Scoring")
                 hs = recap["highest_scoring"]
-                st.markdown(f"**{hs['team_a']}** {hs['score_a']:.0f} — {hs['score_b']:.0f} **{hs['team_b']}**")
+                st.markdown(
+                    f"{team_logo_tag(hs['team_a'], 26)}**{hs['team_a']}** {hs['score_a']:.0f} — "
+                    f"{hs['score_b']:.0f} **{hs['team_b']}**{team_logo_tag(hs['team_b'], 26)}",
+                    unsafe_allow_html=True,
+                )
 
             with st.container(border=True):
                 st.markdown("##### 🛡️ Defensive Performance")
                 bd = recap["best_defense"]
-                st.markdown(f"**{bd['team']}** held **{bd['opponent']}** to {bd['points_allowed']:.0f} points")
+                st.markdown(
+                    f"{team_logo_tag(bd['team'], 26)}**{bd['team']}** held "
+                    f"{team_logo_tag(bd['opponent'], 26)}**{bd['opponent']}** to {bd['points_allowed']:.0f} points",
+                    unsafe_allow_html=True,
+                )
 
             st.divider()
             st.subheader("📋 Shareable Recap")
@@ -761,7 +894,8 @@ elif page == "🎲 Fun Stats":
                 st.markdown(f"**{title}**")
                 st.caption(subtitle)
                 if key in fs:
-                    st.markdown(f"### {fmt(fs[key])}")
+                    logo = team_logo_tag(fs[key]["team"], 26)
+                    st.markdown(f"### {logo}{fmt(fs[key])}", unsafe_allow_html=True)
                 else:
                     st.caption("Not enough data yet")
 
@@ -941,3 +1075,17 @@ elif page == "⚙️ Settings":
     Each component is scaled 0-100 relative to the rest of the league, then combined
     using the weights above.
     """)
+
+
+# ============================================================================
+# GLOBAL FOOTER (renders after whichever page ran above, on every page)
+# ============================================================================
+st.markdown(
+    '<div class="footer-note">'
+    '🔒 <b>Opponent Rank</b> freezes the moment a game is marked Completed — a win over the '
+    '#1 team stays a win over the #1 team, even if that opponent later slips in the polls. '
+    'Games that haven\'t been played yet still show their current live rank, which updates '
+    'as CPU results come in.'
+    '</div>',
+    unsafe_allow_html=True,
+)

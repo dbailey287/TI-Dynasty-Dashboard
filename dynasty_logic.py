@@ -98,6 +98,16 @@ def clean_dataframe(df: pd.DataFrame) -> pd.DataFrame:
 
     df["Opponent_Rank_Num"] = pd.to_numeric(df["Opponent_Rank"], errors="coerce")
 
+    # Opponent_Rank_At_Game may not exist in CSVs produced before this
+    # feature was added (older seasons) -- treat it as entirely unknown
+    # rather than erroring, so old data still loads (just without the
+    # frozen-rank view available).
+    if "Opponent_Rank_At_Game" in df.columns:
+        df["Opponent_Rank_At_Game_Num"] = pd.to_numeric(df["Opponent_Rank_At_Game"], errors="coerce")
+    else:
+        df["Opponent_Rank_At_Game"] = pd.NA
+        df["Opponent_Rank_At_Game_Num"] = pd.NA
+
     df["Week_Sort"] = df["Week"].apply(week_sort_key)
 
     # Parse date (best effort; some rows have no date e.g. BYE weeks)
@@ -128,6 +138,26 @@ def add_derived_columns(df: pd.DataFrame) -> pd.DataFrame:
     df["Opponent_Is_User"] = df["Opponent_User"] != CPU_LABEL
     df["One_Score_Game"] = df["Completed"] & (df["Margin"].abs() <= 8)
     df["Blowout_Game"] = df["Completed"] & (df["Margin"].abs() >= 21)
+
+    # "At-game" variants: same concepts, but based on the opponent's rank
+    # FROZEN at the moment the game was actually played (see
+    # Opponent_Rank_At_Game_Num), rather than their current/live rank. A
+    # win over the #1 team stays a win over the #1 team even after that
+    # team later slips in the rankings.
+    df["Ranked_Game_AtGame"] = df["Opponent_Rank_At_Game_Num"].notna()
+    df["Top10_Game_AtGame"] = df["Opponent_Rank_At_Game_Num"] <= 10
+    df["Ranked_Win_AtGame"] = df["Win"] & df["Ranked_Game_AtGame"]
+    df["Ranked_Loss_AtGame"] = df["Loss"] & df["Ranked_Game_AtGame"]
+
+    # What to actually SHOW in a "Opp Rank" column: the frozen at-game rank
+    # once it's been recorded (this includes the literal value "-" for a
+    # game where the opponent was genuinely unranked at kickoff -- that's
+    # real recorded data, not a missing value, so it must NOT get
+    # overwritten by the live rank). Only fall back to the live rank when
+    # no frozen value has been recorded yet at all (the game hasn't been
+    # played, or this row predates the rank-freezing feature).
+    df["Opponent_Rank_Display"] = df["Opponent_Rank_At_Game"].fillna(df["Opponent_Rank"])
+    df["Opponent_Rank_Display_Num"] = pd.to_numeric(df["Opponent_Rank_Display"], errors="coerce")
 
     # Game_Id: unique per actual game (User-vs-User games appear twice in
     # the export -- once per team's perspective -- and need to collapse to
@@ -161,6 +191,20 @@ def default_current_week_sort(df: pd.DataFrame):
     return int(upcoming["Week_Sort"].min())
 
 
+def has_at_game_rank_data(df: pd.DataFrame) -> bool:
+    """
+    True if this data has usable Opponent_Rank_At_Game values (i.e. was
+    scraped with the version of the scraper that tracks frozen ranks).
+    Older seasons scraped before that feature existed won't have it --
+    the dashboard falls back to live-rank rankings for those rather than
+    showing an all-empty "at time of game" view.
+    """
+    completed = df[df["Completed"]]
+    if completed.empty or "Ranked_Game_AtGame" not in df.columns:
+        return False
+    return bool(completed["Ranked_Game_AtGame"].any())
+
+
 def get_unique_games(df: pd.DataFrame, completed_only: bool = True) -> pd.DataFrame:
     """One row per actual game (dedupes User-vs-User games)."""
     subset = df[df["Completed"]] if completed_only else df
@@ -191,12 +235,25 @@ def _streak_and_form(team_games: pd.DataFrame, form_window: int = 5):
     return streak_label, form_pct
 
 
-def compute_team_stats(df: pd.DataFrame, teams: list, as_of_week_sort: int | None = None) -> pd.DataFrame:
+def compute_team_stats(df: pd.DataFrame, teams: list, as_of_week_sort: int | None = None,
+                        rank_basis: str = "at_game") -> pd.DataFrame:
     """
     Builds one row per team with season-to-date stats.
     If as_of_week_sort is given, only games with Week_Sort <= that value
     are considered (used to compute "last week's" snapshot for trend arrows).
+
+    rank_basis controls which opponent-rank concept "Ranked_W"/"Top10_W"/etc.
+    are built from:
+      - "at_game" (default): the opponent's rank FROZEN at the moment the
+        game was played -- a win over the #1 team stays a win over the #1
+        team even after they later slip in the rankings.
+      - "live": the opponent's CURRENT rank as of the most recent scrape,
+        which can retroactively make a past win look weaker (or stronger)
+        as that opponent's own record changes.
     """
+    ranked_game_col = "Ranked_Game_AtGame" if rank_basis == "at_game" else "Ranked_Game"
+    top10_game_col = "Top10_Game_AtGame" if rank_basis == "at_game" else "Top10_Game"
+
     rows = []
     completed = df[df["Completed"]].copy()
     if as_of_week_sort is not None:
@@ -214,8 +271,8 @@ def compute_team_stats(df: pd.DataFrame, teams: list, as_of_week_sort: int | Non
         away = tg[tg["Location"] == "Away"]
         vs_user = tg[tg["Opponent_Is_User"]]
         vs_cpu = tg[~tg["Opponent_Is_User"]]
-        ranked = tg[tg["Ranked_Game"]]
-        top10 = tg[tg["Top10_Game"]]
+        ranked = tg[tg[ranked_game_col]]
+        top10 = tg[tg[top10_game_col]]
 
         pf = tg["Team_Score"].mean() if games_played else np.nan
         pa = tg["Opponent_Score"].mean() if games_played else np.nan
@@ -265,13 +322,18 @@ def _cpu_opponent_quality(rank_num) -> float:
 
 
 def add_strength_of_schedule(df: pd.DataFrame, team_stats: pd.DataFrame,
-                              as_of_week_sort: int | None = None) -> pd.DataFrame:
+                              as_of_week_sort: int | None = None,
+                              rank_basis: str = "at_game") -> pd.DataFrame:
     """
     Two-pass SOS: for opponents that are one of our tracked teams, use that
     opponent's own win% (already computed in team_stats). For CPU opponents,
-    use a rank-tier quality proxy. Adds an 'SOS' column (0-1 scale, higher
-    = tougher) to a copy of team_stats.
+    use a rank-tier quality proxy -- based on that opponent's rank AT THE
+    TIME of the game (rank_basis="at_game", default) or their current rank
+    (rank_basis="live"). Adds an 'SOS' column (0-1 scale, higher = tougher)
+    to a copy of team_stats.
     """
+    rank_col = "Opponent_Rank_At_Game_Num" if rank_basis == "at_game" else "Opponent_Rank_Num"
+
     stats = team_stats.copy()
     completed = df[df["Completed"]].copy()
     if as_of_week_sort is not None:
@@ -289,7 +351,7 @@ def add_strength_of_schedule(df: pd.DataFrame, team_stats: pd.DataFrame,
                 opp_win_pct = stats.loc[row["Opponent"], "Win_Pct"]
                 qualities.append(opp_win_pct if pd.notna(opp_win_pct) else 0.5)
             else:
-                qualities.append(_cpu_opponent_quality(row["Opponent_Rank_Num"]))
+                qualities.append(_cpu_opponent_quality(row[rank_col]))
         sos_values[team] = float(np.mean(qualities)) if qualities else np.nan
 
     stats["SOS"] = pd.Series(sos_values)
@@ -300,7 +362,8 @@ def add_strength_of_schedule(df: pd.DataFrame, team_stats: pd.DataFrame,
 # Dynasty Rating (power rankings)
 # ---------------------------------------------------------------------------
 
-def compute_rating_history(df: pd.DataFrame, teams: list, weights: dict = None) -> pd.DataFrame:
+def compute_rating_history(df: pd.DataFrame, teams: list, weights: dict = None,
+                            rank_basis: str = "at_game") -> pd.DataFrame:
     """
     Recomputes the Dynasty Rating as of every completed week (using the
     same as_of_week_sort mechanism used for trend arrows), producing a
@@ -313,8 +376,8 @@ def compute_rating_history(df: pd.DataFrame, teams: list, weights: dict = None) 
 
     rows = []
     for w in completed_weeks:
-        stats = compute_team_stats(df, teams, as_of_week_sort=w)
-        stats = add_strength_of_schedule(df, stats, as_of_week_sort=w)
+        stats = compute_team_stats(df, teams, as_of_week_sort=w, rank_basis=rank_basis)
+        stats = add_strength_of_schedule(df, stats, as_of_week_sort=w, rank_basis=rank_basis)
         week_rated = compute_dynasty_rating(stats, weights)
         for team, row in week_rated.iterrows():
             rows.append({
@@ -366,7 +429,8 @@ def format_weekly_recap_text(recap: dict, week_label) -> str:
     return "\n".join(lines).strip()
 
 
-def compute_multi_season_rating_history(df_all: pd.DataFrame, weights: dict = None) -> pd.DataFrame:
+def compute_multi_season_rating_history(df_all: pd.DataFrame, weights: dict = None,
+                                         rank_basis: str = "at_game") -> pd.DataFrame:
     """
     Stitches together a season-by-season Dynasty Rating history across every
     season present in df_all into one continuous timeline. Ratings reset at
@@ -381,7 +445,7 @@ def compute_multi_season_rating_history(df_all: pd.DataFrame, weights: dict = No
         season_teams = sorted(season_df["Team"].unique())
         if not season_teams:
             continue
-        hist = compute_rating_history(season_df, season_teams, weights)
+        hist = compute_rating_history(season_df, season_teams, weights, rank_basis=rank_basis)
         if hist.empty:
             continue
         hist = hist.copy()
@@ -459,6 +523,103 @@ def compute_career_stats(df_all: pd.DataFrame, rating_history: pd.DataFrame = No
     return stats.sort_values("Win_Pct", ascending=False)
 
 
+# ---------------------------------------------------------------------------
+# Team branding: logos (ESPN's public CDN) and school colors
+# ---------------------------------------------------------------------------
+# Logo URLs point at ESPN's public team-logo CDN (a.espncdn.com) rather than
+# bundling image files -- nothing is hosted or redistributed here, the app
+# just links to ESPN's own hosted asset at render time. IDs were confirmed
+# against ESPN's live team API (site.api.espn.com / site.web.api.espn.com)
+# as of July 2026. This intentionally covers the full FBS, not just your
+# 17 league teams -- CPU opponents (Ohio State, Georgia, Utah, etc.) need
+# logos too, or the Schedule/Teams/League Stats pages look inconsistent
+# with some rows having a logo and others not.
+#
+# If a logo ever fails to render for a team not in this dict yet: search
+# "espn <team> football" -> the team page URL ends in /id/<NUMBER>/... ->
+# add that ID here.
+TEAM_ESPN_ID = {
+    # --- Your 17 league teams ---
+    "Arizona State": "9", "Arkansas": "8", "Baylor": "239", "California": "25",
+    "Colorado": "38", "Missouri": "142", "Northwestern": "77", "Oklahoma State": "197",
+    "Pittsburgh": "221", "SMU": "2567", "South Carolina": "2579", "Stanford": "24",
+    "Temple": "218", "Virginia": "258", "Virginia Tech": "259", "West Virginia": "277",
+    "Wisconsin": "275",
+
+    # --- ACC ---
+    "Boston College": "103", "Clemson": "228", "Duke": "150", "Florida State": "52",
+    "Georgia Tech": "59", "Louisville": "97", "Miami": "2390", "NC State": "152",
+    "North Carolina": "153", "Syracuse": "183", "Wake Forest": "154",
+
+    # --- American ---
+    "Army": "349", "Charlotte": "2429", "East Carolina": "151", "Florida Atlantic": "2226",
+    "Memphis": "235", "Navy": "2426", "North Texas": "249", "Rice": "242",
+    "South Florida": "58", "Tulane": "2655", "Tulsa": "202", "UAB": "5",
+    "UTSA": "2636",
+
+    # --- SEC ---
+    "Alabama": "333", "Auburn": "2", "Florida": "57", "Georgia": "61",
+    "Kentucky": "96", "LSU": "99", "Mississippi State": "344", "Ole Miss": "145",
+    "Oklahoma": "201", "Tennessee": "2633", "Texas": "251", "Texas A&M": "245",
+    "Vanderbilt": "238",
+
+    # --- Big Ten ---
+    "Illinois": "356", "Indiana": "84", "Iowa": "2294", "Maryland": "120",
+    "Michigan": "130", "Michigan State": "127", "Minnesota": "135", "Nebraska": "158",
+    "Ohio State": "194", "Oregon": "2483", "Penn State": "213", "Purdue": "2509",
+    "Rutgers": "164", "UCLA": "26", "USC": "30", "Washington": "264",
+
+    # --- Big 12 ---
+    "Arizona": "12", "BYU": "252", "Cincinnati": "2132", "Houston": "248",
+    "Iowa State": "66", "Kansas": "2305", "Kansas State": "2306", "TCU": "2628",
+    "Texas Tech": "2641", "UCF": "2116", "Utah": "254",
+
+    # --- Notable independents / other G5 ---
+    "Notre Dame": "87", "Air Force": "2005", "Boise State": "68", "San Diego State": "21",
+    "Fresno State": "278", "Wyoming": "2751", "Colorado State": "36",
+    "Bowling Green": "189", "Toledo": "2649", "Ohio": "195", "Akron": "2006",
+    "Kent State": "2309", "Miami (OH)": "193", "Buffalo": "2084",
+    "Central Michigan": "2117", "Eastern Michigan": "2199", "Western Michigan": "2711",
+    "Ball State": "2050",
+
+    # --- Confirmed missing from user-reported screenshots (July 2026) ---
+    "Washington State": "265", "Oregon State": "204", "UConn": "41",
+    "UTEP": "2638", "Florida International": "2229",
+}
+
+# (primary, secondary) hex colors, no leading '#', official school colors.
+TEAM_COLORS = {
+    "Arizona State": ("8C1D40", "FFC627"), "Arkansas": ("9D2235", "FFFFFF"),
+    "Baylor": ("154734", "FFB81C"), "California": ("003262", "FDB515"),
+    "Colorado": ("CFB87C", "000000"), "Missouri": ("F1B82D", "000000"),
+    "Northwestern": ("4E2A84", "FFFFFF"), "Oklahoma State": ("FF7300", "000000"),
+    "Pittsburgh": ("003594", "FFB81C"), "SMU": ("C8102E", "354CA1"),
+    "South Carolina": ("73000A", "000000"), "Stanford": ("8C1515", "FFFFFF"),
+    "Temple": ("9D2235", "FFFFFF"), "Virginia": ("232D4B", "F84C1E"),
+    "Virginia Tech": ("630031", "CF4420"), "West Virginia": ("002855", "EAAA00"),
+    "Wisconsin": ("C5050C", "FFFFFF"),
+}
+DEFAULT_TEAM_COLOR = ("2a2f3a", "888888")  # neutral fallback for an unrecognized team
+
+
+def logo_url(team: str, dark_bg: bool = True) -> str | None:
+    """ESPN CDN logo URL for a team, or None if not in TEAM_ESPN_ID.
+    dark_bg=True uses the white-friendly variant (better on a dark theme)."""
+    espn_id = TEAM_ESPN_ID.get(team)
+    if not espn_id:
+        return None
+    variant = "500-dark" if dark_bg else "500"
+    return f"https://a.espncdn.com/i/teamlogos/ncaa/{variant}/{espn_id}.png"
+
+
+def team_primary_color(team: str) -> str:
+    return "#" + TEAM_COLORS.get(team, DEFAULT_TEAM_COLOR)[0]
+
+
+def team_secondary_color(team: str) -> str:
+    return "#" + TEAM_COLORS.get(team, DEFAULT_TEAM_COLOR)[1]
+
+
 DEFAULT_RATING_WEIGHTS = {
     "win_pct": 0.35,
     "sos": 0.20,
@@ -513,7 +674,8 @@ def compute_dynasty_rating(team_stats_with_sos: pd.DataFrame,
     return stats
 
 
-def compute_rating_trend(df: pd.DataFrame, teams: list, weights: dict = None) -> pd.DataFrame:
+def compute_rating_trend(df: pd.DataFrame, teams: list, weights: dict = None,
+                          rank_basis: str = "at_game") -> pd.DataFrame:
     """
     Computes current Dynasty Rating and the rating/rank as of one week
     earlier, returning current ranking with a Rank_Change column
@@ -521,8 +683,8 @@ def compute_rating_trend(df: pd.DataFrame, teams: list, weights: dict = None) ->
     """
     completed_weeks = sorted(df.loc[df["Completed"], "Week_Sort"].unique())
     if not completed_weeks:
-        current_stats = compute_team_stats(df, teams)
-        current_stats = add_strength_of_schedule(df, current_stats)
+        current_stats = compute_team_stats(df, teams, rank_basis=rank_basis)
+        current_stats = add_strength_of_schedule(df, current_stats, rank_basis=rank_basis)
         rated = compute_dynasty_rating(current_stats, weights)
         rated["Rank_Change"] = 0
         return rated
@@ -531,13 +693,13 @@ def compute_rating_trend(df: pd.DataFrame, teams: list, weights: dict = None) ->
     prior_weeks = [w for w in completed_weeks if w < current_week]
     prior_week = prior_weeks[-1] if prior_weeks else None
 
-    current_stats = compute_team_stats(df, teams, as_of_week_sort=current_week)
-    current_stats = add_strength_of_schedule(df, current_stats, as_of_week_sort=current_week)
+    current_stats = compute_team_stats(df, teams, as_of_week_sort=current_week, rank_basis=rank_basis)
+    current_stats = add_strength_of_schedule(df, current_stats, as_of_week_sort=current_week, rank_basis=rank_basis)
     current_rated = compute_dynasty_rating(current_stats, weights)
 
     if prior_week is not None:
-        prior_stats = compute_team_stats(df, teams, as_of_week_sort=prior_week)
-        prior_stats = add_strength_of_schedule(df, prior_stats, as_of_week_sort=prior_week)
+        prior_stats = compute_team_stats(df, teams, as_of_week_sort=prior_week, rank_basis=rank_basis)
+        prior_stats = add_strength_of_schedule(df, prior_stats, as_of_week_sort=prior_week, rank_basis=rank_basis)
         prior_rated = compute_dynasty_rating(prior_stats, weights)
         prior_rank_map = prior_rated["Rank"].to_dict()
     else:
@@ -694,7 +856,8 @@ def best_defensive_performance(df: pd.DataFrame):
 # Weekly recap
 # ---------------------------------------------------------------------------
 
-def weekly_recap(df: pd.DataFrame, team_stats_current: pd.DataFrame, week_sort: int) -> dict:
+def weekly_recap(df: pd.DataFrame, team_stats_current: pd.DataFrame, week_sort: int,
+                  rank_basis: str = "at_game") -> dict:
     week_games = get_unique_games(df, completed_only=True)
     week_games = week_games[week_games["Week_Sort"] == week_sort]
     if week_games.empty:
@@ -702,6 +865,9 @@ def weekly_recap(df: pd.DataFrame, team_stats_current: pd.DataFrame, week_sort: 
 
     week_games = week_games.copy()
     week_games["Total_Pts"] = week_games["Team_Score"] + week_games["Opponent_Score"]
+
+    ranked_win_col = "Ranked_Win_AtGame" if rank_basis == "at_game" else "Ranked_Win"
+    rank_num_col = "Opponent_Rank_At_Game_Num" if rank_basis == "at_game" else "Opponent_Rank_Num"
 
     # Game of the week: closest user-vs-user game that week, else closest overall
     uu_games = week_games[week_games["Opponent_Is_User"]]
@@ -711,7 +877,7 @@ def weekly_recap(df: pd.DataFrame, team_stats_current: pd.DataFrame, week_sort: 
 
     # Upset alert: a team with a worse (numerically higher, i.e. lower-rated)
     # Dynasty Rank beat a team with a meaningfully better rank, OR beat a
-    # ranked CPU opponent.
+    # ranked CPU opponent (rank as of the game itself, not their rank today).
     upset = None
     for _, row in week_games.iterrows():
         if row["Outcome"] != "W":
@@ -722,8 +888,8 @@ def weekly_recap(df: pd.DataFrame, team_stats_current: pd.DataFrame, week_sort: 
             if team_rank - opp_rank >= 3:
                 upset = f"{row['Team']} (#{int(team_rank)}) defeated {row['Opponent']} (#{int(opp_rank)})"
                 break
-        elif row["Ranked_Win"] and row["Opponent_Rank_Num"] <= 15:
-            upset = f"{row['Team']} defeated #{int(row['Opponent_Rank_Num'])} {row['Opponent']}"
+        elif row[ranked_win_col] and pd.notna(row[rank_num_col]) and row[rank_num_col] <= 15:
+            upset = f"{row['Team']} defeated #{int(row[rank_num_col])} {row['Opponent']}"
             break
 
     highest_scoring = week_games.loc[week_games["Total_Pts"].idxmax()]
