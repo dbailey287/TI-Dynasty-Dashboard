@@ -1,0 +1,42 @@
+name: RTA Tracker
+
+on:
+  schedule:
+    - cron: "*/10 * * * *"   # every 10 minutes
+  workflow_dispatch: {}       # adds a "Run workflow" button for manual testing
+
+permissions:
+  contents: write             # needed to commit rta_status.json back to the repo
+
+jobs:
+  check-rta:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install requests pandas
+
+      - name: Check RTA / advance status
+        env:
+          DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
+          RTA_MAIN_CHANNEL_ID: ${{ secrets.RTA_MAIN_CHANNEL_ID }}
+          RTA_ADMIN_CHANNEL_ID: ${{ secrets.RTA_ADMIN_CHANNEL_ID }}
+          RTA_ANNOUNCE_CHANNEL_ID: ${{ secrets.RTA_ANNOUNCE_CHANNEL_ID }}
+          PYTHONUNBUFFERED: "1"
+        run: python check_rta_status.py
+
+      - name: Commit updated status (only if it changed)
+        run: |
+          git config user.name "rta-tracker-bot"
+          git config user.email "actions@github.com"
+          git add rta_status.json
+          git diff --cached --quiet || git commit -m "Update RTA status [skip ci]"
+          git push
