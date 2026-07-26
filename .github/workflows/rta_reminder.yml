@@ -2,16 +2,15 @@ name: RTA Reminder
 
 on:
   schedule:
-    # Fires daily at both possible UTC times for 8am Eastern -- the script
-    # itself checks the real current Eastern time and no-ops on whichever
-    # of these two isn't actually 8am right now, so this stays correct
-    # across the DST transition without ever needing manual adjustment.
-    - cron: "0 12 * * *"   # 8am EDT (summer)
-    - cron: "0 13 * * *"   # 8am EST (winter)
+    # One fixed trigger, no DST handling -- the exact hour drifts by an
+    # hour twice a year (7am vs 8am Eastern depending on the season),
+    # which doesn't matter for this. Only fires on Sun/Wed/Fri (cron
+    # day-of-week: 0=Sun, 3=Wed, 5=Fri).
+    - cron: "0 12 * * 0,3,5"
   workflow_dispatch:
     inputs:
       force_run:
-        description: "Bypass the day/hour gate (for testing)"
+        description: "Bypass the advance-day gate (for testing)"
         type: boolean
         default: false
 
@@ -37,7 +36,10 @@ jobs:
       - name: Check and send reminder
         env:
           DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
+          RTA_MAIN_CHANNEL_ID: ${{ secrets.RTA_MAIN_CHANNEL_ID }}
           RTA_ANNOUNCE_CHANNEL_ID: ${{ secrets.RTA_ANNOUNCE_CHANNEL_ID }}
+          SUMMARY_CHANNEL_ID: ${{ secrets.SUMMARY_CHANNEL_ID }}
+          ADMIN_LOG_CHANNEL_ID: ${{ secrets.ADMIN_LOG_CHANNEL_ID }}
           RTA_FORCE_RUN: ${{ github.event.inputs.force_run == 'true' && '1' || '0' }}
           PYTHONUNBUFFERED: "1"
         run: python rta_reminder.py

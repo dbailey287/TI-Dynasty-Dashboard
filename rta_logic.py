@@ -33,6 +33,24 @@ import roster as _roster
 # inside a longer word (e.g. won't fire on "mortar").
 RTA_PATTERN = re.compile(r"\brta\b", re.IGNORECASE)
 
+# Signals this is a QUESTION or DISCUSSION about RTA status, not someone
+# declaring themselves ready -- e.g. "who's not RTA?" or "is everyone RTA
+# yet?" should never mark the asker as ready.
+_DISCUSSION_SIGNAL = re.compile(
+    r"\?|\b(who|whos|who's|anyone|everyone|status|list)\b",
+    re.IGNORECASE,
+)
+
+# "not RTA", "isn't RTA", "RTA... not yet" etc -- a negated mention should
+# never count as a positive declaration. Looks up to ~20 characters on
+# either side of "rta" for a negation word, stopping at sentence
+# punctuation so it doesn't reach into an unrelated clause.
+_NEGATION_SIGNAL = re.compile(
+    r"\b(not|isn'?t|ain'?t|aren'?t|no)\b[^.!?]{0,20}\brta\b"
+    r"|\brta\b[^.!?]{0,20}\b(not|isn'?t|ain'?t|aren'?t|no)\b",
+    re.IGNORECASE,
+)
+
 DEFAULT_ADVANCE_KEYWORD = "advance"
 
 FUNNY_ADVANCE_MESSAGES = [
@@ -81,7 +99,14 @@ def load_active_roster(directory: str = ".") -> list:
 
 
 def is_rta_message(content: str) -> bool:
-    return bool(RTA_PATTERN.search(content or ""))
+    content = content or ""
+    if not RTA_PATTERN.search(content):
+        return False
+    if _DISCUSSION_SIGNAL.search(content):
+        return False
+    if _NEGATION_SIGNAL.search(content):
+        return False
+    return True
 
 
 def is_advance_message(content: str, keyword: str = DEFAULT_ADVANCE_KEYWORD) -> bool:
@@ -156,6 +181,56 @@ def process_rta_messages(messages: list, tracked_user_ids: set, state: dict) -> 
     state["last_message_id_main"] = last_id
     state["last_updated"] = datetime.now(timezone.utc).isoformat()
     return state
+
+
+def get_current_week_matchups(directory: str = ".") -> tuple:
+    """
+    Best-effort lookup of "who is each team playing this week," for the
+    reminder message (so it can show "Arkansas vs Missouri" next to
+    someone's name, and flag User vs User games specially). Returns
+    (week_label, {team: {"opponent": str, "opponent_is_user": bool}}).
+    Returns ("?", {}) on anything unexpected -- this is an enrichment,
+    never something that should block the actual reminder from going out.
+    """
+    import pandas as pd
+
+    files = glob.glob(os.path.join(directory, "dynasty_data_*.csv"))
+    if not files:
+        return "?", {}
+
+    def season_num(path):
+        m = re.search(r"dynasty_data_(\d+)\.csv$", os.path.basename(path))
+        return int(m.group(1)) if m else -1
+    latest = max(files, key=season_num)
+
+    try:
+        df = pd.read_csv(latest, engine="python", on_bad_lines="skip", dtype=str)
+        upcoming = df[df["Status"] == "Upcoming"]
+        if upcoming.empty:
+            return "?", {}
+
+        def week_sort_key(w):
+            w = str(w).strip()
+            if w.isdigit():
+                return int(w)
+            if "conf" in w.lower():
+                return 900
+            return 999
+        upcoming = upcoming.copy()
+        upcoming["_sort"] = upcoming["Week"].apply(week_sort_key)
+        week_label = str(upcoming.loc[upcoming["_sort"].idxmin(), "Week"])
+
+        week_games = df[(df["Week"] == week_label) & (df["Status"].isin(["Upcoming", "Completed"]))]
+        matchups = {}
+        for _, row in week_games.iterrows():
+            opponent_user = (row.get("Opponent_User") or "CPU").strip()
+            matchups[row["Team"]] = {
+                "opponent": (row.get("Opponent") or "?").strip(),
+                "opponent_is_user": opponent_user != "CPU",
+            }
+        return week_label, matchups
+    except Exception:
+        return "?", {}
 
 
 def find_current_week_label(directory: str = ".") -> str:
