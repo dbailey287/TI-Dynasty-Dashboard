@@ -32,7 +32,7 @@ jobs:
         env:
           DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
           GENAI_API_KEY: ${{ secrets.GENAI_API_KEY }}
-          CHANNEL_IDS: ${{ secrets.CHANNEL_IDS }}
+          SCREENSHOT_CHANNEL_ID: ${{ secrets.SCREENSHOT_CHANNEL_ID }}
           SUMMARY_CHANNEL_ID: ${{ secrets.SUMMARY_CHANNEL_ID }}
           ADMIN_LOG_CHANNEL_ID: ${{ secrets.ADMIN_LOG_CHANNEL_ID }}
         # Scheduled runs have no "inputs" object at all, so this falls back

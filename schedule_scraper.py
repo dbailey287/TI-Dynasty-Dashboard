@@ -80,6 +80,13 @@ if _missing:
 
 TARGET_SCREENSHOT_CHANNEL_ID = _parse_SCREENSHOT_CHANNEL_ID(SCREENSHOT_CHANNEL_ID_RAW)
 
+# Optional: post a short "what happened" summary and a fuller admin log
+# after each run. Both are optional and independent -- leave either
+# unset to skip that notification entirely. Values must be single
+# channel IDs (not comma-separated lists like SCREENSHOT_CHANNEL_ID).
+SUMMARY_CHANNEL_ID = int(os.environ["SUMMARY_CHANNEL_ID"]) if os.environ.get("SUMMARY_CHANNEL_ID") else None
+ADMIN_LOG_CHANNEL_ID = int(os.environ["ADMIN_LOG_CHANNEL_ID"]) if os.environ.get("ADMIN_LOG_CHANNEL_ID") else None
+
 # Try the primary model first; if it 503s past its own retry budget,
 # fall through to the next model in the list rather than giving up.
 #
@@ -523,7 +530,88 @@ intents.message_content = True
 bot = commands.Bot(command_prefix="!", intents=intents)
 
 
-async def process_one_attachment(attachment, semaphore: asyncio.Semaphore, channel_id: int, message_id: int):
+def format_run_summary(teams_updated: list) -> str | None:
+    """Short, human-readable summary for the public/main summary channel.
+    Returns None when there's nothing to report, so the caller can skip
+    posting entirely rather than sending a "nothing happened" message
+    every single day."""
+    if not teams_updated:
+        return None
+    teams_sorted = sorted(set(teams_updated))
+    if len(teams_sorted) == 1:
+        team_list = teams_sorted[0]
+    elif len(teams_sorted) == 2:
+        team_list = f"{teams_sorted[0]} and {teams_sorted[1]}"
+    else:
+        team_list = ", ".join(teams_sorted[:-1]) + f", and {teams_sorted[-1]}"
+    return f"✅ Schedule scraper ran — updates found for {len(teams_sorted)} team(s): {team_list}."
+
+
+def format_admin_log(per_team_rows: dict, failed_images: dict, images_processed: int) -> str:
+    """Fuller breakdown for the admin-only log channel -- posted every run,
+    including "nothing new" runs, so a missing daily log entry is itself a
+    signal something broke."""
+    lines = [
+        f"**Schedule Scraper Run** — {datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%d %H:%M UTC')}",
+        "",
+        f"Images processed this run: {images_processed}",
+        f"Teams updated: {len(per_team_rows)}",
+    ]
+    if per_team_rows:
+        for team in sorted(per_team_rows):
+            lines.append(f"  • {team}: {per_team_rows[team]} schedule row(s) written")
+    else:
+        lines.append("  (no new screenshots found)")
+
+    if failed_images:
+        lines.append("")
+        lines.append(f"⚠️ {len(failed_images)} image(s) still failing after all models:")
+        for info in list(failed_images.values())[:15]:
+            filename = info.get("filename", "unknown file")
+            reason = str(info.get("reason", "unknown error"))[:150]
+            lines.append(f"  • {filename}: {reason}")
+        if len(failed_images) > 15:
+            lines.append(f"  ...and {len(failed_images) - 15} more (see {FAILED_FILE})")
+
+    return "\n".join(lines)
+
+
+async def post_run_notifications(teams_updated: list, per_team_rows: dict, failed_images: dict, images_processed: int):
+    """Posts the summary (if there's news) and the admin log (always), to
+    whichever channels are configured. Silently skips a channel that
+    isn't set up yet, rather than failing the whole run over it."""
+    summary_text = format_run_summary(teams_updated)
+    if SUMMARY_CHANNEL_ID and summary_text:
+        channel = bot.get_channel(SUMMARY_CHANNEL_ID)
+        if channel:
+            try:
+                await channel.send(summary_text)
+            except discord.DiscordException as e:
+                log.error("Failed to post summary to #%s: %s", channel.name, e)
+        else:
+            log.warning("SUMMARY_CHANNEL_ID %s not found/accessible.", SUMMARY_CHANNEL_ID)
+
+    if ADMIN_LOG_CHANNEL_ID:
+        channel = bot.get_channel(ADMIN_LOG_CHANNEL_ID)
+        if channel:
+            log_text = format_admin_log(per_team_rows, failed_images, images_processed)
+            try:
+                if len(log_text) <= 1900:
+                    await channel.send(log_text)
+                else:
+                    # Too long for one message -- send as a small text file instead.
+                    buf = io.BytesIO(log_text.encode("utf-8"))
+                    await channel.send(
+                        content="Run log attached (too long for a single message):",
+                        file=discord.File(buf, filename="scraper_run_log.txt"),
+                    )
+            except discord.DiscordException as e:
+                log.error("Failed to post admin log to #%s: %s", channel.name, e)
+        else:
+            log.warning("ADMIN_LOG_CHANNEL_ID %s not found/accessible.", ADMIN_LOG_CHANNEL_ID)
+
+
+
     """Returns (records, failure_record_or_None)."""
     async with semaphore:
         log.info("Processing %s (id=%s)...", attachment.filename, attachment.id)
@@ -637,6 +725,11 @@ async def on_ready():
             "%d image(s) still failing after all models — run with --retry-failed to retry them. See %s.",
             len(failed_images), FAILED_FILE,
         )
+
+    per_team_rows = {}
+    for r in all_records:
+        per_team_rows[r["Team"]] = per_team_rows.get(r["Team"], 0) + 1
+    await post_run_notifications(list(per_team_rows.keys()), per_team_rows, failed_images, len(newly_processed))
 
     await bot.close()
 
