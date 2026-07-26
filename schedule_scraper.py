@@ -572,18 +572,62 @@ def format_alert_message(success: bool, teams_updated: list, error_text: str = N
     return f"✅ Schedule scraper ran successfully — updates found for {len(teams_sorted)} team(s): {team_list}."
 
 
-async def post_alert(success: bool, teams_updated: list, error_text: str = None):
-    """Posts the short status line to #bot-admin-alerts (SUMMARY_CHANNEL_ID)."""
+def format_run_breakdown(per_team_rows: dict, failed_images: dict, images_processed: int) -> str:
+    """Fuller per-team breakdown -- same content that used to go to the log
+    channel, now sent to #bot-admin-alerts alongside the short status line."""
+    lines = [
+        f"**Schedule Scraper Run** — {datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%d %H:%M UTC')}",
+        "",
+        f"Images processed this run: {images_processed}",
+        f"Teams updated: {len(per_team_rows)}",
+    ]
+    if per_team_rows:
+        for team in sorted(per_team_rows):
+            lines.append(f"  • {team}: {per_team_rows[team]} schedule row(s) written")
+    else:
+        lines.append("  (no new screenshots found)")
+
+    if failed_images:
+        lines.append("")
+        lines.append(f"⚠️ {len(failed_images)} image(s) still failing after all models:")
+        for info in list(failed_images.values())[:15]:
+            filename = info.get("filename", "unknown file")
+            reason = str(info.get("reason", "unknown error"))[:150]
+            lines.append(f"  • {filename}: {reason}")
+        if len(failed_images) > 15:
+            lines.append(f"  ...and {len(failed_images) - 15} more (see {FAILED_FILE})")
+
+    return "\n".join(lines)
+
+
+async def post_alert(success: bool, teams_updated: list, per_team_rows: dict,
+                      failed_images: dict, images_processed: int, error_text: str = None):
+    """Posts BOTH the short status line and the fuller per-team breakdown
+    to #bot-admin-alerts (SUMMARY_CHANNEL_ID)."""
     if not SUMMARY_CHANNEL_ID:
         return
     channel = bot.get_channel(SUMMARY_CHANNEL_ID)
     if not channel:
         log.warning("SUMMARY_CHANNEL_ID %s not found/accessible.", SUMMARY_CHANNEL_ID)
         return
+
     try:
         await channel.send(format_alert_message(success, teams_updated, error_text))
     except discord.DiscordException as e:
         log.error("Failed to post alert to #%s: %s", channel.name, e)
+
+    breakdown_text = format_run_breakdown(per_team_rows, failed_images, images_processed)
+    try:
+        if len(breakdown_text) <= 1900:
+            await channel.send(breakdown_text)
+        else:
+            buf = io.BytesIO(breakdown_text.encode("utf-8"))
+            await channel.send(
+                content="Run breakdown attached (too long for a single message):",
+                file=discord.File(buf, filename="run_breakdown.txt"),
+            )
+    except discord.DiscordException as e:
+        log.error("Failed to post run breakdown to #%s: %s", channel.name, e)
 
 
 async def post_log_file():
@@ -639,6 +683,7 @@ async def on_ready():
     run_failed = False
     error_text = None
     per_team_rows = {}
+    newly_processed: list[int] = []
 
     try:
         # No time-window cutoff here on purpose: processed_ids (STATE_FILE) is
@@ -649,7 +694,6 @@ async def on_ready():
         # picked up if the script wasn't run within 24h of it being posted --
         # exactly the failure mode for an irregular/mid-season run cadence.
         all_records: list[dict] = []
-        newly_processed: list[int] = []
 
         for channel_id in TARGET_SCREENSHOT_CHANNEL_ID:
             channel = bot.get_channel(channel_id)
@@ -734,9 +778,9 @@ async def on_ready():
         log.exception("Unhandled error during scraper run:")
 
     if run_failed:
-        await post_alert(False, [], error_text=error_text)
+        await post_alert(False, [], per_team_rows, failed_images, len(newly_processed), error_text=error_text)
     else:
-        await post_alert(True, list(per_team_rows.keys()))
+        await post_alert(True, list(per_team_rows.keys()), per_team_rows, failed_images, len(newly_processed))
     await post_log_file()
 
     log.info("Notifications sent. Closing Discord connection now...")
