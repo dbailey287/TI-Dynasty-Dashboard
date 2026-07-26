@@ -618,6 +618,7 @@ async def post_run_notifications(teams_updated: list, per_team_rows: dict, faile
 
 
 
+async def process_one_attachment(attachment, semaphore: asyncio.Semaphore, channel_id: int, message_id: int):
     """Returns (records, failure_record_or_None)."""
     async with semaphore:
         log.info("Processing %s (id=%s)...", attachment.filename, attachment.id)
