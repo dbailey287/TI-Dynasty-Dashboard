@@ -833,3 +833,14 @@ if __name__ == "__main__":
         log.info("Season %d -> %s doesn't exist yet; this run will create it fresh.", SEASON, CSV_FILE)
 
     bot.run(BOT_TOKEN)
+
+    # bot.run() blocks until the bot fully disconnects, but discord.py's own
+    # cleanup (closing the underlying aiohttp session, etc.) has been known
+    # to leave the process technically alive even after all real work --
+    # including on_ready()'s own bot.close() call -- has finished. That's
+    # invisible locally (you'd just see the terminal prompt come back a
+    # beat late), but in GitHub Actions it means the step never registers
+    # as complete and just hangs indefinitely. Force a hard exit here so
+    # the step always ends the moment bot.run() actually returns.
+    log.info("Scraper finished — exiting.")
+    sys.exit(0)
