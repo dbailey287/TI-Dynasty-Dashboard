@@ -1,0 +1,48 @@
+name: Daily Schedule Scraper
+
+on:
+  schedule:
+    - cron: "0 12 * * *"    # once a day, 12:00 UTC -- adjust the hour to suit your timezone
+  workflow_dispatch:         # adds a "Run workflow" button in the Actions tab for manual runs
+    inputs:
+      season:
+        description: "Season year to scrape"
+        required: false
+        default: "2026"
+
+permissions:
+  contents: write            # needed to commit the updated CSV/state files back to the repo
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install discord.py google-genai Pillow pandas python-dotenv
+
+      - name: Run scraper
+        env:
+          DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
+          GENAI_API_KEY: ${{ secrets.GENAI_API_KEY }}
+          CHANNEL_IDS: ${{ secrets.CHANNEL_IDS }}
+          SUMMARY_CHANNEL_ID: ${{ secrets.SUMMARY_CHANNEL_ID }}
+          ADMIN_LOG_CHANNEL_ID: ${{ secrets.ADMIN_LOG_CHANNEL_ID }}
+        # Scheduled runs have no "inputs" object at all, so this falls back
+        # to 2026; manual runs use whatever you typed (or the button's default).
+        run: python schedule_scraper.py --season ${{ github.event.inputs.season || '2026' }}
+
+      - name: Commit updated data (only if something changed)
+        run: |
+          git config user.name "schedule-scraper-bot"
+          git config user.email "actions@github.com"
+          git add dynasty_data_*.csv processed_images_*.json failed_images_*.json
+          git diff --cached --quiet || git commit -m "Update schedule data [skip ci]"
+          git push
