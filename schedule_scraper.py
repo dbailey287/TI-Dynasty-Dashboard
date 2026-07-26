@@ -131,6 +131,19 @@ log = logging.getLogger("cfb_scraper")
 # cover, without changing the level of our own "cfb_scraper" logger above.
 logging.getLogger("discord").setLevel(logging.DEBUG)
 
+# Captures a copy of every log line (ours and discord.py's) into memory so
+# the full run log can be posted as a real file to #bot-admin-logs, not
+# just a hand-formatted summary. The console still gets output as normal
+# via logging.basicConfig above -- this is an additional handler, not a
+# replacement.
+LOG_BUFFER = io.StringIO()
+_log_capture_handler = logging.StreamHandler(LOG_BUFFER)
+_log_capture_handler.setFormatter(logging.Formatter(
+    "[%(asctime)s] [%(levelname)-5s] %(name)s: %(message)s", datefmt="%Y-%m-%d %H:%M:%S",
+))
+_log_capture_handler.setLevel(logging.DEBUG)
+logging.getLogger().addHandler(_log_capture_handler)
+
 
 def _validate_season(raw: str) -> int:
     try:
@@ -536,13 +549,19 @@ intents.message_content = True
 bot = commands.Bot(command_prefix="!", intents=intents)
 
 
-def format_run_summary(teams_updated: list) -> str | None:
-    """Short, human-readable summary for the public/main summary channel.
-    Returns None when there's nothing to report, so the caller can skip
-    posting entirely rather than sending a "nothing happened" message
-    every single day."""
+def format_alert_message(success: bool, teams_updated: list, error_text: str = None) -> str:
+    """Short status line for #bot-admin-alerts -- posted every run, success
+    or failure, so a missing alert is itself a signal something's wrong
+    with the automation (not just with a particular team's data)."""
+    if not success:
+        msg = "❌ **Schedule scraper run FAILED**"
+        if error_text:
+            msg += f": {error_text[:300]}"
+        return msg
+
     if not teams_updated:
-        return None
+        return "✅ Schedule scraper ran successfully — no new updates found."
+
     teams_sorted = sorted(set(teams_updated))
     if len(teams_sorted) == 1:
         team_list = teams_sorted[0]
@@ -550,72 +569,40 @@ def format_run_summary(teams_updated: list) -> str | None:
         team_list = f"{teams_sorted[0]} and {teams_sorted[1]}"
     else:
         team_list = ", ".join(teams_sorted[:-1]) + f", and {teams_sorted[-1]}"
-    return f"✅ Schedule scraper ran — updates found for {len(teams_sorted)} team(s): {team_list}."
+    return f"✅ Schedule scraper ran successfully — updates found for {len(teams_sorted)} team(s): {team_list}."
 
 
-def format_admin_log(per_team_rows: dict, failed_images: dict, images_processed: int) -> str:
-    """Fuller breakdown for the admin-only log channel -- posted every run,
-    including "nothing new" runs, so a missing daily log entry is itself a
-    signal something broke."""
-    lines = [
-        f"**Schedule Scraper Run** — {datetime.datetime.now(datetime.timezone.utc).strftime('%Y-%m-%d %H:%M UTC')}",
-        "",
-        f"Images processed this run: {images_processed}",
-        f"Teams updated: {len(per_team_rows)}",
-    ]
-    if per_team_rows:
-        for team in sorted(per_team_rows):
-            lines.append(f"  • {team}: {per_team_rows[team]} schedule row(s) written")
-    else:
-        lines.append("  (no new screenshots found)")
-
-    if failed_images:
-        lines.append("")
-        lines.append(f"⚠️ {len(failed_images)} image(s) still failing after all models:")
-        for info in list(failed_images.values())[:15]:
-            filename = info.get("filename", "unknown file")
-            reason = str(info.get("reason", "unknown error"))[:150]
-            lines.append(f"  • {filename}: {reason}")
-        if len(failed_images) > 15:
-            lines.append(f"  ...and {len(failed_images) - 15} more (see {FAILED_FILE})")
-
-    return "\n".join(lines)
+async def post_alert(success: bool, teams_updated: list, error_text: str = None):
+    """Posts the short status line to #bot-admin-alerts (SUMMARY_CHANNEL_ID)."""
+    if not SUMMARY_CHANNEL_ID:
+        return
+    channel = bot.get_channel(SUMMARY_CHANNEL_ID)
+    if not channel:
+        log.warning("SUMMARY_CHANNEL_ID %s not found/accessible.", SUMMARY_CHANNEL_ID)
+        return
+    try:
+        await channel.send(format_alert_message(success, teams_updated, error_text))
+    except discord.DiscordException as e:
+        log.error("Failed to post alert to #%s: %s", channel.name, e)
 
 
-async def post_run_notifications(teams_updated: list, per_team_rows: dict, failed_images: dict, images_processed: int):
-    """Posts the summary (if there's news) and the admin log (always), to
-    whichever channels are configured. Silently skips a channel that
-    isn't set up yet, rather than failing the whole run over it."""
-    summary_text = format_run_summary(teams_updated)
-    if SUMMARY_CHANNEL_ID and summary_text:
-        channel = bot.get_channel(SUMMARY_CHANNEL_ID)
-        if channel:
-            try:
-                await channel.send(summary_text)
-            except discord.DiscordException as e:
-                log.error("Failed to post summary to #%s: %s", channel.name, e)
-        else:
-            log.warning("SUMMARY_CHANNEL_ID %s not found/accessible.", SUMMARY_CHANNEL_ID)
+async def post_log_file():
+    """Posts the FULL captured run log as a real file attachment to
+    #bot-admin-logs (ADMIN_LOG_CHANNEL_ID) -- every run, unconditionally."""
+    if not ADMIN_LOG_CHANNEL_ID:
+        return
+    channel = bot.get_channel(ADMIN_LOG_CHANNEL_ID)
+    if not channel:
+        log.warning("ADMIN_LOG_CHANNEL_ID %s not found/accessible.", ADMIN_LOG_CHANNEL_ID)
+        return
 
-    if ADMIN_LOG_CHANNEL_ID:
-        channel = bot.get_channel(ADMIN_LOG_CHANNEL_ID)
-        if channel:
-            log_text = format_admin_log(per_team_rows, failed_images, images_processed)
-            try:
-                if len(log_text) <= 1900:
-                    await channel.send(log_text)
-                else:
-                    # Too long for one message -- send as a small text file instead.
-                    buf = io.BytesIO(log_text.encode("utf-8"))
-                    await channel.send(
-                        content="Run log attached (too long for a single message):",
-                        file=discord.File(buf, filename="scraper_run_log.txt"),
-                    )
-            except discord.DiscordException as e:
-                log.error("Failed to post admin log to #%s: %s", channel.name, e)
-        else:
-            log.warning("ADMIN_LOG_CHANNEL_ID %s not found/accessible.", ADMIN_LOG_CHANNEL_ID)
-
+    log_text = LOG_BUFFER.getvalue() or "(no log output captured)"
+    timestamp = datetime.datetime.now(datetime.timezone.utc).strftime("%Y%m%d_%H%M%S")
+    buf = io.BytesIO(log_text.encode("utf-8"))
+    try:
+        await channel.send(file=discord.File(buf, filename=f"scraper_run_{timestamp}.txt"))
+    except discord.DiscordException as e:
+        log.error("Failed to post log file to #%s: %s", channel.name, e)
 
 
 async def process_one_attachment(attachment, semaphore: asyncio.Semaphore, channel_id: int, message_id: int):
@@ -649,98 +636,115 @@ async def on_ready():
     if "--retry-failed" in sys.argv:
         await retry_failed(processed_ids, failed_images)
         return
-    # No time-window cutoff here on purpose: processed_ids (STATE_FILE) is
-    # already the source of truth for "have I seen this image before," so
-    # scanning full channel history is safe and cheap (Discord API calls,
-    # not billed vision calls). A rolling time cutoff previously meant a
-    # screenshot could silently age out of the scan window and never get
-    # picked up if the script wasn't run within 24h of it being posted --
-    # exactly the failure mode for an irregular/mid-season run cadence.
-    all_records: list[dict] = []
-    newly_processed: list[int] = []
+    run_failed = False
+    error_text = None
+    per_team_rows = {}
 
-    for channel_id in TARGET_SCREENSHOT_CHANNEL_ID:
-        channel = bot.get_channel(channel_id)
-        if not channel:
-            log.warning("Channel ID %s not found/accessible, skipping.", channel_id)
-            continue
+    try:
+        # No time-window cutoff here on purpose: processed_ids (STATE_FILE) is
+        # already the source of truth for "have I seen this image before," so
+        # scanning full channel history is safe and cheap (Discord API calls,
+        # not billed vision calls). A rolling time cutoff previously meant a
+        # screenshot could silently age out of the scan window and never get
+        # picked up if the script wasn't run within 24h of it being posted --
+        # exactly the failure mode for an irregular/mid-season run cadence.
+        all_records: list[dict] = []
+        newly_processed: list[int] = []
 
-        log.info("Scanning channel: #%s", channel.name)
-
-        image_attachments = []  # list of (attachment, message_id)
-        async for message in channel.history(limit=None):
-            for attachment in message.attachments:
-                if attachment.content_type and attachment.content_type.startswith("image/"):
-                    if attachment.id in processed_ids:
-                        continue  # already parsed in a prior run
-                    image_attachments.append((attachment, message.id))
-
-        log.info("Found %d new schedule image(s) to process.", len(image_attachments))
-
-        semaphore = asyncio.Semaphore(MAX_CONCURRENT_REQUESTS)
-        tasks = [
-            process_one_attachment(a, semaphore, channel_id, msg_id)
-            for a, msg_id in image_attachments
-        ]
-        results = await asyncio.gather(*tasks, return_exceptions=True)
-
-        for (attachment, msg_id), result in zip(image_attachments, results):
-            if isinstance(result, Exception):
-                log.error("Attachment %s failed with %s: %s", attachment.filename, type(result).__name__, result)
-                failed_images[str(attachment.id)] = {
-                    "attachment_id": attachment.id,
-                    "filename": attachment.filename,
-                    "channel_id": channel_id,
-                    "message_id": msg_id,
-                    "last_attempt": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                    "reason": f"Unexpected exception: {type(result).__name__}: {result}",
-                }
+        for channel_id in TARGET_SCREENSHOT_CHANNEL_ID:
+            channel = bot.get_channel(channel_id)
+            if not channel:
+                log.warning("Channel ID %s not found/accessible, skipping.", channel_id)
                 continue
 
-            records, failure_record = result
-            if records:
-                all_records.extend(records)
-                newly_processed.append(attachment.id)
-                failed_images.pop(str(attachment.id), None)  # succeeded on retry, clear old failure if any
-            elif failure_record:
-                log.error(
-                    "[LOGGED FAILURE] %s could not be parsed by any model — saved to %s for later retry.",
-                    attachment.filename, FAILED_FILE,
-                )
-                failed_images[str(attachment.id)] = failure_record
+            log.info("Scanning channel: #%s", channel.name)
 
-    if all_records:
-        df_new = pd.DataFrame(all_records)
-        df_existing = pd.read_csv(CSV_FILE) if os.path.exists(CSV_FILE) else None
-        df_combined = merge_records(df_existing, df_new, SEASON)
+            image_attachments = []  # list of (attachment, message_id)
+            async for message in channel.history(limit=None):
+                for attachment in message.attachments:
+                    if attachment.content_type and attachment.content_type.startswith("image/"):
+                        if attachment.id in processed_ids:
+                            continue  # already parsed in a prior run
+                        image_attachments.append((attachment, message.id))
 
-        df_combined["Week_Sort"] = df_combined["Week"].apply(get_sort_key)
-        df_combined = df_combined.sort_values(by=["Team", "Week_Sort"]).drop(columns=["Week_Sort"])
-        df_combined.to_csv(CSV_FILE, index=False)
-        log.info("COMPLETED: Saved %d total records to %s.", len(df_combined), CSV_FILE)
+            log.info("Found %d new schedule image(s) to process.", len(image_attachments))
+
+            semaphore = asyncio.Semaphore(MAX_CONCURRENT_REQUESTS)
+            tasks = [
+                process_one_attachment(a, semaphore, channel_id, msg_id)
+                for a, msg_id in image_attachments
+            ]
+            results = await asyncio.gather(*tasks, return_exceptions=True)
+
+            for (attachment, msg_id), result in zip(image_attachments, results):
+                if isinstance(result, Exception):
+                    log.error("Attachment %s failed with %s: %s", attachment.filename, type(result).__name__, result)
+                    failed_images[str(attachment.id)] = {
+                        "attachment_id": attachment.id,
+                        "filename": attachment.filename,
+                        "channel_id": channel_id,
+                        "message_id": msg_id,
+                        "last_attempt": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+                        "reason": f"Unexpected exception: {type(result).__name__}: {result}",
+                    }
+                    continue
+
+                records, failure_record = result
+                if records:
+                    all_records.extend(records)
+                    newly_processed.append(attachment.id)
+                    failed_images.pop(str(attachment.id), None)  # succeeded on retry, clear old failure if any
+                elif failure_record:
+                    log.error(
+                        "[LOGGED FAILURE] %s could not be parsed by any model — saved to %s for later retry.",
+                        attachment.filename, FAILED_FILE,
+                    )
+                    failed_images[str(attachment.id)] = failure_record
+
+        if all_records:
+            df_new = pd.DataFrame(all_records)
+            df_existing = pd.read_csv(CSV_FILE) if os.path.exists(CSV_FILE) else None
+            df_combined = merge_records(df_existing, df_new, SEASON)
+
+            df_combined["Week_Sort"] = df_combined["Week"].apply(get_sort_key)
+            df_combined = df_combined.sort_values(by=["Team", "Week_Sort"]).drop(columns=["Week_Sort"])
+            df_combined.to_csv(CSV_FILE, index=False)
+            log.info("COMPLETED: Saved %d total records to %s.", len(df_combined), CSV_FILE)
+        else:
+            log.info("No new schedule entries were parsed this run.")
+
+        if newly_processed:
+            processed_ids.update(newly_processed)
+            save_processed_ids(processed_ids)
+            log.info("Marked %d image(s) as processed (won't be re-scanned next run).", len(newly_processed))
+
+        save_failed_images(failed_images)
+        if failed_images:
+            log.warning(
+                "%d image(s) still failing after all models — run with --retry-failed to retry them. See %s.",
+                len(failed_images), FAILED_FILE,
+            )
+
+        per_team_rows = {}
+        for r in all_records:
+            per_team_rows[r["Team"]] = per_team_rows.get(r["Team"], 0) + 1
+    except Exception as e:
+        run_failed = True
+        error_text = f"{type(e).__name__}: {e}"
+        log.exception("Unhandled error during scraper run:")
+
+    if run_failed:
+        await post_alert(False, [], error_text=error_text)
     else:
-        log.info("No new schedule entries were parsed this run.")
-
-    if newly_processed:
-        processed_ids.update(newly_processed)
-        save_processed_ids(processed_ids)
-        log.info("Marked %d image(s) as processed (won't be re-scanned next run).", len(newly_processed))
-
-    save_failed_images(failed_images)
-    if failed_images:
-        log.warning(
-            "%d image(s) still failing after all models — run with --retry-failed to retry them. See %s.",
-            len(failed_images), FAILED_FILE,
-        )
-
-    per_team_rows = {}
-    for r in all_records:
-        per_team_rows[r["Team"]] = per_team_rows.get(r["Team"], 0) + 1
-    await post_run_notifications(list(per_team_rows.keys()), per_team_rows, failed_images, len(newly_processed))
+        await post_alert(True, list(per_team_rows.keys()))
+    await post_log_file()
 
     log.info("Notifications sent. Closing Discord connection now...")
     await bot.close()
     log.info("Discord connection closed cleanly.")
+
+    if run_failed:
+        sys.exit(1)
 
 
 async def retry_failed(processed_ids: set, failed_images: dict) -> None:
