@@ -261,6 +261,16 @@ def get_current_week_matchups(directory: str = ".") -> tuple:
         return "?", {}
 
 
+def parse_channel_ids(raw: str) -> list:
+    """Splits a comma-separated (whitespace-tolerant) list of channel IDs,
+    e.g. "111,222" or "111, 222" -> ["111", "222"]. A single ID with no
+    comma just returns a one-item list, so this is safe to use everywhere
+    a channel ID env var is read, whether or not multiple were given."""
+    if not raw:
+        return []
+    return [part.strip() for part in raw.split(",") if part.strip()]
+
+
 def find_current_week_label(directory: str = ".") -> str:
     """
     Best-effort lookup of "what week is it" from the newest

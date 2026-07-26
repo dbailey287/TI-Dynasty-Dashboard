@@ -24,7 +24,8 @@ Required environment variables:
     DISCORD_TOKEN                Bot token (same one everything else uses)
     RTA_MAIN_CHANNEL_ID           #26-mega-dynasty channel ID
     RTA_ADMIN_CHANNEL_ID          #monitored-admin-advance channel ID
-    RTA_ANNOUNCE_CHANNEL_ID       #announcements channel ID
+    RTA_ANNOUNCE_CHANNEL_ID       #announcements channel ID(s) -- comma-separated
+                                   for multiple channels, e.g. "111,222"
 
 Optional:
     SUMMARY_CHANNEL_ID             #bot-admin-alerts (reused from the scraper setup)
@@ -44,7 +45,7 @@ import rta_logic as rl
 DISCORD_TOKEN = os.environ.get("DISCORD_TOKEN")
 MAIN_CHANNEL_ID = os.environ.get("RTA_MAIN_CHANNEL_ID")
 ADMIN_CHANNEL_ID = os.environ.get("RTA_ADMIN_CHANNEL_ID")
-ANNOUNCE_CHANNEL_ID = os.environ.get("RTA_ANNOUNCE_CHANNEL_ID")
+ANNOUNCE_CHANNEL_IDS = rl.parse_channel_ids(os.environ.get("RTA_ANNOUNCE_CHANNEL_ID", ""))
 SUMMARY_CHANNEL_ID = os.environ.get("SUMMARY_CHANNEL_ID")
 ADMIN_LOG_CHANNEL_ID = os.environ.get("ADMIN_LOG_CHANNEL_ID")
 ADVANCE_KEYWORD = os.environ.get("RTA_ADVANCE_KEYWORD", rl.DEFAULT_ADVANCE_KEYWORD)
@@ -119,7 +120,7 @@ def run() -> str:
     genuine failures -- the caller catches and reports those."""
     missing = [name for name, val in [
         ("DISCORD_TOKEN", DISCORD_TOKEN), ("RTA_MAIN_CHANNEL_ID", MAIN_CHANNEL_ID),
-        ("RTA_ADMIN_CHANNEL_ID", ADMIN_CHANNEL_ID), ("RTA_ANNOUNCE_CHANNEL_ID", ANNOUNCE_CHANNEL_ID),
+        ("RTA_ADMIN_CHANNEL_ID", ADMIN_CHANNEL_ID), ("RTA_ANNOUNCE_CHANNEL_ID", ANNOUNCE_CHANNEL_IDS),
     ] if not val]
     if missing:
         raise RuntimeError(f"Missing environment variable(s): {', '.join(missing)}")
@@ -152,12 +153,14 @@ def run() -> str:
             matchup_lines = rl.format_matchup_lines(all_ids, id_to_team, matchups) if matchups else []
 
             if matchup_lines:
-                post_chunked(
-                    ANNOUNCE_CHANNEL_ID, DISCORD_TOKEN,
-                    announcement + "\n\nThis week's matchups:", matchup_lines,
-                )
+                for cid in ANNOUNCE_CHANNEL_IDS:
+                    post_chunked(
+                        cid, DISCORD_TOKEN,
+                        announcement + "\n\nThis week's matchups:", matchup_lines,
+                    )
             else:
-                post_message(ANNOUNCE_CHANNEL_ID, DISCORD_TOKEN, announcement)
+                for cid in ANNOUNCE_CHANNEL_IDS:
+                    post_message(cid, DISCORD_TOKEN, announcement)
 
     main_messages = fetch_new_messages(MAIN_CHANNEL_ID, DISCORD_TOKEN, state.get("last_message_id_main"))
     log.info("Main channel: %d new message(s).", len(main_messages))

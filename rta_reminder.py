@@ -18,7 +18,8 @@ Required environment variables:
     DISCORD_TOKEN                Bot token
     RTA_MAIN_CHANNEL_ID           #26-mega-dynasty channel ID (for the
                                    clickable link in the reminder text)
-    RTA_ANNOUNCE_CHANNEL_ID       #announcements channel ID
+    RTA_ANNOUNCE_CHANNEL_ID       #announcements channel ID(s) -- comma-separated
+                                   for multiple channels, e.g. "111,222"
 
 Optional:
     SUMMARY_CHANNEL_ID             #bot-admin-alerts (reused from the scraper setup)
@@ -40,7 +41,7 @@ import rta_logic as rl
 
 DISCORD_TOKEN = os.environ.get("DISCORD_TOKEN")
 MAIN_CHANNEL_ID = os.environ.get("RTA_MAIN_CHANNEL_ID")
-ANNOUNCE_CHANNEL_ID = os.environ.get("RTA_ANNOUNCE_CHANNEL_ID")
+ANNOUNCE_CHANNEL_IDS = rl.parse_channel_ids(os.environ.get("RTA_ANNOUNCE_CHANNEL_ID", ""))
 SUMMARY_CHANNEL_ID = os.environ.get("SUMMARY_CHANNEL_ID")
 ADMIN_LOG_CHANNEL_ID = os.environ.get("ADMIN_LOG_CHANNEL_ID")
 STATE_FILE = os.environ.get("RTA_STATE_FILE", "rta_status.json")
@@ -102,7 +103,7 @@ def run() -> str:
         return "skipped_gate"
 
     missing = [name for name, val in [
-        ("DISCORD_TOKEN", DISCORD_TOKEN), ("RTA_ANNOUNCE_CHANNEL_ID", ANNOUNCE_CHANNEL_ID),
+        ("DISCORD_TOKEN", DISCORD_TOKEN), ("RTA_ANNOUNCE_CHANNEL_ID", ANNOUNCE_CHANNEL_IDS),
     ] if not val]
     if missing:
         raise RuntimeError(f"Missing environment variable(s): {', '.join(missing)}")
@@ -126,7 +127,8 @@ def run() -> str:
     log.info("Week label: %s. Matchups found for %d team(s).", week_label, len(matchups))
 
     message = format_reminder_message(not_ready, id_to_team, week_label, matchups, MAIN_CHANNEL_ID)
-    post_message(ANNOUNCE_CHANNEL_ID, DISCORD_TOKEN, message)
+    for cid in ANNOUNCE_CHANNEL_IDS:
+        post_message(cid, DISCORD_TOKEN, message)
     log.info("Reminder posted (%d tagged).", len(not_ready))
     return f"sent:{len(not_ready)}"
 
