@@ -423,10 +423,9 @@ if page == "🏈 Home":
                 is_ready = entry["user_id"] in ready_ids
                 logo = team_logo_tag(team, 20) if team else ""
                 icon = "✅" if is_ready else "⬜"
-                style = "" if is_ready else "opacity:0.45;"
                 with cols[i % 4]:
                     st.markdown(
-                        f'<div style="{style} padding:3px 0;">{icon} {logo}<b>{team}</b> '
+                        f'<div style="padding:3px 0;">{icon} {logo}<b>{team}</b> '
                         f'<span class="stat-label">({entry["display_name"]})</span></div>',
                         unsafe_allow_html=True,
                     )
