@@ -408,7 +408,8 @@ if page == "🏈 Home":
     c3.metric("CPU Games", summary["cpu_games"])
     c4.metric("Teams Tracked", len(TEAMS))
 
-    rta_status = dl.load_rta_status()
+    rta_status_path = os.path.join(SCRIPT_DIR, "rta_status.json")
+    rta_status = dl.load_rta_status(rta_status_path)
     if rta_status is not None:
         st.divider()
         ready_ids = set(rta_status.get("ready_user_ids", []))
@@ -433,6 +434,11 @@ if page == "🏈 Home":
             st.caption("Roster not found (Server_Members_Teams.csv) -- can't show who's tracked.")
         if rta_status.get("last_updated"):
             st.caption(f"Last checked: {rta_status['last_updated']}")
+    else:
+        rta_error = dl.rta_status_diagnostic(rta_status_path)
+        if rta_error:
+            st.divider()
+            st.warning(f"⚠️ {rta_error}")
 
     st.divider()
 

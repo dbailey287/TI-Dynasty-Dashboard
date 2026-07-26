@@ -240,6 +240,32 @@ def apply_display_names(df: pd.DataFrame, team_display_map: dict) -> pd.DataFram
     return df
 
 
+def rta_status_diagnostic(path: str = "rta_status.json") -> str | None:
+    """
+    Returns None if there's nothing to report -- the file is missing
+    entirely (e.g. the RTA automation just isn't set up yet) or it loaded
+    fine. Returns a short human-readable reason if the file EXISTS but
+    couldn't be parsed (e.g. leftover git merge-conflict markers from a
+    conflict that wasn't fully resolved), so the dashboard can show a
+    clear message instead of silently hiding the section either way.
+    """
+    import json
+    import os
+    if not os.path.exists(path):
+        return None
+    try:
+        with open(path, "r") as f:
+            json.load(f)
+        return None
+    except json.JSONDecodeError as e:
+        return (
+            f"rta_status.json exists but isn't valid JSON ({e}). Check for "
+            "leftover git merge-conflict markers (<<<<<<<, =======, >>>>>>>)."
+        )
+    except OSError as e:
+        return f"rta_status.json exists but couldn't be read: {e}"
+
+
 def load_rta_status(path: str = "rta_status.json") -> dict | None:
     """
     Reads the Ready-To-Advance status file written by the RTA tracker's
