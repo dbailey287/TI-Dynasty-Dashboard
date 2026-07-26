@@ -185,47 +185,40 @@ def resolve_season() -> int:
         except ValueError as e:
             print(f"  {e}")
 
-# Team assignments can change season to season (someone swaps teams, a new
-# person joins, etc.), so this is keyed by season year rather than being a
-# single flat mapping. When a new season starts, copy the most recent
-# season's block below, bump the year, and edit whichever assignments
-# changed -- everything else can stay as-is.
-USER_TEAMS_BY_SEASON = {
-    2026: {
-        "Brian": "Arizona State", "Clemsontigers1": "Arkansas", "TigerBo413": "Baylor",
-        "Ben": "California", "tigerbrave27": "Colorado", "Holdma Dix": "Missouri",
-        "Chefkdh": "Northwestern", "bigdaddydoubles": "Oklahoma State", "aalexbailey": "Pittsburgh",
-        "cfuller23": "SMU", "Clemson256": "South Carolina", "bearofswag": "Stanford",
-        "reign_man34": "Temple", "son_of_beef": "Virginia", "Rooke1221": "Virginia Tech",
-        "Garnet Blood": "West Virginia", "Whobedis": "Wisconsin",
-    },
-    # 2027: {
-    #     "Brian": "Arizona State", ...   <- copy 2026's block and edit
-    #     changed assignments before running the 2027 scrape for the first time.
-    # },
+import roster as _roster  # shared with the dashboard and RTA scripts -- see roster.py
+
+# Emergency fallback ONLY -- used if Server_Members_Teams.csv can't be
+# found at all, so a missing file doesn't hard-crash a run. Team/user
+# matching now comes from that CSV going forward; this dict is not meant
+# to be maintained anymore.
+_FALLBACK_USER_TEAMS_2026 = {
+    "Brian": "Arizona State", "Clemsontigers1": "Arkansas", "TigerBo413": "Baylor",
+    "Ben": "California", "tigerbrave27": "Colorado", "Holdma Dix": "Missouri",
+    "Chefkdh": "Northwestern", "bigdaddydoubles": "Oklahoma State", "aalexbailey": "Pittsburgh",
+    "cfuller23": "SMU", "Clemson256": "South Carolina", "bearofswag": "Stanford",
+    "reign_man34": "Temple", "son_of_beef": "Virginia", "Rooke1221": "Virginia Tech",
+    "Garnet Blood": "West Virginia", "Whobedis": "Wisconsin",
 }
 
 
 def resolve_user_teams(season: int) -> dict:
-    """Looks up the season's team-assignment mapping. Falls back to the
-    most recent earlier season's mapping (with a loud warning) if the new
-    season hasn't been added to USER_TEAMS_BY_SEASON yet, so a first run
-    for a new year doesn't crash -- it just won't reflect swapped teams
-    until you add that season's block above."""
-    if season in USER_TEAMS_BY_SEASON:
-        return USER_TEAMS_BY_SEASON[season]
+    """Loads {username: team} from Server_Members_Teams.csv (via roster.py),
+    filtered to active users with a team assigned. Falls back to a small
+    hardcoded 2026 mapping -- with a loud warning -- only if that CSV is
+    missing entirely, so a first run without it doesn't just crash."""
+    roster_path = _roster.find_roster_csv(".")
+    if not roster_path:
+        log.warning(
+            "No Server_Members_Teams.csv found -- falling back to a hardcoded "
+            "2026 mapping. Add that CSV to the repo for accurate, up-to-date "
+            "team/user matching (see roster.py)."
+        )
+        return dict(_FALLBACK_USER_TEAMS_2026)
 
-    known_seasons = [s for s in USER_TEAMS_BY_SEASON if s <= season]
-    if not known_seasons:
-        known_seasons = list(USER_TEAMS_BY_SEASON)
-    fallback_season = max(known_seasons)
-    log.warning(
-        "No USER_TEAMS_BY_SEASON entry for %d yet -- using %d's team assignments as a "
-        "starting point. If any teams changed hands for %d, add a %d block to "
-        "USER_TEAMS_BY_SEASON in the script (copy %d's and edit) before your next run.",
-        season, fallback_season, season, season, fallback_season,
-    )
-    return USER_TEAMS_BY_SEASON[fallback_season]
+    entries = _roster.load_roster(roster_path)
+    mapping = _roster.username_to_team(entries)
+    log.info("Loaded %d active user(s) from %s.", len(mapping), roster_path)
+    return mapping
 
 VISION_PROMPT = """
 Analyze this College Football Team Schedule screenshot.

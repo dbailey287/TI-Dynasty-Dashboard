@@ -185,6 +185,15 @@ if df_all.empty:
             st.rerun()
     st.stop()
 
+# Overlay each team's current Discord display_name from Server_Members_Teams.csv,
+# if that file is present -- upgrades the "User" column to something a human
+# actually recognizes, and self-corrects historical rows too (this replaces
+# whatever text the scraper happened to read off a screenshot, which was
+# never guaranteed to match anyone's real name in the first place).
+_roster_display_map = dl.load_roster_display_names(SCRIPT_DIR)
+if _roster_display_map:
+    df_all = dl.apply_display_names(df_all, _roster_display_map)
+
 seasons_available = sorted(df_all["Season"].dropna().unique().tolist(), reverse=True)
 if "selected_season" not in st.session_state or st.session_state["selected_season"] not in seasons_available:
     st.session_state["selected_season"] = seasons_available[0]
@@ -286,6 +295,49 @@ def team_display(team: str) -> str:
     return f"{team} ({user})" if user else team
 
 
+def render_team_hero(team: str, user: str, rank=None, rating=None):
+    """Full-width gradient banner in the team's own colors, with a dark
+    overlay so white text stays readable regardless of how light/dark the
+    team's actual colors are."""
+    primary = dl.team_primary_color(team)
+    secondary = dl.team_secondary_color(team)
+    logo = dl.logo_url(team)
+    logo_html = (
+        f'<img src="{logo}" style="height:70px;width:70px;object-fit:contain;'
+        f'filter:drop-shadow(0 2px 6px rgba(0,0,0,0.5));">' if logo else ""
+    )
+    badge_html = ""
+    if rank is not None and rating is not None:
+        badge_html = (
+            '<div style="margin-top:8px;">'
+            f'<span style="background:rgba(0,0,0,0.35); padding:4px 12px; border-radius:20px; '
+            f'font-size:0.85rem; font-weight:600; margin-right:8px;">Dynasty Rank #{int(rank)}</span>'
+            f'<span style="background:rgba(0,0,0,0.35); padding:4px 12px; border-radius:20px; '
+            f'font-size:0.85rem; font-weight:600;">Rating {rating:.1f}</span>'
+            '</div>'
+        )
+    st.markdown(
+        f'<div style="background: linear-gradient(135deg, {primary} 0%, {secondary} 100%); '
+        'position: relative; border-radius: 14px; padding: 20px 24px; margin-bottom: 18px; '
+        'display:flex; align-items:center; gap:18px; overflow:hidden;">'
+        '<div style="position:absolute; inset:0; background:rgba(0,0,0,0.45);"></div>'
+        f'<div style="position:relative; z-index:1;">{logo_html}</div>'
+        '<div style="position:relative; z-index:1; color:white;">'
+        f'<div style="font-size:1.7rem; font-weight:800; text-shadow: 0 2px 4px rgba(0,0,0,0.4);">{team}</div>'
+        f'<div style="font-size:0.95rem; opacity:0.9;">{user}</div>'
+        f'{badge_html}'
+        '</div></div>',
+        unsafe_allow_html=True,
+    )
+
+
+def colored_divider(color: str):
+    st.markdown(
+        f'<hr style="border:none; height:2px; background:{color}; opacity:0.5; margin:18px 0;">',
+        unsafe_allow_html=True,
+    )
+
+
 def team_logo_tag(team: str, size: int = 22) -> str:
     """Small inline <img> tag for a team's logo, or '' if unrecognized."""
     url = dl.logo_url(team)
@@ -355,6 +407,34 @@ if page == "🏈 Home":
     c2.metric("User vs User", summary["user_vs_user_games"])
     c3.metric("CPU Games", summary["cpu_games"])
     c4.metric("Teams Tracked", len(TEAMS))
+
+    rta_status = dl.load_rta_status()
+    if rta_status is not None:
+        st.divider()
+        ready_users = set(rta_status.get("ready_users", []))
+        team_user_map = team_stats["User"].to_dict()
+        # Map each tracked Discord username back to its team for display,
+        # since ready_users only stores usernames.
+        user_to_team = {u: t for t, u in team_user_map.items()}
+        all_users = sorted(user_to_team.keys())
+
+        st.subheader(f"✅ Ready to Advance — {len(ready_users)}/{len(all_users)}")
+        if all_users:
+            cols = st.columns(4)
+            for i, user in enumerate(all_users):
+                team = user_to_team.get(user, "")
+                is_ready = user in ready_users
+                logo = team_logo_tag(team, 20) if team else ""
+                icon = "✅" if is_ready else "⬜"
+                style = "" if is_ready else "opacity:0.45;"
+                with cols[i % 4]:
+                    st.markdown(
+                        f'<div style="{style} padding:3px 0;">{icon} {logo}<b>{team or user}</b> '
+                        f'<span class="stat-label">({user})</span></div>',
+                        unsafe_allow_html=True,
+                    )
+        if rta_status.get("last_updated"):
+            st.caption(f"Last checked: {rta_status['last_updated']}")
 
     st.divider()
 
@@ -571,6 +651,65 @@ elif page == "🏆 Power Rankings":
             fig_hist.update_layout(height=500, legend_title_text="")
             st.plotly_chart(fig_hist, use_container_width=True)
 
+        st.divider()
+        st.subheader("🏁 Rating Race")
+        st.caption("Same data, animated — hit play to watch the field shuffle week by week. Drag the slider to jump to any week.")
+
+        race_weeks = sorted(rating_history["Week_Sort"].unique())
+        if len(race_weeks) < 2:
+            st.caption("Need at least two completed weeks for the race to animate.")
+        else:
+            frames = []
+            for w in race_weeks:
+                wk_data = rating_history[rating_history["Week_Sort"] == w].sort_values("Dynasty_Rating", ascending=True)
+                frames.append(go.Frame(
+                    data=[go.Bar(
+                        x=wk_data["Dynasty_Rating"], y=wk_data["Team"], orientation="h",
+                        marker_color=[dl.team_primary_color(t) for t in wk_data["Team"]],
+                        text=wk_data["Dynasty_Rating"].round(1), textposition="outside",
+                        hovertext=wk_data["User"], hoverinfo="text+x",
+                    )],
+                    name=str(w),
+                    layout=go.Layout(yaxis=dict(categoryorder="array", categoryarray=wk_data["Team"].tolist())),
+                ))
+
+            first_wk = rating_history[rating_history["Week_Sort"] == race_weeks[0]].sort_values("Dynasty_Rating", ascending=True)
+            race_fig = go.Figure(
+                data=[go.Bar(
+                    x=first_wk["Dynasty_Rating"], y=first_wk["Team"], orientation="h",
+                    marker_color=[dl.team_primary_color(t) for t in first_wk["Team"]],
+                    text=first_wk["Dynasty_Rating"].round(1), textposition="outside",
+                    hovertext=first_wk["User"], hoverinfo="text+x",
+                )],
+                frames=frames,
+            )
+            race_fig.update_layout(
+                xaxis=dict(range=[0, 105], title="Dynasty Rating"),
+                yaxis=dict(categoryorder="array", categoryarray=first_wk["Team"].tolist(), title=""),
+                height=max(360, 32 * len(TEAMS)),
+                margin=dict(l=10, r=10, t=10, b=10),
+                updatemenus=[dict(
+                    type="buttons", direction="left", x=0, y=1.08, xanchor="left",
+                    buttons=[
+                        dict(label="▶ Play", method="animate",
+                             args=[None, {"frame": {"duration": 700, "redraw": True}, "fromcurrent": True, "transition": {"duration": 300}}]),
+                        dict(label="⏸ Pause", method="animate",
+                             args=[[None], {"frame": {"duration": 0}, "mode": "immediate"}]),
+                    ],
+                )],
+                sliders=[dict(
+                    active=0, x=0, y=-0.02, len=1.0,
+                    currentvalue=dict(prefix="Week: "),
+                    steps=[
+                        dict(label=rating_history.loc[rating_history["Week_Sort"] == w, "Week"].iloc[0],
+                             method="animate",
+                             args=[[str(w)], {"frame": {"duration": 0, "redraw": True}, "mode": "immediate"}])
+                        for w in race_weeks
+                    ],
+                )],
+            )
+            st.plotly_chart(race_fig, use_container_width=True)
+
 
 # ============================================================================
 # PAGE: SCHEDULE
@@ -629,23 +768,12 @@ elif page == "👤 Teams":
         rating_row = rated.loc[selected_team] if selected_team in rated.index else None
 
         primary = dl.team_primary_color(selected_team)
-        secondary = dl.team_secondary_color(selected_team)
-        logo = dl.logo_url(selected_team)
 
-        hc1, hc2 = st.columns([1, 5])
-        with hc1:
-            if logo:
-                st.image(logo, width=80)
-        with hc2:
-            st.markdown(
-                f'<div style="border-left: 6px solid {primary}; '
-                f'border-bottom: 2px solid {secondary}; padding: 4px 0 6px 12px; margin-top: 4px;">'
-                f'<span style="font-size:1.5rem; font-weight:700;">{selected_team}</span>'
-                f'<span class="stat-label">&nbsp;&nbsp;{row["User"]}</span></div>',
-                unsafe_allow_html=True,
-            )
-        if rating_row is not None:
-            st.caption(f"Dynasty Rank #{int(rating_row['Rank'])}  ·  Rating {rating_row['Dynasty_Rating']:.1f}")
+        render_team_hero(
+            selected_team, row["User"],
+            rank=rating_row["Rank"] if rating_row is not None else None,
+            rating=rating_row["Dynasty_Rating"] if rating_row is not None else None,
+        )
 
         c1, c2, c3, c4 = st.columns(4)
         c1.metric("Overall", f"{int(row['W'])}-{int(row['L'])}")
@@ -665,7 +793,7 @@ elif page == "👤 Teams":
         c11.metric("Avg Margin", f"{row['MOV']:+.1f}" if pd.notna(row["MOV"]) else "—")
         c12.metric("SOS", f"{row['SOS']:.3f}" if pd.notna(row["SOS"]) else "—")
 
-        st.divider()
+        colored_divider(primary)
         st.subheader("Game Log")
         log = df[df["Team"] == selected_team].sort_values("Week_Sort")
         log_display = log[[
@@ -679,7 +807,7 @@ elif page == "👤 Teams":
         )
 
         if rating_row is not None:
-            st.divider()
+            colored_divider(primary)
             st.subheader("Why this ranking?")
             for b in dl.rating_explanation(selected_team, rated):
                 st.markdown(f"- {b}")

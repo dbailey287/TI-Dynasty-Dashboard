@@ -191,6 +191,57 @@ def default_current_week_sort(df: pd.DataFrame):
     return int(upcoming["Week_Sort"].min())
 
 
+def load_roster_display_names(directory: str = ".") -> dict:
+    """Returns {team: display_name} from Server_Members_Teams.csv, or {}
+    if roster.py / the CSV aren't present -- the dashboard falls back to
+    whatever the scraper originally wrote in that case, rather than
+    crashing over a missing optional file."""
+    try:
+        import roster as _roster
+    except ImportError:
+        return {}
+    path = _roster.find_roster_csv(directory)
+    if not path:
+        return {}
+    try:
+        entries = _roster.load_roster(path)
+    except (OSError, KeyError):
+        return {}
+    return _roster.team_to_display_name(entries)
+
+
+def apply_display_names(df: pd.DataFrame, team_display_map: dict) -> pd.DataFrame:
+    """Overrides the User column with the roster's current display_name,
+    for any team present in that mapping. Teams not in the roster (e.g.
+    older seasons, or a team not yet added to the CSV) keep whatever the
+    scraper originally wrote -- this never removes information, only
+    upgrades it when a better source is available."""
+    if not team_display_map:
+        return df
+    df = df.copy()
+    mask = df["Team"].isin(team_display_map)
+    df.loc[mask, "User"] = df.loc[mask, "Team"].map(team_display_map)
+    return df
+
+
+def load_rta_status(path: str = "rta_status.json") -> dict | None:
+    """
+    Reads the Ready-To-Advance status file written by the RTA tracker's
+    GitHub Actions job. Returns None if the file doesn't exist (e.g. the
+    tracker isn't set up yet) rather than raising, so the dashboard can
+    just hide the section gracefully.
+    """
+    import json
+    import os
+    if not os.path.exists(path):
+        return None
+    try:
+        with open(path, "r") as f:
+            return json.load(f)
+    except (json.JSONDecodeError, OSError):
+        return None
+
+
 def has_at_game_rank_data(df: pd.DataFrame) -> bool:
     """
     True if this data has usable Opponent_Rank_At_Game values (i.e. was
