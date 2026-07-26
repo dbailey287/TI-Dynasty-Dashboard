@@ -98,6 +98,22 @@ def post_message(channel_id: str, token: str, content: str):
     resp.raise_for_status()
 
 
+def post_chunked(channel_id: str, token: str, header: str, lines: list, max_len: int = 1900):
+    """Posts header + lines as one message, splitting into multiple
+    messages if it would exceed Discord's length limit (unlikely with 17
+    teams, but safe regardless of roster size)."""
+    chunk = header
+    for line in lines:
+        candidate = chunk + "\n" + line
+        if len(candidate) > max_len:
+            post_message(channel_id, token, chunk)
+            chunk = line
+        else:
+            chunk = candidate
+    if chunk:
+        post_message(channel_id, token, chunk)
+
+
 def run() -> str:
     """Returns a short status string for the alert channel. Raises on
     genuine failures -- the caller catches and reports those."""
@@ -125,11 +141,23 @@ def run() -> str:
         changed = True
         if triggered:
             advance_triggered = True
-            week_label = rl.find_current_week_label(".")
+            week_label, matchups = rl.get_current_week_matchups(".")
             announcement = rl.pick_announcement()
-            week_note = f" We're now on **Week {week_label}**." if week_label != "?" else ""
+            if week_label != "?":
+                announcement += f" We're now on **Week {week_label}**."
             log.info("Advance detected -- posting to #announcements (week=%s).", week_label)
-            post_message(ANNOUNCE_CHANNEL_ID, DISCORD_TOKEN, announcement + week_note)
+
+            all_ids = [r["user_id"] for r in roster]
+            id_to_team = {r["user_id"]: r["team"] for r in roster}
+            matchup_lines = rl.format_matchup_lines(all_ids, id_to_team, matchups) if matchups else []
+
+            if matchup_lines:
+                post_chunked(
+                    ANNOUNCE_CHANNEL_ID, DISCORD_TOKEN,
+                    announcement + "\n\nThis week's matchups:", matchup_lines,
+                )
+            else:
+                post_message(ANNOUNCE_CHANNEL_ID, DISCORD_TOKEN, announcement)
 
     main_messages = fetch_new_messages(MAIN_CHANNEL_ID, DISCORD_TOKEN, state.get("last_message_id_main"))
     log.info("Main channel: %d new message(s).", len(main_messages))

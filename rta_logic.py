@@ -183,6 +183,34 @@ def process_rta_messages(messages: list, tracked_user_ids: set, state: dict) -> 
     return state
 
 
+def format_matchup_lines(user_ids: list, id_to_team: dict, matchups: dict) -> list:
+    """
+    Builds one formatted line per user ID, showing their current-week
+    matchup and flagging User vs User games specially. Shared between the
+    RTA reminder ("who's not ready, and who are they playing") and the
+    advance announcement ("here's everyone's new matchup").
+    """
+    def sort_key(uid):
+        return id_to_team.get(uid) or uid
+
+    lines = []
+    for uid in sorted(user_ids, key=sort_key):
+        team = id_to_team.get(uid)
+        mention = f"<@{uid}>"
+        matchup = matchups.get(team) if team else None
+        if matchup and matchup["opponent"] != "?":
+            opp = matchup["opponent"]
+            if matchup["opponent_is_user"]:
+                lines.append(f"🔥 {mention} — **{team}** vs **{opp}** — USER MATCHUP!")
+            else:
+                lines.append(f"- {mention} — {team} vs {opp}")
+        elif team:
+            lines.append(f"- {mention} — {team}")
+        else:
+            lines.append(f"- {mention}")
+    return lines
+
+
 def get_current_week_matchups(directory: str = ".") -> tuple:
     """
     Best-effort lookup of "who is each team playing this week," for the

@@ -79,23 +79,7 @@ def format_reminder_message(not_ready_ids: list, id_to_team: dict, week_label: s
         intro += "."
 
     lines = [intro, "", "Still waiting on:"]
-
-    def sort_key(uid):
-        return id_to_team.get(uid) or uid
-    for uid in sorted(not_ready_ids, key=sort_key):
-        team = id_to_team.get(uid)
-        mention = f"<@{uid}>"
-        matchup = matchups.get(team) if team else None
-        if matchup and matchup["opponent"] != "?":
-            opp = matchup["opponent"]
-            if matchup["opponent_is_user"]:
-                lines.append(f"🔥 {mention} — **{team}** vs **{opp}** — USER MATCHUP!")
-            else:
-                lines.append(f"- {mention} — {team} vs {opp}")
-        elif team:
-            lines.append(f"- {mention} — {team}")
-        else:
-            lines.append(f"- {mention}")
+    lines.extend(rl.format_matchup_lines(not_ready_ids, id_to_team, matchups))
 
     lines.append("")
     if main_channel_id:
