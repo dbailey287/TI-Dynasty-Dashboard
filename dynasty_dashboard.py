@@ -411,28 +411,26 @@ if page == "🏈 Home":
     rta_status = dl.load_rta_status()
     if rta_status is not None:
         st.divider()
-        ready_users = set(rta_status.get("ready_users", []))
-        team_user_map = team_stats["User"].to_dict()
-        # Map each tracked Discord username back to its team for display,
-        # since ready_users only stores usernames.
-        user_to_team = {u: t for t, u in team_user_map.items()}
-        all_users = sorted(user_to_team.keys())
+        ready_ids = set(rta_status.get("ready_user_ids", []))
+        roster_entries = dl.load_roster_entries(SCRIPT_DIR)
 
-        st.subheader(f"✅ Ready to Advance — {len(ready_users)}/{len(all_users)}")
-        if all_users:
+        st.subheader(f"✅ Ready to Advance — {len(ready_ids & {e['user_id'] for e in roster_entries})}/{len(roster_entries)}")
+        if roster_entries:
             cols = st.columns(4)
-            for i, user in enumerate(all_users):
-                team = user_to_team.get(user, "")
-                is_ready = user in ready_users
+            for i, entry in enumerate(sorted(roster_entries, key=lambda e: e["team"])):
+                team = entry["team"]
+                is_ready = entry["user_id"] in ready_ids
                 logo = team_logo_tag(team, 20) if team else ""
                 icon = "✅" if is_ready else "⬜"
                 style = "" if is_ready else "opacity:0.45;"
                 with cols[i % 4]:
                     st.markdown(
-                        f'<div style="{style} padding:3px 0;">{icon} {logo}<b>{team or user}</b> '
-                        f'<span class="stat-label">({user})</span></div>',
+                        f'<div style="{style} padding:3px 0;">{icon} {logo}<b>{team}</b> '
+                        f'<span class="stat-label">({entry["display_name"]})</span></div>',
                         unsafe_allow_html=True,
                     )
+        else:
+            st.caption("Roster not found (Server_Members_Teams.csv) -- can't show who's tracked.")
         if rta_status.get("last_updated"):
             st.caption(f"Last checked: {rta_status['last_updated']}")
 

@@ -191,6 +191,22 @@ def default_current_week_sort(df: pd.DataFrame):
     return int(upcoming["Week_Sort"].min())
 
 
+def load_roster_entries(directory: str = ".") -> list:
+    """Returns the full active roster (team/username/display_name/user_id)
+    via roster.py, or [] if roster.py / the CSV aren't present."""
+    try:
+        import roster as _roster
+    except ImportError:
+        return []
+    path = _roster.find_roster_csv(directory)
+    if not path:
+        return []
+    try:
+        return _roster.load_roster(path)
+    except (OSError, KeyError):
+        return []
+
+
 def load_roster_display_names(directory: str = ".") -> dict:
     """Returns {team: display_name} from Server_Members_Teams.csv, or {}
     if roster.py / the CSV aren't present -- the dashboard falls back to
