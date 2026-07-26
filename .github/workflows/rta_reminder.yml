@@ -31,7 +31,7 @@ jobs:
           python-version: "3.12"
 
       - name: Install dependencies
-        run: pip install requests
+        run: pip install requests pandas
 
       - name: Check and send reminder
         env:
