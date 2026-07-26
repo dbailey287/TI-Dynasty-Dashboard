@@ -125,6 +125,12 @@ logging.basicConfig(
 )
 log = logging.getLogger("cfb_scraper")
 
+# Temporarily verbose while diagnosing a hang-on-shutdown issue in CI: this
+# surfaces discord.py's own internal gateway/session lifecycle messages
+# (heartbeats, close handshake, reconnects) that our own log lines don't
+# cover, without changing the level of our own "cfb_scraper" logger above.
+logging.getLogger("discord").setLevel(logging.DEBUG)
+
 
 def _validate_season(raw: str) -> int:
     try:
@@ -731,7 +737,9 @@ async def on_ready():
         per_team_rows[r["Team"]] = per_team_rows.get(r["Team"], 0) + 1
     await post_run_notifications(list(per_team_rows.keys()), per_team_rows, failed_images, len(newly_processed))
 
+    log.info("Notifications sent. Closing Discord connection now...")
     await bot.close()
+    log.info("Discord connection closed cleanly.")
 
 
 async def retry_failed(processed_ids: set, failed_images: dict) -> None:
