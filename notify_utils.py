@@ -49,19 +49,24 @@ def _post(channel_id: str, token: str, content: str = None,
     resp.raise_for_status()
 
 
-def post_log_file(channel_id: str, token: str, script_name: str):
-    """Posts the full captured run log as a .txt file. No-ops if
-    channel_id isn't set; logs (doesn't raise) if the post itself fails,
-    so a Discord hiccup here never crashes the actual automation."""
+def post_text_file(channel_id: str, token: str, script_name: str, text: str, content: str = None):
+    """Posts arbitrary text as a .txt file (e.g. a combined multi-run
+    digest log, not just the current process's own captured output)."""
     if not channel_id:
         return
-    log_text = LOG_BUFFER.getvalue() or "(no log output captured)"
+    text = text or "(no log output captured)"
     timestamp = datetime.datetime.now(datetime.timezone.utc).strftime("%Y%m%d_%H%M%S")
     try:
-        _post(channel_id, token, file_bytes=log_text.encode("utf-8"),
+        _post(channel_id, token, content=content, file_bytes=text.encode("utf-8"),
               filename=f"{script_name}_{timestamp}.txt")
     except Exception as e:
         logging.getLogger(__name__).error("Failed to post log file: %s", e)
+
+
+def post_log_file(channel_id: str, token: str, script_name: str):
+    """Posts the full captured run log (this process's own output) as a
+    .txt file. No-ops if channel_id isn't set."""
+    post_text_file(channel_id, token, script_name, LOG_BUFFER.getvalue())
 
 
 def post_alert(channel_id: str, token: str, message: str):

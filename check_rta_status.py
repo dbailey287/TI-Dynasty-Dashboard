@@ -13,9 +13,14 @@ On an advance: resets everyone's RTA status and posts a celebratory
 message (plus the newly-detected week number, best-effort) to
 #announcements.
 
-Every invocation posts:
-  - a short status line to #bot-admin-alerts (SUMMARY_CHANNEL_ID)
-  - the full run log as a file to #bot-admin-logs (ADMIN_LOG_CHANNEL_ID)
+Every invocation does its real work immediately (RTA/advance detection,
+resetting status, posting the advance announcement to #announcements).
+The META notifications -- the "here's what happened" status line to
+#bot-admin-alerts and the run log to #bot-admin-logs -- are BATCHED
+instead of sent every 10 minutes: they accumulate quietly and get sent
+as one digest at ~6am and ~6pm Eastern, covering everything since the
+last digest. A genuine FAILURE always alerts immediately, bypassing the
+batch -- routine "ran fine" noise is what gets batched, not problems.
 
 Meant to run on a SCHEDULE (e.g. every 5-10 minutes via GitHub Actions --
 see .github/workflows/rta_tracker.yml), not as a persistent listener.
@@ -32,10 +37,15 @@ Optional:
     ADMIN_LOG_CHANNEL_ID           #bot-admin-logs (reused from the scraper setup)
     RTA_ADVANCE_KEYWORD           Defaults to "advance"
     RTA_STATE_FILE                 Defaults to rta_status.json
+    RTA_DIGEST_STATE_FILE           Defaults to rta_notification_log.json
+    RTA_DIGEST_HOURS                 Defaults to "6,18" (24h, Eastern)
 """
+import json
 import logging
 import os
 import sys
+from datetime import datetime, timezone
+from zoneinfo import ZoneInfo
 
 import requests
 
@@ -48,6 +58,9 @@ ADMIN_CHANNEL_ID = os.environ.get("RTA_ADMIN_CHANNEL_ID")
 ANNOUNCE_CHANNEL_IDS = rl.parse_channel_ids(os.environ.get("RTA_ANNOUNCE_CHANNEL_ID", ""))
 SUMMARY_CHANNEL_ID = os.environ.get("SUMMARY_CHANNEL_ID")
 ADMIN_LOG_CHANNEL_ID = os.environ.get("ADMIN_LOG_CHANNEL_ID")
+DIGEST_STATE_FILE = os.environ.get("RTA_DIGEST_STATE_FILE", "rta_notification_log.json")
+DIGEST_HOURS = {int(h) for h in os.environ.get("RTA_DIGEST_HOURS", "6,18").split(",")}
+EASTERN = ZoneInfo("America/New_York")
 ADVANCE_KEYWORD = os.environ.get("RTA_ADVANCE_KEYWORD", rl.DEFAULT_ADVANCE_KEYWORD)
 STATE_FILE = os.environ.get("RTA_STATE_FILE", "rta_status.json")
 
@@ -97,6 +110,55 @@ def post_message(channel_id: str, token: str, content: str):
         headers=headers, json={"content": content}, timeout=15,
     )
     resp.raise_for_status()
+
+
+DEFAULT_DIGEST_STATE = {"pending_runs": [], "last_digest_sent_at": None}
+
+
+def load_digest_state(path: str) -> dict:
+    if not os.path.exists(path):
+        return dict(DEFAULT_DIGEST_STATE)
+    with open(path, "r") as f:
+        state = json.load(f)
+    for key, default in DEFAULT_DIGEST_STATE.items():
+        state.setdefault(key, default)
+    return state
+
+
+def save_digest_state(path: str, state: dict):
+    with open(path, "w") as f:
+        json.dump(state, f, indent=2)
+
+
+def should_send_digest_now(now_eastern: datetime, last_digest_sent_at: str) -> bool:
+    """True if it's currently a digest hour AND we haven't already sent
+    one recently -- the "recently" check is what stops this from firing
+    on every single 10-minute tick within the target hour."""
+    if now_eastern.hour not in DIGEST_HOURS:
+        return False
+    if not last_digest_sent_at:
+        return True
+    last_dt = datetime.fromisoformat(last_digest_sent_at)
+    hours_since = (now_eastern.astimezone(timezone.utc) - last_dt.astimezone(timezone.utc)).total_seconds() / 3600
+    return hours_since >= 1
+
+
+def format_digest_alert(pending_runs: list) -> str:
+    if not pending_runs:
+        return "📋 RTA Tracker Digest — no runs recorded in this window."
+    total_new_rta = sum(r.get("new_rta", 0) for r in pending_runs)
+    advances = sum(1 for r in pending_runs if r.get("advance_triggered"))
+    latest = pending_runs[-1]
+    lines = [f"📋 **RTA Tracker Digest** — last ~12h ({len(pending_runs)} run(s))"]
+    lines.append(f"{total_new_rta} new RTA(s), {advances} advance(s) triggered.")
+    if "ready" in latest and "total" in latest:
+        lines.append(f"Current: {latest['ready']}/{latest['total']} ready.")
+    return "\n".join(lines)
+
+
+def build_digest_log_text(pending_runs: list) -> str:
+    parts = [f"=== {r.get('timestamp', '?')} ===\n{r.get('log_text', '')}" for r in pending_runs]
+    return "\n\n".join(parts)
 
 
 def post_chunked(channel_id: str, token: str, header: str, lines: list, max_len: int = 1900):
@@ -189,25 +251,42 @@ def main():
         error_text = f"{type(e).__name__}: {e}"
         log.exception("Unhandled error during RTA tracker run:")
 
+    log_text = notify.LOG_BUFFER.getvalue()
+    timestamp = datetime.now(timezone.utc).isoformat()
+
     if error_text:
-        alert = f"❌ RTA Tracker FAILED: {error_text}"
-    elif status == "no_change":
-        alert = "✅ RTA Tracker: ran, nothing new."
+        # Failures bypass the digest entirely and alert right away --
+        # routine "ran fine" noise is what gets batched, not problems.
+        notify.post_alert(SUMMARY_CHANNEL_ID, DISCORD_TOKEN, f"❌ RTA Tracker FAILED: {error_text}")
+        notify.post_log_file(ADMIN_LOG_CHANNEL_ID, DISCORD_TOKEN, "rta_tracker")
+        sys.exit(1)
+
+    if status == "no_change":
+        record = {"timestamp": timestamp, "new_rta": 0, "advance_triggered": False, "log_text": log_text}
     else:
         _, new_rta, advance, ready, total = status.split(":")
-        parts = []
-        if int(new_rta) > 0:
-            parts.append(f"{new_rta} new RTA(s)")
-        if int(advance):
-            parts.append("advance triggered")
-        detail = ", ".join(parts) if parts else "no new activity"
-        alert = f"✅ RTA Tracker: ran ({detail}). Ready: {ready}/{total}."
+        record = {
+            "timestamp": timestamp, "new_rta": int(new_rta), "advance_triggered": bool(int(advance)),
+            "ready": int(ready), "total": int(total), "log_text": log_text,
+        }
 
-    notify.post_alert(SUMMARY_CHANNEL_ID, DISCORD_TOKEN, alert)
-    notify.post_log_file(ADMIN_LOG_CHANNEL_ID, DISCORD_TOKEN, "rta_tracker")
+    digest_state = load_digest_state(DIGEST_STATE_FILE)
+    digest_state["pending_runs"].append(record)
 
-    if error_text:
-        sys.exit(1)
+    now_eastern = datetime.now(EASTERN)
+    if should_send_digest_now(now_eastern, digest_state["last_digest_sent_at"]):
+        alert = format_digest_alert(digest_state["pending_runs"])
+        combined_log = build_digest_log_text(digest_state["pending_runs"])
+        covered_count = len(digest_state["pending_runs"])
+        notify.post_alert(SUMMARY_CHANNEL_ID, DISCORD_TOKEN, alert)
+        notify.post_text_file(ADMIN_LOG_CHANNEL_ID, DISCORD_TOKEN, "rta_tracker_digest", combined_log)
+        digest_state["pending_runs"] = []
+        digest_state["last_digest_sent_at"] = now_eastern.astimezone(timezone.utc).isoformat()
+        log.info("Digest sent (%d run(s) covered); pending_runs cleared.", covered_count)
+    else:
+        log.info("Not digest time -- accumulated, %d pending run(s).", len(digest_state["pending_runs"]))
+
+    save_digest_state(DIGEST_STATE_FILE, digest_state)
 
 
 if __name__ == "__main__":

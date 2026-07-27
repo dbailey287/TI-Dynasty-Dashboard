@@ -2,7 +2,7 @@ name: RTA Tracker
 
 on:
   schedule:
-    - cron: "*/10 * * * *"   # every 10 minutes
+    - cron: "*/10 * * * *"   # every 10 minutes -- notification batching (see script) keeps this from being noisy
   workflow_dispatch: {}       # adds a "Run workflow" button for manual testing
 
 permissions:
