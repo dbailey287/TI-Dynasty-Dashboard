@@ -1,9 +1,9 @@
 {
   "ready_user_ids": [],
-  "last_message_id_main": "1531167023105572968",
-  "last_message_id_admin": "1531128972295930007",
-  "last_updated": "2026-07-27T05:11:06.529242+00:00",
-  "last_reset_at": "2026-07-27T05:11:04.937561+00:00",
-  "cycle_count": 1,
-  "current_week_sort": 2
+  "last_message_id_main": "1531192563170803825",
+  "last_message_id_admin": "1531192429598740670",
+  "last_updated": "2026-07-27T06:52:35.641629+00:00",
+  "last_reset_at": "2026-07-27T06:52:33.921598+00:00",
+  "cycle_count": 2,
+  "current_week_sort": 3
 }
