@@ -199,7 +199,9 @@ def format_matchup_lines(user_ids: list, id_to_team: dict, matchups: dict) -> li
         team = id_to_team.get(uid)
         mention = f"<@{uid}>"
         matchup = matchups.get(team) if team else None
-        if matchup and matchup["opponent"] != "?":
+        if matchup and matchup.get("is_bye"):
+            lines.append(f"😴 {mention} — {team} — **BYE week**")
+        elif matchup and matchup["opponent"] != "?":
             opp = matchup["opponent"]
             if matchup["opponent_is_user"]:
                 lines.append(f"🔥 {mention} — **{team}** vs **{opp}** — USER MATCHUP!")
@@ -278,21 +280,28 @@ def get_matchups_for_week_sort(directory: str, week_sort: int) -> dict:
     """Who's playing whom for an EXPLICIT week_sort -- not derived from
     which games happen to still say Upcoming, so this stays correct even
     if the scraper hasn't caught up on some teams yet. Returns
-    {team: {"opponent": str, "opponent_is_user": bool}}, or {} if
-    nothing's found."""
+    {team: {"opponent": str, "opponent_is_user": bool, "is_bye": bool}},
+    or {} if nothing's found. BYE weeks are included and flagged rather
+    than silently dropped -- a team on a bye still gets tagged, just with
+    "BYE week" shown instead of an opponent."""
     df = _load_latest_season_df(directory)
     if df is None:
         return {}
     week_games = df[
         (df["Week"].apply(week_sort_key) == week_sort)
-        & (df["Status"].isin(["Upcoming", "Completed"]))
+        & (df["Status"].isin(["Upcoming", "Completed", "BYE"]))
     ]
     matchups = {}
     for _, row in week_games.iterrows():
+        status = (row.get("Status") or "").strip()
+        if status == "BYE":
+            matchups[row["Team"]] = {"opponent": None, "opponent_is_user": False, "is_bye": True}
+            continue
         opponent_user = (row.get("Opponent_User") or "CPU").strip()
         matchups[row["Team"]] = {
             "opponent": (row.get("Opponent") or "?").strip(),
             "opponent_is_user": opponent_user != "CPU",
+            "is_bye": False,
         }
     return matchups
 
