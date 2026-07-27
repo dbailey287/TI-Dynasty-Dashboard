@@ -2,7 +2,7 @@ name: RTA Tracker
 
 on:
   schedule:
-    - cron: "*/10 * * * *"   # every 10 minutes -- notification batching (see script) keeps this from being noisy
+    - cron: "3,13,23,33,43,53 * * * *"   # every 10 minutes, offset from :00/:10/:20 etc -- GitHub Actions queues are most congested at round minutes (especially :00), so this dodges the worst of it
   workflow_dispatch: {}       # adds a "Run workflow" button for manual testing
 
 permissions:
