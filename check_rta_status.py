@@ -204,11 +204,28 @@ def run() -> str:
         changed = True
         if triggered:
             advance_triggered = True
-            week_label, matchups = rl.get_current_week_matchups(".")
+
+            prior_week_sort = state.get("current_week_sort")
+            if prior_week_sort is None:
+                # Bootstrap ONLY: no tracked week yet (e.g. very first
+                # advance ever), so fall back to the CSV's best guess this
+                # one time. Every advance after this increments from what
+                # we already know instead of re-deriving from the CSV,
+                # which is what avoids the staleness bug going forward.
+                prior_week_sort = rl.find_earliest_upcoming_week_sort(".")
+                if prior_week_sort is None:
+                    prior_week_sort = 0
+                new_week_sort = prior_week_sort
+            else:
+                new_week_sort = prior_week_sort + 1
+
+            state["current_week_sort"] = new_week_sort
+            week_label = rl.get_week_label_for_sort(".", new_week_sort)
+            matchups = rl.get_matchups_for_week_sort(".", new_week_sort)
+
             announcement = rl.pick_announcement()
-            if week_label != "?":
-                announcement += f" We're now on **Week {week_label}**."
-            log.info("Advance detected -- posting to #announcements (week=%s).", week_label)
+            announcement += f" We're now on **Week {week_label}**."
+            log.info("Advance detected -- posting to #announcements (week_sort=%s, label=%s).", new_week_sort, week_label)
 
             all_ids = [r["user_id"] for r in roster]
             id_to_team = {r["user_id"]: r["team"] for r in roster}

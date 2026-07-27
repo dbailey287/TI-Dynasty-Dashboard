@@ -35,6 +35,7 @@ def main():
     parser.add_argument("--clear", action="store_true", help="Clear RTA status for everyone")
     parser.add_argument("--show", action="store_true", help="Just print current status, no changes")
     parser.add_argument("--state-file", default="rta_status.json")
+    parser.add_argument("--set-week", type=int, help="Manually set the tracked current week number (the week you're currently IN, before any pending advance)")
     args = parser.parse_args()
 
     entries = rl.load_active_roster(".")
@@ -79,6 +80,10 @@ def main():
                 ready.discard(team_to_id[t])
             made_changes = True
             print(f"Marked NOT ready: {', '.join(teams)}")
+        if args.set_week is not None:  # explicit None-check -- week 0 is valid and falsy
+            state["current_week_sort"] = args.set_week
+            made_changes = True
+            print(f"Set tracked current week to: {args.set_week}")
 
     if made_changes:
         state["ready_user_ids"] = sorted(ready)
@@ -86,7 +91,7 @@ def main():
         print(f"Saved to {args.state_file}.")
     elif not args.show:
         print("No changes specified -- showing current status only. "
-              "(Use --ready, --not-ready, --ready-all, or --clear to change anything.)")
+              "(Use --ready, --not-ready, --ready-all, --clear, or --set-week to change anything.)")
 
     print()
     ready_teams = sorted(id_to_team[uid] for uid in ready if uid in id_to_team)
@@ -94,6 +99,8 @@ def main():
     print(f"Current status: {len(ready_teams)}/{len(team_to_id)} ready")
     print("  Ready:    ", ", ".join(ready_teams) if ready_teams else "(none)")
     print("  Not ready:", ", ".join(not_ready_teams) if not_ready_teams else "(none)")
+    tracked_week = state.get("current_week_sort")
+    print(f"  Tracked current week: {tracked_week if tracked_week is not None else '(not set yet -- will bootstrap from the CSV on the next advance)'}")
 
 
 if __name__ == "__main__":

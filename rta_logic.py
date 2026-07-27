@@ -125,6 +125,7 @@ DEFAULT_STATE = {
     "last_updated": None,
     "last_reset_at": None,
     "cycle_count": 0,
+    "current_week_sort": None,  # explicitly tracked, incremented on each advance -- see check_rta_status.py
 }
 
 
@@ -211,54 +212,110 @@ def format_matchup_lines(user_ids: list, id_to_team: dict, matchups: dict) -> li
     return lines
 
 
-def get_current_week_matchups(directory: str = ".") -> tuple:
-    """
-    Best-effort lookup of "who is each team playing this week," for the
-    reminder message (so it can show "Arkansas vs Missouri" next to
-    someone's name, and flag User vs User games specially). Returns
-    (week_label, {team: {"opponent": str, "opponent_is_user": bool}}).
-    Returns ("?", {}) on anything unexpected -- this is an enrichment,
-    never something that should block the actual reminder from going out.
-    """
+def _load_latest_season_df(directory: str):
+    """Internal: loads the newest dynasty_data_<season>.csv as a
+    dataframe, or None if it can't."""
     import pandas as pd
-
     files = glob.glob(os.path.join(directory, "dynasty_data_*.csv"))
     if not files:
-        return "?", {}
+        return None
 
     def season_num(path):
         m = re.search(r"dynasty_data_(\d+)\.csv$", os.path.basename(path))
         return int(m.group(1)) if m else -1
     latest = max(files, key=season_num)
-
     try:
-        df = pd.read_csv(latest, engine="python", on_bad_lines="skip", dtype=str)
-        upcoming = df[df["Status"] == "Upcoming"]
-        if upcoming.empty:
-            return "?", {}
-
-        def week_sort_key(w):
-            w = str(w).strip()
-            if w.isdigit():
-                return int(w)
-            if "conf" in w.lower():
-                return 900
-            return 999
-        upcoming = upcoming.copy()
-        upcoming["_sort"] = upcoming["Week"].apply(week_sort_key)
-        week_label = str(upcoming.loc[upcoming["_sort"].idxmin(), "Week"])
-
-        week_games = df[(df["Week"] == week_label) & (df["Status"].isin(["Upcoming", "Completed"]))]
-        matchups = {}
-        for _, row in week_games.iterrows():
-            opponent_user = (row.get("Opponent_User") or "CPU").strip()
-            matchups[row["Team"]] = {
-                "opponent": (row.get("Opponent") or "?").strip(),
-                "opponent_is_user": opponent_user != "CPU",
-            }
-        return week_label, matchups
+        return pd.read_csv(latest, engine="python", on_bad_lines="skip", dtype=str)
     except Exception:
+        return None
+
+
+def week_sort_key(week_val) -> int:
+    w = str(week_val).strip()
+    if w.isdigit():
+        return int(w)
+    if "conf" in w.lower():
+        return 900
+    return 999
+
+
+def find_earliest_upcoming_week_sort(directory: str = ".") -> int:
+    """
+    Best-effort "what week is it right now" -- the earliest week where any
+    team's game is still marked Upcoming. This is what powers the RTA
+    reminder (fine there, since it's read-only and self-corrects every
+    run) but is ONLY used to bootstrap the advance tracker's week counter
+    the very first time it's ever used -- see get_matchups_for_week_sort
+    and check_rta_status.py's advance handling for why it's not used on
+    every advance. Returns None if it can't determine anything.
+    """
+    df = _load_latest_season_df(directory)
+    if df is None:
+        return None
+    upcoming = df[df["Status"] == "Upcoming"]
+    if upcoming.empty:
+        return None
+    return int(upcoming["Week"].apply(week_sort_key).min())
+
+
+def get_week_label_for_sort(directory: str, week_sort: int) -> str:
+    """Looks up the human-readable Week label (e.g. "3", "Conf Champ")
+    for a given week_sort value, from ANY row regardless of Upcoming/
+    Completed status -- the full season's weeks all exist in the CSV
+    from the first-ever scrape, so this works even if that particular
+    week's games haven't been played/scraped yet. Falls back to the raw
+    number as a string if nothing matches."""
+    df = _load_latest_season_df(directory)
+    if df is None:
+        return str(week_sort)
+    matches = df[df["Week"].apply(week_sort_key) == week_sort]
+    if matches.empty:
+        return str(week_sort)
+    return str(matches.iloc[0]["Week"])
+
+
+def get_matchups_for_week_sort(directory: str, week_sort: int) -> dict:
+    """Who's playing whom for an EXPLICIT week_sort -- not derived from
+    which games happen to still say Upcoming, so this stays correct even
+    if the scraper hasn't caught up on some teams yet. Returns
+    {team: {"opponent": str, "opponent_is_user": bool}}, or {} if
+    nothing's found."""
+    df = _load_latest_season_df(directory)
+    if df is None:
+        return {}
+    week_games = df[
+        (df["Week"].apply(week_sort_key) == week_sort)
+        & (df["Status"].isin(["Upcoming", "Completed"]))
+    ]
+    matchups = {}
+    for _, row in week_games.iterrows():
+        opponent_user = (row.get("Opponent_User") or "CPU").strip()
+        matchups[row["Team"]] = {
+            "opponent": (row.get("Opponent") or "?").strip(),
+            "opponent_is_user": opponent_user != "CPU",
+        }
+    return matchups
+
+
+def get_current_week_matchups(directory: str = ".") -> tuple:
+    """
+    Best-effort "what week is it, and who's playing whom" -- used by the
+    RTA reminder, which re-derives this fresh every time it runs (fine
+    there, since it's read-only display info that self-corrects). Returns
+    (week_label, {team: {...}}), or ("?", {}) if nothing can be determined.
+
+    NOTE: the advance announcement does NOT use this function -- it tracks
+    its own week number explicitly (see check_rta_status.py) specifically
+    to avoid the staleness problem this function is inherently subject to
+    (if even one team's data hasn't been scraped yet, this can report an
+    already-finished week as "current").
+    """
+    week_sort = find_earliest_upcoming_week_sort(directory)
+    if week_sort is None:
         return "?", {}
+    week_label = get_week_label_for_sort(directory, week_sort)
+    matchups = get_matchups_for_week_sort(directory, week_sort)
+    return week_label, matchups
 
 
 def parse_channel_ids(raw: str) -> list:
@@ -269,44 +326,3 @@ def parse_channel_ids(raw: str) -> list:
     if not raw:
         return []
     return [part.strip() for part in raw.split(",") if part.strip()]
-
-
-def find_current_week_label(directory: str = ".") -> str:
-    """
-    Best-effort lookup of "what week is it" from the newest
-    dynasty_data_<season>.csv, for the advance announcement ("we've
-    advanced to Week X"). Uses the same "earliest week with an Upcoming
-    game" logic the dashboard uses. Returns "?" if it can't determine one
-    (missing file, no Upcoming games left, etc.) rather than raising --
-    this is a nice-to-have detail in a Discord message, not something
-    that should ever crash the actual RTA reset.
-    """
-    import pandas as pd
-
-    files = glob.glob(os.path.join(directory, "dynasty_data_*.csv"))
-    if not files:
-        return "?"
-
-    def season_num(path):
-        m = re.search(r"dynasty_data_(\d+)\.csv$", os.path.basename(path))
-        return int(m.group(1)) if m else -1
-    latest = max(files, key=season_num)
-
-    try:
-        df = pd.read_csv(latest, engine="python", on_bad_lines="skip", dtype=str)
-        upcoming = df[df["Status"] == "Upcoming"]
-        if upcoming.empty:
-            return "?"
-
-        def week_sort_key(w):
-            w = str(w).strip()
-            if w.isdigit():
-                return int(w)
-            if "conf" in w.lower():
-                return 900
-            return 999
-        upcoming = upcoming.copy()
-        upcoming["_sort"] = upcoming["Week"].apply(week_sort_key)
-        return str(upcoming.loc[upcoming["_sort"].idxmin(), "Week"])
-    except Exception:
-        return "?"
