@@ -80,6 +80,38 @@ FUNNY_RTA_NAG_MESSAGES = [
     "🎯 So close to advancing... just need a few more RTAs.",
 ]
 
+# Short, standalone fan chants -- NOT full fight song lyrics (some of
+# those are copyrighted), just the well-known 2-6 word rallying cries
+# fans actually shout. Add more anytime; it's just a plain list per team.
+TEAM_TAGLINES = {
+    "Arizona State": ["Fork 'Em, Devils! 🔱", "Forks Up!", "Go Devils!"],
+    "Arkansas": ["Woo Pig Sooie! 🐗", "Go Hogs Go!", "Callin' the Hogs!"],
+    "Baylor": ["Sic 'Em, Bears! 🐻", "That's Baylor... Sic 'Em!"],
+    "California": ["Go Bears! 💙💛"],
+    "Colorado": ["Go Buffs! 🦬", "CU Boulder, Fight!"],
+    "Kentucky": ["C-A-T-S! Cats! Cats! Cats! 🐾", "Go Big Blue! 💙"],
+    "Missouri": ["M-I-Z... Z-O-U! 🐯", "Go Tigers!"],
+    "Northwestern": ["Go 'Cats! 💜", "U Rah Rah!"],
+    "Oklahoma State": ["Go Pokes! 🤠", "Ride 'em, Cowboys!"],
+    "Pittsburgh": ["Hail to Pitt! 🐾", "Let's Go, Pitt!"],
+    "SMU": ["Pony Up! 🐴", "Go Mustangs!"],
+    "South Carolina": ["Go Cocks! 🐔", "Fighting Gamecocks!"],
+    "Stanford": ["Go Cardinal! 🌲", "Fight, Fight, Fight!"],
+    "Temple": ["Fear the Owl! 🦉", "T-U, Owls!"],
+    "Virginia": ["Wahoowa! 🔶", "Go Hoos!"],
+    "Virginia Tech": ["Let's Go... Hokies! 🦃", "Hokie Pride!"],
+    "West Virginia": ["Let's Go Mountaineers! 🏔️", "WVU! WVU!"],
+    "Wisconsin": ["On, Wisconsin! 🦡", "Go Badgers!"],
+}
+
+
+def pick_tagline(team: str) -> str:
+    """Returns a random chant for the given team, or None if the team
+    isn't in TEAM_TAGLINES (e.g. a new team not added yet) -- callers
+    should treat None as "skip the reply" rather than erroring."""
+    options = TEAM_TAGLINES.get(team)
+    return random.choice(options) if options else None
+
 
 def pick_announcement() -> str:
     return random.choice(FUNNY_ADVANCE_MESSAGES)
@@ -166,22 +198,33 @@ def process_admin_messages(messages: list, keyword: str, state: dict) -> tuple:
     return state, triggered
 
 
-def process_rta_messages(messages: list, tracked_user_ids: set, state: dict) -> dict:
+def process_rta_messages(messages: list, tracked_user_ids: set, id_to_team: dict, state: dict) -> tuple:
     """messages: list of dicts with {"id": str, "author_id": str, "content": str},
     from the MAIN chat channel, oldest-first. Only messages from a
-    tracked_user_ids member count -- matched by Discord user ID, not name."""
+    tracked_user_ids member count -- matched by Discord user ID, not name.
+
+    Returns (state, hits) where hits is a list of {"message_id", "user_id",
+    "team"} for every message that counted as a valid RTA this run --
+    including repeat declarations from someone already marked ready --
+    so the caller can reply to each one with a team-specific chant."""
     ready = set(state.get("ready_user_ids", []))
     last_id = state.get("last_message_id_main")
+    hits = []
 
     for msg in messages:
         if msg["author_id"] in tracked_user_ids and is_rta_message(msg["content"]):
             ready.add(msg["author_id"])
+            hits.append({
+                "message_id": msg["id"],
+                "user_id": msg["author_id"],
+                "team": id_to_team.get(msg["author_id"]),
+            })
         last_id = msg["id"]
 
     state["ready_user_ids"] = sorted(ready)
     state["last_message_id_main"] = last_id
     state["last_updated"] = datetime.now(timezone.utc).isoformat()
-    return state
+    return state, hits
 
 
 def format_matchup_lines(user_ids: list, id_to_team: dict, matchups: dict) -> list:

@@ -112,6 +112,19 @@ def post_message(channel_id: str, token: str, content: str):
     resp.raise_for_status()
 
 
+def reply_to_message(channel_id: str, message_id: str, token: str, content: str):
+    """Posts a native Discord reply (shows the 'replying to' UI) to a
+    specific message, rather than a standalone message."""
+    headers = {"Authorization": f"Bot {token}", "Content-Type": "application/json"}
+    resp = requests.post(
+        f"{API_BASE}/channels/{channel_id}/messages",
+        headers=headers,
+        json={"content": content, "message_reference": {"message_id": message_id}},
+        timeout=15,
+    )
+    resp.raise_for_status()
+
+
 DEFAULT_DIGEST_STATE = {"pending_runs": [], "last_digest_sent_at": None}
 
 
@@ -191,6 +204,7 @@ def run() -> str:
     if not roster:
         raise RuntimeError("Couldn't find/load Server_Members_Teams.csv (via roster.py).")
     tracked_ids = {r["user_id"] for r in roster}
+    id_to_team = {r["user_id"]: r["team"] for r in roster}
     log.info("Tracking %d active roster member(s).", len(tracked_ids))
 
     state = rl.load_state(STATE_FILE)
@@ -228,7 +242,6 @@ def run() -> str:
             log.info("Advance detected -- posting to #announcements (week_sort=%s, label=%s).", new_week_sort, week_label)
 
             all_ids = [r["user_id"] for r in roster]
-            id_to_team = {r["user_id"]: r["team"] for r in roster}
             matchup_lines = rl.format_matchup_lines(all_ids, id_to_team, matchups) if matchups else []
 
             if matchup_lines:
@@ -246,7 +259,18 @@ def run() -> str:
     new_rta_count = 0
     if main_messages:
         before = set(state.get("ready_user_ids", []))
-        state = rl.process_rta_messages(main_messages, tracked_ids, state)
+        state, hits = rl.process_rta_messages(main_messages, tracked_ids, id_to_team, state)
+
+        for hit in hits:
+            tagline = rl.pick_tagline(hit["team"])
+            if not tagline:
+                continue
+            try:
+                reply_to_message(MAIN_CHANNEL_ID, hit["message_id"], DISCORD_TOKEN, tagline)
+            except Exception as e:
+                # A flavor-text reply failing is never worth treating as a
+                # real run failure -- log it and keep going.
+                log.warning("Couldn't reply with tagline for %s: %s", hit["team"], e)
         new_rta_count = len(set(state["ready_user_ids"]) - before)
         changed = True
 
