@@ -84,24 +84,98 @@ FUNNY_RTA_NAG_MESSAGES = [
 # those are copyrighted), just the well-known 2-6 word rallying cries
 # fans actually shout. Add more anytime; it's just a plain list per team.
 TEAM_TAGLINES = {
-    "Arizona State": ["Fork 'Em, Devils! 🔱", "Forks Up!", "Go Devils!"],
-    "Arkansas": ["Woo Pig Sooie! 🐗", "Go Hogs Go!", "Callin' the Hogs!"],
-    "Baylor": ["Sic 'Em, Bears! 🐻", "That's Baylor... Sic 'Em!"],
-    "California": ["Go Bears! 💙💛"],
-    "Colorado": ["Go Buffs! 🦬", "CU Boulder, Fight!"],
-    "Kentucky": ["C-A-T-S! Cats! Cats! Cats! 🐾", "Go Big Blue! 💙"],
-    "Missouri": ["M-I-Z... Z-O-U! 🐯", "Go Tigers!"],
-    "Northwestern": ["Go 'Cats! 💜", "U Rah Rah!"],
-    "Oklahoma State": ["Go Pokes! 🤠", "Ride 'em, Cowboys!"],
-    "Pittsburgh": ["Hail to Pitt! 🐾", "Let's Go, Pitt!"],
-    "SMU": ["Pony Up! 🐴", "Go Mustangs!"],
-    "South Carolina": ["Go Cocks! 🐔", "Fighting Gamecocks!"],
-    "Stanford": ["Go Cardinal! 🌲", "Fight, Fight, Fight!"],
-    "Temple": ["Fear the Owl! 🦉", "T-U, Owls!"],
-    "Virginia": ["Wahoowa! 🔶", "Go Hoos!"],
-    "Virginia Tech": ["Let's Go... Hokies! 🦃", "Hokie Pride!"],
-    "West Virginia": ["Let's Go Mountaineers! 🏔️", "WVU! WVU!"],
-    "Wisconsin": ["On, Wisconsin! 🦡", "Go Badgers!"],
+    "Arizona State": [
+        "Fork 'Em, Devils! 🔱", "Forks Up!", "Go Devils!",
+        "😈 We may be cursed, but at least we're spicy.",
+        "🔱 Forking around since 1885.",
+        "🤷 Bowl game? We'll take it under advisement.",
+    ],
+    "Arkansas": [
+        "Woo Pig Sooie! 🐗", "Go Hogs Go!", "Callin' the Hogs!",
+        "🐗 We may be hogs, but we're PROUD hogs.",
+        "😅 Our defense is a work in progress. A LONG work in progress.",
+    ],
+    "Baylor": [
+        "Sic 'Em, Bears! 🐻", "That's Baylor... Sic 'Em!",
+        "🐻 Bears hibernate. We're just resting up for later.",
+        "😬 Sic 'em? More like sit 'em down and hope.",
+    ],
+    "California": [
+        "Go Bears! 💙💛",
+        "🐻 Golden Bears, modest record, unbreakable spirit.",
+        "📚 We may not win state, but we ACED it academically.",
+        "🌉 Bridging the gap between \"good\" and \"next year.\"",
+    ],
+    "Colorado": [
+        "Go Buffs! 🦬", "CU Boulder, Fight!",
+        "🦬 Big, slow, and occasionally dangerous. Just like our offense.",
+        "😤 Buffs don't rebuild. We reload. Eventually.",
+    ],
+    "Kentucky": [
+        "C-A-T-S! Cats! Cats! Cats! 🐾", "Go Big Blue! 💙",
+        "🏀 Ngl we're just here till basketball season.",
+        "😹 Wildcats? More like Mildcats. Don't tell Coach.",
+    ],
+    "Missouri": [
+        "M-I-Z... Z-O-U! 🐯", "Go Tigers!",
+        "🐯 Tigers roar. We... politely growl.",
+        "🎯 Mizzou: perpetually \"this could be our year.\"",
+    ],
+    "Northwestern": [
+        "Go 'Cats! 💜", "U Rah Rah!",
+        "📚 #1 in the classroom, and that's what matters (please clap).",
+        "😬 The 'Cats have claws. Sometimes we even use them.",
+    ],
+    "Oklahoma State": [
+        "Go Pokes! 🤠", "Ride 'em, Cowboys!",
+        "🤠 We fell off the horse. Getting back on. Eventually.",
+        "😂 Cowboys don't cry. We just take a moment.",
+    ],
+    "Pittsburgh": [
+        "Hail to Pitt! 🐾", "Let's Go, Pitt!",
+        "🐆 Panthers are stealthy. Also stealthily bad on 3rd down.",
+        "😤 Hail to Pitt, and hail Mary passes.",
+    ],
+    "SMU": [
+        "Pony Up! 🐴", "Go Mustangs!",
+        "🐴 We may stumble, but we stumble with STYLE.",
+        "✨ Mustangs: all flash, occasionally some substance.",
+    ],
+    "South Carolina": [
+        "Go Cocks! 🐔", "Fighting Gamecocks!",
+        "🐔 We may not win, but we WILL strut about it.",
+        "😂 Fighting Gamecocks, mostly fighting our own mistakes.",
+    ],
+    "Stanford": [
+        "Go Cardinal! 🌲", "Fight, Fight, Fight!",
+        "🌲 We're a tree. Trees are patient. VERY patient.",
+        "🤓 4.2 GPA, mediocre record, no regrets.",
+    ],
+    "Temple": [
+        "Fear the Owl! 🦉", "T-U, Owls!",
+        "🦉 Fear the Owl! Or at least mildly acknowledge it.",
+        "😴 Owls are nocturnal. Our offense only shows up at night too, apparently.",
+    ],
+    "Virginia": [
+        "Wahoowa! 🔶", "Go Hoos!",
+        "⚔️ Cavaliers charge in. We just kind of... amble in.",
+        "😬 Wahoowa! Wahoo-ouch.",
+    ],
+    "Virginia Tech": [
+        "Let's Go... Hokies! 🦃", "Hokie Pride!",
+        "🦃 We may be a turkey, but we're a PROUD turkey.",
+        "😅 Enter Sandman hits different when you're down 21.",
+    ],
+    "West Virginia": [
+        "Let's Go Mountaineers! 🏔️", "WVU! WVU!",
+        "⛰️ We climb mountains. Also our own mistakes, apparently.",
+        "😅 Almost heaven? More like almost .500.",
+    ],
+    "Wisconsin": [
+        "On, Wisconsin! 🦡", "Go Badgers!",
+        "🦡 Badgers dig deep. Still digging out of that hole.",
+        "🧀 Say cheese! It's the only thing consistently good this year.",
+    ],
 }
 
 
