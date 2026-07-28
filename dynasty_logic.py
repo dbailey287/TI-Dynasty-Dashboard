@@ -1052,9 +1052,9 @@ def build_h2h_matrix(df: pd.DataFrame, teams: list) -> pd.DataFrame:
     Returns a team x team matrix of results for completed User-vs-User
     games (from the row-owner's perspective, i.e. matrix[a][b] = a's
     result vs b), each tagged with the season it happened in -- e.g.
-    "W'26". If the same two teams met in more than one season, ALL of
-    those results are shown together (e.g. "W'26, L'27") rather than the
-    later one silently overwriting the earlier one, which is what a plain
+    "W (2026)". If the same two teams met in more than one season, ALL of
+    those results are shown together, one per line, rather than the later
+    one silently overwriting the earlier one, which is what a plain
     single-value cell would otherwise do once this spans multiple seasons.
     """
     matrix = pd.DataFrame("-", index=teams, columns=teams)
@@ -1063,11 +1063,11 @@ def build_h2h_matrix(df: pd.DataFrame, teams: list) -> pd.DataFrame:
     for _, row in uu.iterrows():
         if row["Team"] in teams and row["Opponent"] in teams:
             season = row.get("Season")
-            season_tag = f"'{str(season)[-2:]}" if pd.notna(season) else ""
+            season_tag = f" ({int(season)})" if pd.notna(season) else ""
             entry = f"{row['Outcome']}{season_tag}"
             cell_entries.setdefault((row["Team"], row["Opponent"]), []).append(entry)
     for (team, opp), entries in cell_entries.items():
-        matrix.loc[team, opp] = ", ".join(entries)
+        matrix.loc[team, opp] = "\n".join(entries)
     for t in teams:
         if t in matrix.columns:
             matrix.loc[t, t] = "—"
@@ -1080,9 +1080,9 @@ def user_vs_user_records(df: pd.DataFrame, teams: list) -> pd.DataFrame:
 
     def _label(opp_team: str, season) -> str:
         user = team_user_map.get(opp_team)
-        season_tag = f" '{str(season)[-2:]}" if pd.notna(season) else ""
+        season_prefix = f"{int(season)}: " if pd.notna(season) else ""
         base = f"{opp_team} ({user})" if user else opp_team
-        return f"{base}{season_tag}"
+        return f"{season_prefix}{base}"
 
     rows = []
     for team in teams:
