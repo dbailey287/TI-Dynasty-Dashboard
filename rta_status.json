@@ -1,13 +1,69 @@
 {
   "ready_user_ids": [
+    "1123408868458889306",
+    "1254972344070311970",
     "1264702227197591555",
+    "1358920417347108874",
+    "1392129295916466176",
     "1398491406330495040",
+    "402459179417206784",
     "796043766695067719"
   ],
-  "last_message_id_main": "1531444283326861464",
+  "last_message_id_main": "1531518264675401860",
   "last_message_id_admin": "1531192429598740670",
-  "last_updated": "2026-07-27T23:49:14.470123+00:00",
+  "last_updated": "2026-07-28T07:15:37.266046+00:00",
   "last_reset_at": "2026-07-27T06:52:33.921598+00:00",
   "cycle_count": 2,
-  "current_week_sort": 3
+  "current_week_sort": 3,
+  "last_tagline_by_team": {
+    "Kentucky": "C-A-T-S! Cats! Cats! Cats! \ud83d\udc3e",
+    "Pittsburgh": "\ud83d\udc3e Building a program, brick by brick. Very small bricks.",
+    "California": "\ud83d\udcda We may not win state, but we ACED it academically.",
+    "Arizona State": "\ud83d\udd31 Forking around since 1885.",
+    "Temple": "\ud83e\udd89 We see in the dark. Seeing the scoreboard is harder."
+  },
+  "tagline_queue_by_team": {
+    "Kentucky": [
+      "\ud83d\ude39 Wildcats? More like Mildcats. Don't tell Coach.",
+      "\ud83c\udfc8 Football season: the appetizer before basketball season.",
+      "\ud83d\ude02 Big Blue Nation, medium blue expectations.",
+      "Go Big Blue! \ud83d\udc99",
+      "\ud83d\udc3e We claw our way to 6-6 every year, and we're proud of it.",
+      "\ud83c\udfc0 Ngl we're just here till basketball season."
+    ],
+    "Pittsburgh": [
+      "\ud83d\ude24 Hail to Pitt, and hail Mary passes.",
+      "Hail to Pitt! \ud83d\udc3e",
+      "Let's Go, Pitt!",
+      "\ud83d\udc06 Panthers are stealthy. Also stealthily bad on 3rd down.",
+      "\ud83d\ude05 Hail to Pitt, hail to whatever happens next.",
+      "\ud83d\udc06 Panthers prowl. We mostly just kinda wander."
+    ],
+    "California": [
+      "\ud83d\udc3b Golden Bears, modest record, unbreakable spirit.",
+      "\ud83c\udf09 Bridging the gap between \"good\" and \"next year.\"",
+      "Go Bears! \ud83d\udc99\ud83d\udc9b",
+      "\ud83c\udf09 Golden Gate energy, bronze medal record.",
+      "\ud83d\udc3b Cal Bears: nationally ranked in vibes only.",
+      "\ud83d\ude05 We're not tanking, we're 'strategically evaluating.'"
+    ],
+    "Arizona State": [
+      "Fork 'Em, Devils! \ud83d\udd31",
+      "\ud83d\ude24 Tempe heat isn't the only thing that's brutal around here.",
+      "\ud83e\udd37 Bowl game? We'll take it under advisement.",
+      "Forks Up!",
+      "\ud83d\udd25 We run hot and cold. Mostly cold. But hot sometimes!",
+      "\ud83d\ude08 We may be cursed, but at least we're spicy.",
+      "\ud83d\udd31 Small pitchfork energy, big pitchfork dreams.",
+      "Go Devils!"
+    ],
+    "Temple": [
+      "\ud83e\udd89 Whoo's ready for a rebuilding year? We are! Again!",
+      "\ud83e\udd89 Fear the Owl! Or at least mildly acknowledge it.",
+      "\ud83d\ude34 Owls are nocturnal. Our offense only shows up at night too, apparently.",
+      "\ud83d\ude02 Fear the Owl (mild, occasional fear only).",
+      "Fear the Owl! \ud83e\udd89",
+      "T-U, Owls!"
+    ]
+  }
 }
