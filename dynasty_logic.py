@@ -373,6 +373,7 @@ def compute_team_stats(df: pd.DataFrame, teams: list, as_of_week_sort: int | Non
         mov = tg["Margin"].mean() if games_played else np.nan
 
         streak_label, form_pct = _streak_and_form(tg)
+        rank_num_col = "Opponent_Rank_At_Game_Num" if rank_basis == "at_game" else "Opponent_Rank_Num"
 
         def _win_count(subset, location=None, min_margin=None):
             s = subset[subset["Outcome"] == "W"]
@@ -381,6 +382,22 @@ def compute_team_stats(df: pd.DataFrame, teams: list, as_of_week_sort: int | Non
             if min_margin is not None:
                 s = s[s["Margin"] >= min_margin]
             return int(len(s))
+
+        def _win_quality_sum(subset, location=None, min_margin=None):
+            """Sums (26 - opponent_rank) per qualifying win, so beating a
+            higher-ranked (lower-numbered) opponent contributes more than
+            beating a lower-ranked one -- a win over #3 contributes 23
+            points, a win over #24 only 2. Fed into the rating formula;
+            the plain _win_count columns are kept separately so the "Why
+            this ranking?" display still shows an honest game count."""
+            s = subset[subset["Outcome"] == "W"]
+            if location is not None:
+                s = s[s["Location"] == location]
+            if min_margin is not None:
+                s = s[s["Margin"] >= min_margin]
+            ranks = pd.to_numeric(s[rank_num_col], errors="coerce")
+            quality = (26 - ranks).clip(lower=0)
+            return float(quality.sum())
 
         rows.append({
             "Team": team,
@@ -403,11 +420,17 @@ def compute_team_stats(df: pd.DataFrame, teams: list, as_of_week_sort: int | Non
             "Top10_L": int((top10["Outcome"] == "L").sum()),
             # Granular win-quality categories, used by the Dynasty Rating formula --
             # see DEFAULT_RATING_WEIGHTS. "Big" margins: 17+ vs ranked opponents,
-            # 28+ vs unranked opponents.
+            # 28+ vs unranked opponents. Plain counts (for display) plus
+            # rank-quality-weighted sums (what the rating actually uses for
+            # the 4 ranked-win categories -- see _win_quality_sum above).
             "Road_Ranked_W": _win_count(ranked, location="Away"),
             "Home_Ranked_W": _win_count(ranked, location="Home"),
             "Road_Ranked_W_Big": _win_count(ranked, location="Away", min_margin=17),
             "Home_Ranked_W_Big": _win_count(ranked, location="Home", min_margin=17),
+            "Road_Ranked_W_Quality": _win_quality_sum(ranked, location="Away"),
+            "Home_Ranked_W_Quality": _win_quality_sum(ranked, location="Home"),
+            "Road_Ranked_W_Big_Quality": _win_quality_sum(ranked, location="Away", min_margin=17),
+            "Home_Ranked_W_Big_Quality": _win_quality_sum(ranked, location="Home", min_margin=17),
             "Road_Unranked_W": _win_count(unranked, location="Away"),
             "Home_Unranked_W": _win_count(unranked, location="Home"),
             "Road_Unranked_W_Big": _win_count(unranked, location="Away", min_margin=28),
@@ -765,10 +788,10 @@ def compute_dynasty_rating(team_stats_with_sos: pd.DataFrame,
 
     win_pct_scaled = _minmax_scale(stats["Win_Pct"].fillna(0))
     user_wins_scaled = _minmax_scale(stats["User_W"].fillna(0))
-    road_ranked_scaled = _minmax_scale(stats["Road_Ranked_W"].fillna(0))
-    home_ranked_scaled = _minmax_scale(stats["Home_Ranked_W"].fillna(0))
-    road_ranked_big_scaled = _minmax_scale(stats["Road_Ranked_W_Big"].fillna(0))
-    home_ranked_big_scaled = _minmax_scale(stats["Home_Ranked_W_Big"].fillna(0))
+    road_ranked_scaled = _minmax_scale(stats["Road_Ranked_W_Quality"].fillna(0))
+    home_ranked_scaled = _minmax_scale(stats["Home_Ranked_W_Quality"].fillna(0))
+    road_ranked_big_scaled = _minmax_scale(stats["Road_Ranked_W_Big_Quality"].fillna(0))
+    home_ranked_big_scaled = _minmax_scale(stats["Home_Ranked_W_Big_Quality"].fillna(0))
     road_unranked_scaled = _minmax_scale(stats["Road_Unranked_W"].fillna(0))
     home_unranked_scaled = _minmax_scale(stats["Home_Unranked_W"].fillna(0))
     road_unranked_big_scaled = _minmax_scale(stats["Road_Unranked_W_Big"].fillna(0))
