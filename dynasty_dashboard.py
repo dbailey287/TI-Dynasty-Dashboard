@@ -897,8 +897,21 @@ elif page == "🤝 Head-to-Head":
 elif page == "📈 League Stats":
     st.title("📈 League Stats")
 
+    season_scope = st.radio(
+        "Show stats for:", ["Current Season", "All Seasons"], horizontal=True,
+        help="\"All Seasons\" combines every season's games together -- useful once you have more than one season loaded.",
+    )
+    if season_scope == "All Seasons":
+        ls_df = df_all
+        ls_teams = sorted(df_all["Team"].dropna().unique().tolist())
+    else:
+        ls_df = df
+        ls_teams = TEAMS
+    ls_team_stats = dl.compute_team_stats(ls_df, ls_teams)
+    ls_team_stats = dl.add_strength_of_schedule(ls_df, ls_team_stats)
+
     st.subheader("Full League Table")
-    league_table = dl.compute_league_stats_table(df, TEAMS, team_stats).reset_index()
+    league_table = dl.compute_league_stats_table(ls_df, ls_teams, ls_team_stats).reset_index()
     league_table["Record"] = (
         league_table["W"].fillna(0).astype(int).astype(str) + "-" + league_table["L"].fillna(0).astype(int).astype(str)
     )
@@ -930,29 +943,30 @@ elif page == "📈 League Stats":
         column_config={"": st.column_config.ImageColumn("", width="small")},
     )
     st.caption(
-        "PA/G = points allowed per game · Win Quality = sum of (26 − opponent rank) across all ranked wins, "
-        "same scoring the Power Rankings formula uses · swipe/scroll sideways on mobile to see every column."
+        "PPG, PA/G, and Avg Margin are per-game averages, not totals (Total PF/PA alongside them are the actual "
+        "totals, for reference). Win Quality = sum of (26 − opponent rank) across all ranked wins, same scoring "
+        "the Power Rankings formula uses. Swipe/scroll sideways on mobile to see every column."
     )
 
     st.divider()
 
-    best_off = team_stats["PF"].idxmax() if team_stats["PF"].notna().any() else None
-    best_def = team_stats["PA"].idxmin() if team_stats["PA"].notna().any() else None
-    blowout = dl.biggest_blowout(df)
-    closest = dl.closest_game(df)
-    hfa = dl.home_field_advantage(df)
+    best_off = ls_team_stats["PF"].idxmax() if ls_team_stats["PF"].notna().any() else None
+    best_def = ls_team_stats["PA"].idxmin() if ls_team_stats["PA"].notna().any() else None
+    blowout = dl.biggest_blowout(ls_df)
+    closest = dl.closest_game(ls_df)
+    hfa = dl.home_field_advantage(ls_df)
 
     c1, c2 = st.columns(2)
     with c1:
         st.markdown("#### Best Offense")
         if best_off:
-            st.markdown(f"{team_logo_tag(best_off, 28)}**{best_off}** — {team_stats.loc[best_off, 'PF']:.1f} PPG", unsafe_allow_html=True)
+            st.markdown(f"{team_logo_tag(best_off, 28)}**{best_off}** — {ls_team_stats.loc[best_off, 'PF']:.1f} PPG", unsafe_allow_html=True)
         else:
             st.caption("No data yet")
     with c2:
         st.markdown("#### Best Defense")
         if best_def:
-            st.markdown(f"{team_logo_tag(best_def, 28)}**{best_def}** — {team_stats.loc[best_def, 'PA']:.1f} PA/G", unsafe_allow_html=True)
+            st.markdown(f"{team_logo_tag(best_def, 28)}**{best_def}** — {ls_team_stats.loc[best_def, 'PA']:.1f} PA/G", unsafe_allow_html=True)
         else:
             st.caption("No data yet")
 
@@ -978,8 +992,8 @@ elif page == "📈 League Stats":
         else:
             st.caption("No data yet")
 
-    sig_win = dl.signature_win(df)
-    bad_loss = dl.worst_loss(df)
+    sig_win = dl.signature_win(ls_df)
+    bad_loss = dl.worst_loss(ls_df)
 
     c7, c8 = st.columns(2)
     with c7:
@@ -1006,26 +1020,49 @@ elif page == "📈 League Stats":
     st.divider()
     st.subheader("Advanced Splits")
     st.caption(
-        "How each team's performance breaks out by context, rather than blended into one season average. "
-        "Margin columns show average scoring margin in that specific context; blank means no games played there yet."
+        "Every stat below is a per-game AVERAGE for that specific context, never a total. The number in "
+        "parentheses is how many games that average is based on -- e.g. \"+10.5 (3)\" means +10.5 points/game "
+        "average, across 3 games. Blank means zero games in that context so far."
     )
-    split_stats = dl.compute_split_stats(df, TEAMS)
+    split_stats = dl.compute_split_stats(ls_df, ls_teams)
     split_display = split_stats.reset_index()
     split_display["Logo"] = split_display["Team"].apply(dl.logo_url)
-    for col in split_display.columns:
-        if col not in ("Team", "Logo"):
-            split_display[col] = split_display[col].round(1)
 
-    split_cols = {
-        "Logo": "", "Team": "Team",
-        "Margin_Wins": "Margin (W)", "Margin_Losses": "Margin (L)",
-        "Home_PPG": "Home PPG", "Home_PA": "Home PA", "Home_Margin": "Home Margin",
-        "Away_PPG": "Away PPG", "Away_PA": "Away PA", "Away_Margin": "Away Margin",
-        "User_Margin": "User-Game Margin", "CPU_Margin": "CPU-Game Margin",
-        "Margin_vs_Ranked": "Margin vs Ranked", "Margin_vs_Unranked": "Margin vs Unranked",
-        "Blowout_Rate": "Blowout %", "OneScore_Rate": "One-Score %",
-    }
-    split_table = split_display[list(split_cols.keys())].rename(columns=split_cols)
+    def _fmt_with_gp(value, gp):
+        if pd.isna(value) or pd.isna(gp) or gp == 0:
+            return "—"
+        return f"{value:+.1f} ({int(gp)})" if value == value else "—"
+
+    def _fmt_plain_with_gp(value, gp):
+        if pd.isna(value) or pd.isna(gp) or gp == 0:
+            return "—"
+        return f"{value:.1f} ({int(gp)})"
+
+    split_display["Avg Margin, Wins (n)"] = split_display.apply(lambda r: _fmt_with_gp(r["Margin_Wins"], r["Margin_Wins_GP"]), axis=1)
+    split_display["Avg Margin, Losses (n)"] = split_display.apply(lambda r: _fmt_with_gp(r["Margin_Losses"], r["Margin_Losses_GP"]), axis=1)
+    split_display["Home PPG (n)"] = split_display.apply(lambda r: _fmt_plain_with_gp(r["Home_PPG"], r["Home_GP"]), axis=1)
+    split_display["Home PA (n)"] = split_display.apply(lambda r: _fmt_plain_with_gp(r["Home_PA"], r["Home_GP"]), axis=1)
+    split_display["Home Margin (n)"] = split_display.apply(lambda r: _fmt_with_gp(r["Home_Margin"], r["Home_GP"]), axis=1)
+    split_display["Away PPG (n)"] = split_display.apply(lambda r: _fmt_plain_with_gp(r["Away_PPG"], r["Away_GP"]), axis=1)
+    split_display["Away PA (n)"] = split_display.apply(lambda r: _fmt_plain_with_gp(r["Away_PA"], r["Away_GP"]), axis=1)
+    split_display["Away Margin (n)"] = split_display.apply(lambda r: _fmt_with_gp(r["Away_Margin"], r["Away_GP"]), axis=1)
+    split_display["User-Game Margin (n)"] = split_display.apply(lambda r: _fmt_with_gp(r["User_Margin"], r["User_GP"]), axis=1)
+    split_display["CPU-Game Margin (n)"] = split_display.apply(lambda r: _fmt_with_gp(r["CPU_Margin"], r["CPU_GP"]), axis=1)
+    split_display["Avg Margin vs Ranked (n)"] = split_display.apply(lambda r: _fmt_with_gp(r["Margin_vs_Ranked"], r["Ranked_GP"]), axis=1)
+    split_display["Avg Margin vs Unranked (n)"] = split_display.apply(lambda r: _fmt_with_gp(r["Margin_vs_Unranked"], r["Unranked_GP"]), axis=1)
+    split_display["Blowout % (of GP)"] = split_display.apply(
+        lambda r: f"{r['Blowout_Rate']:.0f}% ({int(r['Total_GP'])})" if pd.notna(r["Blowout_Rate"]) and r["Total_GP"] else "—", axis=1)
+    split_display["One-Score % (of GP)"] = split_display.apply(
+        lambda r: f"{r['OneScore_Rate']:.0f}% ({int(r['Total_GP'])})" if pd.notna(r["OneScore_Rate"]) and r["Total_GP"] else "—", axis=1)
+
+    split_table = split_display[[
+        "Logo", "Team", "Avg Margin, Wins (n)", "Avg Margin, Losses (n)",
+        "Home PPG (n)", "Home PA (n)", "Home Margin (n)",
+        "Away PPG (n)", "Away PA (n)", "Away Margin (n)",
+        "User-Game Margin (n)", "CPU-Game Margin (n)",
+        "Avg Margin vs Ranked (n)", "Avg Margin vs Unranked (n)",
+        "Blowout % (of GP)", "One-Score % (of GP)",
+    ]].rename(columns={"Logo": ""})
     st.dataframe(
         split_table, use_container_width=True, hide_index=True,
         height=min(35 * (len(split_table) + 1) + 3, 640),
@@ -1048,7 +1085,7 @@ elif page == "📈 League Stats":
 
     st.divider()
     st.markdown("#### Offense vs Defense")
-    scatter_df = team_stats.reset_index().dropna(subset=["PF", "PA"])
+    scatter_df = ls_team_stats.reset_index().dropna(subset=["PF", "PA"])
     if not scatter_df.empty:
         fig = px.scatter(
             scatter_df, x="PA", y="PF", text="Team", size="GP",

@@ -380,16 +380,21 @@ def compute_split_stats(df: pd.DataFrame, teams: list, rank_basis: str = "at_gam
         gp = len(tg)
         rows.append({
             "Team": team,
-            "Margin_Wins": _avg(wins, "Margin"),
-            "Margin_Losses": _avg(losses, "Margin"),
-            "Home_PPG": _avg(home, "Team_Score"), "Home_PA": _avg(home, "Opponent_Score"), "Home_Margin": _avg(home, "Margin"),
-            "Away_PPG": _avg(away, "Team_Score"), "Away_PA": _avg(away, "Opponent_Score"), "Away_Margin": _avg(away, "Margin"),
-            "User_PPG": _avg(user_games, "Team_Score"), "User_PA": _avg(user_games, "Opponent_Score"), "User_Margin": _avg(user_games, "Margin"),
-            "CPU_PPG": _avg(cpu_games, "Team_Score"), "CPU_PA": _avg(cpu_games, "Opponent_Score"), "CPU_Margin": _avg(cpu_games, "Margin"),
-            "Margin_vs_Ranked": _avg(ranked, "Margin"),
-            "Margin_vs_Unranked": _avg(unranked, "Margin"),
+            "Margin_Wins": _avg(wins, "Margin"), "Margin_Wins_GP": len(wins),
+            "Margin_Losses": _avg(losses, "Margin"), "Margin_Losses_GP": len(losses),
+            "Home_PPG": _avg(home, "Team_Score"), "Home_PA": _avg(home, "Opponent_Score"),
+            "Home_Margin": _avg(home, "Margin"), "Home_GP": len(home),
+            "Away_PPG": _avg(away, "Team_Score"), "Away_PA": _avg(away, "Opponent_Score"),
+            "Away_Margin": _avg(away, "Margin"), "Away_GP": len(away),
+            "User_PPG": _avg(user_games, "Team_Score"), "User_PA": _avg(user_games, "Opponent_Score"),
+            "User_Margin": _avg(user_games, "Margin"), "User_GP": len(user_games),
+            "CPU_PPG": _avg(cpu_games, "Team_Score"), "CPU_PA": _avg(cpu_games, "Opponent_Score"),
+            "CPU_Margin": _avg(cpu_games, "Margin"), "CPU_GP": len(cpu_games),
+            "Margin_vs_Ranked": _avg(ranked, "Margin"), "Ranked_GP": len(ranked),
+            "Margin_vs_Unranked": _avg(unranked, "Margin"), "Unranked_GP": len(unranked),
             "Blowout_Rate": (tg["Blowout_Game"].sum() / gp * 100) if gp else np.nan,
             "OneScore_Rate": (tg["One_Score_Game"].sum() / gp * 100) if gp else np.nan,
+            "Total_GP": gp,
         })
 
     result = pd.DataFrame(rows).set_index("Team")
