@@ -1128,13 +1128,16 @@ elif page == "⚙️ Settings":
 
     w = st.session_state["rating_weights"]
     labels = {
-        "win_pct": "Win %",
-        "sos": "Strength of Schedule",
-        "avg_margin": "Average Margin",
-        "ranked_wins": "Ranked Wins",
-        "road_wins": "Road Wins",
-        "user_wins": "User-vs-User Wins",
-        "recent_form": "Recent Form (last 5)",
+        "user_wins": "1. User-vs-User Wins",
+        "road_ranked_wins": "2. Road Wins vs Ranked",
+        "home_ranked_wins": "3. Home Wins vs Ranked",
+        "road_ranked_wins_big": "4. Road Wins vs Ranked by 17+",
+        "home_ranked_wins_big": "5. Home Wins vs Ranked by 17+",
+        "road_unranked_wins": "6. Road Wins vs Unranked",
+        "home_unranked_wins": "7. Home Wins vs Unranked",
+        "road_unranked_wins_big": "8. Road Wins vs Unranked by 28+",
+        "home_unranked_wins_big": "9. Home Wins vs Unranked by 28+",
+        "win_pct": "Overall Win % (baseline)",
     }
 
     new_weights = {}

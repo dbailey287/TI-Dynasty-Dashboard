@@ -365,6 +365,7 @@ def compute_team_stats(df: pd.DataFrame, teams: list, as_of_week_sort: int | Non
         vs_user = tg[tg["Opponent_Is_User"]]
         vs_cpu = tg[~tg["Opponent_Is_User"]]
         ranked = tg[tg[ranked_game_col]]
+        unranked = tg[~tg[ranked_game_col]]
         top10 = tg[tg[top10_game_col]]
 
         pf = tg["Team_Score"].mean() if games_played else np.nan
@@ -372,6 +373,14 @@ def compute_team_stats(df: pd.DataFrame, teams: list, as_of_week_sort: int | Non
         mov = tg["Margin"].mean() if games_played else np.nan
 
         streak_label, form_pct = _streak_and_form(tg)
+
+        def _win_count(subset, location=None, min_margin=None):
+            s = subset[subset["Outcome"] == "W"]
+            if location is not None:
+                s = s[s["Location"] == location]
+            if min_margin is not None:
+                s = s[s["Margin"] >= min_margin]
+            return int(len(s))
 
         rows.append({
             "Team": team,
@@ -392,6 +401,17 @@ def compute_team_stats(df: pd.DataFrame, teams: list, as_of_week_sort: int | Non
             "Ranked_L": int((ranked["Outcome"] == "L").sum()),
             "Top10_W": int((top10["Outcome"] == "W").sum()),
             "Top10_L": int((top10["Outcome"] == "L").sum()),
+            # Granular win-quality categories, used by the Dynasty Rating formula --
+            # see DEFAULT_RATING_WEIGHTS. "Big" margins: 17+ vs ranked opponents,
+            # 28+ vs unranked opponents.
+            "Road_Ranked_W": _win_count(ranked, location="Away"),
+            "Home_Ranked_W": _win_count(ranked, location="Home"),
+            "Road_Ranked_W_Big": _win_count(ranked, location="Away", min_margin=17),
+            "Home_Ranked_W_Big": _win_count(ranked, location="Home", min_margin=17),
+            "Road_Unranked_W": _win_count(unranked, location="Away"),
+            "Home_Unranked_W": _win_count(unranked, location="Home"),
+            "Road_Unranked_W_Big": _win_count(unranked, location="Away", min_margin=28),
+            "Home_Unranked_W_Big": _win_count(unranked, location="Home", min_margin=28),
             "PF": pf,
             "PA": pa,
             "MOV": mov,
@@ -715,13 +735,16 @@ def team_secondary_color(team: str) -> str:
 
 
 DEFAULT_RATING_WEIGHTS = {
-    "win_pct": 0.35,
-    "sos": 0.20,
-    "avg_margin": 0.20,
-    "ranked_wins": 0.10,
-    "road_wins": 0.05,
-    "user_wins": 0.05,
-    "recent_form": 0.05,
+    "user_wins": 0.18,               # 1. User-vs-User game wins -- the "real" competition, still #1 but no longer overwhelming
+    "road_ranked_wins": 0.16,       # 2. Wins over ranked opponents, on the road
+    "home_ranked_wins": 0.13,       # 3. Wins over ranked opponents, at home
+    "road_ranked_wins_big": 0.10,    # 4. ...by 17+ points
+    "home_ranked_wins_big": 0.08,    # 5. ...by 17+ points
+    "road_unranked_wins": 0.07,       # 6. Wins over unranked opponents, on the road
+    "home_unranked_wins": 0.05,       # 7. Wins over unranked opponents, at home
+    "road_unranked_wins_big": 0.04,    # 8. ...by 28+ points
+    "home_unranked_wins_big": 0.03,    # 9. ...by 28+ points
+    "win_pct": 0.16,                    # baseline: overall record now carries real weight, balances the user-win swing
 }
 
 
@@ -741,27 +764,33 @@ def compute_dynasty_rating(team_stats_with_sos: pd.DataFrame,
     stats = team_stats_with_sos.copy()
 
     win_pct_scaled = _minmax_scale(stats["Win_Pct"].fillna(0))
-    sos_scaled = _minmax_scale(stats["SOS"].fillna(stats["SOS"].mean()))
-    margin_scaled = _minmax_scale(stats["MOV"].fillna(stats["MOV"].mean() if stats["MOV"].notna().any() else 0))
-    ranked_wins_scaled = _minmax_scale(stats["Ranked_W"].fillna(0))
-    road_wins_scaled = _minmax_scale(stats["Away_W"].fillna(0))
     user_wins_scaled = _minmax_scale(stats["User_W"].fillna(0))
-    form_scaled = _minmax_scale(stats["Form_Pct"].fillna(0))
+    road_ranked_scaled = _minmax_scale(stats["Road_Ranked_W"].fillna(0))
+    home_ranked_scaled = _minmax_scale(stats["Home_Ranked_W"].fillna(0))
+    road_ranked_big_scaled = _minmax_scale(stats["Road_Ranked_W_Big"].fillna(0))
+    home_ranked_big_scaled = _minmax_scale(stats["Home_Ranked_W_Big"].fillna(0))
+    road_unranked_scaled = _minmax_scale(stats["Road_Unranked_W"].fillna(0))
+    home_unranked_scaled = _minmax_scale(stats["Home_Unranked_W"].fillna(0))
+    road_unranked_big_scaled = _minmax_scale(stats["Road_Unranked_W_Big"].fillna(0))
+    home_unranked_big_scaled = _minmax_scale(stats["Home_Unranked_W_Big"].fillna(0))
 
     rating = (
-        weights["win_pct"] * win_pct_scaled
-        + weights["sos"] * sos_scaled
-        + weights["avg_margin"] * margin_scaled
-        + weights["ranked_wins"] * ranked_wins_scaled
-        + weights["road_wins"] * road_wins_scaled
-        + weights["user_wins"] * user_wins_scaled
-        + weights["recent_form"] * form_scaled
+        weights["user_wins"] * user_wins_scaled
+        + weights["road_ranked_wins"] * road_ranked_scaled
+        + weights["home_ranked_wins"] * home_ranked_scaled
+        + weights["road_ranked_wins_big"] * road_ranked_big_scaled
+        + weights["home_ranked_wins_big"] * home_ranked_big_scaled
+        + weights["road_unranked_wins"] * road_unranked_scaled
+        + weights["home_unranked_wins"] * home_unranked_scaled
+        + weights["road_unranked_wins_big"] * road_unranked_big_scaled
+        + weights["home_unranked_wins_big"] * home_unranked_big_scaled
+        + weights["win_pct"] * win_pct_scaled
     )
 
     stats["Dynasty_Rating"] = rating.round(1)
     stats["Rating_Component_WinPct"] = win_pct_scaled
-    stats["Rating_Component_SOS"] = sos_scaled
-    stats["Rating_Component_Margin"] = margin_scaled
+    stats["Rating_Component_UserWins"] = user_wins_scaled
+    stats["Rating_Component_RoadRankedWins"] = road_ranked_scaled
 
     stats = stats.sort_values("Dynasty_Rating", ascending=False)
     stats["Rank"] = range(1, len(stats) + 1)
@@ -812,16 +841,26 @@ def rating_explanation(team: str, rated_stats: pd.DataFrame) -> list:
         return []
     row = rated_stats.loc[team]
     bullets = []
-    if row["Ranked_W"] > 0:
-        bullets.append(f"{int(row['Ranked_W'])} win(s) over ranked opponents")
-    if pd.notna(row["SOS"]):
-        bullets.append(f"Strength of schedule score: {row['SOS']:.2f} (0-1 scale, higher = tougher)")
-    if pd.notna(row["MOV"]):
-        bullets.append(f"Average scoring margin of {row['MOV']:+.1f} pts/game")
-    if row["Away_W"] > 0 and row["Away_L"] == 0 and row["Away_W"] >= 2:
-        bullets.append(f"Undefeated on the road ({int(row['Away_W'])}-0)")
     if row["User_W"] > 0:
-        bullets.append(f"{int(row['User_W'])}-{int(row['User_L'])} vs user-controlled teams")
+        bullets.append(f"{int(row['User_W'])}-{int(row['User_L'])} vs user-controlled teams -- the biggest factor in the rating")
+    if row["Road_Ranked_W"] > 0:
+        big = int(row["Road_Ranked_W_Big"])
+        extra = f" ({big} by 17+)" if big else ""
+        bullets.append(f"{int(row['Road_Ranked_W'])} road win(s) over ranked opponents{extra}")
+    if row["Home_Ranked_W"] > 0:
+        big = int(row["Home_Ranked_W_Big"])
+        extra = f" ({big} by 17+)" if big else ""
+        bullets.append(f"{int(row['Home_Ranked_W'])} home win(s) over ranked opponents{extra}")
+    if row["Road_Unranked_W"] > 0:
+        big = int(row["Road_Unranked_W_Big"])
+        extra = f" ({big} by 28+)" if big else ""
+        bullets.append(f"{int(row['Road_Unranked_W'])} road win(s) over unranked opponents{extra}")
+    if row["Home_Unranked_W"] > 0:
+        big = int(row["Home_Unranked_W_Big"])
+        extra = f" ({big} by 28+)" if big else ""
+        bullets.append(f"{int(row['Home_Unranked_W'])} home win(s) over unranked opponents{extra}")
+    if pd.notna(row.get("Win_Pct")):
+        bullets.append(f"{int(row['W'])}-{int(row['L'])} overall")
     if row["Streak"] not in ("-", None):
         bullets.append(f"Currently riding a {row['Streak']} streak")
     return bullets
