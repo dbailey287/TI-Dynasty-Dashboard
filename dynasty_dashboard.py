@@ -915,8 +915,9 @@ elif page == "🤝 Head-to-Head":
     with uc1:
         st.markdown("#### Biggest User Blowout")
         if biggest_uu:
+            season_tag = f" ({int(biggest_uu['season'])})" if pd.notna(biggest_uu.get("season")) else ""
             st.markdown(
-                f"**{biggest_uu['score']}** — {team_logo_tag(biggest_uu['winner'], 24)}{biggest_uu['winner']} vs "
+                f"**{biggest_uu['score']}**{season_tag} — {team_logo_tag(biggest_uu['winner'], 24)}{biggest_uu['winner']} vs "
                 f"{team_logo_tag(biggest_uu['loser'], 24)}{biggest_uu['loser']}",
                 unsafe_allow_html=True,
             )
@@ -925,8 +926,9 @@ elif page == "🤝 Head-to-Head":
     with uc2:
         st.markdown("#### Closest User Game")
         if closest_uu:
+            season_tag = f" ({int(closest_uu['season'])})" if pd.notna(closest_uu.get("season")) else ""
             st.markdown(
-                f"**{closest_uu['score']}** — {team_logo_tag(closest_uu['winner'], 24)}{closest_uu['winner']} over "
+                f"**{closest_uu['score']}**{season_tag} — {team_logo_tag(closest_uu['winner'], 24)}{closest_uu['winner']} over "
                 f"{team_logo_tag(closest_uu['loser'], 24)}{closest_uu['loser']}",
                 unsafe_allow_html=True,
             )
@@ -947,9 +949,16 @@ elif page == "🤝 Head-to-Head":
     matrix_display = h2h_matrix_all.rename(index=matrix_labels, columns=matrix_labels)
 
     def _color_cell(val):
-        if val == "W":
+        if val in ("-", "—") or not val:
+            return ""
+        entries = [e.strip() for e in val.split(",")]
+        has_w = any(e.startswith("W") for e in entries)
+        has_l = any(e.startswith("L") for e in entries)
+        if has_w and has_l:
+            return "background-color: rgba(241, 196, 15, 0.25)"  # split record across seasons
+        if has_w:
             return "background-color: rgba(46, 204, 113, 0.25)"
-        if val == "L":
+        if has_l:
             return "background-color: rgba(231, 76, 60, 0.25)"
         return ""
 
