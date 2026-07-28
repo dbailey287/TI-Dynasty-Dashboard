@@ -897,6 +897,45 @@ elif page == "🤝 Head-to-Head":
 elif page == "📈 League Stats":
     st.title("📈 League Stats")
 
+    st.subheader("Full League Table")
+    league_table = dl.compute_league_stats_table(df, TEAMS, team_stats).reset_index()
+    league_table["Record"] = (
+        league_table["W"].fillna(0).astype(int).astype(str) + "-" + league_table["L"].fillna(0).astype(int).astype(str)
+    )
+    league_table["One-Score Rec"] = (
+        league_table["One_Score_W"].fillna(0).astype(int).astype(str) + "-"
+        + league_table["One_Score_L"].fillna(0).astype(int).astype(str)
+    )
+    league_table["Logo"] = league_table["Team"].apply(dl.logo_url)
+    league_table["Win %"] = (league_table["Win_Pct"] * 100).round(1)
+    league_table["PPG"] = league_table["PF"].round(1)
+    league_table["PA/G"] = league_table["PA"].round(1)
+    league_table["Avg Margin"] = league_table["MOV"].round(1)
+    league_table["SOS"] = league_table["SOS"].round(3)
+
+    display_cols = {
+        "Logo": "", "Team": "Team", "Record": "Record", "Win %": "Win %",
+        "PPG": "PPG", "PA/G": "PA/G", "Avg Margin": "Avg Margin",
+        "Total_PF": "Total PF", "Total_PA": "Total PA",
+        "Best_Game_PF": "Best Game", "Worst_Game_PA": "Worst Def Game",
+        "Biggest_Win_Margin": "Biggest Win", "Worst_Loss_Margin": "Worst Loss",
+        "One-Score Rec": "One-Score Rec", "Longest_Win_Streak": "Longest W Streak",
+        "Longest_Loss_Streak": "Longest L Streak", "SOS": "SOS",
+        "Win_Quality_Score": "Win Quality",
+    }
+    league_display = league_table[list(display_cols.keys())].rename(columns=display_cols)
+    st.dataframe(
+        league_display, use_container_width=True, hide_index=True,
+        height=min(35 * (len(league_display) + 1) + 3, 640),
+        column_config={"": st.column_config.ImageColumn("", width="small")},
+    )
+    st.caption(
+        "PA/G = points allowed per game · Win Quality = sum of (26 − opponent rank) across all ranked wins, "
+        "same scoring the Power Rankings formula uses · swipe/scroll sideways on mobile to see every column."
+    )
+
+    st.divider()
+
     best_off = team_stats["PF"].idxmax() if team_stats["PF"].notna().any() else None
     best_def = team_stats["PA"].idxmin() if team_stats["PA"].notna().any() else None
     blowout = dl.biggest_blowout(df)
@@ -938,6 +977,61 @@ elif page == "📈 League Stats":
             )
         else:
             st.caption("No data yet")
+
+    sig_win = dl.signature_win(df)
+    bad_loss = dl.worst_loss(df)
+
+    c7, c8 = st.columns(2)
+    with c7:
+        st.markdown("#### Signature Win")
+        if sig_win:
+            st.markdown(
+                f"**{sig_win['score']}** — {team_logo_tag(sig_win['team'], 24)}{sig_win['team']} over "
+                f"#{sig_win['opponent_rank']} {sig_win['opponent']}",
+                unsafe_allow_html=True,
+            )
+        else:
+            st.caption("No wins over a ranked opponent yet")
+    with c8:
+        st.markdown("#### Worst Loss")
+        if bad_loss:
+            st.markdown(
+                f"**{bad_loss['score']}** — {team_logo_tag(bad_loss['team'], 24)}{bad_loss['team']} fell to "
+                f"unranked {bad_loss['opponent']}",
+                unsafe_allow_html=True,
+            )
+        else:
+            st.caption("No bad losses yet -- clean season so far")
+
+    st.divider()
+    st.subheader("Advanced Splits")
+    st.caption(
+        "How each team's performance breaks out by context, rather than blended into one season average. "
+        "Margin columns show average scoring margin in that specific context; blank means no games played there yet."
+    )
+    split_stats = dl.compute_split_stats(df, TEAMS)
+    split_display = split_stats.reset_index()
+    split_display["Logo"] = split_display["Team"].apply(dl.logo_url)
+    for col in split_display.columns:
+        if col not in ("Team", "Logo"):
+            split_display[col] = split_display[col].round(1)
+
+    split_cols = {
+        "Logo": "", "Team": "Team",
+        "Margin_Wins": "Margin (W)", "Margin_Losses": "Margin (L)",
+        "Home_PPG": "Home PPG", "Home_PA": "Home PA", "Home_Margin": "Home Margin",
+        "Away_PPG": "Away PPG", "Away_PA": "Away PA", "Away_Margin": "Away Margin",
+        "User_Margin": "User-Game Margin", "CPU_Margin": "CPU-Game Margin",
+        "Margin_vs_Ranked": "Margin vs Ranked", "Margin_vs_Unranked": "Margin vs Unranked",
+        "Blowout_Rate": "Blowout %", "OneScore_Rate": "One-Score %",
+    }
+    split_table = split_display[list(split_cols.keys())].rename(columns=split_cols)
+    st.dataframe(
+        split_table, use_container_width=True, hide_index=True,
+        height=min(35 * (len(split_table) + 1) + 3, 640),
+        column_config={"": st.column_config.ImageColumn("", width="small")},
+    )
+    st.caption("Swipe/scroll sideways on mobile to see every column.")
 
     st.divider()
     st.markdown("#### Home Field Advantage")

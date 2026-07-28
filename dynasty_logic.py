@@ -328,6 +328,155 @@ def _streak_and_form(team_games: pd.DataFrame, form_window: int = 5):
     return streak_label, form_pct
 
 
+def _longest_streaks(team_games: pd.DataFrame) -> tuple:
+    """team_games must already be sorted chronologically (completed only).
+    Returns (longest_win_streak, longest_loss_streak) for the WHOLE season,
+    not just the current one."""
+    if team_games.empty:
+        return 0, 0
+    longest_w = longest_l = cur_w = cur_l = 0
+    for o in team_games["Outcome"]:
+        if o == "W":
+            cur_w += 1
+            cur_l = 0
+        elif o == "L":
+            cur_l += 1
+            cur_w = 0
+        longest_w = max(longest_w, cur_w)
+        longest_l = max(longest_l, cur_l)
+    return longest_w, longest_l
+
+
+def compute_split_stats(df: pd.DataFrame, teams: list, rank_basis: str = "at_game") -> pd.DataFrame:
+    """
+    Builds the "advanced splits" table for the League Stats page: scoring
+    broken out by win/loss, home/away, User-vs-CPU, and ranked/unranked
+    opponent quality, plus blowout/nail-biter rates and current streak.
+    Complements compute_league_stats_table rather than duplicating it --
+    that one is season totals/bests; this one is about how a team's
+    performance splits across different contexts.
+    """
+    rank_col = "Opponent_Rank_At_Game_Num" if rank_basis == "at_game" else "Opponent_Rank_Num"
+    completed = df[df["Completed"]].copy()
+    rows = []
+    for team in teams:
+        tg = completed[completed["Team"] == team]
+        if tg.empty:
+            rows.append({"Team": team})
+            continue
+
+        wins = tg[tg["Outcome"] == "W"]
+        losses = tg[tg["Outcome"] == "L"]
+        home = tg[tg["Location"] == "Home"]
+        away = tg[tg["Location"] == "Away"]
+        user_games = tg[tg["Opponent_Is_User"]]
+        cpu_games = tg[~tg["Opponent_Is_User"]]
+        ranked = tg[tg[rank_col].notna()]
+        unranked = tg[tg[rank_col].isna()]
+
+        def _avg(subset, col):
+            return subset[col].mean() if len(subset) else np.nan
+
+        gp = len(tg)
+        rows.append({
+            "Team": team,
+            "Margin_Wins": _avg(wins, "Margin"),
+            "Margin_Losses": _avg(losses, "Margin"),
+            "Home_PPG": _avg(home, "Team_Score"), "Home_PA": _avg(home, "Opponent_Score"), "Home_Margin": _avg(home, "Margin"),
+            "Away_PPG": _avg(away, "Team_Score"), "Away_PA": _avg(away, "Opponent_Score"), "Away_Margin": _avg(away, "Margin"),
+            "User_PPG": _avg(user_games, "Team_Score"), "User_PA": _avg(user_games, "Opponent_Score"), "User_Margin": _avg(user_games, "Margin"),
+            "CPU_PPG": _avg(cpu_games, "Team_Score"), "CPU_PA": _avg(cpu_games, "Opponent_Score"), "CPU_Margin": _avg(cpu_games, "Margin"),
+            "Margin_vs_Ranked": _avg(ranked, "Margin"),
+            "Margin_vs_Unranked": _avg(unranked, "Margin"),
+            "Blowout_Rate": (tg["Blowout_Game"].sum() / gp * 100) if gp else np.nan,
+            "OneScore_Rate": (tg["One_Score_Game"].sum() / gp * 100) if gp else np.nan,
+        })
+
+    result = pd.DataFrame(rows).set_index("Team")
+    return result.reindex(teams)
+
+
+def signature_win(df: pd.DataFrame, rank_basis: str = "at_game"):
+    """League-wide: the single win over the highest-ranked (lowest rank
+    number) opponent all season -- distinct from biggest_blowout, which
+    only considers margin and ignores opponent quality entirely."""
+    rank_col = "Opponent_Rank_At_Game_Num" if rank_basis == "at_game" else "Opponent_Rank_Num"
+    completed = df[df["Completed"]]
+    wins = completed[(completed["Outcome"] == "W") & completed[rank_col].notna()]
+    if wins.empty:
+        return None
+    idx = wins[rank_col].idxmin()
+    row = wins.loc[idx]
+    return {
+        "team": row["Team"], "opponent": row["Opponent"], "opponent_rank": int(row[rank_col]),
+        "score": f"{row['Team_Score']:.0f}-{row['Opponent_Score']:.0f}",
+    }
+
+
+def worst_loss(df: pd.DataFrame, rank_basis: str = "at_game"):
+    """League-wide: the biggest-margin loss to an UNRANKED opponent --
+    distinct from biggest_blowout, which could be any big-margin game
+    regardless of who lost or the opponent's quality."""
+    rank_col = "Opponent_Rank_At_Game_Num" if rank_basis == "at_game" else "Opponent_Rank_Num"
+    completed = df[df["Completed"]]
+    bad_losses = completed[(completed["Outcome"] == "L") & completed[rank_col].isna()]
+    if bad_losses.empty:
+        return None
+    idx = bad_losses["Margin"].idxmin()  # Margin is negative for a loss; most negative = worst
+    row = bad_losses.loc[idx]
+    return {
+        "team": row["Team"], "opponent": row["Opponent"],
+        "score": f"{row['Opponent_Score']:.0f}-{row['Team_Score']:.0f}",
+        "margin": abs(row["Margin"]),
+    }
+
+
+def compute_league_stats_table(df: pd.DataFrame, teams: list, team_stats: pd.DataFrame) -> pd.DataFrame:
+    """
+    Builds one comprehensive row per team for the League Stats page,
+    combining what's already in team_stats (PPG, points allowed, average
+    margin, records, SOS, etc.) with a handful of new per-team stats
+    computed fresh from the game log: total points, best/worst single-game
+    performances, one-score game record, longest win/loss streaks, and a
+    "win quality" score (reusing the same rank-weighted scoring the
+    Dynasty Rating formula uses -- see compute_dynasty_rating).
+    """
+    completed = df[df["Completed"]].copy()
+    rows = []
+    for team in teams:
+        tg = completed[completed["Team"] == team].sort_values("Week_Sort")
+        if tg.empty:
+            rows.append({"Team": team})
+            continue
+
+        wins = tg[tg["Outcome"] == "W"]
+        losses = tg[tg["Outcome"] == "L"]
+        one_score = tg[tg["One_Score_Game"]]
+        longest_w, longest_l = _longest_streaks(tg)
+
+        rank_col = "Opponent_Rank_At_Game_Num"
+        ranked_wins = wins[wins[rank_col].notna()] if rank_col in wins.columns else wins.iloc[0:0]
+        win_quality = float((26 - pd.to_numeric(ranked_wins[rank_col], errors="coerce")).clip(lower=0).sum()) if len(ranked_wins) else 0.0
+
+        rows.append({
+            "Team": team,
+            "Total_PF": int(tg["Team_Score"].sum()),
+            "Total_PA": int(tg["Opponent_Score"].sum()),
+            "Best_Game_PF": int(tg["Team_Score"].max()),
+            "Worst_Game_PA": int(tg["Opponent_Score"].max()),
+            "Biggest_Win_Margin": int(wins["Margin"].max()) if len(wins) else None,
+            "Worst_Loss_Margin": int(losses["Margin"].min()) if len(losses) else None,
+            "One_Score_W": int((one_score["Outcome"] == "W").sum()),
+            "One_Score_L": int((one_score["Outcome"] == "L").sum()),
+            "Longest_Win_Streak": longest_w,
+            "Longest_Loss_Streak": longest_l,
+            "Win_Quality_Score": round(win_quality, 1),
+        })
+
+    extra = pd.DataFrame(rows).set_index("Team")
+    return team_stats.join(extra, how="left")
+
+
 def compute_team_stats(df: pd.DataFrame, teams: list, as_of_week_sort: int | None = None,
                         rank_basis: str = "at_game") -> pd.DataFrame:
     """
