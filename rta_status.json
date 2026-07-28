@@ -1,15 +1,37 @@
 {
   "ready_user_ids": [
+    "1123408868458889306",
     "1264702227197591555",
+    "1358920417347108874",
     "1398491406330495040",
     "796043766695067719"
   ],
-  "last_message_id_main": "1531468675524067396",
+  "last_message_id_main": "1531478869989785610",
   "last_message_id_admin": "1531192429598740670",
-  "last_updated": "2026-07-28T01:09:57.244973+00:00",
+  "last_updated": "2026-07-28T01:51:21.659448+00:00",
   "last_reset_at": "2026-07-27T06:52:33.921598+00:00",
   "cycle_count": 2,
   "current_week_sort": 3,
-  "last_tagline_by_team": {},
-  "tagline_queue_by_team": {}
+  "last_tagline_by_team": {
+    "Kentucky": "C-A-T-S! Cats! Cats! Cats! \ud83d\udc3e",
+    "Pittsburgh": "\ud83d\udc3e Building a program, brick by brick. Very small bricks."
+  },
+  "tagline_queue_by_team": {
+    "Kentucky": [
+      "\ud83d\ude39 Wildcats? More like Mildcats. Don't tell Coach.",
+      "\ud83c\udfc8 Football season: the appetizer before basketball season.",
+      "\ud83d\ude02 Big Blue Nation, medium blue expectations.",
+      "Go Big Blue! \ud83d\udc99",
+      "\ud83d\udc3e We claw our way to 6-6 every year, and we're proud of it.",
+      "\ud83c\udfc0 Ngl we're just here till basketball season."
+    ],
+    "Pittsburgh": [
+      "\ud83d\ude24 Hail to Pitt, and hail Mary passes.",
+      "Hail to Pitt! \ud83d\udc3e",
+      "Let's Go, Pitt!",
+      "\ud83d\udc06 Panthers are stealthy. Also stealthily bad on 3rd down.",
+      "\ud83d\ude05 Hail to Pitt, hail to whatever happens next.",
+      "\ud83d\udc06 Panthers prowl. We mostly just kinda wander."
+    ]
+  }
 }
