@@ -92,6 +92,9 @@ TEAM_TAGLINES = {
         "🔥 We run hot and cold. Mostly cold. But hot sometimes!",
         "😤 Tempe heat isn't the only thing that's brutal around here.",
         "🔱 Small pitchfork energy, big pitchfork dreams.",
+        "Bowl eligible is a personality trait at this point.",
+        "Forks up. Record down.",
+        "Pac-12 refugees still figuring out the Big 12.",
     ],
     "Arkansas": [
         "Woo Pig Sooie! 🐗", "Go Hogs Go!", "Callin' the Hogs!",
@@ -100,6 +103,9 @@ TEAM_TAGLINES = {
         "🐷 We're not rebuilding, we're... recalibrating.",
         "🍖 Hog heaven is a state of mind, not a record.",
         "😤 Woo Pig Sooie — said with increasing desperation each week.",
+        "Undefeated in tailgating. 2-4 in everything else.",
+        "Hogs by mascot. Doormats by scoreboard.",
+        "SEC bottom feeder and proud of it.",
     ],
     "Baylor": [
         "Sic 'Em, Bears! 🐻", "That's Baylor... Sic 'Em!",
@@ -108,6 +114,9 @@ TEAM_TAGLINES = {
         "🐻 Slow claps for our slow starts.",
         "😂 We bear-ly made that first down.",
         "🐻 Hibernation season started early this year.",
+        "Sic 'Em is more of a suggestion than a strategy.",
+        "Bears by mascot. Kittens by 3rd down.",
+        "Big 12 attendance numbers carrying harder than the offense.",
     ],
     "California": [
         "Go Bears! 💙💛",
@@ -117,6 +126,9 @@ TEAM_TAGLINES = {
         "🐻 Cal Bears: nationally ranked in vibes only.",
         "😅 We're not tanking, we're 'strategically evaluating.'",
         "🌉 Golden Gate energy, bronze medal record.",
+        "We're 0-4 in conference, but the campus tour was excellent.",
+        "Golden Bears. Bronze effort.",
+        "ACC transplant still adjusting to actual football weather.",
     ],
     "Colorado": [
         "Go Buffs! 🦬", "CU Boulder, Fight!",
@@ -125,6 +137,9 @@ TEAM_TAGLINES = {
         "🦬 We stampede... eventually. Once we find our shoes.",
         "😬 Buffs gonna buff (some weeks).",
         "🏔️ Elevation's high. So is our blood pressure watching this team.",
+        "We peaked in the preseason hype video.",
+        "Buffs stampede. We mosey.",
+        "Prime-time hype, undercard results.",
     ],
     "Kentucky": [
         "C-A-T-S! Cats! Cats! Cats! 🐾", "Go Big Blue! 💙",
@@ -133,6 +148,9 @@ TEAM_TAGLINES = {
         "🐾 We claw our way to 6-6 every year, and we're proud of it.",
         "😂 Big Blue Nation, medium blue expectations.",
         "🏈 Football season: the appetizer before basketball season.",
+        "Elite Eight in basketball. Elite excuses in football.",
+        "Big Blue Nation. Small blue effort.",
+        "We recruit like a football school and play like a JV scrimmage.",
     ],
     "Missouri": [
         "M-I-Z... Z-O-U! 🐯", "Go Tigers!",
@@ -141,6 +159,9 @@ TEAM_TAGLINES = {
         "🐯 We're tigers. We just prefer naps to hunting.",
         "😅 M-I-Z... we'll take a win, honestly, any win.",
         "🐅 Roaring on the inside, whimpering on 3rd down.",
+        "We're 6-6 in a way that feels intentional at this point.",
+        "Tigers on the jersey. Housecats on the field.",
+        "SEC middle-of-the-pack, and we've made peace with it.",
     ],
     "Northwestern": [
         "Go 'Cats! 💜", "U Rah Rah!",
@@ -149,6 +170,9 @@ TEAM_TAGLINES = {
         "🎓 We may lose the game, but we WIN the postgame thesis defense.",
         "😹 Wildcats by name, housecats by performance.",
         "💜 Purple hearts, for surviving this season.",
+        "We lost the game, but our postgame press conference was Ivy-League caliber.",
+        "Smart kids. Dumb red zone decisions.",
+        "Big Ten academics carry harder than the Big Ten schedule.",
     ],
     "Oklahoma State": [
         "Go Pokes! 🤠", "Ride 'em, Cowboys!",
@@ -157,6 +181,9 @@ TEAM_TAGLINES = {
         "🤠 We lasso wins. Sometimes the rope's just... too short.",
         "😂 Cowboy up! Or at least cowboy... sideways.",
         "🐴 Giddy up, or at least giddy... eventually.",
+        "We're rebuilding. We've been rebuilding since the Clinton administration.",
+        "Cowboys by name. Rodeo clowns by 4th quarter.",
+        "Big 12 also-ran, and everybody in the league knows it.",
     ],
     "Pittsburgh": [
         "Hail to Pitt! 🐾", "Let's Go, Pitt!",
@@ -165,6 +192,9 @@ TEAM_TAGLINES = {
         "🐆 Panthers prowl. We mostly just kinda wander.",
         "😅 Hail to Pitt, hail to whatever happens next.",
         "🐾 Building a program, brick by brick. Very small bricks.",
+        "We're building a program the same way you build a sandcastle at low tide.",
+        "Panthers prowl. We limp.",
+        "ACC afterthought, and we've stopped pretending otherwise.",
     ],
     "SMU": [
         "Pony Up! 🐴", "Go Mustangs!",
@@ -173,6 +203,9 @@ TEAM_TAGLINES = {
         "🐴 Mustangs run wild. Occasionally in the wrong direction.",
         "😂 We Pony Up, then immediately Pony Down.",
         "✨ Dallas swagger, middling record — we contain multitudes.",
+        "Our uniforms have never lost a game. Unfortunately we have to wear them while playing.",
+        "All style. Zero substance.",
+        "ACC newcomer still figuring out real competition.",
     ],
     "South Carolina": [
         "Go Cocks! 🐔", "Fighting Gamecocks!",
@@ -181,6 +214,9 @@ TEAM_TAGLINES = {
         "🐔 We may lose, but we lose with FEATHERS everywhere.",
         "😂 Cock-a-doodle-don't... but we'll try again next week.",
         "🎶 Sandstorm hype, mid-tier results.",
+        "We show up loud and leave quiet. Every single week.",
+        "Gamecocks by mascot. Punching bags by scoreboard.",
+        "SEC bottom-tier, and Sandstorm can't save us.",
     ],
     "Stanford": [
         "Go Cardinal! 🌲", "Fight, Fight, Fight!",
@@ -189,6 +225,9 @@ TEAM_TAGLINES = {
         "🌲 We photosynthesize wins. Very slowly.",
         "😂 Fight Fight Fight, mostly for a bowl bid.",
         "🤓 We'll out-smart you, if not out-score you.",
+        "Our football team has a lower GPA impact than our actual GPA.",
+        "Smart school. Dumb defense.",
+        "ACC's academic pride, everyone else's easy win.",
     ],
     "Temple": [
         "Fear the Owl! 🦉", "T-U, Owls!",
@@ -197,6 +236,9 @@ TEAM_TAGLINES = {
         "🦉 Whoo's ready for a rebuilding year? We are! Again!",
         "😂 Fear the Owl (mild, occasional fear only).",
         "🦉 We see in the dark. Seeing the scoreboard is harder.",
+        "We're the team opposing fans forget was even on the schedule.",
+        "Owls by mascot. Pigeons by performance.",
+        "American Athletic leftovers, still looking for a signature win.",
     ],
     "Virginia": [
         "Wahoowa! 🔶", "Go Hoos!",
@@ -205,6 +247,9 @@ TEAM_TAGLINES = {
         "🔶 Wahoowa, wahoo-uh-oh.",
         "😅 We're Cavaliers. Cavalier about our record too, apparently.",
         "⚔️ We brought a sword to a gunfight, and still tried our best.",
+        "We bring school spirit. Everyone else brings a running game.",
+        "Cavaliers by name. Pushovers by October.",
+        "ACC bottom-half, and the Wahoos know it.",
     ],
     "Virginia Tech": [
         "Let's Go... Hokies! 🦃", "Hokie Pride!",
@@ -213,6 +258,9 @@ TEAM_TAGLINES = {
         "🦃 Gobble till we wobble, straight to another rebuild.",
         "😂 Hokie Pride, occasionally Hokie Confusion.",
         "🦃 We're not turkeys, we're just misunderstood eagles.",
+        "Enter Sandman still hits. Everything after kickoff, less so.",
+        "Proud turkey. Regular loser.",
+        "Former ACC power, current ACC cautionary tale.",
     ],
     "West Virginia": [
         "Let's Go Mountaineers! 🏔️", "WVU! WVU!",
@@ -221,6 +269,9 @@ TEAM_TAGLINES = {
         "⛰️ We climb. Slowly. With frequent breaks.",
         "😅 Let's Go Mountaineers! (Please, someone, let's go.)",
         "🏔️ WVU: peaks and valleys, mostly valleys this year.",
+        "We climb mountains. Also our own self-inflicted holes.",
+        "Mountaineers by name. Molehills by effort.",
+        "Big 12 middle-of-the-road, and we've stopped apologizing for it.",
     ],
     "Wisconsin": [
         "On, Wisconsin! 🦡", "Go Badgers!",
@@ -229,6 +280,9 @@ TEAM_TAGLINES = {
         "🦡 Badgers dig in. Sometimes we dig ourselves a hole instead.",
         "🧀 Cheesehead pride, questionable red zone decisions.",
         "😂 On Wisconsin! (Please, ON. We need the momentum.)",
+        "Ground and pound offense. Mostly the ground part.",
+        "Cheese is the only thing that's aged well this decade.",
+        "Motion-W offense, stagnant everything else.",
     ],
 }
 
