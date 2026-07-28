@@ -1049,15 +1049,25 @@ def rating_explanation(team: str, rated_stats: pd.DataFrame) -> list:
 
 def build_h2h_matrix(df: pd.DataFrame, teams: list) -> pd.DataFrame:
     """
-    Returns a team x team matrix of 'W'/'L'/'-' for completed User-vs-User
-    games (from the row-owner's perspective, i.e. matrix[a][b] = a's result
-    vs b).
+    Returns a team x team matrix of results for completed User-vs-User
+    games (from the row-owner's perspective, i.e. matrix[a][b] = a's
+    result vs b), each tagged with the season it happened in -- e.g.
+    "W'26". If the same two teams met in more than one season, ALL of
+    those results are shown together (e.g. "W'26, L'27") rather than the
+    later one silently overwriting the earlier one, which is what a plain
+    single-value cell would otherwise do once this spans multiple seasons.
     """
     matrix = pd.DataFrame("-", index=teams, columns=teams)
-    uu = df[(df["Completed"]) & (df["Opponent_Is_User"])]
+    uu = df[(df["Completed"]) & (df["Opponent_Is_User"])].sort_values("Season")
+    cell_entries = {}
     for _, row in uu.iterrows():
-        if row["Team"] in matrix.index and row["Opponent"] in matrix.columns:
-            matrix.loc[row["Team"], row["Opponent"]] = row["Outcome"]
+        if row["Team"] in teams and row["Opponent"] in teams:
+            season = row.get("Season")
+            season_tag = f"'{str(season)[-2:]}" if pd.notna(season) else ""
+            entry = f"{row['Outcome']}{season_tag}"
+            cell_entries.setdefault((row["Team"], row["Opponent"]), []).append(entry)
+    for (team, opp), entries in cell_entries.items():
+        matrix.loc[team, opp] = ", ".join(entries)
     for t in teams:
         if t in matrix.columns:
             matrix.loc[t, t] = "—"
@@ -1068,22 +1078,24 @@ def user_vs_user_records(df: pd.DataFrame, teams: list) -> pd.DataFrame:
     uu = df[(df["Completed"]) & (df["Opponent_Is_User"])]
     team_user_map = df.drop_duplicates("Team").set_index("Team")["User"].to_dict()
 
-    def _label(opp_team: str) -> str:
+    def _label(opp_team: str, season) -> str:
         user = team_user_map.get(opp_team)
-        return f"{opp_team} ({user})" if user else opp_team
+        season_tag = f" '{str(season)[-2:]}" if pd.notna(season) else ""
+        base = f"{opp_team} ({user})" if user else opp_team
+        return f"{base}{season_tag}"
 
     rows = []
     for team in teams:
-        tg = uu[uu["Team"] == team]
-        wins = sorted(tg.loc[tg["Outcome"] == "W", "Opponent"].tolist())
-        losses = sorted(tg.loc[tg["Outcome"] == "L", "Opponent"].tolist())
+        tg = uu[uu["Team"] == team].sort_values("Season")
+        wins = [_label(r["Opponent"], r.get("Season")) for _, r in tg[tg["Outcome"] == "W"].iterrows()]
+        losses = [_label(r["Opponent"], r.get("Season")) for _, r in tg[tg["Outcome"] == "L"].iterrows()]
         rows.append({
             "Team": team,
             "User": team_user_map.get(team, ""),
             "UU_W": int((tg["Outcome"] == "W").sum()),
             "UU_L": int((tg["Outcome"] == "L").sum()),
-            "Wins_Over": ", ".join(_label(o) for o in wins),
-            "Losses_To": ", ".join(_label(o) for o in losses),
+            "Wins_Over": ", ".join(wins),
+            "Losses_To": ", ".join(losses),
         })
     return pd.DataFrame(rows).set_index("Team")
 
@@ -1121,7 +1133,8 @@ def biggest_blowout(df: pd.DataFrame):
     idx = games["Margin"].abs().idxmax()
     row = games.loc[idx]
     winner, loser, wscore, lscore = _winner_loser(row)
-    return {"winner": winner, "loser": loser, "score": f"{wscore:.0f}-{lscore:.0f}", "margin": abs(row["Margin"])}
+    return {"winner": winner, "loser": loser, "score": f"{wscore:.0f}-{lscore:.0f}",
+            "margin": abs(row["Margin"]), "season": row.get("Season")}
 
 
 def closest_game(df: pd.DataFrame):
@@ -1131,7 +1144,8 @@ def closest_game(df: pd.DataFrame):
     idx = games["Margin"].abs().idxmin()
     row = games.loc[idx]
     winner, loser, wscore, lscore = _winner_loser(row)
-    return {"winner": winner, "loser": loser, "score": f"{wscore:.0f}-{lscore:.0f}", "margin": abs(row["Margin"])}
+    return {"winner": winner, "loser": loser, "score": f"{wscore:.0f}-{lscore:.0f}",
+            "margin": abs(row["Margin"]), "season": row.get("Season")}
 
 
 def _winner_loser(row):
