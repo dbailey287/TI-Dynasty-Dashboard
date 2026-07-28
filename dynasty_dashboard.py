@@ -854,8 +854,15 @@ elif page == "👤 Teams":
 # ============================================================================
 elif page == "🤝 Head-to-Head":
     st.title("🤝 Head-to-Head")
+    st.caption(
+        "This page covers your ENTIRE dynasty history, every season combined -- not just the season selected "
+        "in the sidebar. With only 2-3 User-vs-User games a season, a single-season view didn't have enough "
+        "games to be very interesting; across every season, it does."
+    )
 
-    uu_records = dl.user_vs_user_records(df, TEAMS)
+    h2h_teams = sorted(df_all["Team"].dropna().unique().tolist())
+    uu_records = dl.user_vs_user_records(df_all, h2h_teams)
+
     st.subheader("User vs User Records")
     uu_display = uu_records.copy()
     uu_display["Record"] = uu_display["UU_W"].astype(str) + "-" + uu_display["UU_L"].astype(str)
@@ -870,12 +877,74 @@ elif page == "🤝 Head-to-Head":
     )
 
     st.divider()
-    st.subheader("League Matrix")
-    st.caption("Row team's result vs. column team (W / L / — no game yet).")
+    st.subheader("User vs User Stats")
+    st.caption(
+        "Scoring specifically in User-vs-User games, across your whole dynasty history. Same "
+        "\"value (games)\" format as League Stats -- e.g. \"+10.5 (3)\" means +10.5 points/game average across 3 games."
+    )
+    uu_splits = dl.compute_split_stats(df_all, h2h_teams)
+    uu_splits_display = uu_splits.reset_index()
+    uu_splits_display["Logo"] = uu_splits_display["Team"].apply(dl.logo_url)
+    uu_splits_display = uu_splits_display.merge(
+        uu_display[["Team", "Record"]], on="Team", how="left"
+    )
 
-    team_user_map = team_stats["User"].to_dict()
-    matrix_labels = {t: (f"{t} ({team_user_map[t]})" if team_user_map.get(t) else t) for t in TEAMS}
-    matrix_display = h2h_matrix.rename(index=matrix_labels, columns=matrix_labels)
+    def _fmt_plain(value, gp):
+        return "—" if pd.isna(value) or pd.isna(gp) or gp == 0 else f"{value:.1f} ({int(gp)})"
+
+    def _fmt_signed(value, gp):
+        return "—" if pd.isna(value) or pd.isna(gp) or gp == 0 else f"{value:+.1f} ({int(gp)})"
+
+    uu_splits_display["User PPG (n)"] = uu_splits_display.apply(lambda r: _fmt_plain(r["User_PPG"], r["User_GP"]), axis=1)
+    uu_splits_display["User PA (n)"] = uu_splits_display.apply(lambda r: _fmt_plain(r["User_PA"], r["User_GP"]), axis=1)
+    uu_splits_display["User Margin (n)"] = uu_splits_display.apply(lambda r: _fmt_signed(r["User_Margin"], r["User_GP"]), axis=1)
+
+    uu_stats_table = uu_splits_display[["Logo", "Team", "Record", "User PPG (n)", "User PA (n)", "User Margin (n)"]].rename(
+        columns={"Logo": ""}
+    )
+    st.dataframe(
+        uu_stats_table, use_container_width=True, hide_index=True,
+        column_config={"": st.column_config.ImageColumn("", width="small")},
+    )
+
+    user_games_only = df_all[df_all["Opponent_Is_User"]]
+    biggest_uu = dl.biggest_blowout(user_games_only)
+    closest_uu = dl.closest_game(user_games_only)
+
+    uc1, uc2 = st.columns(2)
+    with uc1:
+        st.markdown("#### Biggest User Blowout")
+        if biggest_uu:
+            st.markdown(
+                f"**{biggest_uu['score']}** — {team_logo_tag(biggest_uu['winner'], 24)}{biggest_uu['winner']} vs "
+                f"{team_logo_tag(biggest_uu['loser'], 24)}{biggest_uu['loser']}",
+                unsafe_allow_html=True,
+            )
+        else:
+            st.caption("No User-vs-User games yet")
+    with uc2:
+        st.markdown("#### Closest User Game")
+        if closest_uu:
+            st.markdown(
+                f"**{closest_uu['score']}** — {team_logo_tag(closest_uu['winner'], 24)}{closest_uu['winner']} over "
+                f"{team_logo_tag(closest_uu['loser'], 24)}{closest_uu['loser']}",
+                unsafe_allow_html=True,
+            )
+        else:
+            st.caption("No User-vs-User games yet")
+
+    st.divider()
+    st.subheader("League Matrix")
+    st.caption(
+        "Row team's result vs. column team (W / L / — no game yet), across every season. "
+        "Note: if a team's changed hands between seasons, this shows the CURRENT controller's name for "
+        "every historical game on that team, not necessarily whoever was actually playing at the time."
+    )
+
+    h2h_matrix_all = dl.build_h2h_matrix(df_all, h2h_teams)
+    team_user_map_all = df_all.drop_duplicates("Team").set_index("Team")["User"].to_dict()
+    matrix_labels = {t: (f"{t} ({team_user_map_all[t]})" if team_user_map_all.get(t) else t) for t in h2h_teams}
+    matrix_display = h2h_matrix_all.rename(index=matrix_labels, columns=matrix_labels)
 
     def _color_cell(val):
         if val == "W":
