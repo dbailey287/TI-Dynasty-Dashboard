@@ -89,102 +89,181 @@ TEAM_TAGLINES = {
         "😈 We may be cursed, but at least we're spicy.",
         "🔱 Forking around since 1885.",
         "🤷 Bowl game? We'll take it under advisement.",
+        "🔥 We run hot and cold. Mostly cold. But hot sometimes!",
+        "😤 Tempe heat isn't the only thing that's brutal around here.",
+        "🔱 Small pitchfork energy, big pitchfork dreams.",
     ],
     "Arkansas": [
         "Woo Pig Sooie! 🐗", "Go Hogs Go!", "Callin' the Hogs!",
         "🐗 We may be hogs, but we're PROUD hogs.",
         "😅 Our defense is a work in progress. A LONG work in progress.",
+        "🐷 We're not rebuilding, we're... recalibrating.",
+        "🍖 Hog heaven is a state of mind, not a record.",
+        "😤 Woo Pig Sooie — said with increasing desperation each week.",
     ],
     "Baylor": [
         "Sic 'Em, Bears! 🐻", "That's Baylor... Sic 'Em!",
         "🐻 Bears hibernate. We're just resting up for later.",
         "😬 Sic 'em? More like sit 'em down and hope.",
+        "🐻 Slow claps for our slow starts.",
+        "😂 We bear-ly made that first down.",
+        "🐻 Hibernation season started early this year.",
     ],
     "California": [
         "Go Bears! 💙💛",
         "🐻 Golden Bears, modest record, unbreakable spirit.",
         "📚 We may not win state, but we ACED it academically.",
         "🌉 Bridging the gap between \"good\" and \"next year.\"",
+        "🐻 Cal Bears: nationally ranked in vibes only.",
+        "😅 We're not tanking, we're 'strategically evaluating.'",
+        "🌉 Golden Gate energy, bronze medal record.",
     ],
     "Colorado": [
         "Go Buffs! 🦬", "CU Boulder, Fight!",
         "🦬 Big, slow, and occasionally dangerous. Just like our offense.",
         "😤 Buffs don't rebuild. We reload. Eventually.",
+        "🦬 We stampede... eventually. Once we find our shoes.",
+        "😬 Buffs gonna buff (some weeks).",
+        "🏔️ Elevation's high. So is our blood pressure watching this team.",
     ],
     "Kentucky": [
         "C-A-T-S! Cats! Cats! Cats! 🐾", "Go Big Blue! 💙",
         "🏀 Ngl we're just here till basketball season.",
         "😹 Wildcats? More like Mildcats. Don't tell Coach.",
+        "🐾 We claw our way to 6-6 every year, and we're proud of it.",
+        "😂 Big Blue Nation, medium blue expectations.",
+        "🏈 Football season: the appetizer before basketball season.",
     ],
     "Missouri": [
         "M-I-Z... Z-O-U! 🐯", "Go Tigers!",
         "🐯 Tigers roar. We... politely growl.",
         "🎯 Mizzou: perpetually \"this could be our year.\"",
+        "🐯 We're tigers. We just prefer naps to hunting.",
+        "😅 M-I-Z... we'll take a win, honestly, any win.",
+        "🐅 Roaring on the inside, whimpering on 3rd down.",
     ],
     "Northwestern": [
         "Go 'Cats! 💜", "U Rah Rah!",
         "📚 #1 in the classroom, and that's what matters (please clap).",
         "😬 The 'Cats have claws. Sometimes we even use them.",
+        "🎓 We may lose the game, but we WIN the postgame thesis defense.",
+        "😹 Wildcats by name, housecats by performance.",
+        "💜 Purple hearts, for surviving this season.",
     ],
     "Oklahoma State": [
         "Go Pokes! 🤠", "Ride 'em, Cowboys!",
         "🤠 We fell off the horse. Getting back on. Eventually.",
         "😂 Cowboys don't cry. We just take a moment.",
+        "🤠 We lasso wins. Sometimes the rope's just... too short.",
+        "😂 Cowboy up! Or at least cowboy... sideways.",
+        "🐴 Giddy up, or at least giddy... eventually.",
     ],
     "Pittsburgh": [
         "Hail to Pitt! 🐾", "Let's Go, Pitt!",
         "🐆 Panthers are stealthy. Also stealthily bad on 3rd down.",
         "😤 Hail to Pitt, and hail Mary passes.",
+        "🐆 Panthers prowl. We mostly just kinda wander.",
+        "😅 Hail to Pitt, hail to whatever happens next.",
+        "🐾 Building a program, brick by brick. Very small bricks.",
     ],
     "SMU": [
         "Pony Up! 🐴", "Go Mustangs!",
         "🐴 We may stumble, but we stumble with STYLE.",
         "✨ Mustangs: all flash, occasionally some substance.",
+        "🐴 Mustangs run wild. Occasionally in the wrong direction.",
+        "😂 We Pony Up, then immediately Pony Down.",
+        "✨ Dallas swagger, middling record — we contain multitudes.",
     ],
     "South Carolina": [
         "Go Cocks! 🐔", "Fighting Gamecocks!",
         "🐔 We may not win, but we WILL strut about it.",
         "😂 Fighting Gamecocks, mostly fighting our own mistakes.",
+        "🐔 We may lose, but we lose with FEATHERS everywhere.",
+        "😂 Cock-a-doodle-don't... but we'll try again next week.",
+        "🎶 Sandstorm hype, mid-tier results.",
     ],
     "Stanford": [
         "Go Cardinal! 🌲", "Fight, Fight, Fight!",
         "🌲 We're a tree. Trees are patient. VERY patient.",
         "🤓 4.2 GPA, mediocre record, no regrets.",
+        "🌲 We photosynthesize wins. Very slowly.",
+        "😂 Fight Fight Fight, mostly for a bowl bid.",
+        "🤓 We'll out-smart you, if not out-score you.",
     ],
     "Temple": [
         "Fear the Owl! 🦉", "T-U, Owls!",
         "🦉 Fear the Owl! Or at least mildly acknowledge it.",
         "😴 Owls are nocturnal. Our offense only shows up at night too, apparently.",
+        "🦉 Whoo's ready for a rebuilding year? We are! Again!",
+        "😂 Fear the Owl (mild, occasional fear only).",
+        "🦉 We see in the dark. Seeing the scoreboard is harder.",
     ],
     "Virginia": [
         "Wahoowa! 🔶", "Go Hoos!",
         "⚔️ Cavaliers charge in. We just kind of... amble in.",
         "😬 Wahoowa! Wahoo-ouch.",
+        "🔶 Wahoowa, wahoo-uh-oh.",
+        "😅 We're Cavaliers. Cavalier about our record too, apparently.",
+        "⚔️ We brought a sword to a gunfight, and still tried our best.",
     ],
     "Virginia Tech": [
         "Let's Go... Hokies! 🦃", "Hokie Pride!",
         "🦃 We may be a turkey, but we're a PROUD turkey.",
         "😅 Enter Sandman hits different when you're down 21.",
+        "🦃 Gobble till we wobble, straight to another rebuild.",
+        "😂 Hokie Pride, occasionally Hokie Confusion.",
+        "🦃 We're not turkeys, we're just misunderstood eagles.",
     ],
     "West Virginia": [
         "Let's Go Mountaineers! 🏔️", "WVU! WVU!",
         "⛰️ We climb mountains. Also our own mistakes, apparently.",
         "😅 Almost heaven? More like almost .500.",
+        "⛰️ We climb. Slowly. With frequent breaks.",
+        "😅 Let's Go Mountaineers! (Please, someone, let's go.)",
+        "🏔️ WVU: peaks and valleys, mostly valleys this year.",
     ],
     "Wisconsin": [
         "On, Wisconsin! 🦡", "Go Badgers!",
         "🦡 Badgers dig deep. Still digging out of that hole.",
         "🧀 Say cheese! It's the only thing consistently good this year.",
+        "🦡 Badgers dig in. Sometimes we dig ourselves a hole instead.",
+        "🧀 Cheesehead pride, questionable red zone decisions.",
+        "😂 On Wisconsin! (Please, ON. We need the momentum.)",
     ],
 }
 
 
-def pick_tagline(team: str) -> str:
-    """Returns a random chant for the given team, or None if the team
-    isn't in TEAM_TAGLINES (e.g. a new team not added yet) -- callers
-    should treat None as "skip the reply" rather than erroring."""
+def pick_tagline_round_robin(team: str, queue: list, last_used: str = None) -> tuple:
+    """
+    True round-robin: works through a team's ENTIRE tagline list once
+    (in shuffled order) before any of them repeat, then reshuffles for
+    the next full cycle. Returns (tagline_or_None, updated_queue) -- the
+    caller is responsible for persisting updated_queue to disk (this
+    function stays stateless, since check_rta_status.py runs as a fresh
+    process every time -- there's no in-memory state that would survive
+    between runs).
+
+    team: the team to pick for.
+    queue: that team's current remaining-taglines list, as last
+        persisted (empty list or None means "start a fresh cycle").
+    last_used: the last tagline actually sent for this team, if known --
+        used only to avoid the one edge case pure shuffling can't rule
+        out on its own: a fresh cycle's first pick happening to be
+        identical to the very last thing said before the reshuffle,
+        which would still read as a back-to-back repeat.
+    """
     options = TEAM_TAGLINES.get(team)
-    return random.choice(options) if options else None
+    if not options:
+        return None, queue
+
+    if not queue:
+        queue = list(options)
+        random.shuffle(queue)
+        if len(queue) > 1 and queue[0] == last_used:
+            queue[0], queue[1] = queue[1], queue[0]
+
+    pick = queue.pop(0)
+    return pick, queue
 
 
 def pick_announcement() -> str:
@@ -232,6 +311,8 @@ DEFAULT_STATE = {
     "last_reset_at": None,
     "cycle_count": 0,
     "current_week_sort": None,  # explicitly tracked, incremented on each advance -- see check_rta_status.py
+    "last_tagline_by_team": {},  # {team: last tagline sent} -- used only for the cycle-boundary check
+    "tagline_queue_by_team": {},  # {team: [remaining taglines in the current shuffled cycle]}
 }
 
 

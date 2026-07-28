@@ -262,9 +262,14 @@ def run() -> str:
         state, hits = rl.process_rta_messages(main_messages, tracked_ids, id_to_team, state)
 
         for hit in hits:
-            tagline = rl.pick_tagline(hit["team"])
+            team = hit["team"]
+            last_used = state.get("last_tagline_by_team", {}).get(team)
+            queue = state.get("tagline_queue_by_team", {}).get(team, [])
+            tagline, queue = rl.pick_tagline_round_robin(team, queue, last_used=last_used)
             if not tagline:
                 continue
+            state.setdefault("tagline_queue_by_team", {})[team] = queue
+            state.setdefault("last_tagline_by_team", {})[team] = tagline
             try:
                 reply_to_message(MAIN_CHANNEL_ID, hit["message_id"], DISCORD_TOKEN, tagline)
             except Exception as e:
