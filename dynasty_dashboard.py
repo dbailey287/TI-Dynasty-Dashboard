@@ -417,18 +417,25 @@ if page == "🏈 Home":
 
         st.subheader(f"✅ Ready to Advance — {len(ready_ids & {e['user_id'] for e in roster_entries})}/{len(roster_entries)}")
         if roster_entries:
-            cols = st.columns(4)
-            for i, entry in enumerate(sorted(roster_entries, key=lambda e: e["team"])):
+            items_html = []
+            for entry in sorted(roster_entries, key=lambda e: e["team"]):
                 team = entry["team"]
                 is_ready = entry["user_id"] in ready_ids
                 logo = team_logo_tag(team, 20) if team else ""
                 icon = "✅" if is_ready else "⬜"
-                with cols[i % 4]:
-                    st.markdown(
-                        f'<div style="padding:3px 0;">{icon} {logo}<b>{team}</b> '
-                        f'<span class="stat-label">({entry["display_name"]})</span></div>',
-                        unsafe_allow_html=True,
-                    )
+                items_html.append(
+                    f'<div style="flex:1 1 220px; padding:3px 8px 3px 0;">{icon} {logo}<b>{team}</b> '
+                    f'<span class="stat-label">({entry["display_name"]})</span></div>'
+                )
+            # flexbox with wrap, not st.columns() -- this always reads top-to-bottom,
+            # left-to-right in the SAME sorted order regardless of screen width. Native
+            # Streamlit columns look fine on desktop but silently reorder into
+            # column-then-column blocks once they stack on a narrow/mobile screen,
+            # which is what was actually happening here.
+            st.markdown(
+                f'<div style="display:flex; flex-wrap:wrap;">{"".join(items_html)}</div>',
+                unsafe_allow_html=True,
+            )
         else:
             st.caption("Roster not found (Server_Members_Teams.csv) -- can't show who's tracked.")
         if rta_status.get("last_updated"):
