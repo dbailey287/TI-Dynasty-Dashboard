@@ -561,8 +561,11 @@ elif page == "📊 Standings":
 elif page == "🏆 Power Rankings":
     st.title("🏆 Power Rankings — Dynasty Rating")
     st.caption(
-        "A weighted, 0-100 composite score (win %, strength of schedule, average "
-        "margin, ranked wins, road wins, user-vs-user wins, recent form). "
+        "A weighted, 0-100 composite score. Priority order: User-vs-User wins, then "
+        "wins over ranked opponents (road weighted above home, plus a bonus for 17+ "
+        "point margins), then wins over unranked opponents (road above home, plus a "
+        "bonus for 28+ point margins), with overall win % as a baseline. Wins over "
+        "higher-ranked opponents count for more than wins over lower-ranked ones. "
         "Adjust the weighting in ⚙️ Settings."
     )
 
@@ -571,13 +574,32 @@ elif page == "🏆 Power Rankings":
         ranked_display["W"].fillna(0).astype(int).astype(str)
         + "-" + ranked_display["L"].fillna(0).astype(int).astype(str)
     )
+    ranked_display["User Rec"] = (
+        ranked_display["User_W"].fillna(0).astype(int).astype(str)
+        + "-" + ranked_display["User_L"].fillna(0).astype(int).astype(str)
+    )
     ranked_display["Trend"] = ranked_display["Rank_Change"].apply(
         lambda c: f"▲{c}" if c > 0 else (f"▼{abs(c)}" if c < 0 else "—")
     )
     ranked_display["Logo"] = ranked_display["Team"].apply(dl.logo_url)
-    table = ranked_display[["Rank", "Logo", "Team", "User", "Record", "Dynasty_Rating", "Trend"]].rename(
-        columns={"Dynasty_Rating": "Rating"}
-    )
+
+    input_cols = {
+        "Road_Ranked_W": "Rd Rk",
+        "Home_Ranked_W": "Hm Rk",
+        "Road_Ranked_W_Big": "Rd Rk 17+",
+        "Home_Ranked_W_Big": "Hm Rk 17+",
+        "Road_Unranked_W": "Rd Unrk",
+        "Home_Unranked_W": "Hm Unrk",
+        "Road_Unranked_W_Big": "Rd Unrk 28+",
+        "Home_Unranked_W_Big": "Hm Unrk 28+",
+    }
+    ranked_display = ranked_display.rename(columns=input_cols)
+
+    table = ranked_display[
+        ["Rank", "Logo", "Team", "User", "Record", "User Rec"]
+        + list(input_cols.values())
+        + ["Dynasty_Rating", "Trend"]
+    ].rename(columns={"Dynasty_Rating": "Rating"})
 
     def _trend_color(val):
         if isinstance(val, str) and val.startswith("▲"):
@@ -598,6 +620,10 @@ elif page == "🏆 Power Rankings":
         column_config={
             "Logo": st.column_config.ImageColumn("", width="small"),
         },
+    )
+    st.caption(
+        "Rd/Hm = Road/Home · Rk = vs Ranked · Unrk = vs Unranked · 17+/28+ = win margin bonus tiers. "
+        "These are the raw inputs behind the Rating column above -- swipe/scroll the table sideways on mobile to see them all."
     )
 
     st.divider()
@@ -695,9 +721,9 @@ elif page == "🏆 Power Rankings":
             )
             race_fig.update_layout(
                 xaxis=dict(range=[0, 105], title="Dynasty Rating"),
-                yaxis=dict(categoryorder="array", categoryarray=first_wk["Team"].tolist(), title=""),
+                yaxis=dict(categoryorder="array", categoryarray=first_wk["Team"].tolist(), title="", automargin=True),
                 height=max(360, 32 * len(TEAMS)),
-                margin=dict(l=10, r=10, t=10, b=10),
+                margin=dict(r=10, t=10, b=10),
                 updatemenus=[dict(
                     type="buttons", direction="left", x=0, y=1.08, xanchor="left",
                     buttons=[
@@ -1025,17 +1051,27 @@ elif page == "🎲 Fun Stats":
         ("brick_wall", "🧱 Brick Wall", "Most games allowing under 10", lambda v: f"{v['team']} — {v['value']}"),
     ]
 
-    cols = st.columns(2)
-    for i, (key, title, subtitle, fmt) in enumerate(cards):
-        with cols[i % 2]:
-            with st.container(border=True):
-                st.markdown(f"**{title}**")
-                st.caption(subtitle)
-                if key in fs:
-                    logo = team_logo_tag(fs[key]["team"], 26)
-                    st.markdown(f"### {logo}{fmt(fs[key])}", unsafe_allow_html=True)
-                else:
-                    st.caption("Not enough data yet")
+    cards_html = []
+    for key, title, subtitle, fmt in cards:
+        if key in fs:
+            logo = team_logo_tag(fs[key]["team"], 26)
+            value_html = f'<div style="font-size:1.3rem; font-weight:700; margin-top:4px;">{logo}{fmt(fs[key])}</div>'
+        else:
+            value_html = '<div class="stat-label" style="margin-top:4px;">Not enough data yet</div>'
+        cards_html.append(
+            '<div style="flex:1 1 300px; border:1px solid #2a2f3a; border-radius:10px; padding:14px 16px;">'
+            f'<div style="font-weight:700;">{title}</div>'
+            f'<div class="stat-label">{subtitle}</div>'
+            f'{value_html}'
+            '</div>'
+        )
+    # Flexbox with wrap, not st.columns() -- keeps cards in this exact
+    # curated order regardless of screen width, instead of scrambling into
+    # column-then-column blocks once columns stack on a narrow/mobile screen.
+    st.markdown(
+        f'<div style="display:flex; flex-wrap:wrap; gap:12px;">{"".join(cards_html)}</div>',
+        unsafe_allow_html=True,
+    )
 
 
 # ============================================================================
@@ -1204,14 +1240,15 @@ elif page == "⚙️ Settings":
     st.divider()
     st.subheader("About the Dynasty Rating")
     st.markdown("""
-    - **Win %**: season winning percentage
-    - **Strength of Schedule**: for opponents that are other user teams, their own win %;
-      for CPU opponents, a proxy based on their AP rank tier (or a flat baseline if unranked)
-    - **Average Margin**: average scoring margin, scaled relative to the rest of the league
-    - **Ranked Wins**: wins over AP-ranked opponents
-    - **Road Wins**: wins away from home
-    - **User-vs-User Wins**: wins over other human-controlled teams
-    - **Recent Form**: win % over the last 5 completed games
+    - **1. User-vs-User Wins**: wins over other human-controlled teams -- the single biggest factor
+    - **2-3. Road/Home Wins vs Ranked**: wins over AP-ranked opponents, with road wins weighted
+      above home wins. Beating a higher-ranked opponent counts for more than beating a lower-ranked
+      one (e.g. beating #3 contributes far more than beating #24)
+    - **4-5. ...by 17+ points**: the same two categories again, but only for wins by a big margin
+    - **6-7. Road/Home Wins vs Unranked**: wins over unranked opponents, road weighted above home
+    - **8-9. ...by 28+ points**: the same two categories again, for big blowout margins
+    - **Overall Win % (baseline)**: season winning percentage, so a team's whole record still
+      counts for something even without a marquee win
 
     Each component is scaled 0-100 relative to the rest of the league, then combined
     using the weights above.
