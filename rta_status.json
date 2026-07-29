@@ -2,18 +2,20 @@
   "ready_user_ids": [
     "1123408868458889306",
     "1254972344070311970",
+    "1259468750105743410",
     "1264702227197591555",
     "1358920417347108874",
     "1392129295916466176",
     "1398491406330495040",
+    "1518725345149321337",
     "402459179417206784",
     "476855101353623582",
     "796043766695067719",
     "931224677345546291"
   ],
-  "last_message_id_main": "1532088018989482135",
+  "last_message_id_main": "1532110447665221692",
   "last_message_id_admin": "1531192429598740670",
-  "last_updated": "2026-07-29T18:38:26.207818+00:00",
+  "last_updated": "2026-07-29T19:49:19.878075+00:00",
   "last_reset_at": "2026-07-27T06:52:33.921598+00:00",
   "cycle_count": 2,
   "current_week_sort": 3,
@@ -21,10 +23,12 @@
     "Kentucky": "C-A-T-S! Cats! Cats! Cats! \ud83d\udc3e",
     "Pittsburgh": "\ud83d\udc3e Building a program, brick by brick. Very small bricks.",
     "California": "\ud83d\udcda We may not win state, but we ACED it academically.",
-    "Arizona State": "\ud83d\udd31 Forking around since 1885.",
+    "Arizona State": "Fork 'Em, Devils! \ud83d\udd31",
     "Temple": "\ud83e\udd89 We see in the dark. Seeing the scoreboard is harder.",
     "Northwestern": "We lost the game, but our postgame press conference was Ivy-League caliber.",
-    "SMU": "Our uniforms have never lost a game. Unfortunately we have to wear them while playing."
+    "SMU": "Our uniforms have never lost a game. Unfortunately we have to wear them while playing.",
+    "Virginia": "\u2694\ufe0f Cavaliers charge in. We just kind of... amble in.",
+    "Baylor": "That's Baylor... Sic 'Em!"
   },
   "tagline_queue_by_team": {
     "Kentucky": [
@@ -52,7 +56,6 @@
       "\ud83d\ude05 We're not tanking, we're 'strategically evaluating.'"
     ],
     "Arizona State": [
-      "Fork 'Em, Devils! \ud83d\udd31",
       "\ud83d\ude24 Tempe heat isn't the only thing that's brutal around here.",
       "\ud83e\udd37 Bowl game? We'll take it under advisement.",
       "Forks Up!",
@@ -90,6 +93,28 @@
       "\ud83d\udc34 We may stumble, but we stumble with STYLE.",
       "ACC newcomer still figuring out real competition.",
       "Go Mustangs!"
+    ],
+    "Virginia": [
+      "\ud83d\ude2c Wahoowa! Wahoo-ouch.",
+      "Cavaliers by name. Pushovers by October.",
+      "\u2694\ufe0f We brought a sword to a gunfight, and still tried our best.",
+      "ACC bottom-half, and the Wahoos know it.",
+      "Go Hoos!",
+      "We bring school spirit. Everyone else brings a running game.",
+      "\ud83d\udd36 Wahoowa, wahoo-uh-oh.",
+      "\ud83d\ude05 We're Cavaliers. Cavalier about our record too, apparently.",
+      "Wahoowa! \ud83d\udd36"
+    ],
+    "Baylor": [
+      "\ud83d\udc3b Bears hibernate. We're just resting up for later.",
+      "\ud83d\ude02 We bear-ly made that first down.",
+      "\ud83d\udc3b Slow claps for our slow starts.",
+      "Big 12 attendance numbers carrying harder than the offense.",
+      "\ud83d\udc3b Hibernation season started early this year.",
+      "\ud83d\ude2c Sic 'em? More like sit 'em down and hope.",
+      "Bears by mascot. Kittens by 3rd down.",
+      "Sic 'Em, Bears! \ud83d\udc3b",
+      "Sic 'Em is more of a suggestion than a strategy."
     ]
   }
 }
