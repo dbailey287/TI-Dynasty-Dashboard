@@ -90,7 +90,6 @@ st.markdown("""
             border: 2px solid #ff5a5a !important;
             border-radius: 8px !important;
             padding: 4px 8px !important;
-            animation: sidebar-hint-pulse 2s ease-in-out infinite;
             position: relative;
         }
         button[data-testid="stExpandSidebarButton"]::after {
@@ -104,10 +103,6 @@ st.markdown("""
             font-weight: 600;
             color: #ff5a5a;
             pointer-events: none;
-        }
-        @keyframes sidebar-hint-pulse {
-            0%, 100% { box-shadow: 0 0 0 0 rgba(255, 90, 90, 0.45); }
-            50% { box-shadow: 0 0 0 9px rgba(255, 90, 90, 0); }
         }
     }
 </style>
