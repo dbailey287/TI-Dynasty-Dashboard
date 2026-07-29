@@ -550,7 +550,7 @@ elif page == "📊 Standings":
 
     st.caption("Click any column header to sort.")
     st.dataframe(
-        display, use_container_width=True, hide_index=True, height=600,
+        display, width="content", hide_index=True, height=600,
         column_config={"Logo": st.column_config.ImageColumn("", width="small")},
     )
 
@@ -615,7 +615,7 @@ elif page == "🏆 Power Rankings":
 
     row_height = 35
     st.dataframe(
-        styled_table, use_container_width=True, hide_index=True,
+        styled_table, width="content", hide_index=True,
         height=min(row_height * (len(table) + 1) + 3, 640),
         column_config={
             "Logo": st.column_config.ImageColumn("", width="small"),
@@ -647,7 +647,7 @@ elif page == "🏆 Power Rankings":
         color="Dynasty_Rating", color_continuous_scale="Viridis",
     )
     fig.update_layout(height=500, showlegend=False, coloraxis_showscale=False)
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, width="stretch")
 
     st.divider()
     st.subheader("📈 Rating History")
@@ -685,7 +685,7 @@ elif page == "🏆 Power Rankings":
             if view_mode == "Rank":
                 fig_hist.update_yaxes(autorange="reversed", dtick=1)
             fig_hist.update_layout(height=500, legend_title_text="")
-            st.plotly_chart(fig_hist, use_container_width=True)
+            st.plotly_chart(fig_hist, width="stretch")
 
         st.divider()
         st.subheader("🏁 Rating Race")
@@ -744,7 +744,7 @@ elif page == "🏆 Power Rankings":
                     ],
                 )],
             )
-            st.plotly_chart(race_fig, use_container_width=True)
+            st.plotly_chart(race_fig, width="stretch")
 
 
 # ============================================================================
@@ -755,11 +755,11 @@ elif page == "📅 Schedule":
 
     f1, f2, f3, f4 = st.columns(4)
     week_options = ["All"] + sorted(df["Week"].unique(), key=dl.week_sort_key)
-    week_filter = f1.selectbox("Week", week_options)
+    week_filter = f1.selectbox("Week", week_options, width=180)
     team_options = ["All"] + TEAMS
-    team_filter = f2.selectbox("Team", team_options)
-    status_filter = f3.selectbox("Status", ["All", "Completed", "Upcoming", "BYE"])
-    matchup_filter = f4.selectbox("Matchup Type", ["All", "User vs User", "User vs CPU", "BYE"])
+    team_filter = f2.selectbox("Team", team_options, width=220)
+    status_filter = f3.selectbox("Status", ["All", "Completed", "Upcoming", "BYE"], width=180)
+    matchup_filter = f4.selectbox("Matchup Type", ["All", "User vs User", "User vs CPU", "BYE"], width=220)
 
     sched = df.copy()
     if week_filter != "All":
@@ -784,10 +784,12 @@ elif page == "📅 Schedule":
     sched_display.insert(2, "Logo", sched_display["Team"].apply(dl.logo_url))
     sched_display.insert(7, "Opp Logo", sched_display["Opponent"].apply(dl.logo_url))
     st.dataframe(
-        sched_display, use_container_width=True, hide_index=True, height=650,
+        sched_display, width="content", hide_index=True, height=650,
         column_config={
             "Logo": st.column_config.ImageColumn("", width="small"),
             "Opp Logo": st.column_config.ImageColumn("", width="small"),
+            "Date": st.column_config.Column("Date", width=100),
+            "Opponent": st.column_config.Column("Opponent", width=130),
         },
     )
 
@@ -838,7 +840,7 @@ elif page == "👤 Teams":
         ]].rename(columns={"Opponent_Rank_Display": "Opp Rank"})
         log_display.insert(3, "Opp Logo", log_display["Opponent"].apply(dl.logo_url))
         st.dataframe(
-            log_display, use_container_width=True, hide_index=True, height=450,
+            log_display, width="content", hide_index=True, height=450,
             column_config={"Opp Logo": st.column_config.ImageColumn("", width="small")},
         )
 
@@ -872,8 +874,12 @@ elif page == "🤝 Head-to-Head":
         "Record", key=lambda s: s.map(lambda r: -int(r.split("-")[0]))
     )
     st.dataframe(
-        uu_display, use_container_width=True, hide_index=True,
-        column_config={"Logo": st.column_config.ImageColumn("", width="small")},
+        uu_display, width="content", hide_index=True,
+        column_config={
+            "Logo": st.column_config.ImageColumn("", width="small"),
+            "Wins_Over": st.column_config.Column("Wins Over", width="large"),
+            "Losses_To": st.column_config.Column("Losses To", width="large"),
+        },
     )
 
     st.divider()
@@ -903,7 +909,7 @@ elif page == "🤝 Head-to-Head":
         columns={"Logo": ""}
     )
     st.dataframe(
-        uu_stats_table, use_container_width=True, hide_index=True,
+        uu_stats_table, width="content", hide_index=True,
         column_config={"": st.column_config.ImageColumn("", width="small")},
     )
 
@@ -966,7 +972,7 @@ elif page == "🤝 Head-to-Head":
         styled = matrix_display.style.map(_color_cell)  # pandas >= 2.1
     except AttributeError:
         styled = matrix_display.style.applymap(_color_cell)  # older pandas
-    st.dataframe(styled, use_container_width=True, height=600)
+    st.dataframe(styled, width="content", height=600)
 
     st.divider()
     st.subheader("Game Log")
@@ -982,10 +988,11 @@ elif page == "🤝 Head-to-Head":
             lambda r: f"{r['Loser']} ({r['Loser_User']})" if r["Loser_User"] else r["Loser"], axis=1)
         log_display["Winner Logo"] = game_log["Winner"].apply(dl.logo_url)
         log_display["Loser Logo"] = game_log["Loser"].apply(dl.logo_url)
-        log_display = log_display.sort_values(["Season", "Week"], ascending=[False, False])
+        log_display["_week_sort"] = log_display["Week"].apply(dl.week_sort_key)
+        log_display = log_display.sort_values(["Season", "_week_sort"], ascending=[True, True])
         log_table = log_display[["Season", "Week", "Winner Logo", "Winner", "Score", "Loser", "Loser Logo"]]
         st.dataframe(
-            log_table, use_container_width=True, hide_index=True,
+            log_table, width="content", hide_index=True,
             height=min(35 * (len(log_table) + 1) + 3, 640),
             column_config={
                 "Winner Logo": st.column_config.ImageColumn("", width="small"),
@@ -1041,7 +1048,7 @@ elif page == "📈 League Stats":
     }
     league_display = league_table[list(display_cols.keys())].rename(columns=display_cols)
     st.dataframe(
-        league_display, use_container_width=True, hide_index=True,
+        league_display, width="content", hide_index=True,
         height=min(35 * (len(league_display) + 1) + 3, 640),
         column_config={"": st.column_config.ImageColumn("", width="small")},
     )
@@ -1167,7 +1174,7 @@ elif page == "📈 League Stats":
         "Blowout % (of GP)", "One-Score % (of GP)",
     ]].rename(columns={"Logo": ""})
     st.dataframe(
-        split_table, use_container_width=True, hide_index=True,
+        split_table, width="content", hide_index=True,
         height=min(35 * (len(split_table) + 1) + 3, 640),
         column_config={"": st.column_config.ImageColumn("", width="small")},
     )
@@ -1184,7 +1191,7 @@ elif page == "📈 League Stats":
         go.Bar(name="Losses", x=["Home", "Away"], y=[hfa["home_l"], hfa["away_l"]], marker_color="#e74c3c"),
     ])
     hfa_fig.update_layout(barmode="stack", height=350)
-    st.plotly_chart(hfa_fig, use_container_width=True)
+    st.plotly_chart(hfa_fig, width="stretch")
 
     st.divider()
     st.markdown("#### Offense vs Defense")
@@ -1196,7 +1203,7 @@ elif page == "📈 League Stats":
         )
         fig.update_traces(textposition="top center")
         fig.update_layout(height=500)
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width="stretch")
     else:
         st.caption("Not enough completed games yet for this chart.")
 
@@ -1354,7 +1361,7 @@ elif page == "📜 Career":
     career_display = career_display[show_cols].rename(columns={
         "Seasons_Played": "Seasons", "Teams_By_Season": "Teams By Season", "Ranked_Wins": "Ranked Wins",
     })
-    st.dataframe(career_display, use_container_width=True, hide_index=True, height=500)
+    st.dataframe(career_display, width="content", hide_index=True, height=500)
 
     st.divider()
     st.subheader("📈 Career Rating History")
@@ -1384,7 +1391,7 @@ elif page == "📜 Career":
                 labels={"Season_Week_Label": "Season / Week"},
             )
             fig_career.update_layout(height=520, legend_title_text="")
-            st.plotly_chart(fig_career, use_container_width=True)
+            st.plotly_chart(fig_career, width="stretch")
 
 
 # ============================================================================
