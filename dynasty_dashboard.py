@@ -93,12 +93,13 @@ st.markdown("""
             position: relative;
         }
         button[data-testid="stExpandSidebarButton"]::after {
-            content: "More Dynasty Stats & Info";
+            content: "More Dynasty\\AStats & Info";
             position: absolute;
             left: 110%;
             top: 50%;
             transform: translateY(-50%);
-            white-space: nowrap;
+            white-space: pre-line;
+            line-height: 1.25;
             font-size: 0.8rem;
             font-weight: 600;
             color: #ff5a5a;
