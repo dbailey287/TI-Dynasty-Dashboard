@@ -7,11 +7,12 @@
     "1392129295916466176",
     "1398491406330495040",
     "402459179417206784",
+    "476855101353623582",
     "796043766695067719"
   ],
-  "last_message_id_main": "1531829934115389480",
+  "last_message_id_main": "1531862308803055739",
   "last_message_id_admin": "1531192429598740670",
-  "last_updated": "2026-07-29T01:07:40.341112+00:00",
+  "last_updated": "2026-07-29T04:27:39.831082+00:00",
   "last_reset_at": "2026-07-27T06:52:33.921598+00:00",
   "cycle_count": 2,
   "current_week_sort": 3,
@@ -20,7 +21,8 @@
     "Pittsburgh": "\ud83d\udc3e Building a program, brick by brick. Very small bricks.",
     "California": "\ud83d\udcda We may not win state, but we ACED it academically.",
     "Arizona State": "\ud83d\udd31 Forking around since 1885.",
-    "Temple": "\ud83e\udd89 We see in the dark. Seeing the scoreboard is harder."
+    "Temple": "\ud83e\udd89 We see in the dark. Seeing the scoreboard is harder.",
+    "Northwestern": "We lost the game, but our postgame press conference was Ivy-League caliber."
   },
   "tagline_queue_by_team": {
     "Kentucky": [
@@ -64,6 +66,17 @@
       "\ud83d\ude02 Fear the Owl (mild, occasional fear only).",
       "Fear the Owl! \ud83e\udd89",
       "T-U, Owls!"
+    ],
+    "Northwestern": [
+      "Smart kids. Dumb red zone decisions.",
+      "\ud83d\udcda #1 in the classroom, and that's what matters (please clap).",
+      "\ud83d\ude39 Wildcats by name, housecats by performance.",
+      "\ud83c\udf93 We may lose the game, but we WIN the postgame thesis defense.",
+      "U Rah Rah!",
+      "\ud83d\ude2c The 'Cats have claws. Sometimes we even use them.",
+      "Big Ten academics carry harder than the Big Ten schedule.",
+      "\ud83d\udc9c Purple hearts, for surviving this season.",
+      "Go 'Cats! \ud83d\udc9c"
     ]
   }
 }
