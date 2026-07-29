@@ -10,12 +10,13 @@
     "1518725345149321337",
     "402459179417206784",
     "476855101353623582",
+    "546797525919596564",
     "796043766695067719",
     "931224677345546291"
   ],
-  "last_message_id_main": "1532112817652629605",
+  "last_message_id_main": "1532169788992782426",
   "last_message_id_admin": "1531192429598740670",
-  "last_updated": "2026-07-29T19:57:50.530965+00:00",
+  "last_updated": "2026-07-29T23:50:25.155745+00:00",
   "last_reset_at": "2026-07-27T06:52:33.921598+00:00",
   "cycle_count": 2,
   "current_week_sort": 3,
@@ -28,7 +29,8 @@
     "Northwestern": "We lost the game, but our postgame press conference was Ivy-League caliber.",
     "SMU": "Our uniforms have never lost a game. Unfortunately we have to wear them while playing.",
     "Virginia": "\u2694\ufe0f Cavaliers charge in. We just kind of... amble in.",
-    "Baylor": "That's Baylor... Sic 'Em!"
+    "Baylor": "That's Baylor... Sic 'Em!",
+    "West Virginia": "\ud83c\udfd4\ufe0f WVU: peaks and valleys, mostly valleys this year."
   },
   "tagline_queue_by_team": {
     "Kentucky": [
@@ -115,6 +117,17 @@
       "Bears by mascot. Kittens by 3rd down.",
       "Sic 'Em, Bears! \ud83d\udc3b",
       "Sic 'Em is more of a suggestion than a strategy."
+    ],
+    "West Virginia": [
+      "Let's Go Mountaineers! \ud83c\udfd4\ufe0f",
+      "Mountaineers by name. Molehills by effort.",
+      "\u26f0\ufe0f We climb mountains. Also our own mistakes, apparently.",
+      "\ud83d\ude05 Let's Go Mountaineers! (Please, someone, let's go.)",
+      "\ud83d\ude05 Almost heaven? More like almost .500.",
+      "We climb mountains. Also our own self-inflicted holes.",
+      "\u26f0\ufe0f We climb. Slowly. With frequent breaks.",
+      "Big 12 middle-of-the-road, and we've stopped apologizing for it.",
+      "WVU! WVU!"
     ]
   }
 }
