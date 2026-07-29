@@ -1047,6 +1047,33 @@ def rating_explanation(team: str, rated_stats: pd.DataFrame) -> list:
 # Head-to-head
 # ---------------------------------------------------------------------------
 
+def user_game_log(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    One row per actual User-vs-User game (deduped -- each game only
+    appears once, not once per team's perspective), in chronological
+    order. This is the running history of every real-opponent matchup
+    across the whole dynasty -- meant to just keep growing, season after
+    season, as more User games get played.
+    """
+    uu = df[df["Opponent_Is_User"]]
+    games = get_unique_games(uu, completed_only=True)
+    if games.empty:
+        return pd.DataFrame(columns=["Season", "Week", "Winner", "Winner_User", "Loser", "Loser_User", "Score"])
+
+    team_user_map = df.drop_duplicates("Team").set_index("Team")["User"].to_dict()
+    games = games.sort_values(["Season", "Week_Sort"])
+    rows = []
+    for _, row in games.iterrows():
+        winner, loser, wscore, lscore = _winner_loser(row)
+        rows.append({
+            "Season": row["Season"], "Week": row["Week"],
+            "Winner": winner, "Winner_User": team_user_map.get(winner, ""),
+            "Loser": loser, "Loser_User": team_user_map.get(loser, ""),
+            "Score": f"{wscore:.0f}-{lscore:.0f}",
+        })
+    return pd.DataFrame(rows)
+
+
 def build_h2h_matrix(df: pd.DataFrame, teams: list) -> pd.DataFrame:
     """
     Returns a team x team matrix of results for completed User-vs-User
@@ -1078,17 +1105,20 @@ def user_vs_user_records(df: pd.DataFrame, teams: list) -> pd.DataFrame:
     uu = df[(df["Completed"]) & (df["Opponent_Is_User"])]
     team_user_map = df.drop_duplicates("Team").set_index("Team")["User"].to_dict()
 
-    def _label(opp_team: str, season) -> str:
+    def _label(row) -> str:
+        opp_team = row["Opponent"]
+        season = row.get("Season")
         user = team_user_map.get(opp_team)
         season_prefix = f"{int(season)}: " if pd.notna(season) else ""
         base = f"{opp_team} ({user})" if user else opp_team
-        return f"{season_prefix}{base}"
+        score = f"{row['Team_Score']:.0f}-{row['Opponent_Score']:.0f}"
+        return f"{season_prefix}{base} {score}"
 
     rows = []
     for team in teams:
         tg = uu[uu["Team"] == team].sort_values("Season")
-        wins = [_label(r["Opponent"], r.get("Season")) for _, r in tg[tg["Outcome"] == "W"].iterrows()]
-        losses = [_label(r["Opponent"], r.get("Season")) for _, r in tg[tg["Outcome"] == "L"].iterrows()]
+        wins = [_label(r) for _, r in tg[tg["Outcome"] == "W"].iterrows()]
+        losses = [_label(r) for _, r in tg[tg["Outcome"] == "L"].iterrows()]
         rows.append({
             "Team": team,
             "User": team_user_map.get(team, ""),

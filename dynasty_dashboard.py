@@ -968,6 +968,31 @@ elif page == "🤝 Head-to-Head":
         styled = matrix_display.style.applymap(_color_cell)  # older pandas
     st.dataframe(styled, use_container_width=True, height=600)
 
+    st.divider()
+    st.subheader("Game Log")
+    st.caption("Every User-vs-User game ever played, in order -- keeps growing as your dynasty goes on.")
+    game_log = dl.user_game_log(df_all)
+    if game_log.empty:
+        st.caption("No User-vs-User games yet.")
+    else:
+        log_display = game_log.copy()
+        log_display["Winner"] = log_display.apply(
+            lambda r: f"{r['Winner']} ({r['Winner_User']})" if r["Winner_User"] else r["Winner"], axis=1)
+        log_display["Loser"] = log_display.apply(
+            lambda r: f"{r['Loser']} ({r['Loser_User']})" if r["Loser_User"] else r["Loser"], axis=1)
+        log_display["Winner Logo"] = game_log["Winner"].apply(dl.logo_url)
+        log_display["Loser Logo"] = game_log["Loser"].apply(dl.logo_url)
+        log_display = log_display.sort_values(["Season", "Week"], ascending=[False, False])
+        log_table = log_display[["Season", "Week", "Winner Logo", "Winner", "Score", "Loser", "Loser Logo"]]
+        st.dataframe(
+            log_table, use_container_width=True, hide_index=True,
+            height=min(35 * (len(log_table) + 1) + 3, 640),
+            column_config={
+                "Winner Logo": st.column_config.ImageColumn("", width="small"),
+                "Loser Logo": st.column_config.ImageColumn("", width="small"),
+            },
+        )
+
 
 # ============================================================================
 # PAGE: LEAGUE STATS
