@@ -80,6 +80,23 @@ st.markdown("""
         line-height: 1.5;
         padding: 6px 12px 2px 12px;
     }
+    /* Make the sidebar's collapsed-state toggle arrow harder to miss on
+    phones -- this targets Streamlit's own internal element, not
+    something we control directly, so it could stop working if a future
+    Streamlit version changes its internal structure. */
+    @media (max-width: 640px) {
+        div[data-testid="collapsedControl"] {
+            background-color: rgba(255, 90, 90, 0.18) !important;
+            border: 2px solid #ff5a5a !important;
+            border-radius: 8px !important;
+            padding: 4px 8px !important;
+            animation: sidebar-hint-pulse 2s ease-in-out infinite;
+        }
+        @keyframes sidebar-hint-pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(255, 90, 90, 0.45); }
+            50% { box-shadow: 0 0 0 9px rgba(255, 90, 90, 0); }
+        }
+    }
 </style>
 """, unsafe_allow_html=True)
 
@@ -399,6 +416,25 @@ def render_week_games(week_sort, empty_message: str):
 # ============================================================================
 if page == "🏈 Home":
     st.title("🏈 CFB 27 Dynasty Command Center")
+
+    # TEMPORARY DIAGNOSTIC -- remove once we've confirmed the real mobile
+    # viewport width. Shows the actual CSS pixel width your browser is
+    # using, which is the number the sidebar-arrow media query checks
+    # against -- NOT your phone's physical/marketing resolution.
+    # Uses components.v1.html (not st.markdown) because st.markdown's
+    # HTML sanitizer doesn't reliably execute embedded <script> tags.
+    st.iframe(
+        '<div id="viewport-diag" style="background:#2a1f3a; border:2px solid #a855f7; '
+        'border-radius:8px; padding:12px 16px; font-size:1.1rem; font-family:sans-serif; '
+        'color:#eee;">'
+        '📏 Your browser\'s CSS viewport width: <b><span id="vw-value">measuring...</span>px</b>'
+        '</div>'
+        '<script>'
+        'document.getElementById("vw-value").innerText = window.innerWidth;'
+        '</script>',
+        height=60,
+    )
+
     season = df["Season"].dropna().iloc[0] if df["Season"].notna().any() else "—"
     st.caption(f"Season {season} · Week {effective_current_week_label or '—'}")
 
