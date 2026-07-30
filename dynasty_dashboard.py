@@ -97,6 +97,7 @@ st.markdown("""
             position: absolute;
             left: 110%;
             top: 50%;
+            width: 115px;
             transform: translateY(-50%);
             white-space: pre-line;
             line-height: 1.25;
