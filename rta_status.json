@@ -1,11 +1,12 @@
 {
   "ready_user_ids": [
     "1358920417347108874",
-    "546797525919596564"
+    "546797525919596564",
+    "796043766695067719"
   ],
-  "last_message_id_main": "1532360505577050225",
+  "last_message_id_main": "1532391308751278280",
   "last_message_id_admin": "1532187618182303936",
-  "last_updated": "2026-07-30T12:46:39.625689+00:00",
+  "last_updated": "2026-07-30T14:16:36.350670+00:00",
   "last_reset_at": "2026-07-30T00:51:28.524483+00:00",
   "cycle_count": 3,
   "current_week_sort": 4,
@@ -19,7 +20,8 @@
     "SMU": "Our uniforms have never lost a game. Unfortunately we have to wear them while playing.",
     "Virginia": "\u2694\ufe0f Cavaliers charge in. We just kind of... amble in.",
     "Baylor": "That's Baylor... Sic 'Em!",
-    "West Virginia": "Let's Go Mountaineers! \ud83c\udfd4\ufe0f"
+    "West Virginia": "Let's Go Mountaineers! \ud83c\udfd4\ufe0f",
+    "Arkansas": "Undefeated in tailgating. 2-4 in everything else."
   },
   "tagline_queue_by_team": {
     "Kentucky": [
@@ -115,6 +117,17 @@
       "\u26f0\ufe0f We climb. Slowly. With frequent breaks.",
       "Big 12 middle-of-the-road, and we've stopped apologizing for it.",
       "WVU! WVU!"
+    ],
+    "Arkansas": [
+      "SEC bottom feeder and proud of it.",
+      "\ud83d\ude24 Woo Pig Sooie \u2014 said with increasing desperation each week.",
+      "\ud83d\udc17 We may be hogs, but we're PROUD hogs.",
+      "Callin' the Hogs!",
+      "\ud83c\udf56 Hog heaven is a state of mind, not a record.",
+      "Go Hogs Go!",
+      "Woo Pig Sooie! \ud83d\udc17",
+      "\ud83d\udc37 We're not rebuilding, we're... recalibrating.",
+      "Hogs by mascot. Doormats by scoreboard."
     ]
   }
 }
