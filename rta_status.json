@@ -1,13 +1,16 @@
 {
-  "ready_user_ids": [],
-  "last_message_id_main": "1532188856047243416",
+  "ready_user_ids": [
+    "1358920417347108874",
+    "546797525919596564"
+  ],
+  "last_message_id_main": "1532197990167613490",
   "last_message_id_admin": "1532187618182303936",
-  "last_updated": "2026-07-30T00:51:30.454360+00:00",
+  "last_updated": "2026-07-30T01:45:43.356225+00:00",
   "last_reset_at": "2026-07-30T00:51:28.524483+00:00",
   "cycle_count": 3,
   "current_week_sort": 4,
   "last_tagline_by_team": {
-    "Kentucky": "C-A-T-S! Cats! Cats! Cats! \ud83d\udc3e",
+    "Kentucky": "\ud83d\ude39 Wildcats? More like Mildcats. Don't tell Coach.",
     "Pittsburgh": "\ud83d\udc3e Building a program, brick by brick. Very small bricks.",
     "California": "\ud83d\udcda We may not win state, but we ACED it academically.",
     "Arizona State": "Fork 'Em, Devils! \ud83d\udd31",
@@ -16,11 +19,10 @@
     "SMU": "Our uniforms have never lost a game. Unfortunately we have to wear them while playing.",
     "Virginia": "\u2694\ufe0f Cavaliers charge in. We just kind of... amble in.",
     "Baylor": "That's Baylor... Sic 'Em!",
-    "West Virginia": "\ud83c\udfd4\ufe0f WVU: peaks and valleys, mostly valleys this year."
+    "West Virginia": "Let's Go Mountaineers! \ud83c\udfd4\ufe0f"
   },
   "tagline_queue_by_team": {
     "Kentucky": [
-      "\ud83d\ude39 Wildcats? More like Mildcats. Don't tell Coach.",
       "\ud83c\udfc8 Football season: the appetizer before basketball season.",
       "\ud83d\ude02 Big Blue Nation, medium blue expectations.",
       "Go Big Blue! \ud83d\udc99",
@@ -105,7 +107,6 @@
       "Sic 'Em is more of a suggestion than a strategy."
     ],
     "West Virginia": [
-      "Let's Go Mountaineers! \ud83c\udfd4\ufe0f",
       "Mountaineers by name. Molehills by effort.",
       "\u26f0\ufe0f We climb mountains. Also our own mistakes, apparently.",
       "\ud83d\ude05 Let's Go Mountaineers! (Please, someone, let's go.)",
