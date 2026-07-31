@@ -552,6 +552,59 @@ if page == "🏈 Home":
                 unsafe_allow_html=True,
             )
 
+        st.divider()
+        st.subheader("🏆 Playoff Bracket")
+        bracket_data = dl.load_bracket_data(int(season)) if season != "—" else None
+        if not bracket_data:
+            st.info("Bracket available after conference championship week.")
+        else:
+            round_labels = {
+                "first_round": "First Round",
+                "quarterfinal": "Quarterfinal",
+                "semifinal": "Semifinal",
+                "national_championship": "National Championship",
+            }
+            if bracket_data.get("champion"):
+                st.success(f"🏆 **{bracket_data['champion']}** — National Champions!")
+
+            for round_key, round_label in round_labels.items():
+                games = bracket_data.get("rounds", {}).get(round_key, [])
+                if not games:
+                    continue
+                st.markdown(f"**{round_label}**")
+                cards_html = []
+                for game in games:
+                    bowl = game.get("bowl") or ""
+                    bowl_html = f'<div class="stat-label">{bowl}</div>' if bowl else ""
+                    s1, s2 = game.get("score1"), game.get("score2")
+                    team1, team2 = game.get("team1") or "TBD", game.get("team2") or "TBD"
+                    decided = s1 is not None and s2 is not None
+                    bold1 = "font-weight:700;" if decided and s1 > s2 else ""
+                    bold2 = "font-weight:700;" if decided and s2 > s1 else ""
+                    check1 = " ✓" if decided and s1 > s2 else ""
+                    check2 = " ✓" if decided and s2 > s1 else ""
+                    seed1 = f"{game['seed1']} " if game.get("seed1") is not None else ""
+                    seed2 = f"{game['seed2']} " if game.get("seed2") is not None else ""
+                    logo1 = team_logo_tag(team1, 20) if team1 != "TBD" else ""
+                    logo2 = team_logo_tag(team2, 20) if team2 != "TBD" else ""
+                    score1_txt = "" if s1 is None else str(s1)
+                    score2_txt = "" if s2 is None else str(s2)
+                    cards_html.append(
+                        '<div style="flex:1 1 260px; border:1px solid #2a2f3a; border-radius:10px; padding:10px 14px;">'
+                        f'{bowl_html}'
+                        f'<div style="{bold1}">{seed1}{logo1}{team1}{check1} <span style="float:right;">{score1_txt}</span></div>'
+                        f'<div style="{bold2}">{seed2}{logo2}{team2}{check2} <span style="float:right;">{score2_txt}</span></div>'
+                        '</div>'
+                    )
+                # Flexbox with wrap, same reasoning as the RTA and Fun Stats
+                # sections -- keeps games in this exact round-order on any
+                # screen width, rather than a multi-column grid that could
+                # scramble the reading order once it stacks on mobile.
+                st.markdown(
+                    f'<div style="display:flex; flex-wrap:wrap; gap:10px; margin-bottom:14px;">{"".join(cards_html)}</div>',
+                    unsafe_allow_html=True,
+                )
+
 
 # ============================================================================
 # PAGE: STANDINGS

@@ -1,0 +1,40 @@
+name: Playoff Bracket Scraper
+
+on:
+  workflow_dispatch: {}   # manual trigger only -- a bracket only updates a handful of
+                          # times a whole season, so a recurring schedule would mostly
+                          # do nothing. Run this yourself after posting a new bracket
+                          # screenshot to #playoff-screenshots.
+
+permissions:
+  contents: write         # needed to commit playoff_bracket_<season>.json back to the repo
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install discord.py google-genai pillow requests
+
+      - name: Run bracket scraper
+        env:
+          DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
+          GENAI_API_KEY: ${{ secrets.GENAI_API_KEY }}
+          BRACKET_CHANNEL_ID: ${{ secrets.BRACKET_CHANNEL_ID }}
+          SUMMARY_CHANNEL_ID: ${{ secrets.SUMMARY_CHANNEL_ID }}
+          ADMIN_LOG_CHANNEL_ID: ${{ secrets.ADMIN_LOG_CHANNEL_ID }}
+        run: python bracket_scraper.py
+
+      - name: Commit updated bracket data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add playoff_bracket_*.json processed_bracket_images.json failed_bracket_images.json
+          git diff --staged --quiet || git commit -m "Update playoff bracket data"
+          git push

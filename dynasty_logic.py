@@ -76,7 +76,26 @@ def week_sort_key(week_value) -> int:
     try:
         return int(week_str)
     except ValueError:
-        return 999
+        pass
+    # Postseason weeks, in real-world chronological order. Confirmed
+    # directly against real schedule screenshots: "Bowl 2" = Quarterfinal,
+    # "Bowl 3" = Semifinal, "Nat'l Champ" = National Championship. "Bowl 1"
+    # (First Round) is inferred, not directly confirmed -- it wasn't seen
+    # because the team in the screenshots had a bye through that round as
+    # a #1 overall seed. The regex below extracts the number from any
+    # "Bowl N" label rather than hardcoding just 1/2/3, so it stays
+    # correct even if a differently-numbered bowl slot shows up.
+    lower = week_str.lower()
+    if "conf" in lower:
+        return 900
+    bowl_match = re.search(r"bowl\s*(\d+)", lower)
+    if bowl_match:
+        return 900 + int(bowl_match.group(1))  # Bowl 1 -> 901, Bowl 2 -> 902, etc.
+    if "nat" in lower and "champ" in lower:
+        return 950
+    if "champ" in lower and "conf" not in lower:
+        return 950  # generic fallback if it's just called e.g. "Championship"
+    return 999  # genuinely unrecognized -- safe fallback, won't crash
 
 
 def clean_dataframe(df: pd.DataFrame) -> pd.DataFrame:
@@ -127,10 +146,23 @@ def add_derived_columns(df: pd.DataFrame) -> pd.DataFrame:
 
     df["Completed"] = df["Status"] == "Completed"
     df["Is_Bye"] = df["Status"] == "BYE"
+
+    # Conf Champ, and every CFP round EXCEPT the First Round, are played
+    # at neutral sites -- confirmed directly, not inferred. The "vs"/"at"
+    # text the scraper reads to determine Location isn't reliable for
+    # these rounds (it shows "vs" even for neutral-site games), so this
+    # overrides whatever the scraper produced rather than trusting it.
+    # Only "Bowl 1" (First Round) keeps real Home/Away, since that round
+    # genuinely has one.
+    _week_sort_for_location = df["Week"].apply(week_sort_key)
+    _is_forced_neutral_round = (_week_sort_for_location == 900) | (  # Conf Champ
+        (_week_sort_for_location > 901) & (_week_sort_for_location < 999)  # Bowl 2+, Nat'l Champ -- excludes Bowl 1 (901) and unrecognized (999)
+    )
+    df.loc[_is_forced_neutral_round, "Location"] = "Neutral"
     df["Ranked_Game"] = df["Opponent_Rank_Num"].notna()
     df["Top10_Game"] = df["Opponent_Rank_Num"] <= 10
     df["Home_Game"] = df["Location"] == "Home"
-    df["Away_Game"] = df["Location"] == "Away"
+    df["Away_Game"] = df["Location"].isin(["Away", "Neutral"])
     df["Win"] = df["Completed"] & (df["Outcome"] == "W")
     df["Loss"] = df["Completed"] & (df["Outcome"] == "L")
     df["Ranked_Win"] = df["Win"] & df["Ranked_Game"]
@@ -368,7 +400,7 @@ def compute_split_stats(df: pd.DataFrame, teams: list, rank_basis: str = "at_gam
         wins = tg[tg["Outcome"] == "W"]
         losses = tg[tg["Outcome"] == "L"]
         home = tg[tg["Location"] == "Home"]
-        away = tg[tg["Location"] == "Away"]
+        away = tg[tg["Location"].isin(["Away", "Neutral"])]  # neutral-site games count toward Away, same convention as the rating formula
         user_games = tg[tg["Opponent_Is_User"]]
         cpu_games = tg[~tg["Opponent_Is_User"]]
         ranked = tg[tg[rank_col].notna()]
@@ -515,7 +547,7 @@ def compute_team_stats(df: pd.DataFrame, teams: list, as_of_week_sort: int | Non
         losses = int((tg["Outcome"] == "L").sum())
 
         home = tg[tg["Location"] == "Home"]
-        away = tg[tg["Location"] == "Away"]
+        away = tg[tg["Location"].isin(["Away", "Neutral"])]  # neutral-site games (Conf Champ, most CFP rounds) count toward Away
         vs_user = tg[tg["Opponent_Is_User"]]
         vs_cpu = tg[~tg["Opponent_Is_User"]]
         ranked = tg[tg[ranked_game_col]]
@@ -529,10 +561,19 @@ def compute_team_stats(df: pd.DataFrame, teams: list, as_of_week_sort: int | Non
         streak_label, form_pct = _streak_and_form(tg)
         rank_num_col = "Opponent_Rank_At_Game_Num" if rank_basis == "at_game" else "Opponent_Rank_Num"
 
+        def _location_matches(subset, location):
+            # Neutral-site games (Conf Champ, most CFP rounds) count
+            # toward "Away"/Road categories, same real-world convention
+            # as treating a neutral site closer to a road game than a
+            # true home game.
+            if location == "Away":
+                return subset[subset["Location"].isin(["Away", "Neutral"])]
+            return subset[subset["Location"] == location]
+
         def _win_count(subset, location=None, min_margin=None):
             s = subset[subset["Outcome"] == "W"]
             if location is not None:
-                s = s[s["Location"] == location]
+                s = _location_matches(s, location)
             if min_margin is not None:
                 s = s[s["Margin"] >= min_margin]
             return int(len(s))
@@ -546,7 +587,7 @@ def compute_team_stats(df: pd.DataFrame, teams: list, as_of_week_sort: int | Non
             this ranking?" display still shows an honest game count."""
             s = subset[subset["Outcome"] == "W"]
             if location is not None:
-                s = s[s["Location"] == location]
+                s = _location_matches(s, location)
             if min_margin is not None:
                 s = s[s["Margin"] >= min_margin]
             ranks = pd.to_numeric(s[rank_num_col], errors="coerce")
@@ -891,6 +932,26 @@ TEAM_COLORS = {
     "Wisconsin": ("C5050C", "FFFFFF"),
 }
 DEFAULT_TEAM_COLOR = ("2a2f3a", "888888")  # neutral fallback for an unrecognized team
+
+
+def load_bracket_data(season: int, directory: str = ".") -> dict | None:
+    """
+    Loads playoff_bracket_<season>.json if it exists (written by
+    bracket_scraper.py). Returns None if no bracket has been scraped yet
+    for that season -- callers should treat None as "show a coming soon
+    message" rather than an error, since most of the season this file
+    simply won't exist yet.
+    """
+    import json
+    import os
+    path = os.path.join(directory, f"playoff_bracket_{season}.json")
+    if not os.path.exists(path):
+        return None
+    try:
+        with open(path, "r") as f:
+            return json.load(f)
+    except (json.JSONDecodeError, OSError):
+        return None
 
 
 def logo_url(team: str, dark_bg: bool = True) -> str | None:
