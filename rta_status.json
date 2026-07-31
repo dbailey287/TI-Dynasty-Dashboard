@@ -1,5 +1,6 @@
 {
   "ready_user_ids": [
+    "1069336188726554824",
     "1123408868458889306",
     "1266038078250946676",
     "1358920417347108874",
@@ -10,9 +11,9 @@
     "546797525919596564",
     "796043766695067719"
   ],
-  "last_message_id_main": "1532731743272964128",
+  "last_message_id_main": "1532762608820555928",
   "last_message_id_admin": "1532187618182303936",
-  "last_updated": "2026-07-31T13:20:50.944570+00:00",
+  "last_updated": "2026-07-31T15:33:13.292467+00:00",
   "last_reset_at": "2026-07-30T00:51:28.524483+00:00",
   "cycle_count": 3,
   "current_week_sort": 4,
@@ -29,7 +30,8 @@
     "West Virginia": "Let's Go Mountaineers! \ud83c\udfd4\ufe0f",
     "Arkansas": "Undefeated in tailgating. 2-4 in everything else.",
     "South Carolina": "\ud83c\udfb6 Sandstorm hype, mid-tier results.",
-    "Missouri": "M-I-Z... Z-O-U! \ud83d\udc2f"
+    "Missouri": "M-I-Z... Z-O-U! \ud83d\udc2f",
+    "Stanford": "Fight, Fight, Fight!"
   },
   "tagline_queue_by_team": {
     "Kentucky": [
@@ -154,6 +156,17 @@
       "We're 6-6 in a way that feels intentional at this point.",
       "\ud83d\udc2f Tigers roar. We... politely growl.",
       "\ud83d\udc2f We're tigers. We just prefer naps to hunting."
+    ],
+    "Stanford": [
+      "\ud83d\ude02 Fight Fight Fight, mostly for a bowl bid.",
+      "\ud83e\udd13 4.2 GPA, mediocre record, no regrets.",
+      "Our football team has a lower GPA impact than our actual GPA.",
+      "ACC's academic pride, everyone else's easy win.",
+      "\ud83c\udf32 We photosynthesize wins. Very slowly.",
+      "\ud83c\udf32 We're a tree. Trees are patient. VERY patient.",
+      "Go Cardinal! \ud83c\udf32",
+      "Smart school. Dumb defense.",
+      "\ud83e\udd13 We'll out-smart you, if not out-score you."
     ]
   }
 }
