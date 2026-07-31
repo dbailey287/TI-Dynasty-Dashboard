@@ -187,6 +187,7 @@ PAGES = [
     "🔥 Weekly Recap",
     "🎲 Fun Stats",
     "📜 Career",
+    "🏆 Playoff History",
     "⚙️ Settings",
 ]
 page = st.sidebar.radio("Navigate", PAGES, label_visibility="collapsed", key="nav_radio")
@@ -1480,6 +1481,14 @@ elif page == "📜 Career":
             )
             fig_career.update_layout(height=520, legend_title_text="")
             st.plotly_chart(fig_career, width="stretch")
+
+
+# ============================================================================
+# PAGE: PLAYOFF HISTORY
+# ============================================================================
+elif page == "🏆 Playoff History":
+    st.title("🏆 Playoff History")
+    st.info("Playoff history isn't available until after your league's first playoff.")
 
 
 # ============================================================================
