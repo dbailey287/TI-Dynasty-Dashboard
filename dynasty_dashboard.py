@@ -403,9 +403,13 @@ def team_logo_tag(team: str, size: int = 22) -> str:
     )
 
 
-def render_week_games(week_sort, empty_message: str):
+def render_week_games(week_sort, empty_message: str, team_ready_lookup: dict = None):
     """Renders the game list for a given Week_Sort, highlighting User vs
-    User matchups. Shared by the 'This Week' and 'Upcoming Week' sections."""
+    User matchups. Shared by the 'This Week' and 'Upcoming Week' sections.
+    Games where the team (or, for a User-vs-User game, EITHER team) has
+    already marked RTA get struck through -- team_ready_lookup defaults
+    to empty (nobody struck through) if RTA data isn't available."""
+    team_ready_lookup = team_ready_lookup or {}
     if week_sort is None:
         st.caption("No data yet.")
         return
@@ -427,9 +431,17 @@ def render_week_games(week_sort, empty_message: str):
         team_logo = team_logo_tag(g["Team"])
         opp_logo = team_logo_tag(g["Opponent"])
 
+        team_ready = team_ready_lookup.get(g["Team"], False)
+        if g["Opponent_Is_User"]:
+            opp_ready = team_ready_lookup.get(g["Opponent"], False)
+            already_ready = team_ready or opp_ready
+        else:
+            already_ready = team_ready
+        strike_style = "text-decoration:line-through; opacity:0.6;" if already_ready else ""
+
         if g["Opponent_Is_User"]:
             st.markdown(
-                f'<div class="user-game-card">'
+                f'<div class="user-game-card" style="{strike_style}">'
                 f'<span class="user-badge">USER MATCHUP</span>'
                 f'{team_logo}{team_link(g["Team"])} <span class="stat-label">({g["User"]})</span> '
                 f'{loc} '
@@ -439,7 +451,7 @@ def render_week_games(week_sort, empty_message: str):
             )
         else:
             st.markdown(
-                f'<div class="cpu-game-row">'
+                f'<div class="cpu-game-row" style="{strike_style}">'
                 f'{team_logo}{team_link(g["Team"])} <span class="stat-label">({g["User"]})</span> '
                 f'{loc} {rank_tag}{opp_logo}{team_link(g["Opponent"])}'
                 f'{result_tag}</div>',
@@ -464,10 +476,18 @@ if page == "🏈 Home":
 
     rta_status_path = os.path.join(SCRIPT_DIR, "rta_status.json")
     rta_status = dl.load_rta_status(rta_status_path)
+
+    # Team -> ready(bool) lookup for the "This Week" strikethrough feature.
+    # Safe default is an empty dict (nobody ready, no strikethroughs) if
+    # rta_status.json is missing, so this never breaks the page even when
+    # RTA tracking isn't set up.
+    team_ready_lookup = {}
+
     if rta_status is not None:
         st.divider()
         ready_ids = set(rta_status.get("ready_user_ids", []))
         roster_entries = dl.load_roster_entries(SCRIPT_DIR)
+        team_ready_lookup = {e["team"]: e["user_id"] in ready_ids for e in roster_entries}
 
         st.subheader(f"✅ Ready to Advance — {len(ready_ids & {e['user_id'] for e in roster_entries})}/{len(roster_entries)}")
         if roster_entries:
@@ -555,7 +575,7 @@ if page == "🏈 Home":
 
     with col2:
         st.subheader(f"📅 This Week — Week {effective_current_week_label or '—'}")
-        render_week_games(effective_current_week_sort, "No games scheduled this week.")
+        render_week_games(effective_current_week_sort, "No games scheduled this week.", team_ready_lookup)
 
         st.divider()
 
