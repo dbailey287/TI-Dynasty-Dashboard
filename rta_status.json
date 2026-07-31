@@ -1,5 +1,6 @@
 {
   "ready_user_ids": [
+    "1266038078250946676",
     "1358920417347108874",
     "1392129295916466176",
     "1398491406330495040",
@@ -8,9 +9,9 @@
     "546797525919596564",
     "796043766695067719"
   ],
-  "last_message_id_main": "1532597615378829382",
+  "last_message_id_main": "1532712044409651291",
   "last_message_id_admin": "1532187618182303936",
-  "last_updated": "2026-07-31T06:46:40.348442+00:00",
+  "last_updated": "2026-07-31T11:44:15.112591+00:00",
   "last_reset_at": "2026-07-30T00:51:28.524483+00:00",
   "cycle_count": 3,
   "current_week_sort": 4,
@@ -26,7 +27,8 @@
     "Baylor": "That's Baylor... Sic 'Em!",
     "West Virginia": "Let's Go Mountaineers! \ud83c\udfd4\ufe0f",
     "Arkansas": "Undefeated in tailgating. 2-4 in everything else.",
-    "South Carolina": "\ud83c\udfb6 Sandstorm hype, mid-tier results."
+    "South Carolina": "\ud83c\udfb6 Sandstorm hype, mid-tier results.",
+    "Missouri": "M-I-Z... Z-O-U! \ud83d\udc2f"
   },
   "tagline_queue_by_team": {
     "Kentucky": [
@@ -141,6 +143,17 @@
       "Go Cocks! \ud83d\udc14",
       "\ud83d\udc14 We may lose, but we lose with FEATHERS everywhere.",
       "We show up loud and leave quiet. Every single week."
+    ],
+    "Missouri": [
+      "\ud83d\ude05 M-I-Z... we'll take a win, honestly, any win.",
+      "\ud83d\udc05 Roaring on the inside, whimpering on 3rd down.",
+      "Go Tigers!",
+      "SEC middle-of-the-pack, and we've made peace with it.",
+      "Tigers on the jersey. Housecats on the field.",
+      "\ud83c\udfaf Mizzou: perpetually \"this could be our year.\"",
+      "We're 6-6 in a way that feels intentional at this point.",
+      "\ud83d\udc2f Tigers roar. We... politely growl.",
+      "\ud83d\udc2f We're tigers. We just prefer naps to hunting."
     ]
   }
 }
