@@ -6,7 +6,7 @@ on:
     # hour twice a year (4am vs 5am Eastern depending on the season),
     # which doesn't matter for this. Only fires on Sun/Wed/Fri (cron
     # day-of-week: 0=Sun, 3=Wed, 5=Fri).
-    - cron: "0 9 * * 0,3,5"
+    - cron: "6 6 * * 0,3,5"
   workflow_dispatch:
     inputs:
       force_run:
