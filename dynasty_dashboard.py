@@ -176,6 +176,31 @@ def trend_arrow(change: int) -> str:
 
 st.sidebar.title("🏈 Dynasty Command Center")
 
+# Tap-to-jump: team names on the Home page link to their entry on the
+# Teams page. Set this to False to fully revert to plain, non-clickable
+# team names everywhere -- this one flag controls all of it.
+ENABLE_TEAM_TAP_TO_JUMP = True
+
+if ENABLE_TEAM_TAP_TO_JUMP and "jump_team" in st.query_params:
+    _jump_target = st.query_params["jump_team"]
+    st.session_state["nav_radio"] = "👤 Teams"
+    st.session_state["teams_page_select"] = _jump_target
+    st.query_params.clear()
+
+
+def team_link(team: str, display_text: str = None) -> str:
+    """Returns the HTML for a team name -- a clickable link to the Teams
+    page if ENABLE_TEAM_TAP_TO_JUMP is on AND the team is one of the 18
+    tracked teams (an untracked CPU opponent has no valid entry to jump
+    to, so those stay plain text regardless of the flag), otherwise
+    plain bold text with identical appearance. Centralized here so the
+    whole feature can be turned off in one place if it doesn't work out."""
+    text = display_text if display_text is not None else team
+    if not ENABLE_TEAM_TAP_TO_JUMP or team not in TEAMS:
+        return f"<b>{text}</b>"
+    return f'<a href="?jump_team={team}" style="color:inherit; text-decoration:none; font-weight:700;">{text}</a>'
+
+
 PAGES = [
     "🏈 Home",
     "📊 Standings",
@@ -406,17 +431,17 @@ def render_week_games(week_sort, empty_message: str):
             st.markdown(
                 f'<div class="user-game-card">'
                 f'<span class="user-badge">USER MATCHUP</span>'
-                f'{team_logo}<b>{g["Team"]}</b> <span class="stat-label">({g["User"]})</span> '
+                f'{team_logo}{team_link(g["Team"])} <span class="stat-label">({g["User"]})</span> '
                 f'{loc} '
-                f'{opp_logo}<b>{g["Opponent"]}</b> <span class="stat-label">({g["Opponent_User"]})</span>'
+                f'{opp_logo}{team_link(g["Opponent"])} <span class="stat-label">({g["Opponent_User"]})</span>'
                 f'{result_tag}</div>',
                 unsafe_allow_html=True,
             )
         else:
             st.markdown(
                 f'<div class="cpu-game-row">'
-                f'{team_logo}<b>{g["Team"]}</b> <span class="stat-label">({g["User"]})</span> '
-                f'{loc} {rank_tag}{opp_logo}{g["Opponent"]}'
+                f'{team_logo}{team_link(g["Team"])} <span class="stat-label">({g["User"]})</span> '
+                f'{loc} {rank_tag}{opp_logo}{team_link(g["Opponent"])}'
                 f'{result_tag}</div>',
                 unsafe_allow_html=True,
             )
@@ -515,14 +540,14 @@ if page == "🏈 Home":
         if upset_found is not None:
             w, l, ws, ls = dl._winner_loser(upset_found)
             st.markdown(
-                f"{team_logo_tag(w, 26)}**{w}** {ws:.0f}-{ls:.0f} over "
-                f"{team_logo_tag(l, 26)}**#{int(upset_found[upset_num_col])} {l}**",
+                f"{team_logo_tag(w, 26)}{team_link(w)} {ws:.0f}-{ls:.0f} over "
+                f"{team_logo_tag(l, 26)}{team_link(l, f'#{int(upset_found[upset_num_col])} {l}')}",
                 unsafe_allow_html=True,
             )
         elif blowout:
             st.markdown(
-                f"{team_logo_tag(blowout['winner'], 26)}**{blowout['winner']}** {blowout['score']} over "
-                f"{team_logo_tag(blowout['loser'], 26)}**{blowout['loser']}**",
+                f"{team_logo_tag(blowout['winner'], 26)}{team_link(blowout['winner'])} {blowout['score']} over "
+                f"{team_logo_tag(blowout['loser'], 26)}{team_link(blowout['loser'])}",
                 unsafe_allow_html=True,
             )
         else:
@@ -549,7 +574,7 @@ if page == "🏈 Home":
             arrow = trend_arrow(int(r["Rank_Change"]))
             logo = team_logo_tag(r["Team"], 22)
             st.markdown(
-                f"**{int(r['Rank'])}.** {logo}**{r['Team']}** — {r['Dynasty_Rating']:.1f} {arrow}",
+                f"**{int(r['Rank'])}.** {logo}{team_link(r['Team'])} — {r['Dynasty_Rating']:.1f} {arrow}",
                 unsafe_allow_html=True,
             )
 
@@ -889,7 +914,7 @@ elif page == "📅 Schedule":
 elif page == "👤 Teams":
     st.title("👤 Team Report Card")
 
-    selected_team = st.selectbox("Select a team", TEAMS, format_func=team_display)
+    selected_team = st.selectbox("Select a team", TEAMS, format_func=team_display, key="teams_page_select")
     if selected_team in team_stats.index:
         row = team_stats.loc[selected_team]
         rating_row = rated.loc[selected_team] if selected_team in rated.index else None
