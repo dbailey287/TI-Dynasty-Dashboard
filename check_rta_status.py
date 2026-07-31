@@ -233,13 +233,36 @@ def run() -> str:
             else:
                 new_week_sort = prior_week_sort + 1
 
+            # Season transition: if we were just on the National
+            # Championship (950) and the REAL bracket (never the
+            # predicted one) shows a decided champion, this advance
+            # starts a brand new season -- reset back to week 0 instead
+            # of continuing to climb past the championship forever.
+            # Checking the bracket file rather than dynasty_data is
+            # deliberate: dynasty_data only has games for user-controlled
+            # teams, and it's entirely possible none of them reach the
+            # National Championship, in which case dynasty_data would
+            # never show it as complete even though it genuinely happened.
+            season_transition = False
+            if prior_week_sort == 950:
+                current_season = rl.get_current_season(".")
+                if current_season is not None:
+                    champion = rl.get_national_champion(current_season, ".")
+                    if champion:
+                        season_transition = True
+                        new_week_sort = 0
+
             state["current_week_sort"] = new_week_sort
             week_label = rl.get_week_label_for_sort(".", new_week_sort)
             matchups = rl.get_matchups_for_week_sort(".", new_week_sort)
 
-            announcement = rl.pick_announcement()
-            announcement += f" We're now on **Week {week_label}**."
-            log.info("Advance detected -- posting to #announcements (week_sort=%s, label=%s).", new_week_sort, week_label)
+            if season_transition:
+                announcement = f"🎉 {champion} are your National Champions! The dynasty marches on -- welcome to a brand new season."
+                log.info("Season transition detected (champion=%s) -- resetting week counter to 0.", champion)
+            else:
+                announcement = rl.pick_announcement()
+                announcement += f" We're now on **Week {week_label}**."
+                log.info("Advance detected -- posting to #announcements (week_sort=%s, label=%s).", new_week_sort, week_label)
 
             all_ids = [r["user_id"] for r in roster]
             matchup_lines = rl.format_matchup_lines(all_ids, id_to_team, matchups) if matchups else []

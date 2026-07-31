@@ -38,6 +38,7 @@ import sys
 from datetime import datetime, timezone
 
 import discord
+import pandas as pd
 from google import genai
 from google.genai.errors import APIError
 from PIL import Image
@@ -165,9 +166,43 @@ def save_failed_images(failed: dict) -> None:
         json.dump(failed, f, indent=2)
 
 
-def save_bracket(data: dict, season: int) -> str:
-    path = f"playoff_bracket_{season}.json"
+def is_conf_champ_complete(season: int, directory: str = ".") -> bool:
+    """
+    True once every team that actually PLAYED a conference championship
+    game has a Completed result for it. Most teams never play one at all
+    (only conference winners do) -- those show "BYE" for that week and
+    are correctly ignored here, not treated as "still waiting." Returns
+    False (safe default -> treat as still-predicted) if the season's CSV
+    doesn't exist yet, or if there's no Conf Champ data to check at all.
+    """
+    import glob
+    path_matches = glob.glob(os.path.join(directory, f"dynasty_data_{season}.csv"))
+    if not path_matches:
+        return False
+    try:
+        df = pd.read_csv(path_matches[0], dtype=str)
+    except Exception:
+        return False
+    conf_champ_rows = df[df["Week"] == "Conf Champ"]
+    real_games = conf_champ_rows[conf_champ_rows["Status"] != "BYE"]
+    if real_games.empty:
+        return False  # nobody's played theirs yet (or no data) -- still predicted
+    return bool((real_games["Status"] == "Completed").all())
+
+
+def save_bracket(data: dict, season: int, is_predicted: bool) -> str:
+    """
+    Predicted brackets always overwrite predicted_bracket_<season>.json --
+    no history kept, it's just "the latest projection." Real brackets
+    overwrite playoff_bracket_<season>.json, each update superseding the
+    last with a more complete picture of the actual playoff as it
+    progresses. The two files never cross -- once a season's brackets are
+    classified as real, nothing writes to the predicted file again.
+    """
+    prefix = "predicted_bracket" if is_predicted else "playoff_bracket"
+    path = f"{prefix}_{season}.json"
     data["last_updated"] = datetime.now(timezone.utc).isoformat()
+    data["is_predicted"] = is_predicted
     with open(path, "w") as f:
         json.dump(data, f, indent=2)
     return path
@@ -177,7 +212,7 @@ intents = discord.Intents.default()
 intents.message_content = True
 bot = discord.Client(intents=intents)
 
-_run_result = {"processed": 0, "failed": 0, "path": None, "champion": None}
+_run_result = {"processed": 0, "failed": 0, "path": None, "champion": None, "is_predicted": None}
 
 
 @bot.event
@@ -213,8 +248,10 @@ async def on_ready():
 
         if last_good_data:
             season = last_good_data.get("season") or datetime.now().year
-            path = save_bracket(last_good_data, season)
+            predicted = not is_conf_champ_complete(season)
+            path = save_bracket(last_good_data, season, is_predicted=predicted)
             _run_result["path"] = path
+            _run_result["is_predicted"] = predicted
             _run_result["champion"] = last_good_data.get("champion") or None
 
         _run_result["processed"] = newly_processed
@@ -244,7 +281,8 @@ def main():
 
     if _run_result["path"]:
         champ_note = f" 🏆 Champion: {_run_result['champion']}" if _run_result["champion"] else ""
-        alert = f"✅ Bracket Scraper: updated {_run_result['path']} ({_run_result['processed']} new image(s)).{champ_note}"
+        kind = "PREDICTED" if _run_result["is_predicted"] else "real"
+        alert = f"✅ Bracket Scraper: updated {_run_result['path']} ({kind}, {_run_result['processed']} new image(s)).{champ_note}"
     elif _run_result["processed"] == 0:
         alert = "✅ Bracket Scraper: ran, no new bracket screenshots found."
     else:

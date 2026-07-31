@@ -555,9 +555,16 @@ if page == "🏈 Home":
         st.divider()
         st.subheader("🏆 Playoff Bracket")
         bracket_data = dl.load_bracket_data(int(season)) if season != "—" else None
+        showing_predicted = False
+        if not bracket_data and season != "—":
+            bracket_data = dl.load_bracket_data(int(season), predicted=True)
+            showing_predicted = bool(bracket_data)
+
         if not bracket_data:
             st.info("Bracket available after conference championship week.")
         else:
+            if showing_predicted:
+                st.warning("⚠️ Projected bracket — this is only a prediction, not a real result. It has no bearing on the actual schedule.")
             round_labels = {
                 "first_round": "First Round",
                 "quarterfinal": "Quarterfinal",

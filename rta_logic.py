@@ -466,6 +466,44 @@ def format_matchup_lines(user_ids: list, id_to_team: dict, matchups: dict) -> li
     return lines
 
 
+def get_national_champion(season: int, directory: str = ".") -> str | None:
+    """
+    Reads playoff_bracket_<season>.json (the REAL bracket, never the
+    predicted one) and returns the champion's name if the National
+    Championship has been decided, else None. This is the authoritative
+    check for "has the season actually ended" -- NOT dynasty_data, since
+    dynasty_data only contains games for user-controlled teams, and it's
+    entirely possible none of them make the National Championship. The
+    bracket file always captures the real result regardless of who's in it.
+    """
+    path = os.path.join(directory, f"playoff_bracket_{season}.json")
+    if not os.path.exists(path):
+        return None
+    try:
+        with open(path, "r") as f:
+            data = json.load(f)
+    except (json.JSONDecodeError, OSError):
+        return None
+    champion = data.get("champion")
+    return champion if champion else None
+
+
+def get_current_season(directory: str = ".") -> int | None:
+    """Returns the season number of the newest dynasty_data_<season>.csv
+    found, or None if there isn't one yet. Used to know which season's
+    playoff bracket file to check for the National Championship result."""
+    files = glob.glob(os.path.join(directory, "dynasty_data_*.csv"))
+    if not files:
+        return None
+
+    def season_num(path):
+        m = re.search(r"dynasty_data_(\d+)\.csv$", os.path.basename(path))
+        return int(m.group(1)) if m else -1
+    latest = max(files, key=season_num)
+    n = season_num(latest)
+    return n if n != -1 else None
+
+
 def _load_latest_season_df(directory: str):
     """Internal: loads the newest dynasty_data_<season>.csv as a
     dataframe, or None if it can't."""
@@ -488,8 +526,14 @@ def week_sort_key(week_val) -> int:
     w = str(week_val).strip()
     if w.isdigit():
         return int(w)
-    if "conf" in w.lower():
+    lower = w.lower()
+    if "conf" in lower:
         return 900
+    bowl_match = re.search(r"bowl\s*(\d+)", lower)
+    if bowl_match:
+        return 900 + int(bowl_match.group(1))  # Bowl 1 -> 901, Bowl 2 -> 902, etc.
+    if "champ" in lower and "conf" not in lower:
+        return 950  # National Championship (confirmed label: "Nat'l Champ")
     return 999
 
 

@@ -934,17 +934,17 @@ TEAM_COLORS = {
 DEFAULT_TEAM_COLOR = ("2a2f3a", "888888")  # neutral fallback for an unrecognized team
 
 
-def load_bracket_data(season: int, directory: str = ".") -> dict | None:
+def load_bracket_data(season: int, directory: str = ".", predicted: bool = False) -> dict | None:
     """
-    Loads playoff_bracket_<season>.json if it exists (written by
-    bracket_scraper.py). Returns None if no bracket has been scraped yet
-    for that season -- callers should treat None as "show a coming soon
-    message" rather than an error, since most of the season this file
-    simply won't exist yet.
+    Loads playoff_bracket_<season>.json (predicted=False) or
+    predicted_bracket_<season>.json (predicted=True), written by
+    bracket_scraper.py. Returns None if that file doesn't exist yet --
+    callers should treat None as "nothing to show" rather than an error.
     """
     import json
     import os
-    path = os.path.join(directory, f"playoff_bracket_{season}.json")
+    prefix = "predicted_bracket" if predicted else "playoff_bracket"
+    path = os.path.join(directory, f"{prefix}_{season}.json")
     if not os.path.exists(path):
         return None
     try:
