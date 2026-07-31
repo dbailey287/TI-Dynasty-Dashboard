@@ -1,20 +1,22 @@
 {
   "ready_user_ids": [
     "1358920417347108874",
+    "1392129295916466176",
+    "1398491406330495040",
     "402459179417206784",
     "546797525919596564",
     "796043766695067719"
   ],
-  "last_message_id_main": "1532525470632116276",
+  "last_message_id_main": "1532542055098876026",
   "last_message_id_admin": "1532187618182303936",
-  "last_updated": "2026-07-30T23:10:37.920948+00:00",
+  "last_updated": "2026-07-31T00:14:59.623031+00:00",
   "last_reset_at": "2026-07-30T00:51:28.524483+00:00",
   "cycle_count": 3,
   "current_week_sort": 4,
   "last_tagline_by_team": {
     "Kentucky": "\ud83d\ude39 Wildcats? More like Mildcats. Don't tell Coach.",
     "Pittsburgh": "\ud83d\udc3e Building a program, brick by brick. Very small bricks.",
-    "California": "\ud83d\udcda We may not win state, but we ACED it academically.",
+    "California": "\ud83d\udc3b Golden Bears, modest record, unbreakable spirit.",
     "Arizona State": "Fork 'Em, Devils! \ud83d\udd31",
     "Temple": "\ud83e\udd89 Whoo's ready for a rebuilding year? We are! Again!",
     "Northwestern": "We lost the game, but our postgame press conference was Ivy-League caliber.",
@@ -22,7 +24,8 @@
     "Virginia": "\u2694\ufe0f Cavaliers charge in. We just kind of... amble in.",
     "Baylor": "That's Baylor... Sic 'Em!",
     "West Virginia": "Let's Go Mountaineers! \ud83c\udfd4\ufe0f",
-    "Arkansas": "Undefeated in tailgating. 2-4 in everything else."
+    "Arkansas": "Undefeated in tailgating. 2-4 in everything else.",
+    "South Carolina": "\ud83c\udfb6 Sandstorm hype, mid-tier results."
   },
   "tagline_queue_by_team": {
     "Kentucky": [
@@ -41,7 +44,6 @@
       "\ud83d\udc06 Panthers prowl. We mostly just kinda wander."
     ],
     "California": [
-      "\ud83d\udc3b Golden Bears, modest record, unbreakable spirit.",
       "\ud83c\udf09 Bridging the gap between \"good\" and \"next year.\"",
       "Go Bears! \ud83d\udc99\ud83d\udc9b",
       "\ud83c\udf09 Golden Gate energy, bronze medal record.",
@@ -128,6 +130,17 @@
       "Woo Pig Sooie! \ud83d\udc17",
       "\ud83d\udc37 We're not rebuilding, we're... recalibrating.",
       "Hogs by mascot. Doormats by scoreboard."
+    ],
+    "South Carolina": [
+      "\ud83d\ude02 Fighting Gamecocks, mostly fighting our own mistakes.",
+      "\ud83d\ude02 Cock-a-doodle-don't... but we'll try again next week.",
+      "Fighting Gamecocks!",
+      "Gamecocks by mascot. Punching bags by scoreboard.",
+      "SEC bottom-tier, and Sandstorm can't save us.",
+      "\ud83d\udc14 We may not win, but we WILL strut about it.",
+      "Go Cocks! \ud83d\udc14",
+      "\ud83d\udc14 We may lose, but we lose with FEATHERS everywhere.",
+      "We show up loud and leave quiet. Every single week."
     ]
   }
 }
