@@ -2,6 +2,7 @@
   "ready_user_ids": [
     "1069336188726554824",
     "1123408868458889306",
+    "1259468750105743410",
     "1266038078250946676",
     "1358920417347108874",
     "1392129295916466176",
@@ -11,9 +12,9 @@
     "546797525919596564",
     "796043766695067719"
   ],
-  "last_message_id_main": "1532773137500995755",
+  "last_message_id_main": "1532836527355203714",
   "last_message_id_admin": "1532187618182303936",
-  "last_updated": "2026-07-31T17:08:33.338701+00:00",
+  "last_updated": "2026-07-31T19:59:06.933437+00:00",
   "last_reset_at": "2026-07-30T00:51:28.524483+00:00",
   "cycle_count": 3,
   "current_week_sort": 4,
@@ -25,11 +26,11 @@
     "Temple": "\ud83e\udd89 Whoo's ready for a rebuilding year? We are! Again!",
     "Northwestern": "Smart kids. Dumb red zone decisions.",
     "SMU": "Our uniforms have never lost a game. Unfortunately we have to wear them while playing.",
-    "Virginia": "\u2694\ufe0f Cavaliers charge in. We just kind of... amble in.",
+    "Virginia": "\ud83d\ude2c Wahoowa! Wahoo-ouch.",
     "Baylor": "That's Baylor... Sic 'Em!",
     "West Virginia": "Let's Go Mountaineers! \ud83c\udfd4\ufe0f",
     "Arkansas": "Undefeated in tailgating. 2-4 in everything else.",
-    "South Carolina": "\ud83c\udfb6 Sandstorm hype, mid-tier results.",
+    "South Carolina": "\ud83d\ude02 Fighting Gamecocks, mostly fighting our own mistakes.",
     "Missouri": "M-I-Z... Z-O-U! \ud83d\udc2f",
     "Stanford": "Fight, Fight, Fight!"
   },
@@ -93,7 +94,6 @@
       "Go Mustangs!"
     ],
     "Virginia": [
-      "\ud83d\ude2c Wahoowa! Wahoo-ouch.",
       "Cavaliers by name. Pushovers by October.",
       "\u2694\ufe0f We brought a sword to a gunfight, and still tried our best.",
       "ACC bottom-half, and the Wahoos know it.",
@@ -136,7 +136,6 @@
       "Hogs by mascot. Doormats by scoreboard."
     ],
     "South Carolina": [
-      "\ud83d\ude02 Fighting Gamecocks, mostly fighting our own mistakes.",
       "\ud83d\ude02 Cock-a-doodle-don't... but we'll try again next week.",
       "Fighting Gamecocks!",
       "Gamecocks by mascot. Punching bags by scoreboard.",
