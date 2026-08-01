@@ -1,8 +1,10 @@
 {
-  "ready_user_ids": [],
-  "last_message_id_main": "1532959720199946353",
+  "ready_user_ids": [
+    "796043766695067719"
+  ],
+  "last_message_id_main": "1533078482748440686",
   "last_message_id_admin": "1532939191707500716",
-  "last_updated": "2026-08-01T04:33:06.421630+00:00",
+  "last_updated": "2026-08-01T11:47:16.336310+00:00",
   "last_reset_at": "2026-08-01T02:33:44.142880+00:00",
   "cycle_count": 4,
   "current_week_sort": 5,
@@ -17,7 +19,7 @@
     "Virginia": "\ud83d\ude2c Wahoowa! Wahoo-ouch.",
     "Baylor": "That's Baylor... Sic 'Em!",
     "West Virginia": "Let's Go Mountaineers! \ud83c\udfd4\ufe0f",
-    "Arkansas": "Undefeated in tailgating. 2-4 in everything else.",
+    "Arkansas": "SEC bottom feeder and proud of it.",
     "South Carolina": "\ud83d\ude02 Fighting Gamecocks, mostly fighting our own mistakes.",
     "Missouri": "M-I-Z... Z-O-U! \ud83d\udc2f",
     "Stanford": "Fight, Fight, Fight!"
@@ -112,7 +114,6 @@
       "WVU! WVU!"
     ],
     "Arkansas": [
-      "SEC bottom feeder and proud of it.",
       "\ud83d\ude24 Woo Pig Sooie \u2014 said with increasing desperation each week.",
       "\ud83d\udc17 We may be hogs, but we're PROUD hogs.",
       "Callin' the Hogs!",
