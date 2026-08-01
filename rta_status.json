@@ -1,13 +1,15 @@
 {
   "ready_user_ids": [
     "1254972344070311970",
+    "1266038078250946676",
+    "1398491406330495040",
     "402459179417206784",
     "476855101353623582",
     "796043766695067719"
   ],
-  "last_message_id_main": "1533131223721967698",
+  "last_message_id_main": "1533151314983391282",
   "last_message_id_admin": "1532939191707500716",
-  "last_updated": "2026-08-01T15:41:58.002916+00:00",
+  "last_updated": "2026-08-01T16:37:42.641766+00:00",
   "last_reset_at": "2026-08-01T02:33:44.142880+00:00",
   "cycle_count": 4,
   "current_week_sort": 5,
@@ -23,8 +25,8 @@
     "Baylor": "That's Baylor... Sic 'Em!",
     "West Virginia": "Let's Go Mountaineers! \ud83c\udfd4\ufe0f",
     "Arkansas": "SEC bottom feeder and proud of it.",
-    "South Carolina": "\ud83d\ude02 Fighting Gamecocks, mostly fighting our own mistakes.",
-    "Missouri": "M-I-Z... Z-O-U! \ud83d\udc2f",
+    "South Carolina": "\ud83d\ude02 Cock-a-doodle-don't... but we'll try again next week.",
+    "Missouri": "\ud83d\ude05 M-I-Z... we'll take a win, honestly, any win.",
     "Stanford": "Fight, Fight, Fight!"
   },
   "tagline_queue_by_team": {
@@ -124,7 +126,6 @@
       "Hogs by mascot. Doormats by scoreboard."
     ],
     "South Carolina": [
-      "\ud83d\ude02 Cock-a-doodle-don't... but we'll try again next week.",
       "Fighting Gamecocks!",
       "Gamecocks by mascot. Punching bags by scoreboard.",
       "SEC bottom-tier, and Sandstorm can't save us.",
@@ -134,7 +135,6 @@
       "We show up loud and leave quiet. Every single week."
     ],
     "Missouri": [
-      "\ud83d\ude05 M-I-Z... we'll take a win, honestly, any win.",
       "\ud83d\udc05 Roaring on the inside, whimpering on 3rd down.",
       "Go Tigers!",
       "SEC middle-of-the-pack, and we've made peace with it.",
