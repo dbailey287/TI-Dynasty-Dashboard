@@ -4,15 +4,16 @@
     "1264702227197591555",
     "1266038078250946676",
     "1358920417347108874",
+    "1378208565873082402",
     "1398491406330495040",
     "402459179417206784",
     "476855101353623582",
     "546797525919596564",
     "796043766695067719"
   ],
-  "last_message_id_main": "1533248042650702154",
+  "last_message_id_main": "1533261343304716419",
   "last_message_id_admin": "1532939191707500716",
-  "last_updated": "2026-08-01T23:38:16.562918+00:00",
+  "last_updated": "2026-08-01T23:57:23.918417+00:00",
   "last_reset_at": "2026-08-01T02:33:44.142880+00:00",
   "cycle_count": 4,
   "current_week_sort": 5,
@@ -31,7 +32,8 @@
     "South Carolina": "\ud83d\ude02 Cock-a-doodle-don't... but we'll try again next week.",
     "Missouri": "\ud83d\ude05 M-I-Z... we'll take a win, honestly, any win.",
     "Stanford": "Fight, Fight, Fight!",
-    "Colorado": "Prime-time hype, undercard results."
+    "Colorado": "Prime-time hype, undercard results.",
+    "Oklahoma State": "Ride 'em, Cowboys!"
   },
   "tagline_queue_by_team": {
     "Kentucky": [
@@ -167,6 +169,17 @@
       "CU Boulder, Fight!",
       "\ud83d\ude2c Buffs gonna buff (some weeks).",
       "\ud83e\uddac Big, slow, and occasionally dangerous. Just like our offense."
+    ],
+    "Oklahoma State": [
+      "\ud83e\udd20 We fell off the horse. Getting back on. Eventually.",
+      "\ud83d\ude02 Cowboys don't cry. We just take a moment.",
+      "\ud83d\udc34 Giddy up, or at least giddy... eventually.",
+      "\ud83d\ude02 Cowboy up! Or at least cowboy... sideways.",
+      "We're rebuilding. We've been rebuilding since the Clinton administration.",
+      "\ud83e\udd20 We lasso wins. Sometimes the rope's just... too short.",
+      "Cowboys by name. Rodeo clowns by 4th quarter.",
+      "Go Pokes! \ud83e\udd20",
+      "Big 12 also-ran, and everybody in the league knows it."
     ]
   }
 }
