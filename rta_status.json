@@ -1,15 +1,16 @@
 {
   "ready_user_ids": [
     "1254972344070311970",
+    "1264702227197591555",
     "1266038078250946676",
     "1398491406330495040",
     "402459179417206784",
     "476855101353623582",
     "796043766695067719"
   ],
-  "last_message_id_main": "1533151314983391282",
+  "last_message_id_main": "1533162709653131546",
   "last_message_id_admin": "1532939191707500716",
-  "last_updated": "2026-08-01T16:37:42.641766+00:00",
+  "last_updated": "2026-08-01T17:40:23.298786+00:00",
   "last_reset_at": "2026-08-01T02:33:44.142880+00:00",
   "cycle_count": 4,
   "current_week_sort": 5,
@@ -27,7 +28,8 @@
     "Arkansas": "SEC bottom feeder and proud of it.",
     "South Carolina": "\ud83d\ude02 Cock-a-doodle-don't... but we'll try again next week.",
     "Missouri": "\ud83d\ude05 M-I-Z... we'll take a win, honestly, any win.",
-    "Stanford": "Fight, Fight, Fight!"
+    "Stanford": "Fight, Fight, Fight!",
+    "Colorado": "Prime-time hype, undercard results."
   },
   "tagline_queue_by_team": {
     "Kentucky": [
@@ -154,6 +156,17 @@
       "Go Cardinal! \ud83c\udf32",
       "Smart school. Dumb defense.",
       "\ud83e\udd13 We'll out-smart you, if not out-score you."
+    ],
+    "Colorado": [
+      "\ud83e\uddac We stampede... eventually. Once we find our shoes.",
+      "We peaked in the preseason hype video.",
+      "\ud83c\udfd4\ufe0f Elevation's high. So is our blood pressure watching this team.",
+      "\ud83d\ude24 Buffs don't rebuild. We reload. Eventually.",
+      "Buffs stampede. We mosey.",
+      "Go Buffs! \ud83e\uddac",
+      "CU Boulder, Fight!",
+      "\ud83d\ude2c Buffs gonna buff (some weeks).",
+      "\ud83e\uddac Big, slow, and occasionally dangerous. Just like our offense."
     ]
   }
 }
