@@ -3,20 +3,21 @@
     "1254972344070311970",
     "1264702227197591555",
     "1266038078250946676",
+    "1358920417347108874",
     "1398491406330495040",
     "402459179417206784",
     "476855101353623582",
     "546797525919596564",
     "796043766695067719"
   ],
-  "last_message_id_main": "1533212082026320064",
+  "last_message_id_main": "1533248042650702154",
   "last_message_id_admin": "1532939191707500716",
-  "last_updated": "2026-08-01T20:38:54.671066+00:00",
+  "last_updated": "2026-08-01T23:38:16.562918+00:00",
   "last_reset_at": "2026-08-01T02:33:44.142880+00:00",
   "cycle_count": 4,
   "current_week_sort": 5,
   "last_tagline_by_team": {
-    "Kentucky": "\ud83d\ude39 Wildcats? More like Mildcats. Don't tell Coach.",
+    "Kentucky": "\ud83c\udfc8 Football season: the appetizer before basketball season.",
     "Pittsburgh": "\ud83d\ude24 Hail to Pitt, and hail Mary passes.",
     "California": "\ud83d\udc3b Golden Bears, modest record, unbreakable spirit.",
     "Arizona State": "\ud83e\udd37 Bowl game? We'll take it under advisement.",
@@ -34,7 +35,6 @@
   },
   "tagline_queue_by_team": {
     "Kentucky": [
-      "\ud83c\udfc8 Football season: the appetizer before basketball season.",
       "\ud83d\ude02 Big Blue Nation, medium blue expectations.",
       "Go Big Blue! \ud83d\udc99",
       "\ud83d\udc3e We claw our way to 6-6 every year, and we're proud of it.",
