@@ -1,11 +1,13 @@
 {
   "ready_user_ids": [
+    "1254972344070311970",
+    "402459179417206784",
     "476855101353623582",
     "796043766695067719"
   ],
-  "last_message_id_main": "1533114399458328768",
+  "last_message_id_main": "1533131223721967698",
   "last_message_id_admin": "1532939191707500716",
-  "last_updated": "2026-08-01T14:35:29.924932+00:00",
+  "last_updated": "2026-08-01T15:41:58.002916+00:00",
   "last_reset_at": "2026-08-01T02:33:44.142880+00:00",
   "cycle_count": 4,
   "current_week_sort": 5,
@@ -13,8 +15,8 @@
     "Kentucky": "\ud83d\ude39 Wildcats? More like Mildcats. Don't tell Coach.",
     "Pittsburgh": "\ud83d\ude24 Hail to Pitt, and hail Mary passes.",
     "California": "\ud83d\udc3b Golden Bears, modest record, unbreakable spirit.",
-    "Arizona State": "\ud83d\ude24 Tempe heat isn't the only thing that's brutal around here.",
-    "Temple": "\ud83e\udd89 Whoo's ready for a rebuilding year? We are! Again!",
+    "Arizona State": "\ud83e\udd37 Bowl game? We'll take it under advisement.",
+    "Temple": "\ud83e\udd89 Fear the Owl! Or at least mildly acknowledge it.",
     "Northwestern": "\ud83d\udcda #1 in the classroom, and that's what matters (please clap).",
     "SMU": "Our uniforms have never lost a game. Unfortunately we have to wear them while playing.",
     "Virginia": "\ud83d\ude2c Wahoowa! Wahoo-ouch.",
@@ -48,7 +50,6 @@
       "\ud83d\ude05 We're not tanking, we're 'strategically evaluating.'"
     ],
     "Arizona State": [
-      "\ud83e\udd37 Bowl game? We'll take it under advisement.",
       "Forks Up!",
       "\ud83d\udd25 We run hot and cold. Mostly cold. But hot sometimes!",
       "\ud83d\ude08 We may be cursed, but at least we're spicy.",
@@ -56,7 +57,6 @@
       "Go Devils!"
     ],
     "Temple": [
-      "\ud83e\udd89 Fear the Owl! Or at least mildly acknowledge it.",
       "\ud83d\ude34 Owls are nocturnal. Our offense only shows up at night too, apparently.",
       "\ud83d\ude02 Fear the Owl (mild, occasional fear only).",
       "Fear the Owl! \ud83e\udd89",
