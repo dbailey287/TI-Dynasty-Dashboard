@@ -6,11 +6,12 @@
     "1398491406330495040",
     "402459179417206784",
     "476855101353623582",
+    "546797525919596564",
     "796043766695067719"
   ],
-  "last_message_id_main": "1533167527859982378",
+  "last_message_id_main": "1533199869794058431",
   "last_message_id_admin": "1532939191707500716",
-  "last_updated": "2026-08-01T18:39:51.113224+00:00",
+  "last_updated": "2026-08-01T19:53:02.148504+00:00",
   "last_reset_at": "2026-08-01T02:33:44.142880+00:00",
   "cycle_count": 4,
   "current_week_sort": 5,
@@ -24,7 +25,7 @@
     "SMU": "Our uniforms have never lost a game. Unfortunately we have to wear them while playing.",
     "Virginia": "\ud83d\ude2c Wahoowa! Wahoo-ouch.",
     "Baylor": "That's Baylor... Sic 'Em!",
-    "West Virginia": "Let's Go Mountaineers! \ud83c\udfd4\ufe0f",
+    "West Virginia": "Mountaineers by name. Molehills by effort.",
     "Arkansas": "SEC bottom feeder and proud of it.",
     "South Carolina": "\ud83d\ude02 Cock-a-doodle-don't... but we'll try again next week.",
     "Missouri": "\ud83d\ude05 M-I-Z... we'll take a win, honestly, any win.",
@@ -108,7 +109,6 @@
       "Sic 'Em is more of a suggestion than a strategy."
     ],
     "West Virginia": [
-      "Mountaineers by name. Molehills by effort.",
       "\u26f0\ufe0f We climb mountains. Also our own mistakes, apparently.",
       "\ud83d\ude05 Let's Go Mountaineers! (Please, someone, let's go.)",
       "\ud83d\ude05 Almost heaven? More like almost .500.",
