@@ -3,6 +3,7 @@
     "1254972344070311970",
     "1264702227197591555",
     "1266038078250946676",
+    "1344382759480721459",
     "1358920417347108874",
     "1378208565873082402",
     "1398491406330495040",
@@ -12,9 +13,9 @@
     "546797525919596564",
     "796043766695067719"
   ],
-  "last_message_id_main": "1533392515472818289",
+  "last_message_id_main": "1533439614034120926",
   "last_message_id_admin": "1532939191707500716",
-  "last_updated": "2026-08-02T09:25:15.388830+00:00",
+  "last_updated": "2026-08-02T12:10:44.940953+00:00",
   "last_reset_at": "2026-08-01T02:33:44.142880+00:00",
   "cycle_count": 4,
   "current_week_sort": 5,
@@ -34,7 +35,8 @@
     "Missouri": "\ud83d\ude05 M-I-Z... we'll take a win, honestly, any win.",
     "Stanford": "Fight, Fight, Fight!",
     "Colorado": "Prime-time hype, undercard results.",
-    "Oklahoma State": "Ride 'em, Cowboys!"
+    "Oklahoma State": "Ride 'em, Cowboys!",
+    "Virginia Tech": "Let's Go... Hokies! \ud83e\udd83"
   },
   "tagline_queue_by_team": {
     "Kentucky": [
@@ -180,6 +182,17 @@
       "Cowboys by name. Rodeo clowns by 4th quarter.",
       "Go Pokes! \ud83e\udd20",
       "Big 12 also-ran, and everybody in the league knows it."
+    ],
+    "Virginia Tech": [
+      "Proud turkey. Regular loser.",
+      "\ud83e\udd83 We're not turkeys, we're just misunderstood eagles.",
+      "\ud83e\udd83 Gobble till we wobble, straight to another rebuild.",
+      "\ud83d\ude05 Enter Sandman hits different when you're down 21.",
+      "\ud83d\ude02 Hokie Pride, occasionally Hokie Confusion.",
+      "Former ACC power, current ACC cautionary tale.",
+      "Enter Sandman still hits. Everything after kickoff, less so.",
+      "\ud83e\udd83 We may be a turkey, but we're a PROUD turkey.",
+      "Hokie Pride!"
     ]
   }
 }
