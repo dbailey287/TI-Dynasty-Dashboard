@@ -1,5 +1,6 @@
 {
   "ready_user_ids": [
+    "1123408868458889306",
     "1254972344070311970",
     "1264702227197591555",
     "1266038078250946676",
@@ -13,15 +14,15 @@
     "546797525919596564",
     "796043766695067719"
   ],
-  "last_message_id_main": "1533446959241892000",
+  "last_message_id_main": "1533486347514417194",
   "last_message_id_admin": "1532939191707500716",
-  "last_updated": "2026-08-02T13:52:58.585969+00:00",
+  "last_updated": "2026-08-02T14:53:07.115687+00:00",
   "last_reset_at": "2026-08-01T02:33:44.142880+00:00",
   "cycle_count": 4,
   "current_week_sort": 5,
   "last_tagline_by_team": {
     "Kentucky": "\ud83c\udfc8 Football season: the appetizer before basketball season.",
-    "Pittsburgh": "\ud83d\ude24 Hail to Pitt, and hail Mary passes.",
+    "Pittsburgh": "Hail to Pitt! \ud83d\udc3e",
     "California": "\ud83d\udc3b Golden Bears, modest record, unbreakable spirit.",
     "Arizona State": "\ud83e\udd37 Bowl game? We'll take it under advisement.",
     "Temple": "\ud83e\udd89 Fear the Owl! Or at least mildly acknowledge it.",
@@ -46,7 +47,6 @@
       "\ud83c\udfc0 Ngl we're just here till basketball season."
     ],
     "Pittsburgh": [
-      "Hail to Pitt! \ud83d\udc3e",
       "Let's Go, Pitt!",
       "\ud83d\udc06 Panthers are stealthy. Also stealthily bad on 3rd down.",
       "\ud83d\ude05 Hail to Pitt, hail to whatever happens next.",
