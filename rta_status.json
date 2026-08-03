@@ -1,15 +1,17 @@
 {
-  "ready_user_ids": [],
-  "last_message_id_main": "1533638991524659421",
+  "ready_user_ids": [
+    "1392129295916466176"
+  ],
+  "last_message_id_main": "1533642599779401789",
   "last_message_id_admin": "1533635932241268806",
-  "last_updated": "2026-08-03T00:53:49.548846+00:00",
+  "last_updated": "2026-08-03T03:51:47.632517+00:00",
   "last_reset_at": "2026-08-03T00:53:48.195661+00:00",
   "cycle_count": 5,
   "current_week_sort": 6,
   "last_tagline_by_team": {
     "Kentucky": "\ud83c\udfc8 Football season: the appetizer before basketball season.",
     "Pittsburgh": "Hail to Pitt! \ud83d\udc3e",
-    "California": "\ud83d\udc3b Golden Bears, modest record, unbreakable spirit.",
+    "California": "\ud83c\udf09 Bridging the gap between \"good\" and \"next year.\"",
     "Arizona State": "\ud83e\udd37 Bowl game? We'll take it under advisement.",
     "Temple": "\ud83e\udd89 Fear the Owl! Or at least mildly acknowledge it.",
     "Northwestern": "\ud83d\udcda #1 in the classroom, and that's what matters (please clap).",
@@ -39,7 +41,6 @@
       "\ud83d\udc06 Panthers prowl. We mostly just kinda wander."
     ],
     "California": [
-      "\ud83c\udf09 Bridging the gap between \"good\" and \"next year.\"",
       "Go Bears! \ud83d\udc99\ud83d\udc9b",
       "\ud83c\udf09 Golden Gate energy, bronze medal record.",
       "\ud83d\udc3b Cal Bears: nationally ranked in vibes only.",
