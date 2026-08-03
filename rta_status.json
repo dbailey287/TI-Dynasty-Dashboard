@@ -1,10 +1,11 @@
 {
   "ready_user_ids": [
-    "1392129295916466176"
+    "1392129295916466176",
+    "476855101353623582"
   ],
-  "last_message_id_main": "1533642599779401789",
+  "last_message_id_main": "1533686166065381426",
   "last_message_id_admin": "1533635932241268806",
-  "last_updated": "2026-08-03T03:51:47.632517+00:00",
+  "last_updated": "2026-08-03T06:49:07.278852+00:00",
   "last_reset_at": "2026-08-03T00:53:48.195661+00:00",
   "cycle_count": 5,
   "current_week_sort": 6,
@@ -14,7 +15,7 @@
     "California": "\ud83c\udf09 Bridging the gap between \"good\" and \"next year.\"",
     "Arizona State": "\ud83e\udd37 Bowl game? We'll take it under advisement.",
     "Temple": "\ud83e\udd89 Fear the Owl! Or at least mildly acknowledge it.",
-    "Northwestern": "\ud83d\udcda #1 in the classroom, and that's what matters (please clap).",
+    "Northwestern": "\ud83d\ude39 Wildcats by name, housecats by performance.",
     "SMU": "Our uniforms have never lost a game. Unfortunately we have to wear them while playing.",
     "Virginia": "Cavaliers by name. Pushovers by October.",
     "Baylor": "\ud83d\udc3b Bears hibernate. We're just resting up for later.",
@@ -60,7 +61,6 @@
       "T-U, Owls!"
     ],
     "Northwestern": [
-      "\ud83d\ude39 Wildcats by name, housecats by performance.",
       "\ud83c\udf93 We may lose the game, but we WIN the postgame thesis defense.",
       "U Rah Rah!",
       "\ud83d\ude2c The 'Cats have claws. Sometimes we even use them.",
