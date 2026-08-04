@@ -4,13 +4,14 @@
     "1264702227197591555",
     "1358920417347108874",
     "1392129295916466176",
+    "1398491406330495040",
     "476855101353623582",
     "546797525919596564",
     "796043766695067719"
   ],
-  "last_message_id_main": "1534320395153444875",
+  "last_message_id_main": "1534345736689287301",
   "last_message_id_admin": "1533635932241268806",
-  "last_updated": "2026-08-04T22:43:46.100822+00:00",
+  "last_updated": "2026-08-04T23:47:12.123332+00:00",
   "last_reset_at": "2026-08-03T00:53:48.195661+00:00",
   "cycle_count": 5,
   "current_week_sort": 6,
@@ -26,7 +27,7 @@
     "Baylor": "\ud83d\udc3b Bears hibernate. We're just resting up for later.",
     "West Virginia": "\u26f0\ufe0f We climb mountains. Also our own mistakes, apparently.",
     "Arkansas": "\ud83d\ude24 Woo Pig Sooie \u2014 said with increasing desperation each week.",
-    "South Carolina": "\ud83d\ude02 Cock-a-doodle-don't... but we'll try again next week.",
+    "South Carolina": "Fighting Gamecocks!",
     "Missouri": "\ud83d\ude05 M-I-Z... we'll take a win, honestly, any win.",
     "Stanford": "\ud83d\ude02 Fight Fight Fight, mostly for a bowl bid.",
     "Colorado": "\ud83e\uddac We stampede... eventually. Once we find our shoes.",
@@ -119,7 +120,6 @@
       "Hogs by mascot. Doormats by scoreboard."
     ],
     "South Carolina": [
-      "Fighting Gamecocks!",
       "Gamecocks by mascot. Punching bags by scoreboard.",
       "SEC bottom-tier, and Sandstorm can't save us.",
       "\ud83d\udc14 We may not win, but we WILL strut about it.",
