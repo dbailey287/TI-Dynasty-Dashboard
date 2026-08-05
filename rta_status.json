@@ -7,11 +7,12 @@
     "1398491406330495040",
     "476855101353623582",
     "546797525919596564",
-    "796043766695067719"
+    "796043766695067719",
+    "931224677345546291"
   ],
-  "last_message_id_main": "1534345736689287301",
+  "last_message_id_main": "1534365545456205964",
   "last_message_id_admin": "1533635932241268806",
-  "last_updated": "2026-08-04T23:47:12.123332+00:00",
+  "last_updated": "2026-08-05T01:09:55.775081+00:00",
   "last_reset_at": "2026-08-03T00:53:48.195661+00:00",
   "cycle_count": 5,
   "current_week_sort": 6,
@@ -22,7 +23,7 @@
     "Arizona State": "\ud83e\udd37 Bowl game? We'll take it under advisement.",
     "Temple": "\ud83e\udd89 Fear the Owl! Or at least mildly acknowledge it.",
     "Northwestern": "\ud83d\ude39 Wildcats by name, housecats by performance.",
-    "SMU": "Our uniforms have never lost a game. Unfortunately we have to wear them while playing.",
+    "SMU": "\u2728 Dallas swagger, middling record \u2014 we contain multitudes.",
     "Virginia": "\u2694\ufe0f We brought a sword to a gunfight, and still tried our best.",
     "Baylor": "\ud83d\udc3b Bears hibernate. We're just resting up for later.",
     "West Virginia": "\u26f0\ufe0f We climb mountains. Also our own mistakes, apparently.",
@@ -74,7 +75,6 @@
       "Go 'Cats! \ud83d\udc9c"
     ],
     "SMU": [
-      "\u2728 Dallas swagger, middling record \u2014 we contain multitudes.",
       "Pony Up! \ud83d\udc34",
       "\ud83d\ude02 We Pony Up, then immediately Pony Down.",
       "\u2728 Mustangs: all flash, occasionally some substance.",
