@@ -1,5 +1,6 @@
 {
   "ready_user_ids": [
+    "1254972344070311970",
     "1259468750105743410",
     "1264702227197591555",
     "1358920417347108874",
@@ -10,9 +11,9 @@
     "796043766695067719",
     "931224677345546291"
   ],
-  "last_message_id_main": "1534365545456205964",
+  "last_message_id_main": "1534379555786326068",
   "last_message_id_admin": "1533635932241268806",
-  "last_updated": "2026-08-05T01:09:55.775081+00:00",
+  "last_updated": "2026-08-05T04:28:14.250737+00:00",
   "last_reset_at": "2026-08-03T00:53:48.195661+00:00",
   "cycle_count": 5,
   "current_week_sort": 6,
@@ -20,7 +21,7 @@
     "Kentucky": "\ud83d\ude02 Big Blue Nation, medium blue expectations.",
     "Pittsburgh": "Hail to Pitt! \ud83d\udc3e",
     "California": "\ud83c\udf09 Bridging the gap between \"good\" and \"next year.\"",
-    "Arizona State": "\ud83e\udd37 Bowl game? We'll take it under advisement.",
+    "Arizona State": "Forks Up!",
     "Temple": "\ud83e\udd89 Fear the Owl! Or at least mildly acknowledge it.",
     "Northwestern": "\ud83d\ude39 Wildcats by name, housecats by performance.",
     "SMU": "\u2728 Dallas swagger, middling record \u2014 we contain multitudes.",
@@ -54,7 +55,6 @@
       "\ud83d\ude05 We're not tanking, we're 'strategically evaluating.'"
     ],
     "Arizona State": [
-      "Forks Up!",
       "\ud83d\udd25 We run hot and cold. Mostly cold. But hot sometimes!",
       "\ud83d\ude08 We may be cursed, but at least we're spicy.",
       "\ud83d\udd31 Small pitchfork energy, big pitchfork dreams.",
