@@ -4,16 +4,19 @@
     "1259468750105743410",
     "1264702227197591555",
     "1358920417347108874",
+    "1378208565873082402",
     "1392129295916466176",
     "1398491406330495040",
+    "1518725345149321337",
+    "402459179417206784",
     "476855101353623582",
     "546797525919596564",
     "796043766695067719",
     "931224677345546291"
   ],
-  "last_message_id_main": "1534702975724027996",
+  "last_message_id_main": "1534764842752147487",
   "last_message_id_admin": "1533635932241268806",
-  "last_updated": "2026-08-06T00:09:32.600496+00:00",
+  "last_updated": "2026-08-06T03:33:29.226316+00:00",
   "last_reset_at": "2026-08-03T00:53:48.195661+00:00",
   "cycle_count": 5,
   "current_week_sort": 6,
@@ -22,18 +25,18 @@
     "Pittsburgh": "Hail to Pitt! \ud83d\udc3e",
     "California": "\ud83c\udf09 Bridging the gap between \"good\" and \"next year.\"",
     "Arizona State": "Forks Up!",
-    "Temple": "\ud83e\udd89 Fear the Owl! Or at least mildly acknowledge it.",
+    "Temple": "\ud83d\ude34 Owls are nocturnal. Our offense only shows up at night too, apparently.",
     "Northwestern": "\ud83d\ude39 Wildcats by name, housecats by performance.",
     "SMU": "\u2728 Dallas swagger, middling record \u2014 we contain multitudes.",
     "Virginia": "\u2694\ufe0f We brought a sword to a gunfight, and still tried our best.",
-    "Baylor": "\ud83d\udc3b Bears hibernate. We're just resting up for later.",
+    "Baylor": "\ud83d\ude02 We bear-ly made that first down.",
     "West Virginia": "\u26f0\ufe0f We climb mountains. Also our own mistakes, apparently.",
     "Arkansas": "\ud83d\ude24 Woo Pig Sooie \u2014 said with increasing desperation each week.",
     "South Carolina": "Fighting Gamecocks!",
     "Missouri": "\ud83d\ude05 M-I-Z... we'll take a win, honestly, any win.",
     "Stanford": "\ud83d\ude02 Fight Fight Fight, mostly for a bowl bid.",
     "Colorado": "\ud83e\uddac We stampede... eventually. Once we find our shoes.",
-    "Oklahoma State": "Ride 'em, Cowboys!",
+    "Oklahoma State": "\ud83e\udd20 We fell off the horse. Getting back on. Eventually.",
     "Virginia Tech": "Let's Go... Hokies! \ud83e\udd83"
   },
   "tagline_queue_by_team": {
@@ -61,7 +64,6 @@
       "Go Devils!"
     ],
     "Temple": [
-      "\ud83d\ude34 Owls are nocturnal. Our offense only shows up at night too, apparently.",
       "\ud83d\ude02 Fear the Owl (mild, occasional fear only).",
       "Fear the Owl! \ud83e\udd89",
       "T-U, Owls!"
@@ -93,7 +95,6 @@
       "Wahoowa! \ud83d\udd36"
     ],
     "Baylor": [
-      "\ud83d\ude02 We bear-ly made that first down.",
       "\ud83d\udc3b Slow claps for our slow starts.",
       "Big 12 attendance numbers carrying harder than the offense.",
       "\ud83d\udc3b Hibernation season started early this year.",
@@ -158,7 +159,6 @@
       "\ud83e\uddac Big, slow, and occasionally dangerous. Just like our offense."
     ],
     "Oklahoma State": [
-      "\ud83e\udd20 We fell off the horse. Getting back on. Eventually.",
       "\ud83d\ude02 Cowboys don't cry. We just take a moment.",
       "\ud83d\udc34 Giddy up, or at least giddy... eventually.",
       "\ud83d\ude02 Cowboy up! Or at least cowboy... sideways.",
