@@ -1,8 +1,10 @@
 {
-  "ready_user_ids": [],
-  "last_message_id_main": "1534887192483201086",
+  "ready_user_ids": [
+    "1259468750105743410"
+  ],
+  "last_message_id_main": "1534946729504280709",
   "last_message_id_admin": "1534882652090269777",
-  "last_updated": "2026-08-06T11:33:44.096008+00:00",
+  "last_updated": "2026-08-06T15:33:45.441103+00:00",
   "last_reset_at": "2026-08-06T11:33:41.397238+00:00",
   "cycle_count": 6,
   "current_week_sort": 7,
@@ -14,7 +16,7 @@
     "Temple": "\ud83d\ude34 Owls are nocturnal. Our offense only shows up at night too, apparently.",
     "Northwestern": "\ud83d\ude39 Wildcats by name, housecats by performance.",
     "SMU": "\u2728 Dallas swagger, middling record \u2014 we contain multitudes.",
-    "Virginia": "\u2694\ufe0f We brought a sword to a gunfight, and still tried our best.",
+    "Virginia": "ACC bottom-half, and the Wahoos know it.",
     "Baylor": "\ud83d\ude02 We bear-ly made that first down.",
     "West Virginia": "\u26f0\ufe0f We climb mountains. Also our own mistakes, apparently.",
     "Arkansas": "\ud83d\ude24 Woo Pig Sooie \u2014 said with increasing desperation each week.",
@@ -73,7 +75,6 @@
       "Go Mustangs!"
     ],
     "Virginia": [
-      "ACC bottom-half, and the Wahoos know it.",
       "Go Hoos!",
       "We bring school spirit. Everyone else brings a running game.",
       "\ud83d\udd36 Wahoowa, wahoo-uh-oh.",
