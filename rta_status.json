@@ -4,11 +4,12 @@
     "1259468750105743410",
     "1264702227197591555",
     "402459179417206784",
-    "476855101353623582"
+    "476855101353623582",
+    "546797525919596564"
   ],
-  "last_message_id_main": "1535223256842510336",
+  "last_message_id_main": "1535228802274431067",
   "last_message_id_admin": "1534882652090269777",
-  "last_updated": "2026-08-07T10:07:39.081981+00:00",
+  "last_updated": "2026-08-07T11:05:08.812784+00:00",
   "last_reset_at": "2026-08-06T11:33:41.397238+00:00",
   "cycle_count": 6,
   "current_week_sort": 7,
@@ -22,7 +23,7 @@
     "SMU": "\u2728 Dallas swagger, middling record \u2014 we contain multitudes.",
     "Virginia": "ACC bottom-half, and the Wahoos know it.",
     "Baylor": "\ud83d\ude02 We bear-ly made that first down.",
-    "West Virginia": "\u26f0\ufe0f We climb mountains. Also our own mistakes, apparently.",
+    "West Virginia": "\ud83d\ude05 Let's Go Mountaineers! (Please, someone, let's go.)",
     "Arkansas": "\ud83d\ude24 Woo Pig Sooie \u2014 said with increasing desperation each week.",
     "South Carolina": "Fighting Gamecocks!",
     "Missouri": "\ud83d\ude05 M-I-Z... we'll take a win, honestly, any win.",
@@ -92,7 +93,6 @@
       "Sic 'Em is more of a suggestion than a strategy."
     ],
     "West Virginia": [
-      "\ud83d\ude05 Let's Go Mountaineers! (Please, someone, let's go.)",
       "\ud83d\ude05 Almost heaven? More like almost .500.",
       "We climb mountains. Also our own self-inflicted holes.",
       "\u26f0\ufe0f We climb. Slowly. With frequent breaks.",
