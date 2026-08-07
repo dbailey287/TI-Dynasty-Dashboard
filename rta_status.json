@@ -4,15 +4,18 @@
     "1123408868458889306",
     "1259468750105743410",
     "1264702227197591555",
+    "1266038078250946676",
     "1358920417347108874",
     "1392129295916466176",
     "402459179417206784",
     "476855101353623582",
-    "546797525919596564"
+    "546797525919596564",
+    "796043766695067719",
+    "931224677345546291"
   ],
-  "last_message_id_main": "1535269776048259155",
+  "last_message_id_main": "1535282928991477791",
   "last_message_id_admin": "1534882652090269777",
-  "last_updated": "2026-08-07T13:09:38.533192+00:00",
+  "last_updated": "2026-08-07T14:18:24.080212+00:00",
   "last_reset_at": "2026-08-06T11:33:41.397238+00:00",
   "cycle_count": 6,
   "current_week_sort": 7,
@@ -23,13 +26,13 @@
     "Arizona State": "Forks Up!",
     "Temple": "\ud83d\ude02 Fear the Owl (mild, occasional fear only).",
     "Northwestern": "\ud83c\udf93 We may lose the game, but we WIN the postgame thesis defense.",
-    "SMU": "\u2728 Dallas swagger, middling record \u2014 we contain multitudes.",
+    "SMU": "Pony Up! \ud83d\udc34",
     "Virginia": "ACC bottom-half, and the Wahoos know it.",
     "Baylor": "\ud83d\ude02 We bear-ly made that first down.",
     "West Virginia": "\ud83d\ude05 Let's Go Mountaineers! (Please, someone, let's go.)",
-    "Arkansas": "\ud83d\ude24 Woo Pig Sooie \u2014 said with increasing desperation each week.",
+    "Arkansas": "\ud83d\udc17 We may be hogs, but we're PROUD hogs.",
     "South Carolina": "Fighting Gamecocks!",
-    "Missouri": "\ud83d\ude05 M-I-Z... we'll take a win, honestly, any win.",
+    "Missouri": "\ud83d\udc05 Roaring on the inside, whimpering on 3rd down.",
     "Stanford": "\ud83e\udd13 4.2 GPA, mediocre record, no regrets.",
     "Colorado": "We peaked in the preseason hype video.",
     "Oklahoma State": "\ud83e\udd20 We fell off the horse. Getting back on. Eventually.",
@@ -66,7 +69,6 @@
       "Go 'Cats! \ud83d\udc9c"
     ],
     "SMU": [
-      "Pony Up! \ud83d\udc34",
       "\ud83d\ude02 We Pony Up, then immediately Pony Down.",
       "\u2728 Mustangs: all flash, occasionally some substance.",
       "\ud83d\udc34 Mustangs run wild. Occasionally in the wrong direction.",
@@ -99,7 +101,6 @@
       "WVU! WVU!"
     ],
     "Arkansas": [
-      "\ud83d\udc17 We may be hogs, but we're PROUD hogs.",
       "Callin' the Hogs!",
       "\ud83c\udf56 Hog heaven is a state of mind, not a record.",
       "Go Hogs Go!",
@@ -116,7 +117,6 @@
       "We show up loud and leave quiet. Every single week."
     ],
     "Missouri": [
-      "\ud83d\udc05 Roaring on the inside, whimpering on 3rd down.",
       "Go Tigers!",
       "SEC middle-of-the-pack, and we've made peace with it.",
       "Tigers on the jersey. Housecats on the field.",
