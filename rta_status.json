@@ -1,16 +1,18 @@
 {
   "ready_user_ids": [
-    "1259468750105743410"
+    "1123408868458889306",
+    "1259468750105743410",
+    "1264702227197591555"
   ],
-  "last_message_id_main": "1534946729504280709",
+  "last_message_id_main": "1535022081312555018",
   "last_message_id_admin": "1534882652090269777",
-  "last_updated": "2026-08-06T15:33:45.441103+00:00",
+  "last_updated": "2026-08-07T00:34:25.333280+00:00",
   "last_reset_at": "2026-08-06T11:33:41.397238+00:00",
   "cycle_count": 6,
   "current_week_sort": 7,
   "last_tagline_by_team": {
     "Kentucky": "\ud83d\ude02 Big Blue Nation, medium blue expectations.",
-    "Pittsburgh": "Hail to Pitt! \ud83d\udc3e",
+    "Pittsburgh": "Let's Go, Pitt!",
     "California": "\ud83c\udf09 Bridging the gap between \"good\" and \"next year.\"",
     "Arizona State": "Forks Up!",
     "Temple": "\ud83d\ude34 Owls are nocturnal. Our offense only shows up at night too, apparently.",
@@ -23,7 +25,7 @@
     "South Carolina": "Fighting Gamecocks!",
     "Missouri": "\ud83d\ude05 M-I-Z... we'll take a win, honestly, any win.",
     "Stanford": "\ud83d\ude02 Fight Fight Fight, mostly for a bowl bid.",
-    "Colorado": "\ud83e\uddac We stampede... eventually. Once we find our shoes.",
+    "Colorado": "We peaked in the preseason hype video.",
     "Oklahoma State": "\ud83e\udd20 We fell off the horse. Getting back on. Eventually.",
     "Virginia Tech": "Let's Go... Hokies! \ud83e\udd83"
   },
@@ -34,7 +36,6 @@
       "\ud83c\udfc0 Ngl we're just here till basketball season."
     ],
     "Pittsburgh": [
-      "Let's Go, Pitt!",
       "\ud83d\udc06 Panthers are stealthy. Also stealthily bad on 3rd down.",
       "\ud83d\ude05 Hail to Pitt, hail to whatever happens next.",
       "\ud83d\udc06 Panthers prowl. We mostly just kinda wander."
@@ -136,7 +137,6 @@
       "\ud83e\udd13 We'll out-smart you, if not out-score you."
     ],
     "Colorado": [
-      "We peaked in the preseason hype video.",
       "\ud83c\udfd4\ufe0f Elevation's high. So is our blood pressure watching this team.",
       "\ud83d\ude24 Buffs don't rebuild. We reload. Eventually.",
       "Buffs stampede. We mosey.",
