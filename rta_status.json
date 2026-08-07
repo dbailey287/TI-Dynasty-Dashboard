@@ -7,6 +7,7 @@
     "1264702227197591555",
     "1266038078250946676",
     "1358920417347108874",
+    "1378208565873082402",
     "1392129295916466176",
     "402459179417206784",
     "476855101353623582",
@@ -14,9 +15,9 @@
     "796043766695067719",
     "931224677345546291"
   ],
-  "last_message_id_main": "1535376706272108584",
+  "last_message_id_main": "1535378836990988348",
   "last_message_id_admin": "1534882652090269777",
-  "last_updated": "2026-08-07T20:00:10.357190+00:00",
+  "last_updated": "2026-08-07T20:43:34.708821+00:00",
   "last_reset_at": "2026-08-06T11:33:41.397238+00:00",
   "cycle_count": 6,
   "current_week_sort": 7,
@@ -36,7 +37,7 @@
     "Missouri": "\ud83d\udc05 Roaring on the inside, whimpering on 3rd down.",
     "Stanford": "\ud83e\udd13 4.2 GPA, mediocre record, no regrets.",
     "Colorado": "We peaked in the preseason hype video.",
-    "Oklahoma State": "\ud83e\udd20 We fell off the horse. Getting back on. Eventually.",
+    "Oklahoma State": "\ud83d\ude02 Cowboys don't cry. We just take a moment.",
     "Virginia Tech": "Let's Go... Hokies! \ud83e\udd83"
   },
   "tagline_queue_by_team": {
@@ -144,7 +145,6 @@
       "\ud83e\uddac Big, slow, and occasionally dangerous. Just like our offense."
     ],
     "Oklahoma State": [
-      "\ud83d\ude02 Cowboys don't cry. We just take a moment.",
       "\ud83d\udc34 Giddy up, or at least giddy... eventually.",
       "\ud83d\ude02 Cowboy up! Or at least cowboy... sideways.",
       "We're rebuilding. We've been rebuilding since the Clinton administration.",
