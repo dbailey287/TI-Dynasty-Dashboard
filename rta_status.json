@@ -2,6 +2,7 @@
   "ready_user_ids": [
     "1069336188726554824",
     "1123408868458889306",
+    "1254972344070311970",
     "1259468750105743410",
     "1264702227197591555",
     "1266038078250946676",
@@ -13,9 +14,9 @@
     "796043766695067719",
     "931224677345546291"
   ],
-  "last_message_id_main": "1535316453354512444",
+  "last_message_id_main": "1535376706272108584",
   "last_message_id_admin": "1534882652090269777",
-  "last_updated": "2026-08-07T16:09:14.926903+00:00",
+  "last_updated": "2026-08-07T20:00:10.357190+00:00",
   "last_reset_at": "2026-08-06T11:33:41.397238+00:00",
   "cycle_count": 6,
   "current_week_sort": 7,
@@ -23,7 +24,7 @@
     "Kentucky": "Go Big Blue! \ud83d\udc99",
     "Pittsburgh": "Let's Go, Pitt!",
     "California": "\ud83d\udc3b Cal Bears: nationally ranked in vibes only.",
-    "Arizona State": "Forks Up!",
+    "Arizona State": "\ud83d\udd25 We run hot and cold. Mostly cold. But hot sometimes!",
     "Temple": "\ud83d\ude02 Fear the Owl (mild, occasional fear only).",
     "Northwestern": "\ud83c\udf93 We may lose the game, but we WIN the postgame thesis defense.",
     "SMU": "Pony Up! \ud83d\udc34",
@@ -52,7 +53,6 @@
       "\ud83d\ude05 We're not tanking, we're 'strategically evaluating.'"
     ],
     "Arizona State": [
-      "\ud83d\udd25 We run hot and cold. Mostly cold. But hot sometimes!",
       "\ud83d\ude08 We may be cursed, but at least we're spicy.",
       "\ud83d\udd31 Small pitchfork energy, big pitchfork dreams.",
       "Go Devils!"
