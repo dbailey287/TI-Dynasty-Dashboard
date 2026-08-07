@@ -224,7 +224,12 @@ VISION_PROMPT = """
 Analyze this College Football Team Schedule screenshot.
 Extract the schedule in strict JSON format with keys "featured_team" and "schedule".
 Rules:
-1. "featured_team": The main team name in the header card (e.g. "Arkansas", "Arizona State").
+1. "featured_team": Read this from the SMALL white/light selector box near the
+   top-left of the screen, next to a small controller-button icon labeled "LT"
+   (NOT the large team name/logo in the main header card above it). That header
+   card shows the user's own coached team, which is NOT necessarily the team
+   whose schedule this screenshot displays -- the small "LT" selector box is
+   the reliable indicator of which team's schedule is actually shown here.
 2. "schedule": List of objects with keys:
    - "week": Week string/number (e.g. "0", "1", "6", "12", "Conf Champ").
    - "date": Date string (e.g., "Sat, Sep 5") or "" if BYE.
