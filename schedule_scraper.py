@@ -237,8 +237,15 @@ Rules:
    - "opponent_rank": Rank number string if present (e.g. "20", "19", "4"), or "-" if unranked/BYE.
    - "opponent": Exact opponent team name (e.g. "Tennessee", "Oregon State", "BYU", "Ohio State"). If BYE, use "BYE".
    - "outcome": "W" or "L" if game completed, or "-" if unplayed/BYE.
-   - "team_score": Integer score of featured team, or null.
-   - "opponent_score": Integer score of opponent team, or null.
+   - "team_score": Integer score of the featured team (the team identified in rule 1 above), or null if unplayed.
+   - "opponent_score": Integer score of the opponent, or null if unplayed.
+   IMPORTANT on scores: the on-screen result text (e.g. "W 42-39" or "L 31-0") is
+   NOT always "featured team's score" first -- it shows the WINNING team's score
+   first and the LOSING team's score second, regardless of which team this
+   screenshot is about. So if outcome is "W", team_score is the FIRST number and
+   opponent_score is the SECOND. If outcome is "L", team_score is the SECOND
+   number and opponent_score is the FIRST number (the featured team lost, so
+   their own score is the smaller/losing one, even though it's listed second).
 Return ONLY raw JSON. No markdown formatting or code blocks.
 """
 
@@ -440,6 +447,28 @@ def process_vision_data(data: dict) -> list[dict]:
         t_score = item.get("team_score")
         o_score = item.get("opponent_score")
         outcome = item.get("outcome", "-")
+
+        # Safety net: the vision model can misread which score belongs to
+        # which team on a loss, since the on-screen text shows the WINNER's
+        # score first, not the featured team's score first -- an easy thing
+        # to get backwards, and confirmed happening in practice. The single
+        # W/L letter is far less ambiguous to read correctly than score
+        # order, so trust it and auto-correct the scores to match rather
+        # than silently writing a self-contradictory row to the CSV.
+        if t_score is not None and o_score is not None:
+            if outcome == "W" and t_score < o_score:
+                log.warning(
+                    "Score/outcome mismatch for %s vs %s (W but %s-%s) -- swapping scores.",
+                    matched_team, opponent, t_score, o_score,
+                )
+                t_score, o_score = o_score, t_score
+            elif outcome == "L" and t_score > o_score:
+                log.warning(
+                    "Score/outcome mismatch for %s vs %s (L but %s-%s) -- swapping scores.",
+                    matched_team, opponent, t_score, o_score,
+                )
+                t_score, o_score = o_score, t_score
+
         status = "Completed" if outcome in ["W", "L"] else "Upcoming"
         margin = (t_score - o_score) if (t_score is not None and o_score is not None) else None
 
