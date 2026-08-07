@@ -1,5 +1,6 @@
 {
   "ready_user_ids": [
+    "1069336188726554824",
     "1123408868458889306",
     "1259468750105743410",
     "1264702227197591555",
@@ -7,9 +8,9 @@
     "476855101353623582",
     "546797525919596564"
   ],
-  "last_message_id_main": "1535228802274431067",
+  "last_message_id_main": "1535251296150364170",
   "last_message_id_admin": "1534882652090269777",
-  "last_updated": "2026-08-07T11:05:08.812784+00:00",
+  "last_updated": "2026-08-07T11:54:44.673749+00:00",
   "last_reset_at": "2026-08-06T11:33:41.397238+00:00",
   "cycle_count": 6,
   "current_week_sort": 7,
@@ -27,7 +28,7 @@
     "Arkansas": "\ud83d\ude24 Woo Pig Sooie \u2014 said with increasing desperation each week.",
     "South Carolina": "Fighting Gamecocks!",
     "Missouri": "\ud83d\ude05 M-I-Z... we'll take a win, honestly, any win.",
-    "Stanford": "\ud83d\ude02 Fight Fight Fight, mostly for a bowl bid.",
+    "Stanford": "\ud83e\udd13 4.2 GPA, mediocre record, no regrets.",
     "Colorado": "We peaked in the preseason hype video.",
     "Oklahoma State": "\ud83e\udd20 We fell off the horse. Getting back on. Eventually.",
     "Virginia Tech": "Let's Go... Hokies! \ud83e\udd83"
@@ -127,7 +128,6 @@
       "\ud83d\udc2f We're tigers. We just prefer naps to hunting."
     ],
     "Stanford": [
-      "\ud83e\udd13 4.2 GPA, mediocre record, no regrets.",
       "Our football team has a lower GPA impact than our actual GPA.",
       "ACC's academic pride, everyone else's easy win.",
       "\ud83c\udf32 We photosynthesize wins. Very slowly.",
