@@ -2,11 +2,13 @@
   "ready_user_ids": [
     "1123408868458889306",
     "1259468750105743410",
-    "1264702227197591555"
+    "1264702227197591555",
+    "402459179417206784",
+    "476855101353623582"
   ],
-  "last_message_id_main": "1535022081312555018",
+  "last_message_id_main": "1535122691659661374",
   "last_message_id_admin": "1534882652090269777",
-  "last_updated": "2026-08-07T00:34:25.333280+00:00",
+  "last_updated": "2026-08-07T03:37:22.392580+00:00",
   "last_reset_at": "2026-08-06T11:33:41.397238+00:00",
   "cycle_count": 6,
   "current_week_sort": 7,
@@ -15,8 +17,8 @@
     "Pittsburgh": "Let's Go, Pitt!",
     "California": "\ud83c\udf09 Bridging the gap between \"good\" and \"next year.\"",
     "Arizona State": "Forks Up!",
-    "Temple": "\ud83d\ude34 Owls are nocturnal. Our offense only shows up at night too, apparently.",
-    "Northwestern": "\ud83d\ude39 Wildcats by name, housecats by performance.",
+    "Temple": "\ud83d\ude02 Fear the Owl (mild, occasional fear only).",
+    "Northwestern": "\ud83c\udf93 We may lose the game, but we WIN the postgame thesis defense.",
     "SMU": "\u2728 Dallas swagger, middling record \u2014 we contain multitudes.",
     "Virginia": "ACC bottom-half, and the Wahoos know it.",
     "Baylor": "\ud83d\ude02 We bear-ly made that first down.",
@@ -53,12 +55,10 @@
       "Go Devils!"
     ],
     "Temple": [
-      "\ud83d\ude02 Fear the Owl (mild, occasional fear only).",
       "Fear the Owl! \ud83e\udd89",
       "T-U, Owls!"
     ],
     "Northwestern": [
-      "\ud83c\udf93 We may lose the game, but we WIN the postgame thesis defense.",
       "U Rah Rah!",
       "\ud83d\ude2c The 'Cats have claws. Sometimes we even use them.",
       "Big Ten academics carry harder than the Big Ten schedule.",
