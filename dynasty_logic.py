@@ -923,6 +923,7 @@ TEAM_COLORS = {
     "Arizona State": ("8C1D40", "FFC627"), "Arkansas": ("9D2235", "FFFFFF"),
     "Baylor": ("154734", "FFB81C"), "California": ("003262", "FDB515"),
     "Colorado": ("CFB87C", "000000"), "Kentucky": ("0033A0", "FFFFFF"),
+    "Maryland": ("E03A3E", "000000"),
     "Missouri": ("F1B82D", "000000"),
     "Northwestern": ("4E2A84", "FFFFFF"), "Oklahoma State": ("FF7300", "000000"),
     "Pittsburgh": ("003594", "FFB81C"), "SMU": ("C8102E", "354CA1"),
