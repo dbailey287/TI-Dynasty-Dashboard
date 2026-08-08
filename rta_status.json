@@ -4,13 +4,15 @@
     "1254972344070311970",
     "1358920417347108874",
     "1398491406330495040",
+    "345353840234856449",
+    "402459179417206784",
     "546797525919596564",
     "796043766695067719",
     "931224677345546291"
   ],
-  "last_message_id_main": "1535634937040998482",
+  "last_message_id_main": "1535670394718261289",
   "last_message_id_admin": "1535452693919834162",
-  "last_updated": "2026-08-08T13:54:22.758374+00:00",
+  "last_updated": "2026-08-08T15:26:33.605276+00:00",
   "last_reset_at": "2026-08-08T01:01:39.446292+00:00",
   "cycle_count": 7,
   "current_week_sort": 8,
@@ -19,7 +21,7 @@
     "Pittsburgh": "Let's Go, Pitt!",
     "California": "\ud83d\udc3b Cal Bears: nationally ranked in vibes only.",
     "Arizona State": "\ud83d\ude08 We may be cursed, but at least we're spicy.",
-    "Temple": "\ud83d\ude02 Fear the Owl (mild, occasional fear only).",
+    "Temple": "Fear the Owl! \ud83e\udd89",
     "Northwestern": "\ud83c\udf93 We may lose the game, but we WIN the postgame thesis defense.",
     "SMU": "\ud83d\ude02 We Pony Up, then immediately Pony Down.",
     "Virginia": "ACC bottom-half, and the Wahoos know it.",
@@ -31,7 +33,8 @@
     "Stanford": "Our football team has a lower GPA impact than our actual GPA.",
     "Colorado": "We peaked in the preseason hype video.",
     "Oklahoma State": "\ud83d\ude02 Cowboys don't cry. We just take a moment.",
-    "Virginia Tech": "Let's Go... Hokies! \ud83e\udd83"
+    "Virginia Tech": "Let's Go... Hokies! \ud83e\udd83",
+    "Maryland": "\ud83d\ude05 Big Ten newcomer still figuring out why we're playing Nebraska."
   },
   "tagline_queue_by_team": {
     "Kentucky": [
@@ -50,7 +53,6 @@
       "Go Devils!"
     ],
     "Temple": [
-      "Fear the Owl! \ud83e\udd89",
       "T-U, Owls!"
     ],
     "Northwestern": [
@@ -146,6 +148,16 @@
       "Enter Sandman still hits. Everything after kickoff, less so.",
       "\ud83e\udd83 We may be a turkey, but we're a PROUD turkey.",
       "Hokie Pride!"
+    ],
+    "Maryland": [
+      "\ud83d\udc22 Slow and steady wins the race. We're still working on the winning part.",
+      "Go Terps! \ud83d\udc22",
+      "\ud83d\udc22 We're not slow, we're deliberate.",
+      "SECU Stadium: plenty of seats, negotiable attendance.",
+      "\ud83d\ude02 Terps by name, turtles by pace.",
+      "Fear the Turtle. Mildly acknowledge the record.",
+      "We left the ACC. The ACC did not notice.",
+      "Fear the Turtle! \ud83d\udc22"
     ]
   }
 }
