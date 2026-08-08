@@ -83,6 +83,24 @@ FUNNY_RTA_NAG_MESSAGES = [
     "🎯 So close to advancing... just need a few more RTAs.",
 ]
 
+# OPTIONAL per-team override for real program history. By default,
+# build_quip_prompt() lets Gemini draw on its own general knowledge of a
+# team's football history/reputation -- accuracy isn't required to be
+# perfect there. If a team has an entry HERE, that specific fact is used
+# instead of letting the model free-associate -- useful as a correction
+# lever if a generated line ever gets a detail wrong enough to be worth
+# pinning down, or for a fact worth locking in exactly as-is. Entries
+# here are individually verified against a real source before adding
+# (same standard as confirming "Fear the Turtle" was real). Most teams
+# won't have an entry, and that's fine -- it's an override, not a gate.
+TEAM_HISTORY_FACTS = {
+    # No overrides currently in use -- every team goes through the
+    # general-knowledge Gemini path in build_quip_prompt() uniformly.
+    # Add a team here later if a generated line ever needs a specific
+    # fact pinned down/corrected.
+}
+
+
 # Short, standalone fan chants -- NOT full fight song lyrics (some of
 # those are copyrighted), just the well-known 2-6 word rallying cries
 # fans actually shout. Add more anytime; it's just a plain list per team.
@@ -440,21 +458,60 @@ def build_quip_prompt(form: dict) -> str:
         facts.append(f"Averaging {form['season_ppg']} points scored and {form['season_pa']} points allowed per game this season.")
 
     facts_block = " ".join(facts)
+    fact_count = len(facts)
+
+    history_options = TEAM_HISTORY_FACTS.get(team, [])
+    if history_options:
+        # A specific, pre-verified fact exists for this team (used as an
+        # override/correction lever, not the default path) -- pin the
+        # model to exactly this rather than letting it free-associate.
+        history_fact = random.choice(history_options)
+        history_block = (
+            f"\n\nOne real historical fact about {team}'s program (NOT from this season -- "
+            f"a past season, so don't confuse it with the current-season facts above): "
+            f"{history_fact}\nYou MAY optionally work this in for extra bite, but it's not "
+            f"required -- only use it if it makes the line land better, and never present "
+            f"it as if it happened this season."
+        )
+    else:
+        # Default path: let the model draw on its own general knowledge
+        # of this program's real football history/reputation (famous
+        # droughts, losing streaks, embarrassing losses, rivalries,
+        # historically bad or good eras, etc.) rather than requiring a
+        # pre-verified fact to exist. Exact precision isn't required here
+        # -- approximate/well-known program reputation is good enough --
+        # but it should still be a real, recognizable thing about this
+        # specific program, not something invented from nothing.
+        history_block = (
+            f"\n\nYou may ALSO optionally draw on real general knowledge of {team}'s "
+            f"football program history/reputation -- a well-known losing streak, a "
+            f"famous bad season, a longstanding rivalry, a notable drought, that kind "
+            f"of thing -- to add extra bite, even if you're not 100% certain of exact "
+            f"details. Keep it to something genuinely recognizable about this specific "
+            f"program's real reputation, not something you're making up out of nothing. "
+            f"This is optional -- the season facts above are the required core of the line."
+        )
 
     return f"""You are a trash-talking sports commentator replying to a college football
 coach in a group chat who just posted "RTA" (Ready To Advance) for their
 team, {team}.
 
 Real facts about {team}'s season so far -- use ONLY these, don't invent
-any other games, scores, or opponents:
-{facts_block}
+any other games, scores, opponents, or claims about their schedule/other
+results:
+{facts_block}{history_block}
 
-Write ONE short, punchy line (under 20 words) roasting {team} based on
-these real facts. Tone: sharp, a little mean, more biting than gentle
-ribbing -- this is real trash talk between friends, not a soft joke.
-Can use at most one emoji. Do NOT mention or predict anything about the
-CURRENT week's game, since it hasn't been played yet -- only reference
-the facts given above. Return ONLY the line itself, no quotes, no preamble.
+Write ONE punchy line (roughly 15-30 words) roasting {team}, weaving in
+AT LEAST {min(2, fact_count)} of the {fact_count} season facts above -- not just
+the record alone. If a streak or scoring average is given, make real use
+of it rather than ignoring it. Tone: sharp, a little mean, more biting
+than gentle ribbing -- this is real trash talk between friends, not a
+soft joke. Do NOT reach for generic sports-trash-talk tropes not
+supported by the facts above (e.g. don't claim their wins came against
+weak opponents unless a fact actually says that). Can use at most one
+emoji. Do NOT mention or predict anything about the CURRENT week's game,
+since it hasn't been played yet -- only reference the facts given above.
+Return ONLY the line itself, no quotes, no preamble.
 """
 
 
