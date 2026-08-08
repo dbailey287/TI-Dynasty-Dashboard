@@ -1,27 +1,13 @@
 {
   "ready_user_ids": [
-    "1069336188726554824",
-    "1123408868458889306",
-    "1254972344070311970",
-    "1259468750105743410",
-    "1264702227197591555",
-    "1266038078250946676",
-    "1358920417347108874",
-    "1378208565873082402",
-    "1392129295916466176",
-    "1518725345149321337",
-    "402459179417206784",
-    "476855101353623582",
-    "546797525919596564",
-    "796043766695067719",
-    "931224677345546291"
+    "1398491406330495040"
   ],
-  "last_message_id_main": "1535435189088550972",
-  "last_message_id_admin": "1534882652090269777",
-  "last_updated": "2026-08-07T23:59:58.026357+00:00",
-  "last_reset_at": "2026-08-06T11:33:41.397238+00:00",
-  "cycle_count": 6,
-  "current_week_sort": 7,
+  "last_message_id_main": "1535452910165688360",
+  "last_message_id_admin": "1535452693919834162",
+  "last_updated": "2026-08-08T01:01:41.552950+00:00",
+  "last_reset_at": "2026-08-08T01:01:39.446292+00:00",
+  "cycle_count": 7,
+  "current_week_sort": 8,
   "last_tagline_by_team": {
     "Kentucky": "Go Big Blue! \ud83d\udc99",
     "Pittsburgh": "Let's Go, Pitt!",
@@ -34,7 +20,7 @@
     "Baylor": "\ud83d\udc3b Slow claps for our slow starts.",
     "West Virginia": "\ud83d\ude05 Let's Go Mountaineers! (Please, someone, let's go.)",
     "Arkansas": "\ud83d\udc17 We may be hogs, but we're PROUD hogs.",
-    "South Carolina": "Fighting Gamecocks!",
+    "South Carolina": "Gamecocks by mascot. Punching bags by scoreboard.",
     "Missouri": "\ud83d\udc05 Roaring on the inside, whimpering on 3rd down.",
     "Stanford": "\ud83e\udd13 4.2 GPA, mediocre record, no regrets.",
     "Colorado": "We peaked in the preseason hype video.",
@@ -110,7 +96,6 @@
       "Hogs by mascot. Doormats by scoreboard."
     ],
     "South Carolina": [
-      "Gamecocks by mascot. Punching bags by scoreboard.",
       "SEC bottom-tier, and Sandstorm can't save us.",
       "\ud83d\udc14 We may not win, but we WILL strut about it.",
       "Go Cocks! \ud83d\udc14",
