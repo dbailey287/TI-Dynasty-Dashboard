@@ -1,21 +1,23 @@
 {
   "ready_user_ids": [
+    "1254972344070311970",
+    "1358920417347108874",
     "1398491406330495040",
     "546797525919596564",
     "796043766695067719",
     "931224677345546291"
   ],
-  "last_message_id_main": "1535469140943315064",
+  "last_message_id_main": "1535488910061346907",
   "last_message_id_admin": "1535452693919834162",
-  "last_updated": "2026-08-08T02:06:26.835246+00:00",
+  "last_updated": "2026-08-08T03:42:06.633444+00:00",
   "last_reset_at": "2026-08-08T01:01:39.446292+00:00",
   "cycle_count": 7,
   "current_week_sort": 8,
   "last_tagline_by_team": {
-    "Kentucky": "Go Big Blue! \ud83d\udc99",
+    "Kentucky": "\ud83d\udc3e We claw our way to 6-6 every year, and we're proud of it.",
     "Pittsburgh": "Let's Go, Pitt!",
     "California": "\ud83d\udc3b Cal Bears: nationally ranked in vibes only.",
-    "Arizona State": "\ud83d\udd25 We run hot and cold. Mostly cold. But hot sometimes!",
+    "Arizona State": "\ud83d\ude08 We may be cursed, but at least we're spicy.",
     "Temple": "\ud83d\ude02 Fear the Owl (mild, occasional fear only).",
     "Northwestern": "\ud83c\udf93 We may lose the game, but we WIN the postgame thesis defense.",
     "SMU": "\ud83d\ude02 We Pony Up, then immediately Pony Down.",
@@ -32,7 +34,6 @@
   },
   "tagline_queue_by_team": {
     "Kentucky": [
-      "\ud83d\udc3e We claw our way to 6-6 every year, and we're proud of it.",
       "\ud83c\udfc0 Ngl we're just here till basketball season."
     ],
     "Pittsburgh": [
@@ -44,7 +45,6 @@
       "\ud83d\ude05 We're not tanking, we're 'strategically evaluating.'"
     ],
     "Arizona State": [
-      "\ud83d\ude08 We may be cursed, but at least we're spicy.",
       "\ud83d\udd31 Small pitchfork energy, big pitchfork dreams.",
       "Go Devils!"
     ],
