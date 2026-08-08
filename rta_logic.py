@@ -152,6 +152,16 @@ TEAM_TAGLINES = {
         "Big Blue Nation. Small blue effort.",
         "We recruit like a football school and play like a JV scrimmage.",
     ],
+    "Maryland": [
+        "Fear the Turtle! 🐢", "Go Terps! 🐢",
+        "🐢 We're not slow, we're deliberate.",
+        "😂 Terps by name, turtles by pace.",
+        "😅 Big Ten newcomer still figuring out why we're playing Nebraska.",
+        "SECU Stadium: plenty of seats, negotiable attendance.",
+        "We left the ACC. The ACC did not notice.",
+        "🐢 Slow and steady wins the race. We're still working on the winning part.",
+        "Fear the Turtle. Mildly acknowledge the record.",
+    ],
     "Missouri": [
         "M-I-Z... Z-O-U! 🐯", "Go Tigers!",
         "🐯 Tigers roar. We... politely growl.",
