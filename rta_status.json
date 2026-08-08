@@ -13,9 +13,9 @@
     "796043766695067719",
     "931224677345546291"
   ],
-  "last_message_id_main": "1535691348362002584",
+  "last_message_id_main": "1535710885690220645",
   "last_message_id_admin": "1535452693919834162",
-  "last_updated": "2026-08-08T17:15:37.996764+00:00",
+  "last_updated": "2026-08-08T18:07:21.989200+00:00",
   "last_reset_at": "2026-08-08T01:01:39.446292+00:00",
   "cycle_count": 7,
   "current_week_sort": 8,
@@ -24,7 +24,7 @@
     "Pittsburgh": "Let's Go, Pitt!",
     "California": "\ud83d\udc3b Cal Bears: nationally ranked in vibes only.",
     "Arizona State": "\ud83d\ude08 We may be cursed, but at least we're spicy.",
-    "Temple": "Fear the Owl! \ud83e\udd89",
+    "Temple": "T-U, Owls!",
     "Northwestern": "\ud83c\udf93 We may lose the game, but we WIN the postgame thesis defense.",
     "SMU": "\ud83d\ude02 We Pony Up, then immediately Pony Down.",
     "Virginia": "ACC bottom-half, and the Wahoos know it.",
@@ -55,9 +55,7 @@
       "\ud83d\udd31 Small pitchfork energy, big pitchfork dreams.",
       "Go Devils!"
     ],
-    "Temple": [
-      "T-U, Owls!"
-    ],
+    "Temple": [],
     "Northwestern": [
       "U Rah Rah!",
       "\ud83d\ude2c The 'Cats have claws. Sometimes we even use them.",
