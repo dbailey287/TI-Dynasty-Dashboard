@@ -22,12 +22,15 @@ roster.py's docstring for the full story).
 """
 import glob
 import json
+import logging
 import os
 import random
 import re
 from datetime import datetime, timezone
 
 import roster as _roster
+
+log = logging.getLogger("rta_logic")
 
 # Matches the standalone word "RTA" (case-insensitive), not a substring
 # inside a longer word (e.g. won't fire on "mortar").
@@ -462,16 +465,19 @@ def generate_dynamic_quip(form: dict, api_key: str) -> str | None:
     API error, empty response -- so the caller can fall back to the
     static tagline bank rather than skip the reply entirely."""
     if not api_key:
+        log.warning("generate_dynamic_quip: no API key provided (GENAI_API_KEY not set).")
         return None
     try:
         from google import genai
         from google.genai.errors import APIError
-    except ImportError:
+    except ImportError as e:
+        log.error("generate_dynamic_quip: google-genai package not installed (%s) -- check the workflow's pip install step.", e)
         return None
 
     prompt = build_quip_prompt(form)
     client = genai.Client(api_key=api_key)
 
+    last_error = None
     for model_name in QUIP_MODEL_CHAIN:
         for attempt in range(1, QUIP_RETRIES_PER_MODEL + 1):
             try:
@@ -479,8 +485,11 @@ def generate_dynamic_quip(form: dict, api_key: str) -> str | None:
                 text = (response.text or "").strip()
                 if text:
                     return text
-            except APIError:
-                continue
+                log.warning("generate_dynamic_quip: %s (attempt %d) returned an empty response.", model_name, attempt)
+            except APIError as e:
+                last_error = e
+                log.warning("generate_dynamic_quip: %s (attempt %d) failed: %s", model_name, attempt, e)
+    log.error("generate_dynamic_quip: all models/retries exhausted. Last error: %s", last_error)
     return None
 
 
