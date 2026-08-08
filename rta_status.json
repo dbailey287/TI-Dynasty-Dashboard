@@ -1,42 +1,39 @@
 {
   "ready_user_ids": [
-    "1069336188726554824",
-    "1123408868458889306",
-    "1259468750105743410",
-    "1264702227197591555",
-    "402459179417206784",
-    "476855101353623582",
-    "546797525919596564"
+    "1254972344070311970",
+    "1358920417347108874",
+    "1398491406330495040",
+    "546797525919596564",
+    "796043766695067719",
+    "931224677345546291"
   ],
-  "last_message_id_main": "1535251296150364170",
-  "last_message_id_admin": "1534882652090269777",
-  "last_updated": "2026-08-07T11:54:44.673749+00:00",
-  "last_reset_at": "2026-08-06T11:33:41.397238+00:00",
-  "cycle_count": 6,
-  "current_week_sort": 7,
+  "last_message_id_main": "1535505131909681193",
+  "last_message_id_admin": "1535452693919834162",
+  "last_updated": "2026-08-08T04:39:23.288687+00:00",
+  "last_reset_at": "2026-08-08T01:01:39.446292+00:00",
+  "cycle_count": 7,
+  "current_week_sort": 8,
   "last_tagline_by_team": {
-    "Kentucky": "\ud83d\ude02 Big Blue Nation, medium blue expectations.",
+    "Kentucky": "\ud83d\udc3e We claw our way to 6-6 every year, and we're proud of it.",
     "Pittsburgh": "Let's Go, Pitt!",
-    "California": "\ud83c\udf09 Bridging the gap between \"good\" and \"next year.\"",
-    "Arizona State": "Forks Up!",
+    "California": "\ud83d\udc3b Cal Bears: nationally ranked in vibes only.",
+    "Arizona State": "\ud83d\ude08 We may be cursed, but at least we're spicy.",
     "Temple": "\ud83d\ude02 Fear the Owl (mild, occasional fear only).",
     "Northwestern": "\ud83c\udf93 We may lose the game, but we WIN the postgame thesis defense.",
-    "SMU": "\u2728 Dallas swagger, middling record \u2014 we contain multitudes.",
+    "SMU": "\ud83d\ude02 We Pony Up, then immediately Pony Down.",
     "Virginia": "ACC bottom-half, and the Wahoos know it.",
-    "Baylor": "\ud83d\ude02 We bear-ly made that first down.",
-    "West Virginia": "\ud83d\ude05 Let's Go Mountaineers! (Please, someone, let's go.)",
-    "Arkansas": "\ud83d\ude24 Woo Pig Sooie \u2014 said with increasing desperation each week.",
-    "South Carolina": "Fighting Gamecocks!",
-    "Missouri": "\ud83d\ude05 M-I-Z... we'll take a win, honestly, any win.",
+    "Baylor": "\ud83d\udc3b Slow claps for our slow starts.",
+    "West Virginia": "\ud83d\ude05 Almost heaven? More like almost .500.",
+    "Arkansas": "Callin' the Hogs!",
+    "South Carolina": "SEC bottom-tier, and Sandstorm can't save us.",
+    "Missouri": "\ud83d\udc05 Roaring on the inside, whimpering on 3rd down.",
     "Stanford": "\ud83e\udd13 4.2 GPA, mediocre record, no regrets.",
     "Colorado": "We peaked in the preseason hype video.",
-    "Oklahoma State": "\ud83e\udd20 We fell off the horse. Getting back on. Eventually.",
+    "Oklahoma State": "\ud83d\ude02 Cowboys don't cry. We just take a moment.",
     "Virginia Tech": "Let's Go... Hokies! \ud83e\udd83"
   },
   "tagline_queue_by_team": {
     "Kentucky": [
-      "Go Big Blue! \ud83d\udc99",
-      "\ud83d\udc3e We claw our way to 6-6 every year, and we're proud of it.",
       "\ud83c\udfc0 Ngl we're just here till basketball season."
     ],
     "Pittsburgh": [
@@ -45,14 +42,9 @@
       "\ud83d\udc06 Panthers prowl. We mostly just kinda wander."
     ],
     "California": [
-      "Go Bears! \ud83d\udc99\ud83d\udc9b",
-      "\ud83c\udf09 Golden Gate energy, bronze medal record.",
-      "\ud83d\udc3b Cal Bears: nationally ranked in vibes only.",
       "\ud83d\ude05 We're not tanking, we're 'strategically evaluating.'"
     ],
     "Arizona State": [
-      "\ud83d\udd25 We run hot and cold. Mostly cold. But hot sometimes!",
-      "\ud83d\ude08 We may be cursed, but at least we're spicy.",
       "\ud83d\udd31 Small pitchfork energy, big pitchfork dreams.",
       "Go Devils!"
     ],
@@ -68,8 +60,6 @@
       "Go 'Cats! \ud83d\udc9c"
     ],
     "SMU": [
-      "Pony Up! \ud83d\udc34",
-      "\ud83d\ude02 We Pony Up, then immediately Pony Down.",
       "\u2728 Mustangs: all flash, occasionally some substance.",
       "\ud83d\udc34 Mustangs run wild. Occasionally in the wrong direction.",
       "All style. Zero substance.",
@@ -85,7 +75,6 @@
       "Wahoowa! \ud83d\udd36"
     ],
     "Baylor": [
-      "\ud83d\udc3b Slow claps for our slow starts.",
       "Big 12 attendance numbers carrying harder than the offense.",
       "\ud83d\udc3b Hibernation season started early this year.",
       "\ud83d\ude2c Sic 'em? More like sit 'em down and hope.",
@@ -94,15 +83,12 @@
       "Sic 'Em is more of a suggestion than a strategy."
     ],
     "West Virginia": [
-      "\ud83d\ude05 Almost heaven? More like almost .500.",
       "We climb mountains. Also our own self-inflicted holes.",
       "\u26f0\ufe0f We climb. Slowly. With frequent breaks.",
       "Big 12 middle-of-the-road, and we've stopped apologizing for it.",
       "WVU! WVU!"
     ],
     "Arkansas": [
-      "\ud83d\udc17 We may be hogs, but we're PROUD hogs.",
-      "Callin' the Hogs!",
       "\ud83c\udf56 Hog heaven is a state of mind, not a record.",
       "Go Hogs Go!",
       "Woo Pig Sooie! \ud83d\udc17",
@@ -110,15 +96,12 @@
       "Hogs by mascot. Doormats by scoreboard."
     ],
     "South Carolina": [
-      "Gamecocks by mascot. Punching bags by scoreboard.",
-      "SEC bottom-tier, and Sandstorm can't save us.",
       "\ud83d\udc14 We may not win, but we WILL strut about it.",
       "Go Cocks! \ud83d\udc14",
       "\ud83d\udc14 We may lose, but we lose with FEATHERS everywhere.",
       "We show up loud and leave quiet. Every single week."
     ],
     "Missouri": [
-      "\ud83d\udc05 Roaring on the inside, whimpering on 3rd down.",
       "Go Tigers!",
       "SEC middle-of-the-pack, and we've made peace with it.",
       "Tigers on the jersey. Housecats on the field.",
@@ -146,7 +129,6 @@
       "\ud83e\uddac Big, slow, and occasionally dangerous. Just like our offense."
     ],
     "Oklahoma State": [
-      "\ud83d\ude02 Cowboys don't cry. We just take a moment.",
       "\ud83d\udc34 Giddy up, or at least giddy... eventually.",
       "\ud83d\ude02 Cowboy up! Or at least cowboy... sideways.",
       "We're rebuilding. We've been rebuilding since the Clinton administration.",
