@@ -22,7 +22,7 @@ jobs:
           python-version: "3.12"
 
       - name: Install dependencies
-        run: pip install requests pandas
+        run: pip install requests pandas google-genai
 
       - name: Check RTA / advance status
         env:
@@ -32,6 +32,7 @@ jobs:
           RTA_ANNOUNCE_CHANNEL_ID: ${{ secrets.RTA_ANNOUNCE_CHANNEL_ID }}
           SUMMARY_CHANNEL_ID: ${{ secrets.SUMMARY_CHANNEL_ID }}
           ADMIN_LOG_CHANNEL_ID: ${{ secrets.ADMIN_LOG_CHANNEL_ID }}
+          GENAI_API_KEY: ${{ secrets.GENAI_API_KEY }}
           PYTHONUNBUFFERED: "1"
         run: python check_rta_status.py
 
