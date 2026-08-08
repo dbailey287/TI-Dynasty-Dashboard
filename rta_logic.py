@@ -330,6 +330,160 @@ def pick_tagline_round_robin(team: str, queue: list, last_used: str = None) -> t
     return pick, queue
 
 
+# ---------------------------------------------------------------------------
+# Data-driven quips (week 3+)
+# ---------------------------------------------------------------------------
+# Weeks 0-2, there's rarely enough real season data to say anything
+# specific yet, so RTA replies use the static TEAM_TAGLINES bank above.
+# From week 3 on, replies instead reference this team's ACTUAL season so
+# far -- record, last game, streak -- generated fresh per reply via
+# Gemini rather than picked from a fixed list, so every reply can be
+# unique. Falls back to the static bank on any failure (missing data,
+# missing API key, API error) -- this always has to degrade gracefully,
+# since a broken quip generator should never mean no reply at all.
+
+DYNAMIC_QUIP_MIN_WEEK_SORT = 3
+QUIP_MODEL_CHAIN = ["gemini-flash-lite-latest", "gemini-3.5-flash-lite", "gemini-flash-latest"]
+QUIP_RETRIES_PER_MODEL = 2
+
+
+def get_team_recent_form(team: str, directory: str = ".") -> dict | None:
+    """
+    Pulls this team's actual season-so-far from the current season's
+    dynasty_data_<season>.csv: record, current streak, last completed
+    game, and season PPG/PA. Returns None if there's no completed-game
+    data yet for this team (too early in the season, or the file's
+    missing/unreadable) -- callers should fall back to the static
+    tagline bank in that case, not treat it as an error.
+
+    Deliberately only looks at COMPLETED games. At the moment someone
+    posts RTA to advance past the current week, that week's own game(s)
+    aren't done yet -- the most recent real result available is whatever
+    was last completed, which could be last week or, across a bye,
+    older than that. This never assumes the current week's outcome.
+    """
+    df = _load_latest_season_df(directory)
+    if df is None:
+        return None
+    import pandas as pd
+
+    team_games = df[(df["Team"] == team) & (df["Status"] == "Completed")].copy()
+    if team_games.empty:
+        return None
+
+    team_games["_sort"] = team_games["Week"].apply(week_sort_key)
+    team_games = team_games.sort_values("_sort")
+
+    wins = int((team_games["Outcome"] == "W").sum())
+    losses = int((team_games["Outcome"] == "L").sum())
+
+    # Current streak: walk backward from the most recent game while the
+    # outcome keeps matching.
+    outcomes = list(team_games["Outcome"])
+    streak_type = outcomes[-1]
+    streak_len = 0
+    for o in reversed(outcomes):
+        if o == streak_type:
+            streak_len += 1
+        else:
+            break
+
+    last = team_games.iloc[-1]
+    try:
+        team_score = float(last["Team_Score"])
+        opp_score = float(last["Opponent_Score"])
+    except (ValueError, TypeError):
+        team_score = opp_score = None
+
+    scores = team_games[["Team_Score", "Opponent_Score"]].apply(pd.to_numeric, errors="coerce")
+    ppg = scores["Team_Score"].mean()
+    pa = scores["Opponent_Score"].mean()
+
+    return {
+        "team": team,
+        "wins": wins,
+        "losses": losses,
+        "streak_type": streak_type,       # "W" or "L"
+        "streak_len": streak_len,
+        "last_opponent": last["Opponent"],
+        "last_outcome": last["Outcome"],
+        "last_team_score": team_score,
+        "last_opponent_score": opp_score,
+        "season_ppg": None if pd.isna(ppg) else round(float(ppg), 1),
+        "season_pa": None if pd.isna(pa) else round(float(pa), 1),
+    }
+
+
+def build_quip_prompt(form: dict) -> str:
+    """Builds the Gemini prompt for a single dynamic RTA-reply quip,
+    using only the real facts in `form` -- never inventing anything the
+    data doesn't actually say."""
+    team = form["team"]
+    record = f"{form['wins']}-{form['losses']}"
+    streak_word = "winning" if form["streak_type"] == "W" else "losing"
+    streak = f"a {form['streak_len']}-game {streak_word} streak" if form["streak_len"] > 1 else None
+    last_result = (
+        f"{'beat' if form['last_outcome'] == 'W' else 'lost to'} {form['last_opponent']} "
+        f"{form['last_team_score']:.0f}-{form['last_opponent_score']:.0f}"
+        if form["last_team_score"] is not None else None
+    )
+
+    facts = [f"Record so far this season: {record}."]
+    if last_result:
+        facts.append(f"Most recent completed game: {last_result}.")
+    if streak:
+        facts.append(f"Currently on {streak}.")
+    if form["season_ppg"] is not None and form["season_pa"] is not None:
+        facts.append(f"Averaging {form['season_ppg']} points scored and {form['season_pa']} points allowed per game this season.")
+
+    facts_block = " ".join(facts)
+
+    return f"""You are a trash-talking sports commentator replying to a college football
+coach in a group chat who just posted "RTA" (Ready To Advance) for their
+team, {team}.
+
+Real facts about {team}'s season so far -- use ONLY these, don't invent
+any other games, scores, or opponents:
+{facts_block}
+
+Write ONE short, punchy line (under 20 words) roasting {team} based on
+these real facts. Tone: sharp, a little mean, more biting than gentle
+ribbing -- this is real trash talk between friends, not a soft joke.
+Can use at most one emoji. Do NOT mention or predict anything about the
+CURRENT week's game, since it hasn't been played yet -- only reference
+the facts given above. Return ONLY the line itself, no quotes, no preamble.
+"""
+
+
+def generate_dynamic_quip(form: dict, api_key: str) -> str | None:
+    """Synchronous Gemini call (this script has no async event loop, so
+    no need to wrap it) generating one fresh trash-talk line from a
+    team's real season data. Returns None on any failure -- missing key,
+    API error, empty response -- so the caller can fall back to the
+    static tagline bank rather than skip the reply entirely."""
+    if not api_key:
+        return None
+    try:
+        from google import genai
+        from google.genai.errors import APIError
+    except ImportError:
+        return None
+
+    prompt = build_quip_prompt(form)
+    client = genai.Client(api_key=api_key)
+
+    for model_name in QUIP_MODEL_CHAIN:
+        for attempt in range(1, QUIP_RETRIES_PER_MODEL + 1):
+            try:
+                response = client.models.generate_content(model=model_name, contents=[prompt])
+                text = (response.text or "").strip()
+                if text:
+                    return text
+            except APIError:
+                continue
+    return None
+
+
 def pick_announcement() -> str:
     return random.choice(FUNNY_ADVANCE_MESSAGES)
 

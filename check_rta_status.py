@@ -63,6 +63,10 @@ DIGEST_HOURS = {int(h) for h in os.environ.get("RTA_DIGEST_HOURS", "6,18").split
 EASTERN = ZoneInfo("America/New_York")
 ADVANCE_KEYWORD = os.environ.get("RTA_ADVANCE_KEYWORD", rl.DEFAULT_ADVANCE_KEYWORD)
 STATE_FILE = os.environ.get("RTA_STATE_FILE", "rta_status.json")
+# Optional -- only used for the week-3+ dynamic quips. If unset, RTA
+# replies just always use the static tagline bank, same as before this
+# feature existed. Not in the required-vars check below on purpose.
+GEMINI_API_KEY = os.environ.get("GENAI_API_KEY")
 
 API_BASE = "https://discord.com/api/v10"
 
@@ -284,17 +288,37 @@ def run() -> str:
         before = set(state.get("ready_user_ids", []))
         state, hits = rl.process_rta_messages(main_messages, tracked_ids, id_to_team, state)
 
+        current_week_sort = state.get("current_week_sort")
+        use_dynamic_quips = current_week_sort is not None and current_week_sort >= rl.DYNAMIC_QUIP_MIN_WEEK_SORT
+
         for hit in hits:
             team = hit["team"]
-            last_used = state.get("last_tagline_by_team", {}).get(team)
-            queue = state.get("tagline_queue_by_team", {}).get(team, [])
-            tagline, queue = rl.pick_tagline_round_robin(team, queue, last_used=last_used)
-            if not tagline:
+            reply_text = None
+
+            if use_dynamic_quips:
+                form = rl.get_team_recent_form(team)
+                if form is not None:
+                    reply_text = rl.generate_dynamic_quip(form, GEMINI_API_KEY)
+                    if reply_text:
+                        log.info("Using dynamic quip for %s.", team)
+
+            if not reply_text:
+                # Either too early in the season for dynamic quips, or
+                # the dynamic attempt didn't produce anything (no data
+                # yet, missing API key, API failure) -- fall back to the
+                # static bank. Queue/last-used state only gets touched
+                # here, never when a dynamic quip is actually used.
+                last_used = state.get("last_tagline_by_team", {}).get(team)
+                queue = state.get("tagline_queue_by_team", {}).get(team, [])
+                reply_text, queue = rl.pick_tagline_round_robin(team, queue, last_used=last_used)
+                if reply_text:
+                    state.setdefault("tagline_queue_by_team", {})[team] = queue
+                    state.setdefault("last_tagline_by_team", {})[team] = reply_text
+
+            if not reply_text:
                 continue
-            state.setdefault("tagline_queue_by_team", {})[team] = queue
-            state.setdefault("last_tagline_by_team", {})[team] = tagline
             try:
-                reply_to_message(MAIN_CHANNEL_ID, hit["message_id"], DISCORD_TOKEN, tagline)
+                reply_to_message(MAIN_CHANNEL_ID, hit["message_id"], DISCORD_TOKEN, reply_text)
             except Exception as e:
                 # A flavor-text reply failing is never worth treating as a
                 # real run failure -- log it and keep going.
