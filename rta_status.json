@@ -2,6 +2,7 @@
   "ready_user_ids": [
     "1069336188726554824",
     "1254972344070311970",
+    "1264702227197591555",
     "1266038078250946676",
     "1358920417347108874",
     "1378208565873082402",
@@ -12,9 +13,9 @@
     "796043766695067719",
     "931224677345546291"
   ],
-  "last_message_id_main": "1535681365423685814",
+  "last_message_id_main": "1535690799222624398",
   "last_message_id_admin": "1535452693919834162",
-  "last_updated": "2026-08-08T16:45:10.704122+00:00",
+  "last_updated": "2026-08-08T16:49:09.142647+00:00",
   "last_reset_at": "2026-08-08T01:01:39.446292+00:00",
   "cycle_count": 7,
   "current_week_sort": 8,
@@ -33,7 +34,7 @@
     "South Carolina": "SEC bottom-tier, and Sandstorm can't save us.",
     "Missouri": "Go Tigers!",
     "Stanford": "Our football team has a lower GPA impact than our actual GPA.",
-    "Colorado": "We peaked in the preseason hype video.",
+    "Colorado": "\ud83c\udfd4\ufe0f Elevation's high. So is our blood pressure watching this team.",
     "Oklahoma State": "\ud83d\udc34 Giddy up, or at least giddy... eventually.",
     "Virginia Tech": "Let's Go... Hokies! \ud83e\udd83",
     "Maryland": "\ud83d\ude05 Big Ten newcomer still figuring out why we're playing Nebraska."
@@ -122,7 +123,6 @@
       "\ud83e\udd13 We'll out-smart you, if not out-score you."
     ],
     "Colorado": [
-      "\ud83c\udfd4\ufe0f Elevation's high. So is our blood pressure watching this team.",
       "\ud83d\ude24 Buffs don't rebuild. We reload. Eventually.",
       "Buffs stampede. We mosey.",
       "Go Buffs! \ud83e\uddac",
