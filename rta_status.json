@@ -1,10 +1,13 @@
 {
   "ready_user_ids": [
-    "1398491406330495040"
+    "1398491406330495040",
+    "546797525919596564",
+    "796043766695067719",
+    "931224677345546291"
   ],
-  "last_message_id_main": "1535452910165688360",
+  "last_message_id_main": "1535469140943315064",
   "last_message_id_admin": "1535452693919834162",
-  "last_updated": "2026-08-08T01:01:41.552950+00:00",
+  "last_updated": "2026-08-08T02:06:26.835246+00:00",
   "last_reset_at": "2026-08-08T01:01:39.446292+00:00",
   "cycle_count": 7,
   "current_week_sort": 8,
@@ -15,12 +18,12 @@
     "Arizona State": "\ud83d\udd25 We run hot and cold. Mostly cold. But hot sometimes!",
     "Temple": "\ud83d\ude02 Fear the Owl (mild, occasional fear only).",
     "Northwestern": "\ud83c\udf93 We may lose the game, but we WIN the postgame thesis defense.",
-    "SMU": "Pony Up! \ud83d\udc34",
+    "SMU": "\ud83d\ude02 We Pony Up, then immediately Pony Down.",
     "Virginia": "ACC bottom-half, and the Wahoos know it.",
     "Baylor": "\ud83d\udc3b Slow claps for our slow starts.",
-    "West Virginia": "\ud83d\ude05 Let's Go Mountaineers! (Please, someone, let's go.)",
-    "Arkansas": "\ud83d\udc17 We may be hogs, but we're PROUD hogs.",
-    "South Carolina": "Gamecocks by mascot. Punching bags by scoreboard.",
+    "West Virginia": "\ud83d\ude05 Almost heaven? More like almost .500.",
+    "Arkansas": "Callin' the Hogs!",
+    "South Carolina": "SEC bottom-tier, and Sandstorm can't save us.",
     "Missouri": "\ud83d\udc05 Roaring on the inside, whimpering on 3rd down.",
     "Stanford": "\ud83e\udd13 4.2 GPA, mediocre record, no regrets.",
     "Colorado": "We peaked in the preseason hype video.",
@@ -57,7 +60,6 @@
       "Go 'Cats! \ud83d\udc9c"
     ],
     "SMU": [
-      "\ud83d\ude02 We Pony Up, then immediately Pony Down.",
       "\u2728 Mustangs: all flash, occasionally some substance.",
       "\ud83d\udc34 Mustangs run wild. Occasionally in the wrong direction.",
       "All style. Zero substance.",
@@ -81,14 +83,12 @@
       "Sic 'Em is more of a suggestion than a strategy."
     ],
     "West Virginia": [
-      "\ud83d\ude05 Almost heaven? More like almost .500.",
       "We climb mountains. Also our own self-inflicted holes.",
       "\u26f0\ufe0f We climb. Slowly. With frequent breaks.",
       "Big 12 middle-of-the-road, and we've stopped apologizing for it.",
       "WVU! WVU!"
     ],
     "Arkansas": [
-      "Callin' the Hogs!",
       "\ud83c\udf56 Hog heaven is a state of mind, not a record.",
       "Go Hogs Go!",
       "Woo Pig Sooie! \ud83d\udc17",
@@ -96,7 +96,6 @@
       "Hogs by mascot. Doormats by scoreboard."
     ],
     "South Carolina": [
-      "SEC bottom-tier, and Sandstorm can't save us.",
       "\ud83d\udc14 We may not win, but we WILL strut about it.",
       "Go Cocks! \ud83d\udc14",
       "\ud83d\udc14 We may lose, but we lose with FEATHERS everywhere.",
