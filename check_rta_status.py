@@ -294,13 +294,20 @@ def run() -> str:
         for hit in hits:
             team = hit["team"]
             reply_text = None
+            source = None  # for logging: exactly why this reply is what it is
 
             if use_dynamic_quips:
                 form = rl.get_team_recent_form(team)
-                if form is not None:
+                if form is None:
+                    source = "static (no completed-game data yet for this team)"
+                else:
                     reply_text = rl.generate_dynamic_quip(form, GEMINI_API_KEY)
                     if reply_text:
-                        log.info("Using dynamic quip for %s.", team)
+                        source = "DYNAMIC (Gemini)"
+                    else:
+                        source = "static (Gemini call failed or returned nothing -- check GENAI_API_KEY / API status)"
+            else:
+                source = f"static (week_sort={current_week_sort}, dynamic starts at {rl.DYNAMIC_QUIP_MIN_WEEK_SORT})"
 
             if not reply_text:
                 # Either too early in the season for dynamic quips, or
@@ -314,6 +321,14 @@ def run() -> str:
                 if reply_text:
                     state.setdefault("tagline_queue_by_team", {})[team] = queue
                     state.setdefault("last_tagline_by_team", {})[team] = reply_text
+
+            log.info("Reply for %s: %s -- %r", team, source, reply_text)
+            # Posted immediately, NOT batched into the twice-daily digest --
+            # unlike routine "ran fine" status, this is the one thing
+            # worth seeing right away, since it's the only way to tell in
+            # real time whether a given reply used a dynamic quip or fell
+            # back to the static bank (and if static, exactly why).
+            notify.post_alert(SUMMARY_CHANNEL_ID, DISCORD_TOKEN, f"🗨️ **{team}**: {source}\n> {reply_text}")
 
             if not reply_text:
                 continue
@@ -362,6 +377,15 @@ def main():
             "timestamp": timestamp, "new_rta": int(new_rta), "advance_triggered": bool(int(advance)),
             "ready": int(ready), "total": int(total), "log_text": log_text,
         }
+
+    # Full log posted every run, unconditionally -- not batched like the
+    # short status digest below. With the tracker only actually firing
+    # roughly hourly in practice (GitHub Actions scheduling being what it
+    # is) rather than the configured ~10 minutes, and the channel muted
+    # anyway, this is low-volume enough to just always post -- makes it
+    # easy to grab a specific run's full output for troubleshooting
+    # without waiting for or digging through a digest.
+    notify.post_log_file(ADMIN_LOG_CHANNEL_ID, DISCORD_TOKEN, "rta_tracker")
 
     digest_state = load_digest_state(DIGEST_STATE_FILE)
     digest_state["pending_runs"].append(record)
