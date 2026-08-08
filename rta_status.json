@@ -1,5 +1,6 @@
 {
   "ready_user_ids": [
+    "1069336188726554824",
     "1254972344070311970",
     "1358920417347108874",
     "1398491406330495040",
@@ -7,9 +8,9 @@
     "796043766695067719",
     "931224677345546291"
   ],
-  "last_message_id_main": "1535625500293074995",
+  "last_message_id_main": "1535630325173190696",
   "last_message_id_admin": "1535452693919834162",
-  "last_updated": "2026-08-08T12:28:17.856309+00:00",
+  "last_updated": "2026-08-08T13:04:59.426059+00:00",
   "last_reset_at": "2026-08-08T01:01:39.446292+00:00",
   "cycle_count": 7,
   "current_week_sort": 8,
@@ -27,7 +28,7 @@
     "Arkansas": "\ud83c\udf56 Hog heaven is a state of mind, not a record.",
     "South Carolina": "SEC bottom-tier, and Sandstorm can't save us.",
     "Missouri": "\ud83d\udc05 Roaring on the inside, whimpering on 3rd down.",
-    "Stanford": "\ud83e\udd13 4.2 GPA, mediocre record, no regrets.",
+    "Stanford": "Our football team has a lower GPA impact than our actual GPA.",
     "Colorado": "We peaked in the preseason hype video.",
     "Oklahoma State": "\ud83d\ude02 Cowboys don't cry. We just take a moment.",
     "Virginia Tech": "Let's Go... Hokies! \ud83e\udd83"
@@ -110,7 +111,6 @@
       "\ud83d\udc2f We're tigers. We just prefer naps to hunting."
     ],
     "Stanford": [
-      "Our football team has a lower GPA impact than our actual GPA.",
       "ACC's academic pride, everyone else's easy win.",
       "\ud83c\udf32 We photosynthesize wins. Very slowly.",
       "\ud83c\udf32 We're a tree. Trees are patient. VERY patient.",
