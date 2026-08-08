@@ -2,7 +2,9 @@
   "ready_user_ids": [
     "1069336188726554824",
     "1254972344070311970",
+    "1266038078250946676",
     "1358920417347108874",
+    "1378208565873082402",
     "1398491406330495040",
     "345353840234856449",
     "402459179417206784",
@@ -10,9 +12,9 @@
     "796043766695067719",
     "931224677345546291"
   ],
-  "last_message_id_main": "1535677133249187930",
+  "last_message_id_main": "1535681365423685814",
   "last_message_id_admin": "1535452693919834162",
-  "last_updated": "2026-08-08T16:01:21.628780+00:00",
+  "last_updated": "2026-08-08T16:45:10.704122+00:00",
   "last_reset_at": "2026-08-08T01:01:39.446292+00:00",
   "cycle_count": 7,
   "current_week_sort": 8,
@@ -29,10 +31,10 @@
     "West Virginia": "\ud83d\ude05 Almost heaven? More like almost .500.",
     "Arkansas": "\ud83c\udf56 Hog heaven is a state of mind, not a record.",
     "South Carolina": "SEC bottom-tier, and Sandstorm can't save us.",
-    "Missouri": "\ud83d\udc05 Roaring on the inside, whimpering on 3rd down.",
+    "Missouri": "Go Tigers!",
     "Stanford": "Our football team has a lower GPA impact than our actual GPA.",
     "Colorado": "We peaked in the preseason hype video.",
-    "Oklahoma State": "\ud83d\ude02 Cowboys don't cry. We just take a moment.",
+    "Oklahoma State": "\ud83d\udc34 Giddy up, or at least giddy... eventually.",
     "Virginia Tech": "Let's Go... Hokies! \ud83e\udd83",
     "Maryland": "\ud83d\ude05 Big Ten newcomer still figuring out why we're playing Nebraska."
   },
@@ -104,7 +106,6 @@
       "We show up loud and leave quiet. Every single week."
     ],
     "Missouri": [
-      "Go Tigers!",
       "SEC middle-of-the-pack, and we've made peace with it.",
       "Tigers on the jersey. Housecats on the field.",
       "\ud83c\udfaf Mizzou: perpetually \"this could be our year.\"",
@@ -130,7 +131,6 @@
       "\ud83e\uddac Big, slow, and occasionally dangerous. Just like our offense."
     ],
     "Oklahoma State": [
-      "\ud83d\udc34 Giddy up, or at least giddy... eventually.",
       "\ud83d\ude02 Cowboy up! Or at least cowboy... sideways.",
       "We're rebuilding. We've been rebuilding since the Clinton administration.",
       "\ud83e\udd20 We lasso wins. Sometimes the rope's just... too short.",
