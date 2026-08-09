@@ -421,14 +421,16 @@ def render_week_games(week_sort, empty_message: str, team_ready_lookup: dict = N
         st.caption(empty_message)
         return
 
-    # Sort tiers: User matchups first, then CPU games, then BYEs last.
-    # is_bye is the PRIMARY sort key on its own -- deliberately not
-    # combined arithmetically with Opponent_Is_User, since that column
-    # turns out to not reliably be False on BYE rows (some show True,
-    # a leftover data quirk) -- a combined key would silently let that
-    # push some byes out of the last-place tier they belong in.
+    # Sort: User matchups first (alphabetical within that group), then
+    # everything else -- CPU games and BYEs mixed together -- also
+    # alphabetical by team. _is_bye is explicitly subtracted out of the
+    # user-matchup check below, not just relied on Opponent_Is_User
+    # alone, since that column isn't reliably False on BYE rows (some
+    # show True, a leftover data quirk) -- without that exclusion, those
+    # BYE rows would incorrectly float into the User Matchup tier.
     wk_games = wk_games.assign(_is_bye=(wk_games["Status"] == "BYE"))
-    wk_games = wk_games.sort_values(by=["_is_bye", "Opponent_Is_User"], ascending=[True, False])
+    wk_games = wk_games.assign(_is_user_matchup=(wk_games["Opponent_Is_User"] & ~wk_games["_is_bye"]))
+    wk_games = wk_games.sort_values(by=["_is_user_matchup", "Team"], ascending=[False, True])
 
     for _, g in wk_games.iterrows():
         team_logo = team_logo_tag(g["Team"])
