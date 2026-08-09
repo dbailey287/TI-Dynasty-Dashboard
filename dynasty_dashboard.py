@@ -408,30 +408,50 @@ def render_week_games(week_sort, empty_message: str, team_ready_lookup: dict = N
     User matchups. Shared by the 'This Week' and 'Upcoming Week' sections.
     Games where the team (or, for a User-vs-User game, EITHER team) has
     already marked RTA get struck through -- team_ready_lookup defaults
-    to empty (nobody struck through) if RTA data isn't available."""
+    to empty (nobody struck through) if RTA data isn't available.
+    Teams on a BYE this week are shown too (their own line, no opponent),
+    not silently omitted -- sorted to the end since they're the least
+    time-sensitive entries, after User matchups and CPU games."""
     team_ready_lookup = team_ready_lookup or {}
     if week_sort is None:
         st.caption("No data yet.")
         return
-    wk_games = df[df["Week_Sort"] == week_sort]
-    wk_games = wk_games[wk_games["Status"] != "BYE"].drop_duplicates(subset="Game_Id")
+    wk_games = df[df["Week_Sort"] == week_sort].drop_duplicates(subset="Game_Id")
     if wk_games.empty:
         st.caption(empty_message)
         return
 
-    # User vs User matchups float to the top
-    wk_games = wk_games.sort_values(by="Opponent_Is_User", ascending=False)
+    # Sort tiers: User matchups first, then CPU games, then BYEs last.
+    # is_bye is the PRIMARY sort key on its own -- deliberately not
+    # combined arithmetically with Opponent_Is_User, since that column
+    # turns out to not reliably be False on BYE rows (some show True,
+    # a leftover data quirk) -- a combined key would silently let that
+    # push some byes out of the last-place tier they belong in.
+    wk_games = wk_games.assign(_is_bye=(wk_games["Status"] == "BYE"))
+    wk_games = wk_games.sort_values(by=["_is_bye", "Opponent_Is_User"], ascending=[True, False])
+
     for _, g in wk_games.iterrows():
+        team_logo = team_logo_tag(g["Team"])
+        team_ready = team_ready_lookup.get(g["Team"], False)
+        strike_style = "text-decoration:line-through; opacity:0.6;" if team_ready else ""
+
+        if g["Status"] == "BYE":
+            st.markdown(
+                f'<div class="cpu-game-row" style="{strike_style}">'
+                f'{team_logo}{team_link(g["Team"])} <span class="stat-label">({g["User"]})</span> '
+                f'<span class="stat-label">— BYE</span></div>',
+                unsafe_allow_html=True,
+            )
+            continue
+
         loc = "vs" if g["Location"] == "Home" else "@"
         rank_tag = f"#{int(g['Opponent_Rank_Display_Num'])} " if pd.notna(g["Opponent_Rank_Display_Num"]) else ""
         result_tag = ""
         if g["Status"] == "Completed":
             result_tag = f" &nbsp;·&nbsp; <b>{g['Outcome']}</b> {g['Team_Score']:.0f}-{g['Opponent_Score']:.0f}"
 
-        team_logo = team_logo_tag(g["Team"])
         opp_logo = team_logo_tag(g["Opponent"])
 
-        team_ready = team_ready_lookup.get(g["Team"], False)
         if g["Opponent_Is_User"]:
             opp_ready = team_ready_lookup.get(g["Opponent"], False)
             already_ready = team_ready or opp_ready
