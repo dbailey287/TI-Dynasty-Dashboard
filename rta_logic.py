@@ -443,6 +443,37 @@ def get_team_recent_form(team: str, directory: str = ".") -> dict | None:
 # vocal delivery/timing doesn't translate into a single written line
 # regardless of how the prompt is worded; that's a real limit of text,
 # not something to try to prompt around.
+# Hard-enforced at the code level in generate_dynamic_quip() below, not
+# just requested in the prompt -- real production output showed the
+# banned-openers prompt instruction being ignored a large fraction of
+# the time (a soft "don't do X" request the model can simply not
+# follow), and profanity slipping through with no rule against it at
+# all. A deterministic check-and-retry is the only reliable way to
+# actually guarantee these hold, rather than hoping wording alone works.
+BANNED_OPENERS = (
+    "ready to advance", "well, you're", "well you're", "well,",
+    "rta?!", "rta ", "rta,", "man, ", "man,",
+)
+# Not exhaustive profanity detection (that's a much bigger problem than
+# this needs to solve) -- just the small set of words that actually
+# showed up in real output, checked as a substring on the lowercased text.
+PROFANITY_MARKERS = ("fuck", "shit", "bitch", "asshole", "cunt", "damn it", "goddamn")
+
+
+def _quip_violates_rules(text: str) -> str | None:
+    """Returns a short reason string if the generated text breaks a hard
+    rule, else None. Used to trigger a retry rather than just log and
+    accept a bad line."""
+    lower = text.strip().lower()
+    for opener in BANNED_OPENERS:
+        if lower.startswith(opener):
+            return f"starts with banned opener '{opener}'"
+    for word in PROFANITY_MARKERS:
+        if word in lower:
+            return f"contains profanity marker '{word}'"
+    return None
+
+
 COMEDIAN_STYLES = [
     {
         "name": "Nate Bargatze",
@@ -562,6 +593,15 @@ def build_quip_prompt(form: dict) -> str:
     return f"""You are replying to a college football coach in a group chat who just
 posted "RTA" (Ready To Advance) for their team, {team}.
 
+CRITICAL RULE, read this first: never reference "RTA", "ready to advance",
+"advancing", or the fact that they just posted this message -- not as an
+opener, not anywhere in the line, not even reworded ("screaming RTA",
+"yelling ready to advance", etc. all count as violations too). The
+reader already knows they posted RTA -- that's not a joke, it's just
+context. The ENTIRE line should be about their actual season performance
+instead. This is the single most repeated pattern across many separate
+replies, so it matters more than anything else here.
+
 Real facts about {team}'s season so far -- use ONLY these, don't invent
 any other games, scores, opponents, or claims about their schedule/other
 results:
@@ -575,19 +615,23 @@ of it rather than ignoring it.
 Comedic voice for this line, in the style of {chosen_style['name']}:
 {chosen_style['style']}
 
-{chosen_angle}
+MANDATORY STRUCTURE for this specific line: {chosen_angle}
 
-Do NOT start with any of these overused openers -- vary the actual
-opening words: "Ready to advance...", "Well, you're...", "Well you're...",
-"RTA?!", "Man, ...". Get straight into the specific joke instead.
+IMPORTANT: absolutely NO profanity or curse words of any kind, even mild
+ones, no matter how heated the joke gets. This goes out to a group chat,
+not a comedy club -- keep the language completely clean while still
+being sharp and cutting.
 
 Do NOT reach for generic sports-trash-talk tropes not supported by the
 facts above (e.g. don't claim their wins came against weak opponents
 unless a fact actually says that). Can use at most one emoji. Do NOT
 mention or predict anything about the CURRENT week's game, since it
-hasn't been played yet -- only reference the facts given above. Return
-ONLY the line itself, no quotes, no preamble, no attribution to the
-comedian by name.
+hasn't been played yet -- only reference the facts given above.
+
+Reminder: do not reference RTA/advancing/them posting this message
+anywhere in the line -- the whole thing should just be about their
+season. Return ONLY the line itself, no quotes, no preamble, no
+attribution to the comedian by name.
 """
 
 
@@ -607,7 +651,6 @@ def generate_dynamic_quip(form: dict, api_key: str) -> str | None:
         log.error("generate_dynamic_quip: google-genai package not installed (%s) -- check the workflow's pip install step.", e)
         return None
 
-    prompt = build_quip_prompt(form)
     client = genai.Client(api_key=api_key)
     # Explicit higher temperature -- previously unset (whatever the
     # model's own default is), which real output showed converging hard:
@@ -620,12 +663,22 @@ def generate_dynamic_quip(form: dict, api_key: str) -> str | None:
     last_error = None
     for model_name in QUIP_MODEL_CHAIN:
         for attempt in range(1, QUIP_RETRIES_PER_MODEL + 1):
+            # Fresh prompt each attempt -- a new random style/angle, so a
+            # retry actually has a real chance of avoiding whatever
+            # pattern triggered the last attempt, rather than sending the
+            # identical prompt again and hoping temperature alone saves it.
+            prompt = build_quip_prompt(form)
             try:
                 response = client.models.generate_content(model=model_name, contents=[prompt], config=gen_config)
                 text = (response.text or "").strip()
-                if text:
-                    return text
-                log.warning("generate_dynamic_quip: %s (attempt %d) returned an empty response.", model_name, attempt)
+                if not text:
+                    log.warning("generate_dynamic_quip: %s (attempt %d) returned an empty response.", model_name, attempt)
+                    continue
+                violation = _quip_violates_rules(text)
+                if violation:
+                    log.warning("generate_dynamic_quip: %s (attempt %d) rejected -- %s. Text was: %r", model_name, attempt, violation, text)
+                    continue
+                return text
             except APIError as e:
                 last_error = e
                 log.warning("generate_dynamic_quip: %s (attempt %d) failed: %s", model_name, attempt, e)
