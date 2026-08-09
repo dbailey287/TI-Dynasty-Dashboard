@@ -435,10 +435,42 @@ def get_team_recent_form(team: str, directory: str = ".") -> dict | None:
     }
 
 
+# Comedian voice styles for RTA quips -- one is randomly chosen per quip
+# in build_quip_prompt() below. Add more anytime: each entry just needs
+# a "name" and a "style" description to inject into the prompt. Style
+# descriptions describe WRITING voice -- word choice, pacing, level of
+# detail, restraint vs escalation, how mean vs gentle -- since actual
+# vocal delivery/timing doesn't translate into a single written line
+# regardless of how the prompt is worded; that's a real limit of text,
+# not something to try to prompt around.
+COMEDIAN_STYLES = [
+    {
+        "name": "Nate Bargatze",
+        "style": (
+            "Write in a slow, deadpan, understated voice -- flat, matter-of-fact "
+            "delivery even when the content is absurd or self-deprecating. Clean, "
+            "folksy, 'everyman' framing. Downplay rather than escalate -- the humor "
+            "comes from flat delivery and restraint, not volume or intensity. Still "
+            "land a real jab, just gently and matter-of-factly."
+        ),
+    },
+    {
+        "name": "Derrick Stroup",
+        "style": (
+            "Write in a fast-paced, high-energy, detailed voice -- like someone telling "
+            "an animated story who can barely get the words out fast enough. Sharp and "
+            "cutting, vivid specific details, exclamation-level energy -- but never "
+            "genuinely mean-spirited, just loud and pointed."
+        ),
+    },
+]
+
+
 def build_quip_prompt(form: dict) -> str:
     """Builds the Gemini prompt for a single dynamic RTA-reply quip,
     using only the real facts in `form` -- never inventing anything the
-    data doesn't actually say."""
+    data doesn't actually say. Randomly picks one comedian voice from
+    COMEDIAN_STYLES per call, so replies vary between styles over time."""
     team = form["team"]
     record = f"{form['wins']}-{form['losses']}"
     streak_word = "winning" if form["streak_type"] == "W" else "losing"
@@ -492,9 +524,10 @@ def build_quip_prompt(form: dict) -> str:
             f"This is optional -- the season facts above are the required core of the line."
         )
 
-    return f"""You are a trash-talking sports commentator replying to a college football
-coach in a group chat who just posted "RTA" (Ready To Advance) for their
-team, {team}.
+    chosen_style = random.choice(COMEDIAN_STYLES)
+
+    return f"""You are replying to a college football coach in a group chat who just
+posted "RTA" (Ready To Advance) for their team, {team}.
 
 Real facts about {team}'s season so far -- use ONLY these, don't invent
 any other games, scores, opponents, or claims about their schedule/other
@@ -504,14 +537,18 @@ results:
 Write ONE punchy line (roughly 15-30 words) roasting {team}, weaving in
 AT LEAST {min(2, fact_count)} of the {fact_count} season facts above -- not just
 the record alone. If a streak or scoring average is given, make real use
-of it rather than ignoring it. Tone: sharp, a little mean, more biting
-than gentle ribbing -- this is real trash talk between friends, not a
-soft joke. Do NOT reach for generic sports-trash-talk tropes not
-supported by the facts above (e.g. don't claim their wins came against
-weak opponents unless a fact actually says that). Can use at most one
-emoji. Do NOT mention or predict anything about the CURRENT week's game,
-since it hasn't been played yet -- only reference the facts given above.
-Return ONLY the line itself, no quotes, no preamble.
+of it rather than ignoring it.
+
+Comedic voice for this line, in the style of {chosen_style['name']}:
+{chosen_style['style']}
+
+Do NOT reach for generic sports-trash-talk tropes not supported by the
+facts above (e.g. don't claim their wins came against weak opponents
+unless a fact actually says that). Can use at most one emoji. Do NOT
+mention or predict anything about the CURRENT week's game, since it
+hasn't been played yet -- only reference the facts given above. Return
+ONLY the line itself, no quotes, no preamble, no attribution to the
+comedian by name.
 """
 
 
