@@ -466,6 +466,37 @@ COMEDIAN_STYLES = [
 ]
 
 
+# Structural variety, separate from comedian voice -- randomly picked
+# per quip alongside the comedian style. Without this, real output
+# converges hard on one shape almost every time: "[record], BUT [stat],
+# [dismissive tag]" -- same skeleton regardless of team or voice. This
+# forces the actual STRUCTURE of the joke to vary, not just word choice.
+JOKE_ANGLES = [
+    "Structure this as a backhanded compliment -- open like you're genuinely impressed, then undercut it hard with the facts.",
+    "Structure this as mock-concerned advice, like you're worried about them and gently pointing out why.",
+    "Structure this as one single blunt observation -- no setup, no windup, just the jab landing immediately.",
+    "Structure this as a direct question aimed at them, not a statement about them.",
+    "Structure this by comparing their situation to something absurd, mundane, or unrelated -- not another football team.",
+    "Structure this by zooming in on ONE specific detail or number rather than listing several stats in a row.",
+    "Structure this as if continuing a conversation already in progress -- don't restate their record like it's new information.",
+]
+
+# Specific angle to reach for when using general program-history
+# knowledge (see the "else" branch in build_quip_prompt below). Without
+# pinning a specific angle, real output converges hard on one narrative
+# almost every time -- "this program always collapses/chokes eventually"
+# -- regardless of which team it actually is. Randomly forcing a
+# specific angle breaks that convergence.
+HISTORY_ANGLES = [
+    "a specific well-known bad season, losing streak, or era for this program",
+    "a longstanding rivalry and how this program has historically fared in it",
+    "this program's general reputation/identity within their conference",
+    "a specific notable coach, coaching change, or coaching era for this program",
+    "this program's recruiting reputation relative to their actual on-field results",
+    "a specific memorable win, upset, or moment of success in this program's history",
+]
+
+
 def build_quip_prompt(form: dict) -> str:
     """Builds the Gemini prompt for a single dynamic RTA-reply quip,
     using only the real facts in `form` -- never inventing anything the
@@ -507,24 +538,26 @@ def build_quip_prompt(form: dict) -> str:
         )
     else:
         # Default path: let the model draw on its own general knowledge
-        # of this program's real football history/reputation (famous
-        # droughts, losing streaks, embarrassing losses, rivalries,
-        # historically bad or good eras, etc.) rather than requiring a
-        # pre-verified fact to exist. Exact precision isn't required here
-        # -- approximate/well-known program reputation is good enough --
-        # but it should still be a real, recognizable thing about this
-        # specific program, not something invented from nothing.
+        # of this program's real football history/reputation rather than
+        # requiring a pre-verified fact to exist. Exact precision isn't
+        # required here -- approximate/well-known program reputation is
+        # good enough. A SPECIFIC angle is pinned below (see
+        # HISTORY_ANGLES) rather than left fully open -- an open "pick
+        # whatever" instruction converged hard on the same "this program
+        # always collapses eventually" narrative almost every time,
+        # regardless of which real team it was.
+        chosen_history_angle = random.choice(HISTORY_ANGLES)
         history_block = (
             f"\n\nYou may ALSO optionally draw on real general knowledge of {team}'s "
-            f"football program history/reputation -- a well-known losing streak, a "
-            f"famous bad season, a longstanding rivalry, a notable drought, that kind "
-            f"of thing -- to add extra bite, even if you're not 100% certain of exact "
-            f"details. Keep it to something genuinely recognizable about this specific "
-            f"program's real reputation, not something you're making up out of nothing. "
-            f"This is optional -- the season facts above are the required core of the line."
+            f"football program -- specifically {chosen_history_angle}, even if you're "
+            f"not 100% certain of exact details. Keep it to something genuinely "
+            f"recognizable about this specific program, not something you're making up "
+            f"out of nothing. This is optional -- the season facts above are the "
+            f"required core of the line."
         )
 
     chosen_style = random.choice(COMEDIAN_STYLES)
+    chosen_angle = random.choice(JOKE_ANGLES)
 
     return f"""You are replying to a college football coach in a group chat who just
 posted "RTA" (Ready To Advance) for their team, {team}.
@@ -541,6 +574,12 @@ of it rather than ignoring it.
 
 Comedic voice for this line, in the style of {chosen_style['name']}:
 {chosen_style['style']}
+
+{chosen_angle}
+
+Do NOT start with any of these overused openers -- vary the actual
+opening words: "Ready to advance...", "Well, you're...", "Well you're...",
+"RTA?!", "Man, ...". Get straight into the specific joke instead.
 
 Do NOT reach for generic sports-trash-talk tropes not supported by the
 facts above (e.g. don't claim their wins came against weak opponents
@@ -570,12 +609,19 @@ def generate_dynamic_quip(form: dict, api_key: str) -> str | None:
 
     prompt = build_quip_prompt(form)
     client = genai.Client(api_key=api_key)
+    # Explicit higher temperature -- previously unset (whatever the
+    # model's own default is), which real output showed converging hard:
+    # some generations for the same team came back character-for-character
+    # identical to each other. 1.3 pushes toward meaningfully more varied
+    # phrasing while staying coherent; QUIP_MODEL_CHAIN's flash-lite
+    # models generally tolerate this range fine for short creative text.
+    gen_config = genai.types.GenerateContentConfig(temperature=1.3)
 
     last_error = None
     for model_name in QUIP_MODEL_CHAIN:
         for attempt in range(1, QUIP_RETRIES_PER_MODEL + 1):
             try:
-                response = client.models.generate_content(model=model_name, contents=[prompt])
+                response = client.models.generate_content(model=model_name, contents=[prompt], config=gen_config)
                 text = (response.text or "").strip()
                 if text:
                     return text
