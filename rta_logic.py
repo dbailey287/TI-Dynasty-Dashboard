@@ -477,54 +477,20 @@ def _quip_violates_rules(text: str) -> str | None:
 COMEDIAN_STYLES = [
     {
         "name": "Nate Bargatze",
-        "style": (
-            "Write in a slow, deadpan, understated voice -- flat, matter-of-fact "
-            "delivery even when the content is absurd or self-deprecating. Clean, "
-            "folksy, 'everyman' framing. Downplay rather than escalate -- the humor "
-            "comes from flat delivery and restraint, not volume or intensity. Still "
-            "land a real jab, just gently and matter-of-factly."
-        ),
+        "examples": [
+            "We're 6-0, which is more wins than I've had good decisions this year, so I'd call that a fair trade.",
+            "Giving up thirty a game and still winning just means we'd rather stress everyone out than beat them cleanly.",
+            "I don't know how we're 5-1. Nobody in that building knows. We're just letting it happen and not asking questions.",
+        ],
     },
     {
         "name": "Derrick Stroup",
-        "style": (
-            "Write in a fast-paced, high-energy, detailed voice -- like someone telling "
-            "an animated story who can barely get the words out fast enough. Sharp and "
-            "cutting, vivid specific details, exclamation-level energy -- but never "
-            "genuinely mean-spirited, just loud and pointed."
-        ),
+        "examples": [
+            "SIX AND OH?! Man, you're out here scoring forty a game like it's NOTHING, like anybody could do that, and NOBODY can do that!",
+            "You beat 'em by THREE points and you're strutting around like you just hoisted a trophy, my brother, three points is a FIELD GOAL!",
+            "Giving up thirty a game and still smiling?! That's not a defense, that's an OPEN DOOR POLICY!",
+        ],
     },
-]
-
-
-# Structural variety, separate from comedian voice -- randomly picked
-# per quip alongside the comedian style. Without this, real output
-# converges hard on one shape almost every time: "[record], BUT [stat],
-# [dismissive tag]" -- same skeleton regardless of team or voice. This
-# forces the actual STRUCTURE of the joke to vary, not just word choice.
-JOKE_ANGLES = [
-    "Structure this as a backhanded compliment -- open like you're genuinely impressed, then undercut it hard with the facts.",
-    "Structure this as mock-concerned advice, like you're worried about them and gently pointing out why.",
-    "Structure this as one single blunt observation -- no setup, no windup, just the jab landing immediately.",
-    "Structure this as a direct question aimed at them, not a statement about them.",
-    "Structure this by comparing their situation to something absurd, mundane, or unrelated -- not another football team.",
-    "Structure this by zooming in on ONE specific detail or number rather than listing several stats in a row.",
-    "Structure this as if continuing a conversation already in progress -- don't restate their record like it's new information.",
-]
-
-# Specific angle to reach for when using general program-history
-# knowledge (see the "else" branch in build_quip_prompt below). Without
-# pinning a specific angle, real output converges hard on one narrative
-# almost every time -- "this program always collapses/chokes eventually"
-# -- regardless of which team it actually is. Randomly forcing a
-# specific angle breaks that convergence.
-HISTORY_ANGLES = [
-    "a specific well-known bad season, losing streak, or era for this program",
-    "a longstanding rivalry and how this program has historically fared in it",
-    "this program's general reputation/identity within their conference",
-    "a specific notable coach, coaching change, or coaching era for this program",
-    "this program's recruiting reputation relative to their actual on-field results",
-    "a specific memorable win, upset, or moment of success in this program's history",
 ]
 
 
@@ -532,7 +498,16 @@ def build_quip_prompt(form: dict) -> str:
     """Builds the Gemini prompt for a single dynamic RTA-reply quip,
     using only the real facts in `form` -- never inventing anything the
     data doesn't actually say. Randomly picks one comedian voice from
-    COMEDIAN_STYLES per call, so replies vary between styles over time."""
+    COMEDIAN_STYLES per call, so replies vary between styles over time.
+
+    Deliberately lean: earlier versions stacked many simultaneous
+    requirements (mandatory joke structure, minimum fact count, number
+    formatting, several banned-phrase rules restated more than once) on
+    top of the actual creative ask, and real output got flatter and more
+    repetitive the more rules got added -- comedy loses that fight
+    against constraint-satisfaction. This version leads with concrete
+    example lines to carry the voice (a much stronger signal than prose
+    description) and keeps the hard rules to a short list stated once."""
     team = form["team"]
     record = f"{form['wins']}-{form['losses']}"
     streak_word = "winning" if form["streak_type"] == "W" else "losing"
@@ -543,95 +518,53 @@ def build_quip_prompt(form: dict) -> str:
         if form["last_team_score"] is not None else None
     )
 
-    facts = [f"Record so far this season: {record}."]
+    facts = [f"Record: {record}."]
     if last_result:
-        facts.append(f"Most recent completed game: {last_result}.")
+        facts.append(f"Most recent game: {last_result}.")
     if streak:
         facts.append(f"Currently on {streak}.")
     if form["season_ppg"] is not None and form["season_pa"] is not None:
-        facts.append(f"Averaging {form['season_ppg']} points scored and {form['season_pa']} points allowed per game this season.")
-
+        facts.append(f"Averaging {form['season_ppg']} points scored, {form['season_pa']} allowed per game.")
     facts_block = " ".join(facts)
-    fact_count = len(facts)
 
     history_options = TEAM_HISTORY_FACTS.get(team, [])
     if history_options:
-        # A specific, pre-verified fact exists for this team (used as an
-        # override/correction lever, not the default path) -- pin the
-        # model to exactly this rather than letting it free-associate.
         history_fact = random.choice(history_options)
-        history_block = (
-            f"\n\nOne real historical fact about {team}'s program (NOT from this season -- "
-            f"a past season, so don't confuse it with the current-season facts above): "
-            f"{history_fact}\nYou MAY optionally work this in for extra bite, but it's not "
-            f"required -- only use it if it makes the line land better, and never present "
-            f"it as if it happened this season."
-        )
+        history_block = f"\nOne real historical fact you could optionally use (not from this season): {history_fact}"
     else:
-        # Default path: let the model draw on its own general knowledge
-        # of this program's real football history/reputation rather than
-        # requiring a pre-verified fact to exist. Exact precision isn't
-        # required here -- approximate/well-known program reputation is
-        # good enough. A SPECIFIC angle is pinned below (see
-        # HISTORY_ANGLES) rather than left fully open -- an open "pick
-        # whatever" instruction converged hard on the same "this program
-        # always collapses eventually" narrative almost every time,
-        # regardless of which real team it was.
-        chosen_history_angle = random.choice(HISTORY_ANGLES)
         history_block = (
-            f"\n\nYou may ALSO optionally draw on real general knowledge of {team}'s "
-            f"football program -- specifically {chosen_history_angle}, even if you're "
-            f"not 100% certain of exact details. Keep it to something genuinely "
-            f"recognizable about this specific program, not something you're making up "
-            f"out of nothing. This is optional -- the season facts above are the "
-            f"required core of the line."
+            f"\nYou can also optionally draw on real general knowledge of {team}'s "
+            f"football program/reputation if it strengthens the joke -- approximate "
+            f"details are fine, just keep it genuinely recognizable, not invented."
         )
 
     chosen_style = random.choice(COMEDIAN_STYLES)
-    chosen_angle = random.choice(JOKE_ANGLES)
+    examples_block = "\n".join(f'- "{ex}"' for ex in chosen_style["examples"])
 
-    return f"""You are replying to a college football coach in a group chat who just
-posted "RTA" (Ready To Advance) for their team, {team}.
+    return f"""Write ONE short, funny heckle line (15-25 words) for a college football
+group chat, roasting {team} using their real stats below. Someone just
+posted "RTA" for this team -- everyone already knows that, don't mention
+it or reference advancing at all, just roast their season.
 
-CRITICAL RULE, read this first: never reference "RTA", "ready to advance",
-"advancing", or the fact that they just posted this message -- not as an
-opener, not anywhere in the line, not even reworded ("screaming RTA",
-"yelling ready to advance", etc. all count as violations too). The
-reader already knows they posted RTA -- that's not a joke, it's just
-context. The ENTIRE line should be about their actual season performance
-instead. This is the single most repeated pattern across many separate
-replies, so it matters more than anything else here.
-
-Real facts about {team}'s season so far -- use ONLY these, don't invent
-any other games, scores, opponents, or claims about their schedule/other
-results:
+Real facts about {team} -- use only these, don't invent anything else:
 {facts_block}{history_block}
 
-Write ONE punchy line (roughly 15-30 words) roasting {team}, weaving in
-AT LEAST {min(2, fact_count)} of the {fact_count} season facts above -- not just
-the record alone. If a streak or scoring average is given, make real use
-of it rather than ignoring it.
+Pick whichever ONE or TWO of these facts actually make for the funniest
+line -- you don't need to use all of them, and don't just list them with
+"while"/"after"/"since". This needs a real punchline: a genuine turn, an
+unexpected comparison, an ironic angle -- something that actually reads
+as a joke, not a stats recap with attitude.
 
-Comedic voice for this line, in the style of {chosen_style['name']}:
-{chosen_style['style']}
+Write it in this voice -- study these examples closely, they're the
+actual target sound, not just a topic area:
+{examples_block}
 
-MANDATORY STRUCTURE for this specific line: {chosen_angle}
+(Those examples are about hypothetical teams -- write a NEW line for
+{team} specifically, don't reuse their wording or scenario.)
 
-IMPORTANT: absolutely NO profanity or curse words of any kind, even mild
-ones, no matter how heated the joke gets. This goes out to a group chat,
-not a comedy club -- keep the language completely clean while still
-being sharp and cutting.
-
-Do NOT reach for generic sports-trash-talk tropes not supported by the
-facts above (e.g. don't claim their wins came against weak opponents
-unless a fact actually says that). Can use at most one emoji. Do NOT
-mention or predict anything about the CURRENT week's game, since it
-hasn't been played yet -- only reference the facts given above.
-
-Reminder: do not reference RTA/advancing/them posting this message
-anywhere in the line -- the whole thing should just be about their
-season. Return ONLY the line itself, no quotes, no preamble, no
-attribution to the comedian by name.
+Hard rules: numbers as numerals ("4-4" and "47-45", never spelled out).
+No profanity. No mention of RTA/advancing. No predicting this week's
+game. At most one emoji. Return ONLY the line itself, nothing else.
 """
 
 
