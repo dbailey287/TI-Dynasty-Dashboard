@@ -22,7 +22,11 @@ import sys
 import rta_logic as rl
 
 
+<<<<<<< HEAD
 def generate_examples_for_team(client, team: str, count: int) -> dict:
+=======
+def generate_examples_for_team(client, gen_config, team: str, count: int) -> dict:
+>>>>>>> 55105a57efc302bf254e807273e886a58823161b
     """Prints stats + generated examples for one team. Returns a dict of
     {style_name: count} for that team, or None if there's no data yet."""
     form = rl.get_team_recent_form(team)
@@ -48,7 +52,13 @@ def generate_examples_for_team(client, team: str, count: int) -> dict:
         style_used = next((s["name"] for s in rl.COMEDIAN_STYLES if s["name"] in prompt), "unknown")
 
         try:
+<<<<<<< HEAD
             response = client.models.generate_content(model=rl.QUIP_MODEL_CHAIN[0], contents=[prompt])
+=======
+            response = client.models.generate_content(
+                model=rl.QUIP_MODEL_CHAIN[0], contents=[prompt], config=gen_config,
+            )
+>>>>>>> 55105a57efc302bf254e807273e886a58823161b
             text = (response.text or "").strip()
             if text:
                 print(f"  [{i}] ({style_used}): {text}")
@@ -89,6 +99,15 @@ def main():
         sys.exit(1)
 
     client = genai.Client(api_key=api_key)
+<<<<<<< HEAD
+=======
+    # Same temperature as the real production path in rta_logic.py's
+    # generate_dynamic_quip() -- keeping this in sync matters, otherwise
+    # this tester would give unrepresentatively repetitive results
+    # compared to what the live bot actually produces.
+    from google.genai import types
+    gen_config = types.GenerateContentConfig(temperature=1.3)
+>>>>>>> 55105a57efc302bf254e807273e886a58823161b
 
     if args.all_teams:
         teams = sorted(rl.TEAM_TAGLINES.keys())
@@ -98,7 +117,11 @@ def main():
         overall_style_counts = {}
         skipped = []
         for team in teams:
+<<<<<<< HEAD
             result = generate_examples_for_team(client, team, args.count)
+=======
+            result = generate_examples_for_team(client, gen_config, team, args.count)
+>>>>>>> 55105a57efc302bf254e807273e886a58823161b
             if result is None:
                 skipped.append(team)
             else:
@@ -118,7 +141,11 @@ def main():
             print("(Check the team name matches exactly, and that dynasty_data_<season>.csv")
             print(" is in this same folder.)")
             sys.exit(1)
+<<<<<<< HEAD
         style_counts = generate_examples_for_team(client, args.team, args.count)
+=======
+        style_counts = generate_examples_for_team(client, gen_config, args.team, args.count)
+>>>>>>> 55105a57efc302bf254e807273e886a58823161b
         print("=" * 70)
         print("Style distribution this run:", style_counts)
         print("(Random per call -- run again to see a different mix.)")
