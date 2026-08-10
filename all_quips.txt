@@ -1,0 +1,201 @@
+Generating 5 example(s) each for 19 team(s)...
+(This makes real API calls for every team -- may take a little while.)
+
+======================================================================
+Arizona State
+======================================================================
+  Record: 4-3  |  Last game: lost to Utah 13-14  |  PPG/PA: 31.0/26.6
+
+  [1] (Nate Bargatze): CONNECTION/API FAILED -- UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f3c8' in position 197: character maps to <undefined>
+  [2] (Nate Bargatze): CONNECTION/API FAILED -- UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f971' in position 163: character maps to <undefined>
+  [3] (Nate Bargatze): Ready to advance? You guys are averaging 31 points a game and somehow managed to lose three in a row, including that fourteen-thirteen thing to Utah.
+  [4] (Derrick Stroup): Ready to advance?! Brother, you’ve lost three straight and choked away a 14-13 heartbreaker to Utah to sit at 4-3, you’re not advancing anywhere except straight backwards!
+  [5] (Derrick Stroup): CONNECTION/API FAILED -- UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f4c9' in position 272: character maps to <undefined>
+
+======================================================================
+Arkansas
+======================================================================
+  Record: 7-0  |  Last game: beat Vanderbilt 45-38  |  PPG/PA: 42.1/31.6
+
+  [1] (Derrick Stroup): CONNECTION/API FAILED -- UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f417' in position 198: character maps to <undefined>
+  [2] (Derrick Stroup): CONNECTION/API FAILED -- UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f417' in position 221: character maps to <undefined>
+  [3] (Nate Bargatze): CONNECTION/API FAILED -- UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f417' in position 194: character maps to <undefined>
+  [4] (Derrick Stroup): CONNECTION/API FAILED -- UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f417' in position 231: character maps to <undefined>
+  [5] (Nate Bargatze): CONNECTION/API FAILED -- UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f417' in position 157: character maps to <undefined>
+
+======================================================================
+Baylor
+======================================================================
+  Record: 3-3  |  Last game: lost to Oklahoma State 36-55  |  PPG/PA: 35.8/26.5
+
+  [1] (Derrick Stroup): CONNECTION/API FAILED -- UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f920' in position 198: character maps to <undefined>
+  [2] (Nate Bargatze): CONNECTION/API FAILED -- UnicodeEncodeError: 'charmap' codec can't encode characters in position 130-133: character maps to <undefined>
+  [3] (Nate Bargatze): CONNECTION/API FAILED -- UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f43b' in position 160: character maps to <undefined>
+  [4] (Derrick Stroup): Ready to advance?! Brother, you’re sitting at 3-3 trying to fast-forward past Oklahoma State hanging fifty-five points on your head while you give up twenty-six a game!
+  [5] (Derrick Stroup): CONNECTION/API FAILED -- UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f920' in position 196: character maps to <undefined>
+
+======================================================================
+California
+======================================================================
+  Record: 6-0  |  Last game: beat Oregon State 42-14  |  PPG/PA: 38.5/14.7
+
+  [1] (Nate Bargatze): CONNECTION/API FAILED -- UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f3c8' in position 149: character maps to <undefined>
+  [2] (Derrick Stroup): CONNECTION/API FAILED -- UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f43b' in position 218: character maps to <undefined>
+  [3] (Nate Bargatze): CONNECTION/API FAILED -- UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f43b' in position 164: character maps to <undefined>
+  [4] (Derrick Stroup): CONNECTION/API FAILED -- UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f43b' in position 267: character maps to <undefined>
+  [5] (Derrick Stroup): CONNECTION/API FAILED -- UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f43b' in position 196: character maps to <undefined>
+
+======================================================================
+Colorado
+======================================================================
+  Record: 7-0  |  Last game: beat Nebraska 37-24  |  PPG/PA: 33.1/15.0
+
+  [1] (Derrick Stroup): CONNECTION/API FAILED -- UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f9ac' in position 291: character maps to <undefined>
+  [2] (Derrick Stroup): CONNECTION/API FAILED -- UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f9ac' in position 259: character maps to <undefined>
+  [3] (Derrick Stroup): CONNECTION/API FAILED -- UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f9ac' in position 231: character maps to <undefined>
+  [4] (Derrick Stroup): CONNECTION/API FAILED -- UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f403' in position 170: character maps to <undefined>
+  [5] (Nate Bargatze): Well, I see you posted RTA for Colorado after starting 7-0 and beating Nebraska 37-24, which is fine, but I mostly just keep waiting to wake up.
+
+======================================================================
+Kentucky
+======================================================================
+  Record: 5-3  |  Last game: beat Vanderbilt 41-17  |  PPG/PA: 26.8/19.9
+
+  [1] (Nate Bargatze): CONNECTION/API FAILED -- UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f3c8' in position 165: character maps to <undefined>
+  [2] (Derrick Stroup): CONNECTION/API FAILED -- UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f3c8' in position 313: character maps to <undefined>
+  [3] (Derrick Stroup): CONNECTION/API FAILED -- UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f480' in position 249: character maps to <undefined>
+  [4] (Derrick Stroup): CONNECTION/API FAILED -- UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f3c8' in position 244: character maps to <undefined>
+  [5] (Derrick Stroup): CONNECTION/API FAILED -- UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f3c8' in position 228: character maps to <undefined>
+
+======================================================================
+Maryland
+======================================================================
+  Record: 4-4  |  Last game: beat Michigan State 35-17  |  PPG/PA: 29.9/22.9
+
+  [1] (Derrick Stroup): CONNECTION/API FAILED -- UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f3c8' in position 270: character maps to <undefined>
+  [2] (Derrick Stroup): CONNECTION/API FAILED -- UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f3c8' in position 267: character maps to <undefined>
+  [3] (Derrick Stroup): Ready to advance?! You’re sitting at four and four, barely scraping past Michigan State thirty-five to seventeen on a tiny two-game heater while averaging twenty-nine point nine a game!
+  [4] (Nate Bargatze): CONNECTION/API FAILED -- UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f422' in position 222: character maps to <undefined>
+  [5] (Nate Bargatze): CONNECTION/API FAILED -- UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f422' in position 245: character maps to <undefined>
+
+======================================================================
+Missouri
+======================================================================
+  Record: 5-2  |  Last game: beat Texas A&M 30-17  |  PPG/PA: 35.1/31.9
+
+  [1] (Nate Bargatze): CONNECTION/API FAILED -- UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f3c8' in position 203: character maps to <undefined>
+  [2] (Nate Bargatze): CONNECTION/API FAILED -- UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f605' in position 182: character maps to <undefined>
+  [3] (Derrick Stroup): CONNECTION/API FAILED -- UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f4c8' in position 184: character maps to <undefined>
+  [4] (Nate Bargatze): CONNECTION/API FAILED -- UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f3c8' in position 164: character maps to <undefined>
+  [5] (Derrick Stroup): You’re out here yelling RTA like you didn’t just give up 31.9 points a game while riding a four-game win streak to a five and two record!
+
+======================================================================
+Northwestern
+======================================================================
+  Record: 2-4  |  Last game: lost to Michigan State 45-47  |  PPG/PA: 33.8/44.8
+
+  [1] (Derrick Stroup): Ready to advance?! Brother, you’re sitting at 2-4 and just gave up forty-seven points in a shootout while bleeding 44.8 points a game all season long!
+  [2] (Derrick Stroup): CONNECTION/API FAILED -- UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f3c8' in position 199: character maps to <undefined>
+  [3] (Derrick Stroup): Ready to advance where, back to the drawing board?! You’re sitting at 2-4 and just gave up forty-seven points to Michigan State while bleeding a staggering forty-four point eight points a game, man!
+  [4] (Nate Bargatze): CONNECTION/API FAILED -- UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f3c8' in position 158: character maps to <undefined>
+  [5] (Derrick Stroup): Ready to advance?! Brother, you’re sitting at 2-4 and just gave up forty-seven points in a shootout while bleeding 44.8 a game!
+
+======================================================================
+Oklahoma State
+======================================================================
+  Record: 7-0  |  Last game: beat Nebraska 38-17  |  PPG/PA: 37.1/17.1
+
+  [1] (Derrick Stroup): CONNECTION/API FAILED -- UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f920' in position 240: character maps to <undefined>
+  [2] (Derrick Stroup): CONNECTION/API FAILED -- UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f920' in position 294: character maps to <undefined>
+  [3] (Nate Bargatze): CONNECTION/API FAILED -- UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f920' in position 177: character maps to <undefined>
+  [4] (Derrick Stroup): CONNECTION/API FAILED -- UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f920' in position 196: character maps to <undefined>
+  [5] (Nate Bargatze): CONNECTION/API FAILED -- UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f920' in position 174: character maps to <undefined>
+
+======================================================================
+Pittsburgh
+======================================================================
+  Record: 7-0  |  Last game: beat Boston College 65-35  |  PPG/PA: 54.7/31.7
+
+  [1] (Nate Bargatze): CONNECTION/API FAILED -- UnicodeEncodeError: 'charmap' codec can't encode character '\U0001fab5' in position 158: character maps to <undefined>
+  [2] (Nate Bargatze): CONNECTION/API FAILED -- UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f3c8' in position 169: character maps to <undefined>
+  [3] (Nate Bargatze): CONNECTION/API FAILED -- UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f3c8' in position 171: character maps to <undefined>
+  [4] (Nate Bargatze): CONNECTION/API FAILED -- UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f3c8' in position 150: character maps to <undefined>
+  [5] (Nate Bargatze): CONNECTION/API FAILED -- UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f3c8' in position 140: character maps to <undefined>
+
+======================================================================
+SMU
+======================================================================
+  Record: 8-0  |  Last game: beat Utah State 59-24  |  PPG/PA: 63.1/22.5
+
+  [1] (Derrick Stroup): CONNECTION/API FAILED -- UnicodeEncodeError: 'charmap' codec can't encode characters in position 203-204: character maps to <undefined>
+  [2] (Derrick Stroup): CONNECTION/API FAILED -- UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f920' in position 237: character maps to <undefined>
+  [3] (Derrick Stroup): CONNECTION/API FAILED -- UnicodeEncodeError: 'charmap' codec can't encode characters in position 258-259: character maps to <undefined>
+  [4] (Nate Bargatze): CONNECTION/API FAILED -- UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f40e' in position 141: character maps to <undefined>
+  [5] (Nate Bargatze): CONNECTION/API FAILED -- UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f40e' in position 149: character maps to <undefined>
+
+======================================================================
+South Carolina
+======================================================================
+  Record: 7-0  |  Last game: beat Tennessee 34-19  |  PPG/PA: 31.6/12.1
+
+  [1] (Nate Bargatze): CONNECTION/API FAILED -- UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f414' in position 178: character maps to <undefined>
+  [2] (Nate Bargatze): CONNECTION/API FAILED -- UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f3c8' in position 156: character maps to <undefined>
+  [3] (Nate Bargatze): CONNECTION/API FAILED -- UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f3c8' in position 190: character maps to <undefined>
+  [4] (Derrick Stroup): CONNECTION/API FAILED -- UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f413' in position 282: character maps to <undefined>
+  [5] (Nate Bargatze): CONNECTION/API FAILED -- UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f3c8' in position 150: character maps to <undefined>
+
+======================================================================
+Stanford
+======================================================================
+  Record: 3-3  |  Last game: beat Washington State 45-27  |  PPG/PA: 31.8/33.3
+
+  [1] (Nate Bargatze): CONNECTION/API FAILED -- UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f332' in position 156: character maps to <undefined>
+  [2] (Nate Bargatze): CONNECTION/API FAILED -- UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f332' in position 147: character maps to <undefined>
+  [3] (Nate Bargatze): CONNECTION/API FAILED -- UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f332' in position 142: character maps to <undefined>
+  [4] (Derrick Stroup): CONNECTION/API FAILED -- UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f332' in position 175: character maps to <undefined>
+  [5] (Nate Bargatze): CONNECTION/API FAILED -- UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f332' in position 147: character maps to <undefined>
+
+======================================================================
+Temple
+======================================================================
+  Record: 5-2  |  Last game: beat Charlotte 42-10  |  PPG/PA: 28.1/27.4
+
+  [1] (Derrick Stroup): CONNECTION/API FAILED -- UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f989' in position 300: character maps to <undefined>
+  [2] (Nate Bargatze): CONNECTION/API FAILED -- UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f3c8' in position 177: character maps to <undefined>
+  [3] (Nate Bargatze): Well, five and two is nice, I guess, but a team averaging twenty-eight points while letting in almost twenty-seven looks an awful lot like Temple football.
+  [4] (Nate Bargatze): CONNECTION/API FAILED -- UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f3c8' in position 200: character maps to <undefined>
+  [5] (Derrick Stroup): Man, Temple out here screaming RTA at five and two like a four-game win streak erases putting up twenty-eight points a game while giving up twenty-seven!
+
+======================================================================
+Virginia
+======================================================================
+  Record: 5-1  |  Last game: beat Syracuse 33-9  |  PPG/PA: 28.7/24.8
+
+  [1] (Derrick Stroup): CONNECTION/API FAILED -- UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f3c8' in position 306: character maps to <undefined>
+  [2] (Derrick Stroup): CONNECTION/API FAILED -- UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f3c8' in position 268: character maps to <undefined>
+  [3] (Derrick Stroup): RTA? My brother in Christ, you are riding a three-game winning streak averaging 28.7 points right into a brick wall of historic Virginia football reality!
+  [4] (Nate Bargatze): CONNECTION/API FAILED -- UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f3c8' in position 140: character maps to <undefined>
+  [5] (Nate Bargatze): CONNECTION/API FAILED -- UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f3c8' in position 172: character maps to <undefined>
+
+======================================================================
+Virginia Tech
+======================================================================
+  Record: 4-3  |  Last game: beat Georgia Tech 49-23  |  PPG/PA: 33.1/25.7
+
+  [1] (Nate Bargatze): CONNECTION/API FAILED -- UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f983' in position 154: character maps to <undefined>
+  [2] (Derrick Stroup): CONNECTION/API FAILED -- UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f983' in position 168: character maps to <undefined>
+  [3] (Nate Bargatze): CONNECTION/API FAILED -- UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f983' in position 181: character maps to <undefined>
+  [4] (Nate Bargatze): Ready to advance to what, exactly? You’re sitting at 4-3 and just beat Georgia Tech, but you're still giving up 25 points a game.
+  [5] (Nate Bargatze): CONNECTION/API FAILED -- UnicodeEncodeError: 'charmap' codec can't encode character '\U0001f983' in position 134: character maps to <undefined>
+
+======================================================================
+West Virginia
+======================================================================
+  Record: 6-1  |  Last game: beat Louisiana Tech 49-20  |  PPG/PA: 29.0/24.3
+
+  [1] (Derrick Stroup): CONNECTION/API FAILED -- UnicodeEncodeError: 'charmap' codec can't encode characters in position 212-214: character maps to <undefined>
+  [2] (Derrick Stroup): Six and one, y'all are strutting like world-beaters after barely putting up twenty-nine points a game and dragging that twenty-four point defense across the finish line!
+  [3] (Derrick Stroup): Ready to advance? You’re sitting here at 6-1 just because you just stuffed Louisiana Tech 49-20, but you're only scoring 29 points a game while letting them put up 24.3, man!
+  [4] (Derrick Stroup): Six and one! You just put up forty-nine points on Louisiana Tech, but you’re still sitting there averaging twenty-four points allowed!
+  [5] (Nate Bargatze): CONNECTION/API FAILED -- UnicodeEncodeError: 'charmap' codec can't encode characters in position 177-178: character maps to <undefined>
+
