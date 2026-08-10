@@ -420,6 +420,50 @@ def get_team_recent_form(team: str, directory: str = ".") -> dict | None:
     ppg = scores["Team_Score"].mean()
     pa = scores["Opponent_Score"].mean()
 
+    # Record vs ranked opponents, and vs fellow user-controlled teams --
+    # separate from the overall record, since these are more specific,
+    # more interesting joke material than just the plain W-L.
+    ranked_games = team_games[team_games["Opponent_Rank"].notna() & (team_games["Opponent_Rank"] != "-")]
+    ranked_wins = int((ranked_games["Outcome"] == "W").sum())
+    ranked_losses = int((ranked_games["Outcome"] == "L").sum())
+
+    user_games = team_games[team_games["Matchup_Type"] == "User vs User"]
+    user_wins = int((user_games["Outcome"] == "W").sum())
+    user_losses = int((user_games["Outcome"] == "L").sum())
+
+    # Upcoming opponents -- real facts about what's actually on the
+    # schedule, not a prediction of how those games will go. The
+    # immediate next game, the next RANKED opponent, and the next
+    # fellow-USER opponent are tracked separately since they're often
+    # different weeks (e.g. next game is an easy unranked team, but a
+    # ranked or user matchup looms a few weeks out).
+    upcoming = df[(df["Team"] == team) & (df["Status"] == "Upcoming")].copy()
+    next_opponent = next_opponent_rank = next_opponent_is_user = None
+    next_ranked_opponent = next_ranked_opponent_rank = next_ranked_weeks_away = None
+    next_user_opponent = next_user_weeks_away = None
+    if not upcoming.empty:
+        upcoming["_sort"] = upcoming["Week"].apply(week_sort_key)
+        upcoming = upcoming.sort_values("_sort")
+        current_week_sort_val = team_games["_sort"].iloc[-1]
+
+        first = upcoming.iloc[0]
+        next_opponent = first["Opponent"]
+        next_opponent_rank = None if first["Opponent_Rank"] in (None, "-") or pd.isna(first["Opponent_Rank"]) else first["Opponent_Rank"]
+        next_opponent_is_user = first["Matchup_Type"] == "User vs User"
+
+        ranked_upcoming = upcoming[upcoming["Opponent_Rank"].notna() & (upcoming["Opponent_Rank"] != "-")]
+        if not ranked_upcoming.empty:
+            r = ranked_upcoming.iloc[0]
+            next_ranked_opponent = r["Opponent"]
+            next_ranked_opponent_rank = r["Opponent_Rank"]
+            next_ranked_weeks_away = int(r["_sort"] - current_week_sort_val)
+
+        user_upcoming = upcoming[upcoming["Matchup_Type"] == "User vs User"]
+        if not user_upcoming.empty:
+            u = user_upcoming.iloc[0]
+            next_user_opponent = u["Opponent"]
+            next_user_weeks_away = int(u["_sort"] - current_week_sort_val)
+
     return {
         "team": team,
         "wins": wins,
@@ -432,6 +476,18 @@ def get_team_recent_form(team: str, directory: str = ".") -> dict | None:
         "last_opponent_score": opp_score,
         "season_ppg": None if pd.isna(ppg) else round(float(ppg), 1),
         "season_pa": None if pd.isna(pa) else round(float(pa), 1),
+        "ranked_wins": ranked_wins,
+        "ranked_losses": ranked_losses,
+        "user_wins": user_wins,
+        "user_losses": user_losses,
+        "next_opponent": next_opponent,
+        "next_opponent_rank": next_opponent_rank,
+        "next_opponent_is_user": next_opponent_is_user,
+        "next_ranked_opponent": next_ranked_opponent,
+        "next_ranked_opponent_rank": next_ranked_opponent_rank,
+        "next_ranked_weeks_away": next_ranked_weeks_away,
+        "next_user_opponent": next_user_opponent,
+        "next_user_weeks_away": next_user_weeks_away,
     }
 
 
@@ -479,16 +535,16 @@ COMEDIAN_STYLES = [
         "name": "Nate Bargatze",
         "examples": [
             "We're 6-0, which is more wins than I've had good decisions this year, so I'd call that a fair trade.",
-            "Giving up thirty a game and still winning just means we'd rather stress everyone out than beat them cleanly.",
+            "Giving up 30 a game and still winning just means we'd rather stress everyone out than beat them cleanly.",
             "I don't know how we're 5-1. Nobody in that building knows. We're just letting it happen and not asking questions.",
         ],
     },
     {
         "name": "Derrick Stroup",
         "examples": [
-            "SIX AND OH?! Man, you're out here scoring forty a game like it's NOTHING, like anybody could do that, and NOBODY can do that!",
-            "You beat 'em by THREE points and you're strutting around like you just hoisted a trophy, my brother, three points is a FIELD GOAL!",
-            "Giving up thirty a game and still smiling?! That's not a defense, that's an OPEN DOOR POLICY!",
+            "6-0?! Man, you're out here scoring 40 a game like it's NOTHING, like anybody could do that, and NOBODY can do that!",
+            "You beat 'em by 3 points and you're strutting around like you just hoisted a trophy, my brother, 3 points is a FIELD GOAL!",
+            "Giving up 30 a game and still smiling?! That's not a defense, that's an OPEN DOOR POLICY!",
         ],
     },
 ]
@@ -525,6 +581,18 @@ def build_quip_prompt(form: dict) -> str:
         facts.append(f"Currently on {streak}.")
     if form["season_ppg"] is not None and form["season_pa"] is not None:
         facts.append(f"Averaging {form['season_ppg']} points scored, {form['season_pa']} allowed per game.")
+    if form["ranked_wins"] + form["ranked_losses"] > 0:
+        facts.append(f"Record vs ranked opponents this season: {form['ranked_wins']}-{form['ranked_losses']}.")
+    if form["user_wins"] + form["user_losses"] > 0:
+        facts.append(f"Record vs fellow user-controlled teams this season: {form['user_wins']}-{form['user_losses']}.")
+    if form.get("next_ranked_opponent"):
+        weeks = form["next_ranked_weeks_away"]
+        when = "next week" if weeks == 1 else f"in {weeks} weeks"
+        facts.append(f"Upcoming: plays #{form['next_ranked_opponent_rank']} {form['next_ranked_opponent']} {when}.")
+    if form.get("next_user_opponent"):
+        weeks = form["next_user_weeks_away"]
+        when = "next week" if weeks == 1 else f"in {weeks} weeks"
+        facts.append(f"Upcoming: plays fellow user-controlled team {form['next_user_opponent']} {when}.")
     facts_block = " ".join(facts)
 
     history_options = TEAM_HISTORY_FACTS.get(team, [])
@@ -555,6 +623,14 @@ line -- you don't need to use all of them, and don't just list them with
 unexpected comparison, an ironic angle -- something that actually reads
 as a joke, not a stats recap with attitude.
 
+If it's in the facts above, one especially strong angle is pairing a
+PAST result with a FUTURE one -- e.g. their record against ranked teams
+plus an upcoming ranked opponent, or their record against fellow users
+plus an upcoming user matchup -- building dread or false confidence
+about what's coming. Only use this if those specific facts are actually
+listed above, and don't force it if a simpler single-fact joke lands
+better.
+
 Write it in this voice -- study these examples closely, they're the
 actual target sound, not just a topic area:
 {examples_block}
@@ -563,8 +639,11 @@ actual target sound, not just a topic area:
 {team} specifically, don't reuse their wording or scenario.)
 
 Hard rules: numbers as numerals ("4-4" and "47-45", never spelled out).
-No profanity. No mention of RTA/advancing. No predicting this week's
-game. At most one emoji. Return ONLY the line itself, nothing else.
+No profanity. No mention of RTA/advancing. You CAN reference an upcoming
+opponent as a real schedule fact (who they play, when) if it's listed
+above, but never predict or claim to know how that game actually turns
+out -- nobody knows that yet. At most one emoji. Return ONLY the line
+itself, nothing else.
 """
 
 

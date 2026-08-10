@@ -5,210 +5,142 @@ Arizona State
 ======================================================================
   Record: 4-3  |  Last game: lost to Utah 13-14  |  PPG/PA: 31.0/26.6
 
---- Prompt [1] (comedian style: Derrick Stroup) ---
-You are replying to a college football coach in a group chat who just
-posted "RTA" (Ready To Advance) for their team, Arizona State.
+--- Prompt [1] (comedian style: unknown) ---
+Write ONE short, funny heckle line (15-25 words) for a college football
+group chat, roasting Arizona State using their real stats below. Someone just
+posted "RTA" for this team -- everyone already knows that, don't mention
+it or reference advancing at all, just roast their season.
 
-CRITICAL RULE, read this first: never reference "RTA", "ready to advance",
-"advancing", or the fact that they just posted this message -- not as an
-opener, not anywhere in the line, not even reworded ("screaming RTA",
-"yelling ready to advance", etc. all count as violations too). The
-reader already knows they posted RTA -- that's not a joke, it's just
-context. The ENTIRE line should be about their actual season performance
-instead. This is the single most repeated pattern across many separate
-replies, so it matters more than anything else here.
+Real facts about Arizona State -- use only these, don't invent anything else:
+Record: 4-3. Most recent game: lost to Utah 13-14. Currently on a 3-game losing streak. Averaging 31.0 points scored, 26.6 allowed per game.
+You can also optionally draw on real general knowledge of Arizona State's football program/reputation if it strengthens the joke -- approximate details are fine, just keep it genuinely recognizable, not invented.
 
-Real facts about Arizona State's season so far -- use ONLY these, don't invent
-any other games, scores, opponents, or claims about their schedule/other
-results:
-Record so far this season: 4-3. Most recent completed game: lost to Utah 13-14. Currently on a 3-game losing streak. Averaging 31.0 points scored and 26.6 points allowed per game this season.
+Pick whichever ONE or TWO of these facts actually make for the funniest
+line -- you don't need to use all of them, and don't just list them with
+"while"/"after"/"since". This needs a real punchline: a genuine turn, an
+unexpected comparison, an ironic angle -- something that actually reads
+as a joke, not a stats recap with attitude.
 
-You may ALSO optionally draw on real general knowledge of Arizona State's football program -- specifically a specific well-known bad season, losing streak, or era for this program, even if you're not 100% certain of exact details. Keep it to something genuinely recognizable about this specific program, not something you're making up out of nothing. This is optional -- the season facts above are the required core of the line.
+Write it in this voice -- study these examples closely, they're the
+actual target sound, not just a topic area:
+- "SIX AND OH?! Man, you're out here scoring forty a game like it's NOTHING, like anybody could do that, and NOBODY can do that!"
+- "You beat 'em by THREE points and you're strutting around like you just hoisted a trophy, my brother, three points is a FIELD GOAL!"
+- "Giving up thirty a game and still smiling?! That's not a defense, that's an OPEN DOOR POLICY!"
 
-Write ONE punchy line (roughly 15-30 words) roasting Arizona State, weaving in
-AT LEAST 2 of the 4 season facts above -- not just
-the record alone. If a streak or scoring average is given, make real use
-of it rather than ignoring it.
+(Those examples are about hypothetical teams -- write a NEW line for
+Arizona State specifically, don't reuse their wording or scenario.)
 
-Comedic voice for this line, in the style of Derrick Stroup:
-Write in a fast-paced, high-energy, detailed voice -- like someone telling an animated story who can barely get the words out fast enough. Sharp and cutting, vivid specific details, exclamation-level energy -- but never genuinely mean-spirited, just loud and pointed.
-
-MANDATORY STRUCTURE for this specific line: Structure this as a direct question aimed at them, not a statement about them.
-
-IMPORTANT: absolutely NO profanity or curse words of any kind, even mild
-ones, no matter how heated the joke gets. This goes out to a group chat,
-not a comedy club -- keep the language completely clean while still
-being sharp and cutting.
-
-Do NOT reach for generic sports-trash-talk tropes not supported by the
-facts above (e.g. don't claim their wins came against weak opponents
-unless a fact actually says that). Can use at most one emoji. Do NOT
-mention or predict anything about the CURRENT week's game, since it
-hasn't been played yet -- only reference the facts given above.
-
-Reminder: do not reference RTA/advancing/them posting this message
-anywhere in the line -- the whole thing should just be about their
-season. Return ONLY the line itself, no quotes, no preamble, no
-attribution to the comedian by name.
+Hard rules: numbers as numerals ("4-4" and "47-45", never spelled out).
+No profanity. No mention of RTA/advancing. No predicting this week's
+game. At most one emoji. Return ONLY the line itself, nothing else.
 
 
 
 ======================================================================
 Arkansas
 ======================================================================
-  Record: 7-0  |  Last game: beat Vanderbilt 45-38  |  PPG/PA: 42.1/31.6
+  Record: 8-0  |  Last game: beat Alabama 46-3  |  PPG/PA: 42.6/28.0
 
---- Prompt [1] (comedian style: Derrick Stroup) ---
-You are replying to a college football coach in a group chat who just
-posted "RTA" (Ready To Advance) for their team, Arkansas.
+--- Prompt [1] (comedian style: unknown) ---
+Write ONE short, funny heckle line (15-25 words) for a college football
+group chat, roasting Arkansas using their real stats below. Someone just
+posted "RTA" for this team -- everyone already knows that, don't mention
+it or reference advancing at all, just roast their season.
 
-CRITICAL RULE, read this first: never reference "RTA", "ready to advance",
-"advancing", or the fact that they just posted this message -- not as an
-opener, not anywhere in the line, not even reworded ("screaming RTA",
-"yelling ready to advance", etc. all count as violations too). The
-reader already knows they posted RTA -- that's not a joke, it's just
-context. The ENTIRE line should be about their actual season performance
-instead. This is the single most repeated pattern across many separate
-replies, so it matters more than anything else here.
+Real facts about Arkansas -- use only these, don't invent anything else:
+Record: 8-0. Most recent game: beat Alabama 46-3. Currently on a 8-game winning streak. Averaging 42.6 points scored, 28.0 allowed per game.
+You can also optionally draw on real general knowledge of Arkansas's football program/reputation if it strengthens the joke -- approximate details are fine, just keep it genuinely recognizable, not invented.
 
-Real facts about Arkansas's season so far -- use ONLY these, don't invent
-any other games, scores, opponents, or claims about their schedule/other
-results:
-Record so far this season: 7-0. Most recent completed game: beat Vanderbilt 45-38. Currently on a 7-game winning streak. Averaging 42.1 points scored and 31.6 points allowed per game this season.
+Pick whichever ONE or TWO of these facts actually make for the funniest
+line -- you don't need to use all of them, and don't just list them with
+"while"/"after"/"since". This needs a real punchline: a genuine turn, an
+unexpected comparison, an ironic angle -- something that actually reads
+as a joke, not a stats recap with attitude.
 
-You may ALSO optionally draw on real general knowledge of Arkansas's football program -- specifically a longstanding rivalry and how this program has historically fared in it, even if you're not 100% certain of exact details. Keep it to something genuinely recognizable about this specific program, not something you're making up out of nothing. This is optional -- the season facts above are the required core of the line.
+Write it in this voice -- study these examples closely, they're the
+actual target sound, not just a topic area:
+- "We're 6-0, which is more wins than I've had good decisions this year, so I'd call that a fair trade."
+- "Giving up thirty a game and still winning just means we'd rather stress everyone out than beat them cleanly."
+- "I don't know how we're 5-1. Nobody in that building knows. We're just letting it happen and not asking questions."
 
-Write ONE punchy line (roughly 15-30 words) roasting Arkansas, weaving in
-AT LEAST 2 of the 4 season facts above -- not just
-the record alone. If a streak or scoring average is given, make real use
-of it rather than ignoring it.
+(Those examples are about hypothetical teams -- write a NEW line for
+Arkansas specifically, don't reuse their wording or scenario.)
 
-Comedic voice for this line, in the style of Derrick Stroup:
-Write in a fast-paced, high-energy, detailed voice -- like someone telling an animated story who can barely get the words out fast enough. Sharp and cutting, vivid specific details, exclamation-level energy -- but never genuinely mean-spirited, just loud and pointed.
-
-MANDATORY STRUCTURE for this specific line: Structure this as if continuing a conversation already in progress -- don't restate their record like it's new information.
-
-IMPORTANT: absolutely NO profanity or curse words of any kind, even mild
-ones, no matter how heated the joke gets. This goes out to a group chat,
-not a comedy club -- keep the language completely clean while still
-being sharp and cutting.
-
-Do NOT reach for generic sports-trash-talk tropes not supported by the
-facts above (e.g. don't claim their wins came against weak opponents
-unless a fact actually says that). Can use at most one emoji. Do NOT
-mention or predict anything about the CURRENT week's game, since it
-hasn't been played yet -- only reference the facts given above.
-
-Reminder: do not reference RTA/advancing/them posting this message
-anywhere in the line -- the whole thing should just be about their
-season. Return ONLY the line itself, no quotes, no preamble, no
-attribution to the comedian by name.
+Hard rules: numbers as numerals ("4-4" and "47-45", never spelled out).
+No profanity. No mention of RTA/advancing. No predicting this week's
+game. At most one emoji. Return ONLY the line itself, nothing else.
 
 
 
 ======================================================================
 Baylor
 ======================================================================
-  Record: 3-3  |  Last game: lost to Oklahoma State 36-55  |  PPG/PA: 35.8/26.5
+  Record: 4-3  |  Last game: beat Missouri State 56-24  |  PPG/PA: 38.7/26.1
 
---- Prompt [1] (comedian style: Derrick Stroup) ---
-You are replying to a college football coach in a group chat who just
-posted "RTA" (Ready To Advance) for their team, Baylor.
+--- Prompt [1] (comedian style: unknown) ---
+Write ONE short, funny heckle line (15-25 words) for a college football
+group chat, roasting Baylor using their real stats below. Someone just
+posted "RTA" for this team -- everyone already knows that, don't mention
+it or reference advancing at all, just roast their season.
 
-CRITICAL RULE, read this first: never reference "RTA", "ready to advance",
-"advancing", or the fact that they just posted this message -- not as an
-opener, not anywhere in the line, not even reworded ("screaming RTA",
-"yelling ready to advance", etc. all count as violations too). The
-reader already knows they posted RTA -- that's not a joke, it's just
-context. The ENTIRE line should be about their actual season performance
-instead. This is the single most repeated pattern across many separate
-replies, so it matters more than anything else here.
+Real facts about Baylor -- use only these, don't invent anything else:
+Record: 4-3. Most recent game: beat Missouri State 56-24. Averaging 38.7 points scored, 26.1 allowed per game.
+You can also optionally draw on real general knowledge of Baylor's football program/reputation if it strengthens the joke -- approximate details are fine, just keep it genuinely recognizable, not invented.
 
-Real facts about Baylor's season so far -- use ONLY these, don't invent
-any other games, scores, opponents, or claims about their schedule/other
-results:
-Record so far this season: 3-3. Most recent completed game: lost to Oklahoma State 36-55. Averaging 35.8 points scored and 26.5 points allowed per game this season.
+Pick whichever ONE or TWO of these facts actually make for the funniest
+line -- you don't need to use all of them, and don't just list them with
+"while"/"after"/"since". This needs a real punchline: a genuine turn, an
+unexpected comparison, an ironic angle -- something that actually reads
+as a joke, not a stats recap with attitude.
 
-You may ALSO optionally draw on real general knowledge of Baylor's football program -- specifically a specific notable coach, coaching change, or coaching era for this program, even if you're not 100% certain of exact details. Keep it to something genuinely recognizable about this specific program, not something you're making up out of nothing. This is optional -- the season facts above are the required core of the line.
+Write it in this voice -- study these examples closely, they're the
+actual target sound, not just a topic area:
+- "We're 6-0, which is more wins than I've had good decisions this year, so I'd call that a fair trade."
+- "Giving up thirty a game and still winning just means we'd rather stress everyone out than beat them cleanly."
+- "I don't know how we're 5-1. Nobody in that building knows. We're just letting it happen and not asking questions."
 
-Write ONE punchy line (roughly 15-30 words) roasting Baylor, weaving in
-AT LEAST 2 of the 3 season facts above -- not just
-the record alone. If a streak or scoring average is given, make real use
-of it rather than ignoring it.
+(Those examples are about hypothetical teams -- write a NEW line for
+Baylor specifically, don't reuse their wording or scenario.)
 
-Comedic voice for this line, in the style of Derrick Stroup:
-Write in a fast-paced, high-energy, detailed voice -- like someone telling an animated story who can barely get the words out fast enough. Sharp and cutting, vivid specific details, exclamation-level energy -- but never genuinely mean-spirited, just loud and pointed.
-
-MANDATORY STRUCTURE for this specific line: Structure this as a backhanded compliment -- open like you're genuinely impressed, then undercut it hard with the facts.
-
-IMPORTANT: absolutely NO profanity or curse words of any kind, even mild
-ones, no matter how heated the joke gets. This goes out to a group chat,
-not a comedy club -- keep the language completely clean while still
-being sharp and cutting.
-
-Do NOT reach for generic sports-trash-talk tropes not supported by the
-facts above (e.g. don't claim their wins came against weak opponents
-unless a fact actually says that). Can use at most one emoji. Do NOT
-mention or predict anything about the CURRENT week's game, since it
-hasn't been played yet -- only reference the facts given above.
-
-Reminder: do not reference RTA/advancing/them posting this message
-anywhere in the line -- the whole thing should just be about their
-season. Return ONLY the line itself, no quotes, no preamble, no
-attribution to the comedian by name.
+Hard rules: numbers as numerals ("4-4" and "47-45", never spelled out).
+No profanity. No mention of RTA/advancing. No predicting this week's
+game. At most one emoji. Return ONLY the line itself, nothing else.
 
 
 
 ======================================================================
 California
 ======================================================================
-  Record: 6-0  |  Last game: beat Oregon State 42-14  |  PPG/PA: 38.5/14.7
+  Record: 7-0  |  Last game: beat Washington 33-21  |  PPG/PA: 37.7/15.6
 
---- Prompt [1] (comedian style: Derrick Stroup) ---
-You are replying to a college football coach in a group chat who just
-posted "RTA" (Ready To Advance) for their team, California.
+--- Prompt [1] (comedian style: unknown) ---
+Write ONE short, funny heckle line (15-25 words) for a college football
+group chat, roasting California using their real stats below. Someone just
+posted "RTA" for this team -- everyone already knows that, don't mention
+it or reference advancing at all, just roast their season.
 
-CRITICAL RULE, read this first: never reference "RTA", "ready to advance",
-"advancing", or the fact that they just posted this message -- not as an
-opener, not anywhere in the line, not even reworded ("screaming RTA",
-"yelling ready to advance", etc. all count as violations too). The
-reader already knows they posted RTA -- that's not a joke, it's just
-context. The ENTIRE line should be about their actual season performance
-instead. This is the single most repeated pattern across many separate
-replies, so it matters more than anything else here.
+Real facts about California -- use only these, don't invent anything else:
+Record: 7-0. Most recent game: beat Washington 33-21. Currently on a 7-game winning streak. Averaging 37.7 points scored, 15.6 allowed per game.
+You can also optionally draw on real general knowledge of California's football program/reputation if it strengthens the joke -- approximate details are fine, just keep it genuinely recognizable, not invented.
 
-Real facts about California's season so far -- use ONLY these, don't invent
-any other games, scores, opponents, or claims about their schedule/other
-results:
-Record so far this season: 6-0. Most recent completed game: beat Oregon State 42-14. Currently on a 6-game winning streak. Averaging 38.5 points scored and 14.7 points allowed per game this season.
+Pick whichever ONE or TWO of these facts actually make for the funniest
+line -- you don't need to use all of them, and don't just list them with
+"while"/"after"/"since". This needs a real punchline: a genuine turn, an
+unexpected comparison, an ironic angle -- something that actually reads
+as a joke, not a stats recap with attitude.
 
-You may ALSO optionally draw on real general knowledge of California's football program -- specifically this program's recruiting reputation relative to their actual on-field results, even if you're not 100% certain of exact details. Keep it to something genuinely recognizable about this specific program, not something you're making up out of nothing. This is optional -- the season facts above are the required core of the line.
+Write it in this voice -- study these examples closely, they're the
+actual target sound, not just a topic area:
+- "SIX AND OH?! Man, you're out here scoring forty a game like it's NOTHING, like anybody could do that, and NOBODY can do that!"
+- "You beat 'em by THREE points and you're strutting around like you just hoisted a trophy, my brother, three points is a FIELD GOAL!"
+- "Giving up thirty a game and still smiling?! That's not a defense, that's an OPEN DOOR POLICY!"
 
-Write ONE punchy line (roughly 15-30 words) roasting California, weaving in
-AT LEAST 2 of the 4 season facts above -- not just
-the record alone. If a streak or scoring average is given, make real use
-of it rather than ignoring it.
+(Those examples are about hypothetical teams -- write a NEW line for
+California specifically, don't reuse their wording or scenario.)
 
-Comedic voice for this line, in the style of Derrick Stroup:
-Write in a fast-paced, high-energy, detailed voice -- like someone telling an animated story who can barely get the words out fast enough. Sharp and cutting, vivid specific details, exclamation-level energy -- but never genuinely mean-spirited, just loud and pointed.
-
-MANDATORY STRUCTURE for this specific line: Structure this by zooming in on ONE specific detail or number rather than listing several stats in a row.
-
-IMPORTANT: absolutely NO profanity or curse words of any kind, even mild
-ones, no matter how heated the joke gets. This goes out to a group chat,
-not a comedy club -- keep the language completely clean while still
-being sharp and cutting.
-
-Do NOT reach for generic sports-trash-talk tropes not supported by the
-facts above (e.g. don't claim their wins came against weak opponents
-unless a fact actually says that). Can use at most one emoji. Do NOT
-mention or predict anything about the CURRENT week's game, since it
-hasn't been played yet -- only reference the facts given above.
-
-Reminder: do not reference RTA/advancing/them posting this message
-anywhere in the line -- the whole thing should just be about their
-season. Return ONLY the line itself, no quotes, no preamble, no
-attribution to the comedian by name.
+Hard rules: numbers as numerals ("4-4" and "47-45", never spelled out).
+No profanity. No mention of RTA/advancing. No predicting this week's
+game. At most one emoji. Return ONLY the line itself, nothing else.
 
 
 
@@ -217,51 +149,34 @@ Colorado
 ======================================================================
   Record: 7-0  |  Last game: beat Nebraska 37-24  |  PPG/PA: 33.1/15.0
 
---- Prompt [1] (comedian style: Nate Bargatze) ---
-You are replying to a college football coach in a group chat who just
-posted "RTA" (Ready To Advance) for their team, Colorado.
+--- Prompt [1] (comedian style: unknown) ---
+Write ONE short, funny heckle line (15-25 words) for a college football
+group chat, roasting Colorado using their real stats below. Someone just
+posted "RTA" for this team -- everyone already knows that, don't mention
+it or reference advancing at all, just roast their season.
 
-CRITICAL RULE, read this first: never reference "RTA", "ready to advance",
-"advancing", or the fact that they just posted this message -- not as an
-opener, not anywhere in the line, not even reworded ("screaming RTA",
-"yelling ready to advance", etc. all count as violations too). The
-reader already knows they posted RTA -- that's not a joke, it's just
-context. The ENTIRE line should be about their actual season performance
-instead. This is the single most repeated pattern across many separate
-replies, so it matters more than anything else here.
+Real facts about Colorado -- use only these, don't invent anything else:
+Record: 7-0. Most recent game: beat Nebraska 37-24. Currently on a 7-game winning streak. Averaging 33.1 points scored, 15.0 allowed per game.
+You can also optionally draw on real general knowledge of Colorado's football program/reputation if it strengthens the joke -- approximate details are fine, just keep it genuinely recognizable, not invented.
 
-Real facts about Colorado's season so far -- use ONLY these, don't invent
-any other games, scores, opponents, or claims about their schedule/other
-results:
-Record so far this season: 7-0. Most recent completed game: beat Nebraska 37-24. Currently on a 7-game winning streak. Averaging 33.1 points scored and 15.0 points allowed per game this season.
+Pick whichever ONE or TWO of these facts actually make for the funniest
+line -- you don't need to use all of them, and don't just list them with
+"while"/"after"/"since". This needs a real punchline: a genuine turn, an
+unexpected comparison, an ironic angle -- something that actually reads
+as a joke, not a stats recap with attitude.
 
-You may ALSO optionally draw on real general knowledge of Colorado's football program -- specifically this program's recruiting reputation relative to their actual on-field results, even if you're not 100% certain of exact details. Keep it to something genuinely recognizable about this specific program, not something you're making up out of nothing. This is optional -- the season facts above are the required core of the line.
+Write it in this voice -- study these examples closely, they're the
+actual target sound, not just a topic area:
+- "SIX AND OH?! Man, you're out here scoring forty a game like it's NOTHING, like anybody could do that, and NOBODY can do that!"
+- "You beat 'em by THREE points and you're strutting around like you just hoisted a trophy, my brother, three points is a FIELD GOAL!"
+- "Giving up thirty a game and still smiling?! That's not a defense, that's an OPEN DOOR POLICY!"
 
-Write ONE punchy line (roughly 15-30 words) roasting Colorado, weaving in
-AT LEAST 2 of the 4 season facts above -- not just
-the record alone. If a streak or scoring average is given, make real use
-of it rather than ignoring it.
+(Those examples are about hypothetical teams -- write a NEW line for
+Colorado specifically, don't reuse their wording or scenario.)
 
-Comedic voice for this line, in the style of Nate Bargatze:
-Write in a slow, deadpan, understated voice -- flat, matter-of-fact delivery even when the content is absurd or self-deprecating. Clean, folksy, 'everyman' framing. Downplay rather than escalate -- the humor comes from flat delivery and restraint, not volume or intensity. Still land a real jab, just gently and matter-of-factly.
-
-MANDATORY STRUCTURE for this specific line: Structure this by zooming in on ONE specific detail or number rather than listing several stats in a row.
-
-IMPORTANT: absolutely NO profanity or curse words of any kind, even mild
-ones, no matter how heated the joke gets. This goes out to a group chat,
-not a comedy club -- keep the language completely clean while still
-being sharp and cutting.
-
-Do NOT reach for generic sports-trash-talk tropes not supported by the
-facts above (e.g. don't claim their wins came against weak opponents
-unless a fact actually says that). Can use at most one emoji. Do NOT
-mention or predict anything about the CURRENT week's game, since it
-hasn't been played yet -- only reference the facts given above.
-
-Reminder: do not reference RTA/advancing/them posting this message
-anywhere in the line -- the whole thing should just be about their
-season. Return ONLY the line itself, no quotes, no preamble, no
-attribution to the comedian by name.
+Hard rules: numbers as numerals ("4-4" and "47-45", never spelled out).
+No profanity. No mention of RTA/advancing. No predicting this week's
+game. At most one emoji. Return ONLY the line itself, nothing else.
 
 
 
@@ -270,316 +185,214 @@ Kentucky
 ======================================================================
   Record: 5-3  |  Last game: beat Vanderbilt 41-17  |  PPG/PA: 26.8/19.9
 
---- Prompt [1] (comedian style: Derrick Stroup) ---
-You are replying to a college football coach in a group chat who just
-posted "RTA" (Ready To Advance) for their team, Kentucky.
+--- Prompt [1] (comedian style: unknown) ---
+Write ONE short, funny heckle line (15-25 words) for a college football
+group chat, roasting Kentucky using their real stats below. Someone just
+posted "RTA" for this team -- everyone already knows that, don't mention
+it or reference advancing at all, just roast their season.
 
-CRITICAL RULE, read this first: never reference "RTA", "ready to advance",
-"advancing", or the fact that they just posted this message -- not as an
-opener, not anywhere in the line, not even reworded ("screaming RTA",
-"yelling ready to advance", etc. all count as violations too). The
-reader already knows they posted RTA -- that's not a joke, it's just
-context. The ENTIRE line should be about their actual season performance
-instead. This is the single most repeated pattern across many separate
-replies, so it matters more than anything else here.
+Real facts about Kentucky -- use only these, don't invent anything else:
+Record: 5-3. Most recent game: beat Vanderbilt 41-17. Averaging 26.8 points scored, 19.9 allowed per game.
+You can also optionally draw on real general knowledge of Kentucky's football program/reputation if it strengthens the joke -- approximate details are fine, just keep it genuinely recognizable, not invented.
 
-Real facts about Kentucky's season so far -- use ONLY these, don't invent
-any other games, scores, opponents, or claims about their schedule/other
-results:
-Record so far this season: 5-3. Most recent completed game: beat Vanderbilt 41-17. Averaging 26.8 points scored and 19.9 points allowed per game this season.
+Pick whichever ONE or TWO of these facts actually make for the funniest
+line -- you don't need to use all of them, and don't just list them with
+"while"/"after"/"since". This needs a real punchline: a genuine turn, an
+unexpected comparison, an ironic angle -- something that actually reads
+as a joke, not a stats recap with attitude.
 
-You may ALSO optionally draw on real general knowledge of Kentucky's football program -- specifically a specific well-known bad season, losing streak, or era for this program, even if you're not 100% certain of exact details. Keep it to something genuinely recognizable about this specific program, not something you're making up out of nothing. This is optional -- the season facts above are the required core of the line.
+Write it in this voice -- study these examples closely, they're the
+actual target sound, not just a topic area:
+- "SIX AND OH?! Man, you're out here scoring forty a game like it's NOTHING, like anybody could do that, and NOBODY can do that!"
+- "You beat 'em by THREE points and you're strutting around like you just hoisted a trophy, my brother, three points is a FIELD GOAL!"
+- "Giving up thirty a game and still smiling?! That's not a defense, that's an OPEN DOOR POLICY!"
 
-Write ONE punchy line (roughly 15-30 words) roasting Kentucky, weaving in
-AT LEAST 2 of the 3 season facts above -- not just
-the record alone. If a streak or scoring average is given, make real use
-of it rather than ignoring it.
+(Those examples are about hypothetical teams -- write a NEW line for
+Kentucky specifically, don't reuse their wording or scenario.)
 
-Comedic voice for this line, in the style of Derrick Stroup:
-Write in a fast-paced, high-energy, detailed voice -- like someone telling an animated story who can barely get the words out fast enough. Sharp and cutting, vivid specific details, exclamation-level energy -- but never genuinely mean-spirited, just loud and pointed.
-
-MANDATORY STRUCTURE for this specific line: Structure this as a backhanded compliment -- open like you're genuinely impressed, then undercut it hard with the facts.
-
-IMPORTANT: absolutely NO profanity or curse words of any kind, even mild
-ones, no matter how heated the joke gets. This goes out to a group chat,
-not a comedy club -- keep the language completely clean while still
-being sharp and cutting.
-
-Do NOT reach for generic sports-trash-talk tropes not supported by the
-facts above (e.g. don't claim their wins came against weak opponents
-unless a fact actually says that). Can use at most one emoji. Do NOT
-mention or predict anything about the CURRENT week's game, since it
-hasn't been played yet -- only reference the facts given above.
-
-Reminder: do not reference RTA/advancing/them posting this message
-anywhere in the line -- the whole thing should just be about their
-season. Return ONLY the line itself, no quotes, no preamble, no
-attribution to the comedian by name.
+Hard rules: numbers as numerals ("4-4" and "47-45", never spelled out).
+No profanity. No mention of RTA/advancing. No predicting this week's
+game. At most one emoji. Return ONLY the line itself, nothing else.
 
 
 
 ======================================================================
 Maryland
 ======================================================================
-  Record: 4-4  |  Last game: beat Michigan State 35-17  |  PPG/PA: 29.9/22.9
+  Record: 5-4  |  Last game: beat Illinois 20-17  |  PPG/PA: 28.8/22.2
 
---- Prompt [1] (comedian style: Derrick Stroup) ---
-You are replying to a college football coach in a group chat who just
-posted "RTA" (Ready To Advance) for their team, Maryland.
+--- Prompt [1] (comedian style: unknown) ---
+Write ONE short, funny heckle line (15-25 words) for a college football
+group chat, roasting Maryland using their real stats below. Someone just
+posted "RTA" for this team -- everyone already knows that, don't mention
+it or reference advancing at all, just roast their season.
 
-CRITICAL RULE, read this first: never reference "RTA", "ready to advance",
-"advancing", or the fact that they just posted this message -- not as an
-opener, not anywhere in the line, not even reworded ("screaming RTA",
-"yelling ready to advance", etc. all count as violations too). The
-reader already knows they posted RTA -- that's not a joke, it's just
-context. The ENTIRE line should be about their actual season performance
-instead. This is the single most repeated pattern across many separate
-replies, so it matters more than anything else here.
+Real facts about Maryland -- use only these, don't invent anything else:
+Record: 5-4. Most recent game: beat Illinois 20-17. Currently on a 3-game winning streak. Averaging 28.8 points scored, 22.2 allowed per game.
+You can also optionally draw on real general knowledge of Maryland's football program/reputation if it strengthens the joke -- approximate details are fine, just keep it genuinely recognizable, not invented.
 
-Real facts about Maryland's season so far -- use ONLY these, don't invent
-any other games, scores, opponents, or claims about their schedule/other
-results:
-Record so far this season: 4-4. Most recent completed game: beat Michigan State 35-17. Currently on a 2-game winning streak. Averaging 29.9 points scored and 22.9 points allowed per game this season.
+Pick whichever ONE or TWO of these facts actually make for the funniest
+line -- you don't need to use all of them, and don't just list them with
+"while"/"after"/"since". This needs a real punchline: a genuine turn, an
+unexpected comparison, an ironic angle -- something that actually reads
+as a joke, not a stats recap with attitude.
 
-You may ALSO optionally draw on real general knowledge of Maryland's football program -- specifically a specific memorable win, upset, or moment of success in this program's history, even if you're not 100% certain of exact details. Keep it to something genuinely recognizable about this specific program, not something you're making up out of nothing. This is optional -- the season facts above are the required core of the line.
+Write it in this voice -- study these examples closely, they're the
+actual target sound, not just a topic area:
+- "SIX AND OH?! Man, you're out here scoring forty a game like it's NOTHING, like anybody could do that, and NOBODY can do that!"
+- "You beat 'em by THREE points and you're strutting around like you just hoisted a trophy, my brother, three points is a FIELD GOAL!"
+- "Giving up thirty a game and still smiling?! That's not a defense, that's an OPEN DOOR POLICY!"
 
-Write ONE punchy line (roughly 15-30 words) roasting Maryland, weaving in
-AT LEAST 2 of the 4 season facts above -- not just
-the record alone. If a streak or scoring average is given, make real use
-of it rather than ignoring it.
+(Those examples are about hypothetical teams -- write a NEW line for
+Maryland specifically, don't reuse their wording or scenario.)
 
-Comedic voice for this line, in the style of Derrick Stroup:
-Write in a fast-paced, high-energy, detailed voice -- like someone telling an animated story who can barely get the words out fast enough. Sharp and cutting, vivid specific details, exclamation-level energy -- but never genuinely mean-spirited, just loud and pointed.
-
-MANDATORY STRUCTURE for this specific line: Structure this by zooming in on ONE specific detail or number rather than listing several stats in a row.
-
-IMPORTANT: absolutely NO profanity or curse words of any kind, even mild
-ones, no matter how heated the joke gets. This goes out to a group chat,
-not a comedy club -- keep the language completely clean while still
-being sharp and cutting.
-
-Do NOT reach for generic sports-trash-talk tropes not supported by the
-facts above (e.g. don't claim their wins came against weak opponents
-unless a fact actually says that). Can use at most one emoji. Do NOT
-mention or predict anything about the CURRENT week's game, since it
-hasn't been played yet -- only reference the facts given above.
-
-Reminder: do not reference RTA/advancing/them posting this message
-anywhere in the line -- the whole thing should just be about their
-season. Return ONLY the line itself, no quotes, no preamble, no
-attribution to the comedian by name.
+Hard rules: numbers as numerals ("4-4" and "47-45", never spelled out).
+No profanity. No mention of RTA/advancing. No predicting this week's
+game. At most one emoji. Return ONLY the line itself, nothing else.
 
 
 
 ======================================================================
 Missouri
 ======================================================================
-  Record: 5-2  |  Last game: beat Texas A&M 30-17  |  PPG/PA: 35.1/31.9
+  Record: 6-2  |  Last game: beat Oklahoma State 42-21  |  PPG/PA: 36.0/30.5
 
---- Prompt [1] (comedian style: Derrick Stroup) ---
-You are replying to a college football coach in a group chat who just
-posted "RTA" (Ready To Advance) for their team, Missouri.
+--- Prompt [1] (comedian style: unknown) ---
+Write ONE short, funny heckle line (15-25 words) for a college football
+group chat, roasting Missouri using their real stats below. Someone just
+posted "RTA" for this team -- everyone already knows that, don't mention
+it or reference advancing at all, just roast their season.
 
-CRITICAL RULE, read this first: never reference "RTA", "ready to advance",
-"advancing", or the fact that they just posted this message -- not as an
-opener, not anywhere in the line, not even reworded ("screaming RTA",
-"yelling ready to advance", etc. all count as violations too). The
-reader already knows they posted RTA -- that's not a joke, it's just
-context. The ENTIRE line should be about their actual season performance
-instead. This is the single most repeated pattern across many separate
-replies, so it matters more than anything else here.
+Real facts about Missouri -- use only these, don't invent anything else:
+Record: 6-2. Most recent game: beat Oklahoma State 42-21. Currently on a 5-game winning streak. Averaging 36.0 points scored, 30.5 allowed per game.
+You can also optionally draw on real general knowledge of Missouri's football program/reputation if it strengthens the joke -- approximate details are fine, just keep it genuinely recognizable, not invented.
 
-Real facts about Missouri's season so far -- use ONLY these, don't invent
-any other games, scores, opponents, or claims about their schedule/other
-results:
-Record so far this season: 5-2. Most recent completed game: beat Texas A&M 30-17. Currently on a 4-game winning streak. Averaging 35.1 points scored and 31.9 points allowed per game this season.
+Pick whichever ONE or TWO of these facts actually make for the funniest
+line -- you don't need to use all of them, and don't just list them with
+"while"/"after"/"since". This needs a real punchline: a genuine turn, an
+unexpected comparison, an ironic angle -- something that actually reads
+as a joke, not a stats recap with attitude.
 
-You may ALSO optionally draw on real general knowledge of Missouri's football program -- specifically a specific memorable win, upset, or moment of success in this program's history, even if you're not 100% certain of exact details. Keep it to something genuinely recognizable about this specific program, not something you're making up out of nothing. This is optional -- the season facts above are the required core of the line.
+Write it in this voice -- study these examples closely, they're the
+actual target sound, not just a topic area:
+- "We're 6-0, which is more wins than I've had good decisions this year, so I'd call that a fair trade."
+- "Giving up thirty a game and still winning just means we'd rather stress everyone out than beat them cleanly."
+- "I don't know how we're 5-1. Nobody in that building knows. We're just letting it happen and not asking questions."
 
-Write ONE punchy line (roughly 15-30 words) roasting Missouri, weaving in
-AT LEAST 2 of the 4 season facts above -- not just
-the record alone. If a streak or scoring average is given, make real use
-of it rather than ignoring it.
+(Those examples are about hypothetical teams -- write a NEW line for
+Missouri specifically, don't reuse their wording or scenario.)
 
-Comedic voice for this line, in the style of Derrick Stroup:
-Write in a fast-paced, high-energy, detailed voice -- like someone telling an animated story who can barely get the words out fast enough. Sharp and cutting, vivid specific details, exclamation-level energy -- but never genuinely mean-spirited, just loud and pointed.
-
-MANDATORY STRUCTURE for this specific line: Structure this as mock-concerned advice, like you're worried about them and gently pointing out why.
-
-IMPORTANT: absolutely NO profanity or curse words of any kind, even mild
-ones, no matter how heated the joke gets. This goes out to a group chat,
-not a comedy club -- keep the language completely clean while still
-being sharp and cutting.
-
-Do NOT reach for generic sports-trash-talk tropes not supported by the
-facts above (e.g. don't claim their wins came against weak opponents
-unless a fact actually says that). Can use at most one emoji. Do NOT
-mention or predict anything about the CURRENT week's game, since it
-hasn't been played yet -- only reference the facts given above.
-
-Reminder: do not reference RTA/advancing/them posting this message
-anywhere in the line -- the whole thing should just be about their
-season. Return ONLY the line itself, no quotes, no preamble, no
-attribution to the comedian by name.
+Hard rules: numbers as numerals ("4-4" and "47-45", never spelled out).
+No profanity. No mention of RTA/advancing. No predicting this week's
+game. At most one emoji. Return ONLY the line itself, nothing else.
 
 
 
 ======================================================================
 Northwestern
 ======================================================================
-  Record: 2-4  |  Last game: lost to Michigan State 45-47  |  PPG/PA: 33.8/44.8
+  Record: 3-5  |  Last game: lost to Purdue 17-35  |  PPG/PA: 34.4/39.8
 
---- Prompt [1] (comedian style: Nate Bargatze) ---
-You are replying to a college football coach in a group chat who just
-posted "RTA" (Ready To Advance) for their team, Northwestern.
+--- Prompt [1] (comedian style: unknown) ---
+Write ONE short, funny heckle line (15-25 words) for a college football
+group chat, roasting Northwestern using their real stats below. Someone just
+posted "RTA" for this team -- everyone already knows that, don't mention
+it or reference advancing at all, just roast their season.
 
-CRITICAL RULE, read this first: never reference "RTA", "ready to advance",
-"advancing", or the fact that they just posted this message -- not as an
-opener, not anywhere in the line, not even reworded ("screaming RTA",
-"yelling ready to advance", etc. all count as violations too). The
-reader already knows they posted RTA -- that's not a joke, it's just
-context. The ENTIRE line should be about their actual season performance
-instead. This is the single most repeated pattern across many separate
-replies, so it matters more than anything else here.
+Real facts about Northwestern -- use only these, don't invent anything else:
+Record: 3-5. Most recent game: lost to Purdue 17-35. Averaging 34.4 points scored, 39.8 allowed per game.
+You can also optionally draw on real general knowledge of Northwestern's football program/reputation if it strengthens the joke -- approximate details are fine, just keep it genuinely recognizable, not invented.
 
-Real facts about Northwestern's season so far -- use ONLY these, don't invent
-any other games, scores, opponents, or claims about their schedule/other
-results:
-Record so far this season: 2-4. Most recent completed game: lost to Michigan State 45-47. Averaging 33.8 points scored and 44.8 points allowed per game this season.
+Pick whichever ONE or TWO of these facts actually make for the funniest
+line -- you don't need to use all of them, and don't just list them with
+"while"/"after"/"since". This needs a real punchline: a genuine turn, an
+unexpected comparison, an ironic angle -- something that actually reads
+as a joke, not a stats recap with attitude.
 
-You may ALSO optionally draw on real general knowledge of Northwestern's football program -- specifically a specific memorable win, upset, or moment of success in this program's history, even if you're not 100% certain of exact details. Keep it to something genuinely recognizable about this specific program, not something you're making up out of nothing. This is optional -- the season facts above are the required core of the line.
+Write it in this voice -- study these examples closely, they're the
+actual target sound, not just a topic area:
+- "We're 6-0, which is more wins than I've had good decisions this year, so I'd call that a fair trade."
+- "Giving up thirty a game and still winning just means we'd rather stress everyone out than beat them cleanly."
+- "I don't know how we're 5-1. Nobody in that building knows. We're just letting it happen and not asking questions."
 
-Write ONE punchy line (roughly 15-30 words) roasting Northwestern, weaving in
-AT LEAST 2 of the 3 season facts above -- not just
-the record alone. If a streak or scoring average is given, make real use
-of it rather than ignoring it.
+(Those examples are about hypothetical teams -- write a NEW line for
+Northwestern specifically, don't reuse their wording or scenario.)
 
-Comedic voice for this line, in the style of Nate Bargatze:
-Write in a slow, deadpan, understated voice -- flat, matter-of-fact delivery even when the content is absurd or self-deprecating. Clean, folksy, 'everyman' framing. Downplay rather than escalate -- the humor comes from flat delivery and restraint, not volume or intensity. Still land a real jab, just gently and matter-of-factly.
-
-MANDATORY STRUCTURE for this specific line: Structure this as if continuing a conversation already in progress -- don't restate their record like it's new information.
-
-IMPORTANT: absolutely NO profanity or curse words of any kind, even mild
-ones, no matter how heated the joke gets. This goes out to a group chat,
-not a comedy club -- keep the language completely clean while still
-being sharp and cutting.
-
-Do NOT reach for generic sports-trash-talk tropes not supported by the
-facts above (e.g. don't claim their wins came against weak opponents
-unless a fact actually says that). Can use at most one emoji. Do NOT
-mention or predict anything about the CURRENT week's game, since it
-hasn't been played yet -- only reference the facts given above.
-
-Reminder: do not reference RTA/advancing/them posting this message
-anywhere in the line -- the whole thing should just be about their
-season. Return ONLY the line itself, no quotes, no preamble, no
-attribution to the comedian by name.
+Hard rules: numbers as numerals ("4-4" and "47-45", never spelled out).
+No profanity. No mention of RTA/advancing. No predicting this week's
+game. At most one emoji. Return ONLY the line itself, nothing else.
 
 
 
 ======================================================================
 Oklahoma State
 ======================================================================
-  Record: 7-0  |  Last game: beat Nebraska 38-17  |  PPG/PA: 37.1/17.1
+  Record: 7-1  |  Last game: lost to Missouri 21-42  |  PPG/PA: 35.1/20.2
 
---- Prompt [1] (comedian style: Derrick Stroup) ---
-You are replying to a college football coach in a group chat who just
-posted "RTA" (Ready To Advance) for their team, Oklahoma State.
+--- Prompt [1] (comedian style: unknown) ---
+Write ONE short, funny heckle line (15-25 words) for a college football
+group chat, roasting Oklahoma State using their real stats below. Someone just
+posted "RTA" for this team -- everyone already knows that, don't mention
+it or reference advancing at all, just roast their season.
 
-CRITICAL RULE, read this first: never reference "RTA", "ready to advance",
-"advancing", or the fact that they just posted this message -- not as an
-opener, not anywhere in the line, not even reworded ("screaming RTA",
-"yelling ready to advance", etc. all count as violations too). The
-reader already knows they posted RTA -- that's not a joke, it's just
-context. The ENTIRE line should be about their actual season performance
-instead. This is the single most repeated pattern across many separate
-replies, so it matters more than anything else here.
+Real facts about Oklahoma State -- use only these, don't invent anything else:
+Record: 7-1. Most recent game: lost to Missouri 21-42. Averaging 35.1 points scored, 20.2 allowed per game.
+You can also optionally draw on real general knowledge of Oklahoma State's football program/reputation if it strengthens the joke -- approximate details are fine, just keep it genuinely recognizable, not invented.
 
-Real facts about Oklahoma State's season so far -- use ONLY these, don't invent
-any other games, scores, opponents, or claims about their schedule/other
-results:
-Record so far this season: 7-0. Most recent completed game: beat Nebraska 38-17. Currently on a 7-game winning streak. Averaging 37.1 points scored and 17.1 points allowed per game this season.
+Pick whichever ONE or TWO of these facts actually make for the funniest
+line -- you don't need to use all of them, and don't just list them with
+"while"/"after"/"since". This needs a real punchline: a genuine turn, an
+unexpected comparison, an ironic angle -- something that actually reads
+as a joke, not a stats recap with attitude.
 
-You may ALSO optionally draw on real general knowledge of Oklahoma State's football program -- specifically a specific memorable win, upset, or moment of success in this program's history, even if you're not 100% certain of exact details. Keep it to something genuinely recognizable about this specific program, not something you're making up out of nothing. This is optional -- the season facts above are the required core of the line.
+Write it in this voice -- study these examples closely, they're the
+actual target sound, not just a topic area:
+- "SIX AND OH?! Man, you're out here scoring forty a game like it's NOTHING, like anybody could do that, and NOBODY can do that!"
+- "You beat 'em by THREE points and you're strutting around like you just hoisted a trophy, my brother, three points is a FIELD GOAL!"
+- "Giving up thirty a game and still smiling?! That's not a defense, that's an OPEN DOOR POLICY!"
 
-Write ONE punchy line (roughly 15-30 words) roasting Oklahoma State, weaving in
-AT LEAST 2 of the 4 season facts above -- not just
-the record alone. If a streak or scoring average is given, make real use
-of it rather than ignoring it.
+(Those examples are about hypothetical teams -- write a NEW line for
+Oklahoma State specifically, don't reuse their wording or scenario.)
 
-Comedic voice for this line, in the style of Derrick Stroup:
-Write in a fast-paced, high-energy, detailed voice -- like someone telling an animated story who can barely get the words out fast enough. Sharp and cutting, vivid specific details, exclamation-level energy -- but never genuinely mean-spirited, just loud and pointed.
-
-MANDATORY STRUCTURE for this specific line: Structure this as a direct question aimed at them, not a statement about them.
-
-IMPORTANT: absolutely NO profanity or curse words of any kind, even mild
-ones, no matter how heated the joke gets. This goes out to a group chat,
-not a comedy club -- keep the language completely clean while still
-being sharp and cutting.
-
-Do NOT reach for generic sports-trash-talk tropes not supported by the
-facts above (e.g. don't claim their wins came against weak opponents
-unless a fact actually says that). Can use at most one emoji. Do NOT
-mention or predict anything about the CURRENT week's game, since it
-hasn't been played yet -- only reference the facts given above.
-
-Reminder: do not reference RTA/advancing/them posting this message
-anywhere in the line -- the whole thing should just be about their
-season. Return ONLY the line itself, no quotes, no preamble, no
-attribution to the comedian by name.
+Hard rules: numbers as numerals ("4-4" and "47-45", never spelled out).
+No profanity. No mention of RTA/advancing. No predicting this week's
+game. At most one emoji. Return ONLY the line itself, nothing else.
 
 
 
 ======================================================================
 Pittsburgh
 ======================================================================
-  Record: 7-0  |  Last game: beat Boston College 65-35  |  PPG/PA: 54.7/31.7
+  Record: 9-0  |  Last game: beat Duke 73-7  |  PPG/PA: 56.8/28.8
 
---- Prompt [1] (comedian style: Derrick Stroup) ---
-You are replying to a college football coach in a group chat who just
-posted "RTA" (Ready To Advance) for their team, Pittsburgh.
+--- Prompt [1] (comedian style: unknown) ---
+Write ONE short, funny heckle line (15-25 words) for a college football
+group chat, roasting Pittsburgh using their real stats below. Someone just
+posted "RTA" for this team -- everyone already knows that, don't mention
+it or reference advancing at all, just roast their season.
 
-CRITICAL RULE, read this first: never reference "RTA", "ready to advance",
-"advancing", or the fact that they just posted this message -- not as an
-opener, not anywhere in the line, not even reworded ("screaming RTA",
-"yelling ready to advance", etc. all count as violations too). The
-reader already knows they posted RTA -- that's not a joke, it's just
-context. The ENTIRE line should be about their actual season performance
-instead. This is the single most repeated pattern across many separate
-replies, so it matters more than anything else here.
+Real facts about Pittsburgh -- use only these, don't invent anything else:
+Record: 9-0. Most recent game: beat Duke 73-7. Currently on a 9-game winning streak. Averaging 56.8 points scored, 28.8 allowed per game.
+You can also optionally draw on real general knowledge of Pittsburgh's football program/reputation if it strengthens the joke -- approximate details are fine, just keep it genuinely recognizable, not invented.
 
-Real facts about Pittsburgh's season so far -- use ONLY these, don't invent
-any other games, scores, opponents, or claims about their schedule/other
-results:
-Record so far this season: 7-0. Most recent completed game: beat Boston College 65-35. Currently on a 7-game winning streak. Averaging 54.7 points scored and 31.7 points allowed per game this season.
+Pick whichever ONE or TWO of these facts actually make for the funniest
+line -- you don't need to use all of them, and don't just list them with
+"while"/"after"/"since". This needs a real punchline: a genuine turn, an
+unexpected comparison, an ironic angle -- something that actually reads
+as a joke, not a stats recap with attitude.
 
-You may ALSO optionally draw on real general knowledge of Pittsburgh's football program -- specifically a longstanding rivalry and how this program has historically fared in it, even if you're not 100% certain of exact details. Keep it to something genuinely recognizable about this specific program, not something you're making up out of nothing. This is optional -- the season facts above are the required core of the line.
+Write it in this voice -- study these examples closely, they're the
+actual target sound, not just a topic area:
+- "We're 6-0, which is more wins than I've had good decisions this year, so I'd call that a fair trade."
+- "Giving up thirty a game and still winning just means we'd rather stress everyone out than beat them cleanly."
+- "I don't know how we're 5-1. Nobody in that building knows. We're just letting it happen and not asking questions."
 
-Write ONE punchy line (roughly 15-30 words) roasting Pittsburgh, weaving in
-AT LEAST 2 of the 4 season facts above -- not just
-the record alone. If a streak or scoring average is given, make real use
-of it rather than ignoring it.
+(Those examples are about hypothetical teams -- write a NEW line for
+Pittsburgh specifically, don't reuse their wording or scenario.)
 
-Comedic voice for this line, in the style of Derrick Stroup:
-Write in a fast-paced, high-energy, detailed voice -- like someone telling an animated story who can barely get the words out fast enough. Sharp and cutting, vivid specific details, exclamation-level energy -- but never genuinely mean-spirited, just loud and pointed.
-
-MANDATORY STRUCTURE for this specific line: Structure this by zooming in on ONE specific detail or number rather than listing several stats in a row.
-
-IMPORTANT: absolutely NO profanity or curse words of any kind, even mild
-ones, no matter how heated the joke gets. This goes out to a group chat,
-not a comedy club -- keep the language completely clean while still
-being sharp and cutting.
-
-Do NOT reach for generic sports-trash-talk tropes not supported by the
-facts above (e.g. don't claim their wins came against weak opponents
-unless a fact actually says that). Can use at most one emoji. Do NOT
-mention or predict anything about the CURRENT week's game, since it
-hasn't been played yet -- only reference the facts given above.
-
-Reminder: do not reference RTA/advancing/them posting this message
-anywhere in the line -- the whole thing should just be about their
-season. Return ONLY the line itself, no quotes, no preamble, no
-attribution to the comedian by name.
+Hard rules: numbers as numerals ("4-4" and "47-45", never spelled out).
+No profanity. No mention of RTA/advancing. No predicting this week's
+game. At most one emoji. Return ONLY the line itself, nothing else.
 
 
 
@@ -588,51 +401,34 @@ SMU
 ======================================================================
   Record: 8-0  |  Last game: beat Utah State 59-24  |  PPG/PA: 63.1/22.5
 
---- Prompt [1] (comedian style: Derrick Stroup) ---
-You are replying to a college football coach in a group chat who just
-posted "RTA" (Ready To Advance) for their team, SMU.
+--- Prompt [1] (comedian style: unknown) ---
+Write ONE short, funny heckle line (15-25 words) for a college football
+group chat, roasting SMU using their real stats below. Someone just
+posted "RTA" for this team -- everyone already knows that, don't mention
+it or reference advancing at all, just roast their season.
 
-CRITICAL RULE, read this first: never reference "RTA", "ready to advance",
-"advancing", or the fact that they just posted this message -- not as an
-opener, not anywhere in the line, not even reworded ("screaming RTA",
-"yelling ready to advance", etc. all count as violations too). The
-reader already knows they posted RTA -- that's not a joke, it's just
-context. The ENTIRE line should be about their actual season performance
-instead. This is the single most repeated pattern across many separate
-replies, so it matters more than anything else here.
+Real facts about SMU -- use only these, don't invent anything else:
+Record: 8-0. Most recent game: beat Utah State 59-24. Currently on a 8-game winning streak. Averaging 63.1 points scored, 22.5 allowed per game.
+You can also optionally draw on real general knowledge of SMU's football program/reputation if it strengthens the joke -- approximate details are fine, just keep it genuinely recognizable, not invented.
 
-Real facts about SMU's season so far -- use ONLY these, don't invent
-any other games, scores, opponents, or claims about their schedule/other
-results:
-Record so far this season: 8-0. Most recent completed game: beat Utah State 59-24. Currently on a 8-game winning streak. Averaging 63.1 points scored and 22.5 points allowed per game this season.
+Pick whichever ONE or TWO of these facts actually make for the funniest
+line -- you don't need to use all of them, and don't just list them with
+"while"/"after"/"since". This needs a real punchline: a genuine turn, an
+unexpected comparison, an ironic angle -- something that actually reads
+as a joke, not a stats recap with attitude.
 
-You may ALSO optionally draw on real general knowledge of SMU's football program -- specifically this program's recruiting reputation relative to their actual on-field results, even if you're not 100% certain of exact details. Keep it to something genuinely recognizable about this specific program, not something you're making up out of nothing. This is optional -- the season facts above are the required core of the line.
+Write it in this voice -- study these examples closely, they're the
+actual target sound, not just a topic area:
+- "We're 6-0, which is more wins than I've had good decisions this year, so I'd call that a fair trade."
+- "Giving up thirty a game and still winning just means we'd rather stress everyone out than beat them cleanly."
+- "I don't know how we're 5-1. Nobody in that building knows. We're just letting it happen and not asking questions."
 
-Write ONE punchy line (roughly 15-30 words) roasting SMU, weaving in
-AT LEAST 2 of the 4 season facts above -- not just
-the record alone. If a streak or scoring average is given, make real use
-of it rather than ignoring it.
+(Those examples are about hypothetical teams -- write a NEW line for
+SMU specifically, don't reuse their wording or scenario.)
 
-Comedic voice for this line, in the style of Derrick Stroup:
-Write in a fast-paced, high-energy, detailed voice -- like someone telling an animated story who can barely get the words out fast enough. Sharp and cutting, vivid specific details, exclamation-level energy -- but never genuinely mean-spirited, just loud and pointed.
-
-MANDATORY STRUCTURE for this specific line: Structure this as a direct question aimed at them, not a statement about them.
-
-IMPORTANT: absolutely NO profanity or curse words of any kind, even mild
-ones, no matter how heated the joke gets. This goes out to a group chat,
-not a comedy club -- keep the language completely clean while still
-being sharp and cutting.
-
-Do NOT reach for generic sports-trash-talk tropes not supported by the
-facts above (e.g. don't claim their wins came against weak opponents
-unless a fact actually says that). Can use at most one emoji. Do NOT
-mention or predict anything about the CURRENT week's game, since it
-hasn't been played yet -- only reference the facts given above.
-
-Reminder: do not reference RTA/advancing/them posting this message
-anywhere in the line -- the whole thing should just be about their
-season. Return ONLY the line itself, no quotes, no preamble, no
-attribution to the comedian by name.
+Hard rules: numbers as numerals ("4-4" and "47-45", never spelled out).
+No profanity. No mention of RTA/advancing. No predicting this week's
+game. At most one emoji. Return ONLY the line itself, nothing else.
 
 
 
@@ -641,104 +437,70 @@ South Carolina
 ======================================================================
   Record: 7-0  |  Last game: beat Tennessee 34-19  |  PPG/PA: 31.6/12.1
 
---- Prompt [1] (comedian style: Nate Bargatze) ---
-You are replying to a college football coach in a group chat who just
-posted "RTA" (Ready To Advance) for their team, South Carolina.
+--- Prompt [1] (comedian style: unknown) ---
+Write ONE short, funny heckle line (15-25 words) for a college football
+group chat, roasting South Carolina using their real stats below. Someone just
+posted "RTA" for this team -- everyone already knows that, don't mention
+it or reference advancing at all, just roast their season.
 
-CRITICAL RULE, read this first: never reference "RTA", "ready to advance",
-"advancing", or the fact that they just posted this message -- not as an
-opener, not anywhere in the line, not even reworded ("screaming RTA",
-"yelling ready to advance", etc. all count as violations too). The
-reader already knows they posted RTA -- that's not a joke, it's just
-context. The ENTIRE line should be about their actual season performance
-instead. This is the single most repeated pattern across many separate
-replies, so it matters more than anything else here.
+Real facts about South Carolina -- use only these, don't invent anything else:
+Record: 7-0. Most recent game: beat Tennessee 34-19. Currently on a 7-game winning streak. Averaging 31.6 points scored, 12.1 allowed per game.
+You can also optionally draw on real general knowledge of South Carolina's football program/reputation if it strengthens the joke -- approximate details are fine, just keep it genuinely recognizable, not invented.
 
-Real facts about South Carolina's season so far -- use ONLY these, don't invent
-any other games, scores, opponents, or claims about their schedule/other
-results:
-Record so far this season: 7-0. Most recent completed game: beat Tennessee 34-19. Currently on a 7-game winning streak. Averaging 31.6 points scored and 12.1 points allowed per game this season.
+Pick whichever ONE or TWO of these facts actually make for the funniest
+line -- you don't need to use all of them, and don't just list them with
+"while"/"after"/"since". This needs a real punchline: a genuine turn, an
+unexpected comparison, an ironic angle -- something that actually reads
+as a joke, not a stats recap with attitude.
 
-You may ALSO optionally draw on real general knowledge of South Carolina's football program -- specifically a longstanding rivalry and how this program has historically fared in it, even if you're not 100% certain of exact details. Keep it to something genuinely recognizable about this specific program, not something you're making up out of nothing. This is optional -- the season facts above are the required core of the line.
+Write it in this voice -- study these examples closely, they're the
+actual target sound, not just a topic area:
+- "We're 6-0, which is more wins than I've had good decisions this year, so I'd call that a fair trade."
+- "Giving up thirty a game and still winning just means we'd rather stress everyone out than beat them cleanly."
+- "I don't know how we're 5-1. Nobody in that building knows. We're just letting it happen and not asking questions."
 
-Write ONE punchy line (roughly 15-30 words) roasting South Carolina, weaving in
-AT LEAST 2 of the 4 season facts above -- not just
-the record alone. If a streak or scoring average is given, make real use
-of it rather than ignoring it.
+(Those examples are about hypothetical teams -- write a NEW line for
+South Carolina specifically, don't reuse their wording or scenario.)
 
-Comedic voice for this line, in the style of Nate Bargatze:
-Write in a slow, deadpan, understated voice -- flat, matter-of-fact delivery even when the content is absurd or self-deprecating. Clean, folksy, 'everyman' framing. Downplay rather than escalate -- the humor comes from flat delivery and restraint, not volume or intensity. Still land a real jab, just gently and matter-of-factly.
-
-MANDATORY STRUCTURE for this specific line: Structure this as one single blunt observation -- no setup, no windup, just the jab landing immediately.
-
-IMPORTANT: absolutely NO profanity or curse words of any kind, even mild
-ones, no matter how heated the joke gets. This goes out to a group chat,
-not a comedy club -- keep the language completely clean while still
-being sharp and cutting.
-
-Do NOT reach for generic sports-trash-talk tropes not supported by the
-facts above (e.g. don't claim their wins came against weak opponents
-unless a fact actually says that). Can use at most one emoji. Do NOT
-mention or predict anything about the CURRENT week's game, since it
-hasn't been played yet -- only reference the facts given above.
-
-Reminder: do not reference RTA/advancing/them posting this message
-anywhere in the line -- the whole thing should just be about their
-season. Return ONLY the line itself, no quotes, no preamble, no
-attribution to the comedian by name.
+Hard rules: numbers as numerals ("4-4" and "47-45", never spelled out).
+No profanity. No mention of RTA/advancing. No predicting this week's
+game. At most one emoji. Return ONLY the line itself, nothing else.
 
 
 
 ======================================================================
 Stanford
 ======================================================================
-  Record: 3-3  |  Last game: beat Washington State 45-27  |  PPG/PA: 31.8/33.3
+  Record: 4-4  |  Last game: lost to USC 34-52  |  PPG/PA: 34.2/34.5
 
---- Prompt [1] (comedian style: Derrick Stroup) ---
-You are replying to a college football coach in a group chat who just
-posted "RTA" (Ready To Advance) for their team, Stanford.
+--- Prompt [1] (comedian style: unknown) ---
+Write ONE short, funny heckle line (15-25 words) for a college football
+group chat, roasting Stanford using their real stats below. Someone just
+posted "RTA" for this team -- everyone already knows that, don't mention
+it or reference advancing at all, just roast their season.
 
-CRITICAL RULE, read this first: never reference "RTA", "ready to advance",
-"advancing", or the fact that they just posted this message -- not as an
-opener, not anywhere in the line, not even reworded ("screaming RTA",
-"yelling ready to advance", etc. all count as violations too). The
-reader already knows they posted RTA -- that's not a joke, it's just
-context. The ENTIRE line should be about their actual season performance
-instead. This is the single most repeated pattern across many separate
-replies, so it matters more than anything else here.
+Real facts about Stanford -- use only these, don't invent anything else:
+Record: 4-4. Most recent game: lost to USC 34-52. Averaging 34.2 points scored, 34.5 allowed per game.
+You can also optionally draw on real general knowledge of Stanford's football program/reputation if it strengthens the joke -- approximate details are fine, just keep it genuinely recognizable, not invented.
 
-Real facts about Stanford's season so far -- use ONLY these, don't invent
-any other games, scores, opponents, or claims about their schedule/other
-results:
-Record so far this season: 3-3. Most recent completed game: beat Washington State 45-27. Averaging 31.8 points scored and 33.3 points allowed per game this season.
+Pick whichever ONE or TWO of these facts actually make for the funniest
+line -- you don't need to use all of them, and don't just list them with
+"while"/"after"/"since". This needs a real punchline: a genuine turn, an
+unexpected comparison, an ironic angle -- something that actually reads
+as a joke, not a stats recap with attitude.
 
-You may ALSO optionally draw on real general knowledge of Stanford's football program -- specifically a longstanding rivalry and how this program has historically fared in it, even if you're not 100% certain of exact details. Keep it to something genuinely recognizable about this specific program, not something you're making up out of nothing. This is optional -- the season facts above are the required core of the line.
+Write it in this voice -- study these examples closely, they're the
+actual target sound, not just a topic area:
+- "SIX AND OH?! Man, you're out here scoring forty a game like it's NOTHING, like anybody could do that, and NOBODY can do that!"
+- "You beat 'em by THREE points and you're strutting around like you just hoisted a trophy, my brother, three points is a FIELD GOAL!"
+- "Giving up thirty a game and still smiling?! That's not a defense, that's an OPEN DOOR POLICY!"
 
-Write ONE punchy line (roughly 15-30 words) roasting Stanford, weaving in
-AT LEAST 2 of the 3 season facts above -- not just
-the record alone. If a streak or scoring average is given, make real use
-of it rather than ignoring it.
+(Those examples are about hypothetical teams -- write a NEW line for
+Stanford specifically, don't reuse their wording or scenario.)
 
-Comedic voice for this line, in the style of Derrick Stroup:
-Write in a fast-paced, high-energy, detailed voice -- like someone telling an animated story who can barely get the words out fast enough. Sharp and cutting, vivid specific details, exclamation-level energy -- but never genuinely mean-spirited, just loud and pointed.
-
-MANDATORY STRUCTURE for this specific line: Structure this by comparing their situation to something absurd, mundane, or unrelated -- not another football team.
-
-IMPORTANT: absolutely NO profanity or curse words of any kind, even mild
-ones, no matter how heated the joke gets. This goes out to a group chat,
-not a comedy club -- keep the language completely clean while still
-being sharp and cutting.
-
-Do NOT reach for generic sports-trash-talk tropes not supported by the
-facts above (e.g. don't claim their wins came against weak opponents
-unless a fact actually says that). Can use at most one emoji. Do NOT
-mention or predict anything about the CURRENT week's game, since it
-hasn't been played yet -- only reference the facts given above.
-
-Reminder: do not reference RTA/advancing/them posting this message
-anywhere in the line -- the whole thing should just be about their
-season. Return ONLY the line itself, no quotes, no preamble, no
-attribution to the comedian by name.
+Hard rules: numbers as numerals ("4-4" and "47-45", never spelled out).
+No profanity. No mention of RTA/advancing. No predicting this week's
+game. At most one emoji. Return ONLY the line itself, nothing else.
 
 
 
@@ -747,157 +509,106 @@ Temple
 ======================================================================
   Record: 5-2  |  Last game: beat Charlotte 42-10  |  PPG/PA: 28.1/27.4
 
---- Prompt [1] (comedian style: Derrick Stroup) ---
-You are replying to a college football coach in a group chat who just
-posted "RTA" (Ready To Advance) for their team, Temple.
+--- Prompt [1] (comedian style: unknown) ---
+Write ONE short, funny heckle line (15-25 words) for a college football
+group chat, roasting Temple using their real stats below. Someone just
+posted "RTA" for this team -- everyone already knows that, don't mention
+it or reference advancing at all, just roast their season.
 
-CRITICAL RULE, read this first: never reference "RTA", "ready to advance",
-"advancing", or the fact that they just posted this message -- not as an
-opener, not anywhere in the line, not even reworded ("screaming RTA",
-"yelling ready to advance", etc. all count as violations too). The
-reader already knows they posted RTA -- that's not a joke, it's just
-context. The ENTIRE line should be about their actual season performance
-instead. This is the single most repeated pattern across many separate
-replies, so it matters more than anything else here.
+Real facts about Temple -- use only these, don't invent anything else:
+Record: 5-2. Most recent game: beat Charlotte 42-10. Currently on a 4-game winning streak. Averaging 28.1 points scored, 27.4 allowed per game.
+You can also optionally draw on real general knowledge of Temple's football program/reputation if it strengthens the joke -- approximate details are fine, just keep it genuinely recognizable, not invented.
 
-Real facts about Temple's season so far -- use ONLY these, don't invent
-any other games, scores, opponents, or claims about their schedule/other
-results:
-Record so far this season: 5-2. Most recent completed game: beat Charlotte 42-10. Currently on a 4-game winning streak. Averaging 28.1 points scored and 27.4 points allowed per game this season.
+Pick whichever ONE or TWO of these facts actually make for the funniest
+line -- you don't need to use all of them, and don't just list them with
+"while"/"after"/"since". This needs a real punchline: a genuine turn, an
+unexpected comparison, an ironic angle -- something that actually reads
+as a joke, not a stats recap with attitude.
 
-You may ALSO optionally draw on real general knowledge of Temple's football program -- specifically a specific memorable win, upset, or moment of success in this program's history, even if you're not 100% certain of exact details. Keep it to something genuinely recognizable about this specific program, not something you're making up out of nothing. This is optional -- the season facts above are the required core of the line.
+Write it in this voice -- study these examples closely, they're the
+actual target sound, not just a topic area:
+- "SIX AND OH?! Man, you're out here scoring forty a game like it's NOTHING, like anybody could do that, and NOBODY can do that!"
+- "You beat 'em by THREE points and you're strutting around like you just hoisted a trophy, my brother, three points is a FIELD GOAL!"
+- "Giving up thirty a game and still smiling?! That's not a defense, that's an OPEN DOOR POLICY!"
 
-Write ONE punchy line (roughly 15-30 words) roasting Temple, weaving in
-AT LEAST 2 of the 4 season facts above -- not just
-the record alone. If a streak or scoring average is given, make real use
-of it rather than ignoring it.
+(Those examples are about hypothetical teams -- write a NEW line for
+Temple specifically, don't reuse their wording or scenario.)
 
-Comedic voice for this line, in the style of Derrick Stroup:
-Write in a fast-paced, high-energy, detailed voice -- like someone telling an animated story who can barely get the words out fast enough. Sharp and cutting, vivid specific details, exclamation-level energy -- but never genuinely mean-spirited, just loud and pointed.
-
-MANDATORY STRUCTURE for this specific line: Structure this by zooming in on ONE specific detail or number rather than listing several stats in a row.
-
-IMPORTANT: absolutely NO profanity or curse words of any kind, even mild
-ones, no matter how heated the joke gets. This goes out to a group chat,
-not a comedy club -- keep the language completely clean while still
-being sharp and cutting.
-
-Do NOT reach for generic sports-trash-talk tropes not supported by the
-facts above (e.g. don't claim their wins came against weak opponents
-unless a fact actually says that). Can use at most one emoji. Do NOT
-mention or predict anything about the CURRENT week's game, since it
-hasn't been played yet -- only reference the facts given above.
-
-Reminder: do not reference RTA/advancing/them posting this message
-anywhere in the line -- the whole thing should just be about their
-season. Return ONLY the line itself, no quotes, no preamble, no
-attribution to the comedian by name.
+Hard rules: numbers as numerals ("4-4" and "47-45", never spelled out).
+No profanity. No mention of RTA/advancing. No predicting this week's
+game. At most one emoji. Return ONLY the line itself, nothing else.
 
 
 
 ======================================================================
 Virginia
 ======================================================================
-  Record: 5-1  |  Last game: beat Syracuse 33-9  |  PPG/PA: 28.7/24.8
+  Record: 5-2  |  Last game: lost to Miami 30-48  |  PPG/PA: 28.9/28.1
 
---- Prompt [1] (comedian style: Derrick Stroup) ---
-You are replying to a college football coach in a group chat who just
-posted "RTA" (Ready To Advance) for their team, Virginia.
+--- Prompt [1] (comedian style: unknown) ---
+Write ONE short, funny heckle line (15-25 words) for a college football
+group chat, roasting Virginia using their real stats below. Someone just
+posted "RTA" for this team -- everyone already knows that, don't mention
+it or reference advancing at all, just roast their season.
 
-CRITICAL RULE, read this first: never reference "RTA", "ready to advance",
-"advancing", or the fact that they just posted this message -- not as an
-opener, not anywhere in the line, not even reworded ("screaming RTA",
-"yelling ready to advance", etc. all count as violations too). The
-reader already knows they posted RTA -- that's not a joke, it's just
-context. The ENTIRE line should be about their actual season performance
-instead. This is the single most repeated pattern across many separate
-replies, so it matters more than anything else here.
+Real facts about Virginia -- use only these, don't invent anything else:
+Record: 5-2. Most recent game: lost to Miami 30-48. Averaging 28.9 points scored, 28.1 allowed per game.
+You can also optionally draw on real general knowledge of Virginia's football program/reputation if it strengthens the joke -- approximate details are fine, just keep it genuinely recognizable, not invented.
 
-Real facts about Virginia's season so far -- use ONLY these, don't invent
-any other games, scores, opponents, or claims about their schedule/other
-results:
-Record so far this season: 5-1. Most recent completed game: beat Syracuse 33-9. Currently on a 3-game winning streak. Averaging 28.7 points scored and 24.8 points allowed per game this season.
+Pick whichever ONE or TWO of these facts actually make for the funniest
+line -- you don't need to use all of them, and don't just list them with
+"while"/"after"/"since". This needs a real punchline: a genuine turn, an
+unexpected comparison, an ironic angle -- something that actually reads
+as a joke, not a stats recap with attitude.
 
-You may ALSO optionally draw on real general knowledge of Virginia's football program -- specifically this program's general reputation/identity within their conference, even if you're not 100% certain of exact details. Keep it to something genuinely recognizable about this specific program, not something you're making up out of nothing. This is optional -- the season facts above are the required core of the line.
+Write it in this voice -- study these examples closely, they're the
+actual target sound, not just a topic area:
+- "SIX AND OH?! Man, you're out here scoring forty a game like it's NOTHING, like anybody could do that, and NOBODY can do that!"
+- "You beat 'em by THREE points and you're strutting around like you just hoisted a trophy, my brother, three points is a FIELD GOAL!"
+- "Giving up thirty a game and still smiling?! That's not a defense, that's an OPEN DOOR POLICY!"
 
-Write ONE punchy line (roughly 15-30 words) roasting Virginia, weaving in
-AT LEAST 2 of the 4 season facts above -- not just
-the record alone. If a streak or scoring average is given, make real use
-of it rather than ignoring it.
+(Those examples are about hypothetical teams -- write a NEW line for
+Virginia specifically, don't reuse their wording or scenario.)
 
-Comedic voice for this line, in the style of Derrick Stroup:
-Write in a fast-paced, high-energy, detailed voice -- like someone telling an animated story who can barely get the words out fast enough. Sharp and cutting, vivid specific details, exclamation-level energy -- but never genuinely mean-spirited, just loud and pointed.
-
-MANDATORY STRUCTURE for this specific line: Structure this as mock-concerned advice, like you're worried about them and gently pointing out why.
-
-IMPORTANT: absolutely NO profanity or curse words of any kind, even mild
-ones, no matter how heated the joke gets. This goes out to a group chat,
-not a comedy club -- keep the language completely clean while still
-being sharp and cutting.
-
-Do NOT reach for generic sports-trash-talk tropes not supported by the
-facts above (e.g. don't claim their wins came against weak opponents
-unless a fact actually says that). Can use at most one emoji. Do NOT
-mention or predict anything about the CURRENT week's game, since it
-hasn't been played yet -- only reference the facts given above.
-
-Reminder: do not reference RTA/advancing/them posting this message
-anywhere in the line -- the whole thing should just be about their
-season. Return ONLY the line itself, no quotes, no preamble, no
-attribution to the comedian by name.
+Hard rules: numbers as numerals ("4-4" and "47-45", never spelled out).
+No profanity. No mention of RTA/advancing. No predicting this week's
+game. At most one emoji. Return ONLY the line itself, nothing else.
 
 
 
 ======================================================================
 Virginia Tech
 ======================================================================
-  Record: 4-3  |  Last game: beat Georgia Tech 49-23  |  PPG/PA: 33.1/25.7
+  Record: 4-4  |  Last game: lost to NC State 24-44  |  PPG/PA: 32.0/28.0
 
---- Prompt [1] (comedian style: Derrick Stroup) ---
-You are replying to a college football coach in a group chat who just
-posted "RTA" (Ready To Advance) for their team, Virginia Tech.
+--- Prompt [1] (comedian style: unknown) ---
+Write ONE short, funny heckle line (15-25 words) for a college football
+group chat, roasting Virginia Tech using their real stats below. Someone just
+posted "RTA" for this team -- everyone already knows that, don't mention
+it or reference advancing at all, just roast their season.
 
-CRITICAL RULE, read this first: never reference "RTA", "ready to advance",
-"advancing", or the fact that they just posted this message -- not as an
-opener, not anywhere in the line, not even reworded ("screaming RTA",
-"yelling ready to advance", etc. all count as violations too). The
-reader already knows they posted RTA -- that's not a joke, it's just
-context. The ENTIRE line should be about their actual season performance
-instead. This is the single most repeated pattern across many separate
-replies, so it matters more than anything else here.
+Real facts about Virginia Tech -- use only these, don't invent anything else:
+Record: 4-4. Most recent game: lost to NC State 24-44. Averaging 32.0 points scored, 28.0 allowed per game.
+You can also optionally draw on real general knowledge of Virginia Tech's football program/reputation if it strengthens the joke -- approximate details are fine, just keep it genuinely recognizable, not invented.
 
-Real facts about Virginia Tech's season so far -- use ONLY these, don't invent
-any other games, scores, opponents, or claims about their schedule/other
-results:
-Record so far this season: 4-3. Most recent completed game: beat Georgia Tech 49-23. Currently on a 2-game winning streak. Averaging 33.1 points scored and 25.7 points allowed per game this season.
+Pick whichever ONE or TWO of these facts actually make for the funniest
+line -- you don't need to use all of them, and don't just list them with
+"while"/"after"/"since". This needs a real punchline: a genuine turn, an
+unexpected comparison, an ironic angle -- something that actually reads
+as a joke, not a stats recap with attitude.
 
-You may ALSO optionally draw on real general knowledge of Virginia Tech's football program -- specifically this program's general reputation/identity within their conference, even if you're not 100% certain of exact details. Keep it to something genuinely recognizable about this specific program, not something you're making up out of nothing. This is optional -- the season facts above are the required core of the line.
+Write it in this voice -- study these examples closely, they're the
+actual target sound, not just a topic area:
+- "We're 6-0, which is more wins than I've had good decisions this year, so I'd call that a fair trade."
+- "Giving up thirty a game and still winning just means we'd rather stress everyone out than beat them cleanly."
+- "I don't know how we're 5-1. Nobody in that building knows. We're just letting it happen and not asking questions."
 
-Write ONE punchy line (roughly 15-30 words) roasting Virginia Tech, weaving in
-AT LEAST 2 of the 4 season facts above -- not just
-the record alone. If a streak or scoring average is given, make real use
-of it rather than ignoring it.
+(Those examples are about hypothetical teams -- write a NEW line for
+Virginia Tech specifically, don't reuse their wording or scenario.)
 
-Comedic voice for this line, in the style of Derrick Stroup:
-Write in a fast-paced, high-energy, detailed voice -- like someone telling an animated story who can barely get the words out fast enough. Sharp and cutting, vivid specific details, exclamation-level energy -- but never genuinely mean-spirited, just loud and pointed.
-
-MANDATORY STRUCTURE for this specific line: Structure this by comparing their situation to something absurd, mundane, or unrelated -- not another football team.
-
-IMPORTANT: absolutely NO profanity or curse words of any kind, even mild
-ones, no matter how heated the joke gets. This goes out to a group chat,
-not a comedy club -- keep the language completely clean while still
-being sharp and cutting.
-
-Do NOT reach for generic sports-trash-talk tropes not supported by the
-facts above (e.g. don't claim their wins came against weak opponents
-unless a fact actually says that). Can use at most one emoji. Do NOT
-mention or predict anything about the CURRENT week's game, since it
-hasn't been played yet -- only reference the facts given above.
-
-Reminder: do not reference RTA/advancing/them posting this message
-anywhere in the line -- the whole thing should just be about their
-season. Return ONLY the line itself, no quotes, no preamble, no
-attribution to the comedian by name.
+Hard rules: numbers as numerals ("4-4" and "47-45", never spelled out).
+No profanity. No mention of RTA/advancing. No predicting this week's
+game. At most one emoji. Return ONLY the line itself, nothing else.
 
 
 
@@ -906,51 +617,34 @@ West Virginia
 ======================================================================
   Record: 6-1  |  Last game: beat Louisiana Tech 49-20  |  PPG/PA: 29.0/24.3
 
---- Prompt [1] (comedian style: Derrick Stroup) ---
-You are replying to a college football coach in a group chat who just
-posted "RTA" (Ready To Advance) for their team, West Virginia.
+--- Prompt [1] (comedian style: unknown) ---
+Write ONE short, funny heckle line (15-25 words) for a college football
+group chat, roasting West Virginia using their real stats below. Someone just
+posted "RTA" for this team -- everyone already knows that, don't mention
+it or reference advancing at all, just roast their season.
 
-CRITICAL RULE, read this first: never reference "RTA", "ready to advance",
-"advancing", or the fact that they just posted this message -- not as an
-opener, not anywhere in the line, not even reworded ("screaming RTA",
-"yelling ready to advance", etc. all count as violations too). The
-reader already knows they posted RTA -- that's not a joke, it's just
-context. The ENTIRE line should be about their actual season performance
-instead. This is the single most repeated pattern across many separate
-replies, so it matters more than anything else here.
+Real facts about West Virginia -- use only these, don't invent anything else:
+Record: 6-1. Most recent game: beat Louisiana Tech 49-20. Averaging 29.0 points scored, 24.3 allowed per game.
+You can also optionally draw on real general knowledge of West Virginia's football program/reputation if it strengthens the joke -- approximate details are fine, just keep it genuinely recognizable, not invented.
 
-Real facts about West Virginia's season so far -- use ONLY these, don't invent
-any other games, scores, opponents, or claims about their schedule/other
-results:
-Record so far this season: 6-1. Most recent completed game: beat Louisiana Tech 49-20. Averaging 29.0 points scored and 24.3 points allowed per game this season.
+Pick whichever ONE or TWO of these facts actually make for the funniest
+line -- you don't need to use all of them, and don't just list them with
+"while"/"after"/"since". This needs a real punchline: a genuine turn, an
+unexpected comparison, an ironic angle -- something that actually reads
+as a joke, not a stats recap with attitude.
 
-You may ALSO optionally draw on real general knowledge of West Virginia's football program -- specifically a longstanding rivalry and how this program has historically fared in it, even if you're not 100% certain of exact details. Keep it to something genuinely recognizable about this specific program, not something you're making up out of nothing. This is optional -- the season facts above are the required core of the line.
+Write it in this voice -- study these examples closely, they're the
+actual target sound, not just a topic area:
+- "We're 6-0, which is more wins than I've had good decisions this year, so I'd call that a fair trade."
+- "Giving up thirty a game and still winning just means we'd rather stress everyone out than beat them cleanly."
+- "I don't know how we're 5-1. Nobody in that building knows. We're just letting it happen and not asking questions."
 
-Write ONE punchy line (roughly 15-30 words) roasting West Virginia, weaving in
-AT LEAST 2 of the 3 season facts above -- not just
-the record alone. If a streak or scoring average is given, make real use
-of it rather than ignoring it.
+(Those examples are about hypothetical teams -- write a NEW line for
+West Virginia specifically, don't reuse their wording or scenario.)
 
-Comedic voice for this line, in the style of Derrick Stroup:
-Write in a fast-paced, high-energy, detailed voice -- like someone telling an animated story who can barely get the words out fast enough. Sharp and cutting, vivid specific details, exclamation-level energy -- but never genuinely mean-spirited, just loud and pointed.
-
-MANDATORY STRUCTURE for this specific line: Structure this as one single blunt observation -- no setup, no windup, just the jab landing immediately.
-
-IMPORTANT: absolutely NO profanity or curse words of any kind, even mild
-ones, no matter how heated the joke gets. This goes out to a group chat,
-not a comedy club -- keep the language completely clean while still
-being sharp and cutting.
-
-Do NOT reach for generic sports-trash-talk tropes not supported by the
-facts above (e.g. don't claim their wins came against weak opponents
-unless a fact actually says that). Can use at most one emoji. Do NOT
-mention or predict anything about the CURRENT week's game, since it
-hasn't been played yet -- only reference the facts given above.
-
-Reminder: do not reference RTA/advancing/them posting this message
-anywhere in the line -- the whole thing should just be about their
-season. Return ONLY the line itself, no quotes, no preamble, no
-attribution to the comedian by name.
+Hard rules: numbers as numerals ("4-4" and "47-45", never spelled out).
+No profanity. No mention of RTA/advancing. No predicting this week's
+game. At most one emoji. Return ONLY the line itself, nothing else.
 
 
 
