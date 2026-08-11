@@ -346,6 +346,130 @@ quotes, no preamble.
 """
 
 
+# ---------------------------------------------------------------------------
+# "Ready to advance, as this specific team" + roast structure + a specific
+# well of real-world material to draw from. The advance_team strategy above
+# already tested well (the Brazos river line) because of the first-person
+# "just finished, ready to go" framing plus one genuinely specific local
+# detail -- these keep that framing and vary WHICH kind of specific
+# material it's pointed at, so we can see which well actually produces
+# the funniest results, rather than asking for all of them at once.
+# ---------------------------------------------------------------------------
+
+def strategy_advance_program_history(team, form):
+    return f"""You are the coach of {team} in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- while you're at it, roast your own program's HISTORY:
+a rough era, a coaching change, a well-known drought or stretch, a
+notable rise or fall, anything genuinely recognizable about {team}'s
+program history specifically.
+
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate historical details
+are fine, this isn't a fact-check.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+"""
+
+
+def strategy_advance_town(team, form):
+    return f"""You are the coach of {team} in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- work in something about the actual TOWN or CITY {team}
+is located in: local geography, culture, a well-known local stereotype,
+whatever's genuinely specific to that actual place (not the football
+program itself).
+
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details about the
+town are fine.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+"""
+
+
+def strategy_advance_player(team, form):
+    return f"""You are the coach of {team} in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- reference ONE specific real player from {team}'s
+history (a legend, a bust, someone with a famous moment good or bad) as
+part of the joke.
+
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details about the
+player are fine, this isn't a fact-check.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+"""
+
+
+def strategy_advance_program_issues(team, form):
+    return f"""You are the coach of {team} in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- roast your own program's rougher moments specifically:
+a scandal, a controversy, a coaching mess, an embarrassing stretch --
+an actual ISSUE from {team}'s past, not just a bad record.
+
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details are fine,
+this isn't a fact-check.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+"""
+
+
+def strategy_advance_combo(team, form):
+    return f"""You are the coach of {team} in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week. Roast your own team using WHICHEVER of these actually
+makes for the funniest line: {team}'s program history, a rough or
+embarrassing moment in their past, the actual town/city {team} is
+located in, or a specific real player from their history. Pick ONE
+angle -- whichever is funniest -- don't try to cram in more than one.
+
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details are fine,
+this isn't a fact-check.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing, don't play it safe.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+"""
+
+
 STRATEGIES = {
     "history": strategy_history,
     "vs_ranked_user": strategy_vs_ranked_user,
@@ -363,6 +487,11 @@ STRATEGIES = {
     "school_rivalry": strategy_school_rivalry,
     "school_mascot": strategy_school_mascot,
     "school_reputation": strategy_school_reputation,
+    "advance_program_history": strategy_advance_program_history,
+    "advance_town": strategy_advance_town,
+    "advance_player": strategy_advance_player,
+    "advance_program_issues": strategy_advance_program_issues,
+    "advance_combo": strategy_advance_combo,
 }
 
 

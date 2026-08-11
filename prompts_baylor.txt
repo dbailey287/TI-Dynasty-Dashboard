@@ -70,7 +70,7 @@ quotes, no preamble.
 ======================================================================
 STRATEGY: single_fact
 ======================================================================
-One real fact about Baylor this season: Record: 4-3.
+One real fact about Baylor this season: Most recent game: beat Missouri State 56-24.
 
 Write ONE funny, creative heckle line (30-50 words) built from just this
 single fact -- you have a lot of room here, so go somewhere unexpected
@@ -125,7 +125,7 @@ quotes, no preamble.
 ======================================================================
 STRATEGY: random_1_fact
 ======================================================================
-One real fact about Baylor this season: Record vs ranked opponents: 0-3.
+One real fact about Baylor this season: Averaging 38.7 points scored, 26.1 allowed per game.
 
 Write ONE funny, sharp roast line (25-45 words) built from just this
 single fact -- you have a lot of room here, go somewhere unexpected
@@ -139,7 +139,7 @@ quotes, no preamble.
 ======================================================================
 STRATEGY: random_2_facts
 ======================================================================
-Real facts about Baylor this season: Record vs fellow user-controlled teams: 1-2. Upcoming: plays #24 Texas A&M next week.
+Real facts about Baylor this season: Record vs ranked opponents: 0-3. Most recent game: beat Missouri State 56-24.
 
 Write ONE funny, sharp roast line (25-45 words) using these two facts
 -- find the connection or contrast between them if there is one, don't
@@ -152,7 +152,7 @@ quotes, no preamble.
 ======================================================================
 STRATEGY: random_subset
 ======================================================================
-Real facts about Baylor this season: Record vs ranked opponents: 0-3.
+Real facts about Baylor this season: Most recent game: beat Missouri State 56-24.
 
 Write ONE funny, sharp roast line (25-45 words) using whichever of these
 facts actually makes for the funniest line -- you don't need to use all
