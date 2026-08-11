@@ -300,6 +300,7 @@ def run() -> str:
                 reply_text = rl.generate_dynamic_quip(team, GEMINI_API_KEY)
                 if reply_text:
                     source = "DYNAMIC (Gemini)"
+                    rl.log_quip_response(team, current_week_sort, reply_text)
                 else:
                     source = "static (Gemini call failed or returned nothing -- check GENAI_API_KEY / API status)"
             else:

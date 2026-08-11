@@ -857,6 +857,45 @@ def build_advance_prompt(team: str) -> str:
     return random.choice(ADVANCE_PROMPT_STRATEGIES)(team)
 
 
+QUIP_LOG_FILE = "quip_log.csv"
+QUIP_LOG_HEADER = ["Timestamp", "Season", "Week", "Team", "Response"]
+
+
+def log_quip_response(team: str, week_sort, response_text: str, directory: str = ".") -> None:
+    """Appends one row to quip_log.csv -- timestamp, season, week, team,
+    and the actual Gemini response text. One ongoing file across all
+    seasons (not reset each year) so it's a running history, same as
+    the tagline queue state; a Season column is included so it can
+    still be filtered/segmented later if that's ever useful.
+
+    Only called for actual DYNAMIC (Gemini-sourced) replies -- static
+    tagline-bank fallbacks aren't "a response from Gemini" and aren't
+    logged here. Uses the csv module rather than a naive comma-join,
+    since real Gemini responses routinely contain commas and quotes
+    that would otherwise corrupt the file.
+
+    Never raises -- a logging failure should never break a real RTA
+    reply. Logs a warning and silently continues on any I/O problem."""
+    import csv
+    season = get_current_season(directory)
+    path = os.path.join(directory, QUIP_LOG_FILE)
+    file_exists = os.path.exists(path)
+    try:
+        with open(path, "a", newline="", encoding="utf-8") as f:
+            writer = csv.writer(f)
+            if not file_exists:
+                writer.writerow(QUIP_LOG_HEADER)
+            writer.writerow([
+                datetime.now(timezone.utc).isoformat(),
+                season if season is not None else "",
+                week_sort if week_sort is not None else "",
+                team,
+                response_text,
+            ])
+    except OSError as e:
+        log.warning("log_quip_response: couldn't write to %s: %s", path, e)
+
+
 def generate_dynamic_quip(team: str, api_key: str) -> str | None:
     """Synchronous Gemini call (this script has no async event loop, so
     no need to wrap it) generating one fresh line via build_advance_prompt()
