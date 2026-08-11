@@ -705,12 +705,165 @@ itself, nothing else.
 """
 
 
-def generate_dynamic_quip(form: dict, api_key: str) -> str | None:
+# ---------------------------------------------------------------------------
+# "Ready to advance, as this specific team" + roast structure + a specific
+# well of real-world material -- ported from test_prompt_strategies.py
+# after manual testing there favored these over the stats-heavy approach
+# above. None of these six reference real season stats at all (that's
+# deliberate -- testing showed fewer/no facts produced funnier, less
+# repetitive lines than the full stat bundle), so build_advance_prompt()
+# below is now what generate_dynamic_quip() actually uses.
+# ---------------------------------------------------------------------------
+
+def strategy_advance_team(team: str) -> str:
+    return f"""Write ONE funny joke (20-40 words) about being the coach of {team} in a
+college football dynasty league, specifically about the experience of
+being ready to advance to the next week. Can reference {team}'s general
+vibe, mascot, or identity -- doesn't need real season stats.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+"""
+
+
+def strategy_advance_program_history(team: str) -> str:
+    return f"""You are the coach of {team} in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- while you're at it, roast your own program's HISTORY:
+a rough era, a coaching change, a well-known drought or stretch, a
+notable rise or fall, anything genuinely recognizable about {team}'s
+program history specifically.
+
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate historical details
+are fine, this isn't a fact-check.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+"""
+
+
+def strategy_advance_town(team: str) -> str:
+    return f"""You are the coach of {team} in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- work in something about the actual TOWN or CITY {team}
+is located in: local geography, culture, a well-known local stereotype,
+whatever's genuinely specific to that actual place (not the football
+program itself).
+
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details about the
+town are fine.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+"""
+
+
+def strategy_advance_player(team: str) -> str:
+    return f"""You are the coach of {team} in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- reference ONE specific real player from {team}'s
+history (a legend, a bust, someone with a famous moment good or bad) as
+part of the joke.
+
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details about the
+player are fine, this isn't a fact-check.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+"""
+
+
+def strategy_advance_program_issues(team: str) -> str:
+    return f"""You are the coach of {team} in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- roast your own program's rougher moments specifically:
+a scandal, a controversy, a coaching mess, an embarrassing stretch --
+an actual ISSUE from {team}'s past, not just a bad record.
+
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details are fine,
+this isn't a fact-check.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+"""
+
+
+def strategy_advance_combo(team: str) -> str:
+    return f"""You are the coach of {team} in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week. Roast your own team using WHICHEVER of these actually
+makes for the funniest line: {team}'s program history, a rough or
+embarrassing moment in their past, the actual town/city {team} is
+located in, or a specific real player from their history. Pick ONE
+angle -- whichever is funniest -- don't try to cram in more than one.
+
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details are fine,
+this isn't a fact-check.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing, don't play it safe.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+"""
+
+
+ADVANCE_PROMPT_STRATEGIES = [
+    strategy_advance_team,
+    strategy_advance_program_history,
+    strategy_advance_town,
+    strategy_advance_player,
+    strategy_advance_program_issues,
+    strategy_advance_combo,
+]
+
+
+def build_advance_prompt(team: str) -> str:
+    """Randomly picks one of the six ADVANCE_PROMPT_STRATEGIES per call --
+    this randomization is the actual point (per-reply variety), same
+    reasoning as randomly picking a comedian style used to serve."""
+    return random.choice(ADVANCE_PROMPT_STRATEGIES)(team)
+
+
+def generate_dynamic_quip(team: str, api_key: str) -> str | None:
     """Synchronous Gemini call (this script has no async event loop, so
-    no need to wrap it) generating one fresh trash-talk line from a
-    team's real season data. Returns None on any failure -- missing key,
-    API error, empty response -- so the caller can fall back to the
-    static tagline bank rather than skip the reply entirely."""
+    no need to wrap it) generating one fresh line via build_advance_prompt()
+    -- a randomly-picked one of the 6 ADVANCE_PROMPT_STRATEGIES. Returns
+    None on any failure -- missing key, API error, empty response -- so
+    the caller can fall back to the static tagline bank rather than skip
+    the reply entirely."""
     if not api_key:
         log.warning("generate_dynamic_quip: no API key provided (GENAI_API_KEY not set).")
         return None
@@ -733,11 +886,11 @@ def generate_dynamic_quip(form: dict, api_key: str) -> str | None:
     last_error = None
     for model_name in QUIP_MODEL_CHAIN:
         for attempt in range(1, QUIP_RETRIES_PER_MODEL + 1):
-            # Fresh prompt each attempt -- a new random style/angle, so a
-            # retry actually has a real chance of avoiding whatever
+            # Fresh prompt each attempt -- a new random strategy/style, so
+            # a retry actually has a real chance of avoiding whatever
             # pattern triggered the last attempt, rather than sending the
             # identical prompt again and hoping temperature alone saves it.
-            prompt = build_quip_prompt(form)
+            prompt = build_advance_prompt(team)
             try:
                 response = client.models.generate_content(model=model_name, contents=[prompt], config=gen_config)
                 text = (response.text or "").strip()

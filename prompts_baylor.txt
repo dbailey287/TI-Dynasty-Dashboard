@@ -70,7 +70,7 @@ quotes, no preamble.
 ======================================================================
 STRATEGY: single_fact
 ======================================================================
-One real fact about Baylor this season: Most recent game: beat Missouri State 56-24.
+One real fact about Baylor this season: Record: 4-3.
 
 Write ONE funny, creative heckle line (30-50 words) built from just this
 single fact -- you have a lot of room here, so go somewhere unexpected
@@ -125,7 +125,7 @@ quotes, no preamble.
 ======================================================================
 STRATEGY: random_1_fact
 ======================================================================
-One real fact about Baylor this season: Averaging 38.7 points scored, 26.1 allowed per game.
+One real fact about Baylor this season: Record: 4-3.
 
 Write ONE funny, sharp roast line (25-45 words) built from just this
 single fact -- you have a lot of room here, go somewhere unexpected
@@ -139,7 +139,7 @@ quotes, no preamble.
 ======================================================================
 STRATEGY: random_2_facts
 ======================================================================
-Real facts about Baylor this season: Record vs ranked opponents: 0-3. Most recent game: beat Missouri State 56-24.
+Real facts about Baylor this season: Record: 4-3. Most recent game: beat Missouri State 56-24.
 
 Write ONE funny, sharp roast line (25-45 words) using these two facts
 -- find the connection or contrast between them if there is one, don't
@@ -152,7 +152,7 @@ quotes, no preamble.
 ======================================================================
 STRATEGY: random_subset
 ======================================================================
-Real facts about Baylor this season: Most recent game: beat Missouri State 56-24.
+Real facts about Baylor this season: Averaging 38.7 points scored, 26.1 allowed per game. Record: 4-3. Upcoming: plays #24 Texas A&M next week.
 
 Write ONE funny, sharp roast line (25-45 words) using whichever of these
 facts actually makes for the funniest line -- you don't need to use all
@@ -205,6 +205,125 @@ Write ONE short, punchy line (15-25 words -- keep this one tight, not
 long) about Baylor's overall reputation in college football -- are they
 a blue blood, a perennial underachiever, a scrappy nobody, a program
 everyone overrates, etc. Whatever's genuinely recognizable about them.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+======================================================================
+STRATEGY: advance_program_history
+======================================================================
+You are the coach of Baylor in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- while you're at it, roast your own program's HISTORY:
+a rough era, a coaching change, a well-known drought or stretch, a
+notable rise or fall, anything genuinely recognizable about Baylor's
+program history specifically.
+
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate historical details
+are fine, this isn't a fact-check.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+======================================================================
+STRATEGY: advance_town
+======================================================================
+You are the coach of Baylor in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- work in something about the actual TOWN or CITY Baylor
+is located in: local geography, culture, a well-known local stereotype,
+whatever's genuinely specific to that actual place (not the football
+program itself).
+
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details about the
+town are fine.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+======================================================================
+STRATEGY: advance_player
+======================================================================
+You are the coach of Baylor in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- reference ONE specific real player from Baylor's
+history (a legend, a bust, someone with a famous moment good or bad) as
+part of the joke.
+
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details about the
+player are fine, this isn't a fact-check.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+======================================================================
+STRATEGY: advance_program_issues
+======================================================================
+You are the coach of Baylor in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- roast your own program's rougher moments specifically:
+a scandal, a controversy, a coaching mess, an embarrassing stretch --
+an actual ISSUE from Baylor's past, not just a bad record.
+
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details are fine,
+this isn't a fact-check.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+======================================================================
+STRATEGY: advance_combo
+======================================================================
+You are the coach of Baylor in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week. Roast your own team using WHICHEVER of these actually
+makes for the funniest line: Baylor's program history, a rough or
+embarrassing moment in their past, the actual town/city Baylor is
+located in, or a specific real player from their history. Pick ONE
+angle -- whichever is funniest -- don't try to cram in more than one.
+
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details are fine,
+this isn't a fact-check.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing, don't play it safe.
 
 No profanity. At most one emoji. Return ONLY the line itself, no
 quotes, no preamble.

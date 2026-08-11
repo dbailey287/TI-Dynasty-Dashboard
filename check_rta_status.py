@@ -297,24 +297,20 @@ def run() -> str:
             source = None  # for logging: exactly why this reply is what it is
 
             if use_dynamic_quips:
-                form = rl.get_team_recent_form(team, current_week_sort=current_week_sort)
-                if form is None:
-                    source = "static (no completed-game data yet for this team)"
+                reply_text = rl.generate_dynamic_quip(team, GEMINI_API_KEY)
+                if reply_text:
+                    source = "DYNAMIC (Gemini)"
                 else:
-                    reply_text = rl.generate_dynamic_quip(form, GEMINI_API_KEY)
-                    if reply_text:
-                        source = "DYNAMIC (Gemini)"
-                    else:
-                        source = "static (Gemini call failed or returned nothing -- check GENAI_API_KEY / API status)"
+                    source = "static (Gemini call failed or returned nothing -- check GENAI_API_KEY / API status)"
             else:
                 source = f"static (week_sort={current_week_sort}, dynamic starts at {rl.DYNAMIC_QUIP_MIN_WEEK_SORT})"
 
             if not reply_text:
                 # Either too early in the season for dynamic quips, or
-                # the dynamic attempt didn't produce anything (no data
-                # yet, missing API key, API failure) -- fall back to the
-                # static bank. Queue/last-used state only gets touched
-                # here, never when a dynamic quip is actually used.
+                # the dynamic attempt didn't produce anything (missing
+                # API key, API failure) -- fall back to the static bank.
+                # Queue/last-used state only gets touched here, never
+                # when a dynamic quip is actually used.
                 last_used = state.get("last_tagline_by_team", {}).get(team)
                 queue = state.get("tagline_queue_by_team", {}).get(team, [])
                 reply_text, queue = rl.pick_tagline_round_robin(team, queue, last_used=last_used)
