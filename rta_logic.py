@@ -368,7 +368,7 @@ QUIP_MODEL_CHAIN = ["gemini-flash-lite-latest", "gemini-3.5-flash-lite", "gemini
 QUIP_RETRIES_PER_MODEL = 2
 
 
-def get_team_recent_form(team: str, directory: str = ".") -> dict | None:
+def get_team_recent_form(team: str, directory: str = ".", current_week_sort: int = None) -> dict | None:
     """
     Pulls this team's actual season-so-far from the current season's
     dynasty_data_<season>.csv: record, current streak, last completed
@@ -377,11 +377,25 @@ def get_team_recent_form(team: str, directory: str = ".") -> dict | None:
     missing/unreadable) -- callers should fall back to the static
     tagline bank in that case, not treat it as an error.
 
-    Deliberately only looks at COMPLETED games. At the moment someone
-    posts RTA to advance past the current week, that week's own game(s)
-    aren't done yet -- the most recent real result available is whatever
-    was last completed, which could be last week or, across a bye,
-    older than that. This never assumes the current week's outcome.
+    Deliberately only looks at COMPLETED games for record/streak/last-game
+    facts. At the moment someone posts RTA to advance past the current
+    week, that week's own game(s) aren't done yet in real time -- but the
+    CSV's Status field can lag even further behind: it only updates when
+    the daily schedule scraper next runs and picks up a NEW screenshot,
+    which could be hours or a full day after the game was actually
+    played. So the current week's game can still show "Upcoming" in the
+    data well after someone has already played it and posted RTA.
+
+    current_week_sort (from rta_status.json, the same tracked value used
+    elsewhere for "what week are we on") is used specifically to keep
+    upcoming-opponent facts genuinely in the future -- any week at or
+    before current_week_sort is excluded from next_opponent/
+    next_ranked_opponent/next_user_opponent, regardless of what its
+    Status column says, since a stale "Upcoming" status for a game
+    that's already been played would otherwise get referenced as if it
+    hasn't happened yet. If current_week_sort isn't passed, falls back
+    to trusting Status alone (only used by the standalone offline tester
+    when rta_status.json isn't available to it).
     """
     df = _load_latest_season_df(directory)
     if df is None:
@@ -437,15 +451,26 @@ def get_team_recent_form(team: str, directory: str = ".") -> dict | None:
     # fellow-USER opponent are tracked separately since they're often
     # different weeks (e.g. next game is an easy unranked team, but a
     # ranked or user matchup looms a few weeks out).
+    #
+    # Reference point for "what counts as genuinely upcoming": prefer
+    # the authoritative current_week_sort if the caller passed one in,
+    # since the CSV's own Status column can still say "Upcoming" for a
+    # game that's already been played but hasn't been scraped yet --
+    # without this, that just-played game could get referenced as a
+    # future opponent. Falls back to the last completed game's week if
+    # no current_week_sort was given (standalone/offline testing only).
+    reference_week_sort = current_week_sort if current_week_sort is not None else team_games["_sort"].iloc[-1]
+
     upcoming = df[(df["Team"] == team) & (df["Status"] == "Upcoming")].copy()
     next_opponent = next_opponent_rank = next_opponent_is_user = None
     next_ranked_opponent = next_ranked_opponent_rank = next_ranked_weeks_away = None
     next_user_opponent = next_user_weeks_away = None
     if not upcoming.empty:
         upcoming["_sort"] = upcoming["Week"].apply(week_sort_key)
+        upcoming = upcoming[upcoming["_sort"] > reference_week_sort]
         upcoming = upcoming.sort_values("_sort")
-        current_week_sort_val = team_games["_sort"].iloc[-1]
 
+    if not upcoming.empty:
         first = upcoming.iloc[0]
         next_opponent = first["Opponent"]
         next_opponent_rank = None if first["Opponent_Rank"] in (None, "-") or pd.isna(first["Opponent_Rank"]) else first["Opponent_Rank"]
@@ -456,13 +481,13 @@ def get_team_recent_form(team: str, directory: str = ".") -> dict | None:
             r = ranked_upcoming.iloc[0]
             next_ranked_opponent = r["Opponent"]
             next_ranked_opponent_rank = r["Opponent_Rank"]
-            next_ranked_weeks_away = int(r["_sort"] - current_week_sort_val)
+            next_ranked_weeks_away = int(r["_sort"] - reference_week_sort)
 
         user_upcoming = upcoming[upcoming["Matchup_Type"] == "User vs User"]
         if not user_upcoming.empty:
             u = user_upcoming.iloc[0]
             next_user_opponent = u["Opponent"]
-            next_user_weeks_away = int(u["_sort"] - current_week_sort_val)
+            next_user_weeks_away = int(u["_sort"] - reference_week_sort)
 
     return {
         "team": team,
@@ -534,17 +559,19 @@ COMEDIAN_STYLES = [
     {
         "name": "Nate Bargatze",
         "examples": [
-            "We're 6-0, which is more wins than I've had good decisions this year, so I'd call that a fair trade.",
-            "Giving up 30 a game and still winning just means we'd rather stress everyone out than beat them cleanly.",
-            "I don't know how we're 5-1. Nobody in that building knows. We're just letting it happen and not asking questions.",
+            "We're 6-0, and I keep waiting for someone to tell me it doesn't count, because deep down I still don't fully believe it either.",
+            "Giving up 30 a game and still winning just means we'd rather have a heart attack than win by two scores like normal people do.",
+            "I don't know how we're 5-1. Nobody in that building has an explanation for it. We're just quietly hoping nobody looks too closely at the tape.",
+            "We won by 3 points and everybody's celebrating like we won a championship, when really we just barely avoided total humiliation by one bad snap.",
         ],
     },
     {
         "name": "Derrick Stroup",
         "examples": [
-            "6-0?! Man, you're out here scoring 40 a game like it's NOTHING, like anybody could do that, and NOBODY can do that!",
-            "You beat 'em by 3 points and you're strutting around like you just hoisted a trophy, my brother, 3 points is a FIELD GOAL!",
-            "Giving up 30 a game and still smiling?! That's not a defense, that's an OPEN DOOR POLICY!",
+            "6-0 and you're out here talking like you built a dynasty, but you're scoring 40 and giving up 35, my brother, that is a coin flip with extra steps!",
+            "You win by 3 points and you're strutting around like you're Nick Saban?! 3 points is barely a football game, that is a rounding error with a scoreboard attached to it!",
+            "Giving up 30 a game and STILL smiling?! I have seen hostages negotiate better terms than whatever your defense is out there agreeing to every single Saturday!",
+            "6-0 is cute, sure, but you play the #1 team next week, and I promise you they have eaten better offenses than yours for a pregame snack!",
         ],
     },
 ]
@@ -609,8 +636,9 @@ def build_quip_prompt(form: dict) -> str:
     chosen_style = random.choice(COMEDIAN_STYLES)
     examples_block = "\n".join(f'- "{ex}"' for ex in chosen_style["examples"])
 
-    return f"""Write ONE short, funny heckle line (15-25 words) for a college football
-group chat, roasting {team} using their real stats below. Someone just
+    return f"""Write ONE funny heckle line (25-40 words -- give yourself real room for a
+setup and a turn, not just a one-beat jab) for a college football group
+chat, roasting {team} using their real stats below. Someone just
 posted "RTA" for this team -- everyone already knows that, don't mention
 it or reference advancing at all, just roast their season.
 
@@ -621,7 +649,8 @@ Pick whichever ONE or TWO of these facts actually make for the funniest
 line -- you don't need to use all of them, and don't just list them with
 "while"/"after"/"since". This needs a real punchline: a genuine turn, an
 unexpected comparison, an ironic angle -- something that actually reads
-as a joke, not a stats recap with attitude.
+as a joke, not a stats recap with attitude. Go for real trash talk --
+sharp and a little mean, not a gentle ribbing. Don't hedge the insult.
 
 If it's in the facts above, one especially strong angle is pairing a
 PAST result with a FUTURE one -- e.g. their record against ranked teams
@@ -632,11 +661,14 @@ listed above, and don't force it if a simpler single-fact joke lands
 better.
 
 Write it in this voice -- study these examples closely, they're the
-actual target sound, not just a topic area:
+actual target sound, not just a topic area. Notice they don't all end
+the same way -- vary your own sentence structure and ending too, don't
+fall back on one template:
 {examples_block}
 
 (Those examples are about hypothetical teams -- write a NEW line for
-{team} specifically, don't reuse their wording or scenario.)
+{team} specifically, don't reuse their wording, scenario, or the exact
+way any of them end.)
 
 Hard rules: numbers as numerals ("4-4" and "47-45", never spelled out).
 No profanity. No mention of RTA/advancing. You CAN reference an upcoming

@@ -41,13 +41,13 @@ except AttributeError:
 import rta_logic as rl
 
 
-def generate_examples_for_team(client, gen_config, team: str, count: int, dry_run: bool = False) -> dict:
+def generate_examples_for_team(client, gen_config, team: str, count: int, current_week_sort: int = None, dry_run: bool = False) -> dict:
     """Prints stats + generated examples (or, in dry-run mode, just the
     constructed prompts themselves -- no API call at all) for one team.
     Returns a dict of {style_name: count} for that team (empty in
     dry-run mode, since no style is "used" without an actual call), or
     None if there's no data yet."""
-    form = rl.get_team_recent_form(team)
+    form = rl.get_team_recent_form(team, current_week_sort=current_week_sort)
     if form is None:
         print(f"⚠️  No completed-game data yet for {team} -- skipping.")
         print()
@@ -69,7 +69,10 @@ def generate_examples_for_team(client, gen_config, team: str, count: int, dry_ru
         # the real bot does per reply -- so each of these can genuinely
         # differ even for the same team.
         prompt = rl.build_quip_prompt(form)
-        style_used = next((s["name"] for s in rl.COMEDIAN_STYLES if s["name"] in prompt), "unknown")
+        style_used = next(
+            (s["name"] for s in rl.COMEDIAN_STYLES if any(ex in prompt for ex in s["examples"])),
+            "unknown",
+        )
 
         if dry_run:
             print(f"--- Prompt [{i}] (comedian style: {style_used}) ---")
@@ -110,6 +113,20 @@ def main():
         print("ERROR: either give a team name, or pass --all-teams.")
         sys.exit(1)
 
+    # Load the real current_week_sort from rta_status.json if it's sitting
+    # in this same folder, so upcoming-opponent facts correctly exclude
+    # the current week here too -- same as the live bot does. Falls back
+    # to None (get_team_recent_form's own fallback) if the file isn't
+    # found, which is fine for quick testing but slightly less accurate.
+    current_week_sort = None
+    state_path = os.environ.get("RTA_STATE_FILE", "rta_status.json")
+    if os.path.exists(state_path):
+        state = rl.load_state(state_path)
+        current_week_sort = state.get("current_week_sort")
+        if current_week_sort is not None:
+            print(f"(Using current_week_sort={current_week_sort} from {state_path})")
+            print()
+
     client = None
     gen_config = None
 
@@ -146,7 +163,7 @@ def main():
         overall_style_counts = {}
         skipped = []
         for team in teams:
-            result = generate_examples_for_team(client, gen_config, team, args.count, dry_run=args.dry_run)
+            result = generate_examples_for_team(client, gen_config, team, args.count, current_week_sort=current_week_sort, dry_run=args.dry_run)
             if result is None:
                 skipped.append(team)
             else:
@@ -161,13 +178,13 @@ def main():
         if skipped:
             print(f"Skipped (no completed-game data yet): {', '.join(skipped)}")
     else:
-        form_check = rl.get_team_recent_form(args.team)
+        form_check = rl.get_team_recent_form(args.team, current_week_sort=current_week_sort)
         if form_check is None:
             print(f"No completed-game data found for '{args.team}' -- can't build a quip yet.")
             print("(Check the team name matches exactly, and that dynasty_data_<season>.csv")
             print(" is in this same folder.)")
             sys.exit(1)
-        style_counts = generate_examples_for_team(client, gen_config, args.team, args.count, dry_run=args.dry_run)
+        style_counts = generate_examples_for_team(client, gen_config, args.team, args.count, current_week_sort=current_week_sort, dry_run=args.dry_run)
         if not args.dry_run:
             print("=" * 70)
             print("Style distribution this run:", style_counts)
