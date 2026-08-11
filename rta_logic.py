@@ -612,14 +612,27 @@ def build_quip_prompt(form: dict) -> str:
         facts.append(f"Record vs ranked opponents this season: {form['ranked_wins']}-{form['ranked_losses']}.")
     if form["user_wins"] + form["user_losses"] > 0:
         facts.append(f"Record vs fellow user-controlled teams this season: {form['user_wins']}-{form['user_losses']}.")
-    if form.get("next_ranked_opponent"):
+    same_upcoming_game = (
+        form.get("next_ranked_opponent") and form.get("next_user_opponent")
+        and form["next_ranked_opponent"] == form["next_user_opponent"]
+        and form["next_ranked_weeks_away"] == form["next_user_weeks_away"]
+    )
+    if same_upcoming_game:
         weeks = form["next_ranked_weeks_away"]
         when = "next week" if weeks == 1 else f"in {weeks} weeks"
-        facts.append(f"Upcoming: plays #{form['next_ranked_opponent_rank']} {form['next_ranked_opponent']} {when}.")
-    if form.get("next_user_opponent"):
-        weeks = form["next_user_weeks_away"]
-        when = "next week" if weeks == 1 else f"in {weeks} weeks"
-        facts.append(f"Upcoming: plays fellow user-controlled team {form['next_user_opponent']} {when}.")
+        facts.append(
+            f"Upcoming: plays #{form['next_ranked_opponent_rank']} {form['next_ranked_opponent']} "
+            f"{when} -- both a ranked opponent AND a fellow user-controlled team."
+        )
+    else:
+        if form.get("next_ranked_opponent"):
+            weeks = form["next_ranked_weeks_away"]
+            when = "next week" if weeks == 1 else f"in {weeks} weeks"
+            facts.append(f"Upcoming: plays #{form['next_ranked_opponent_rank']} {form['next_ranked_opponent']} {when}.")
+        if form.get("next_user_opponent"):
+            weeks = form["next_user_weeks_away"]
+            when = "next week" if weeks == 1 else f"in {weeks} weeks"
+            facts.append(f"Upcoming: plays fellow user-controlled team {form['next_user_opponent']} {when}.")
     facts_block = " ".join(facts)
 
     history_options = TEAM_HISTORY_FACTS.get(team, [])
@@ -652,13 +665,22 @@ unexpected comparison, an ironic angle -- something that actually reads
 as a joke, not a stats recap with attitude. Go for real trash talk --
 sharp and a little mean, not a gentle ribbing. Don't hedge the insult.
 
+The ENDING is the most important part -- that's where the joke actually
+has to land. Don't trail off into something vague like "...which should
+make watching them next week real comfortable for everybody" or
+"...which should be real fun when they show up" -- those are gestures
+at a joke, not an actual joke. Commit to something SPECIFIC and vivid
+at the end: a real image, a concrete comparison, an actual punchline --
+not a vague wave at future doom.
+
 If it's in the facts above, one especially strong angle is pairing a
 PAST result with a FUTURE one -- e.g. their record against ranked teams
 plus an upcoming ranked opponent, or their record against fellow users
 plus an upcoming user matchup -- building dread or false confidence
 about what's coming. Only use this if those specific facts are actually
 listed above, and don't force it if a simpler single-fact joke lands
-better.
+better. If you use this angle, the future part still needs a SPECIFIC
+ending, not a vague one -- see the rule above.
 
 Write it in this voice -- study these examples closely, they're the
 actual target sound, not just a topic area. Notice they don't all end
