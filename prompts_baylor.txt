@@ -1,0 +1,212 @@
+======================================================================
+STRATEGY: history
+======================================================================
+Write ONE funny line (30-50 words) for a college football group chat,
+joking about Baylor's football program -- its history, reputation, a
+famous era, a well-known coach, a rivalry, a notable good or bad season,
+anything genuinely recognizable about this specific program.
+
+Exact accuracy isn't required -- approximate details are fine, this is
+about the joke landing, not a fact-check. Just make sure it's clearly
+about Baylor specifically, not something generic that could apply to
+any team. No profanity. At most one emoji. Return ONLY the line itself,
+no quotes, no preamble.
+
+
+======================================================================
+STRATEGY: vs_ranked_user
+======================================================================
+Real facts about Baylor this season: overall record 4-3. Record
+against ranked opponents: 0-3. Record against fellow user-controlled
+teams: 1-2.
+
+Write ONE funny, sharp line (30-50 words) roasting Baylor specifically
+using how they've done against ranked opponents and/or fellow
+user-controlled teams this season -- that's the actual subject, not
+their overall record. Real trash talk, not gentle ribbing. No profanity.
+At most one emoji. Return ONLY the line itself, no quotes, no preamble.
+
+
+======================================================================
+STRATEGY: advance_generic
+======================================================================
+Write ONE funny, short joke (20-40 words) about the general experience
+of playing a college football dynasty/franchise-mode league with
+friends and everyone waiting on each other to be ready to advance to
+the next week -- the anxiety of waiting, the arms race of stats, the
+group-chat energy of it. NOT about any specific team.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+======================================================================
+STRATEGY: advance_team
+======================================================================
+Write ONE funny joke (20-40 words) about being the coach of Baylor in a
+college football dynasty league, specifically about the experience of
+being ready to advance to the next week. Can reference Baylor's general
+vibe, mascot, or identity -- doesn't need real season stats.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+======================================================================
+STRATEGY: no_impersonation
+======================================================================
+Real facts about Baylor this season -- use only these, don't invent
+anything else: Record: 4-3. Most recent game: beat Missouri State 56-24. Averaging 38.7 points scored, 26.1 allowed per game. Record vs ranked opponents: 0-3. Record vs fellow user-controlled teams: 1-2.
+
+Write ONE sharp, funny heckle line (30-50 words) roasting Baylor using
+these real facts. Just be genuinely funny and a little mean -- don't
+try to sound like any particular comedian or persona, just write the
+sharpest, funniest line you can on your own terms.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+======================================================================
+STRATEGY: single_fact
+======================================================================
+One real fact about Baylor this season: Record: 4-3.
+
+Write ONE funny, creative heckle line (30-50 words) built from just this
+single fact -- you have a lot of room here, so go somewhere unexpected
+with it rather than just restating it. Don't invent any other facts,
+but do whatever you want creatively with this one.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+======================================================================
+STRATEGY: character
+======================================================================
+You are playing a character: a rival coach in this dynasty league who
+takes the whole thing way too personally and is a little unhinged about
+it -- not a real comedian, just this specific fictional persona.
+
+Real facts about Baylor this season -- use only these: Record: 4-3. Most recent game: beat Missouri State 56-24. Averaging 38.7 points scored, 26.1 allowed per game. Record vs ranked opponents: 0-3. Record vs fellow user-controlled teams: 1-2.
+
+In that character's voice, write ONE funny heckle line (30-50 words)
+roasting Baylor using these facts.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+======================================================================
+STRATEGY: roast_genre
+======================================================================
+Real facts about Baylor this season -- use only these: Record: 4-3. Most recent game: beat Missouri State 56-24. Averaging 38.7 points scored, 26.1 allowed per game. Record vs ranked opponents: 0-3. Record vs fellow user-controlled teams: 1-2.
+
+Write ONE line (30-50 words) in the style of a Comedy Central Roast
+joke -- sharp, a little savage, structured like a real roast joke (a
+setup that lands on a real insult, not just an observation) -- about
+Baylor, using these real facts.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+======================================================================
+STRATEGY: absurdist
+======================================================================
+Write ONE absurd, weird, genuinely funny line (20-40 words) about
+Baylor's football team. Doesn't need to be based on real stats or facts
+at all -- just needs to be surreal and funny. Go somewhere unexpected.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+======================================================================
+STRATEGY: random_1_fact
+======================================================================
+One real fact about Baylor this season: Record vs ranked opponents: 0-3.
+
+Write ONE funny, sharp roast line (25-45 words) built from just this
+single fact -- you have a lot of room here, go somewhere unexpected
+with it rather than just restating it. Real trash talk, sharp and a
+little mean.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+======================================================================
+STRATEGY: random_2_facts
+======================================================================
+Real facts about Baylor this season: Record vs fellow user-controlled teams: 1-2. Upcoming: plays #24 Texas A&M next week.
+
+Write ONE funny, sharp roast line (25-45 words) using these two facts
+-- find the connection or contrast between them if there is one, don't
+just state them back to back. Real trash talk, sharp and a little mean.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+======================================================================
+STRATEGY: random_subset
+======================================================================
+Real facts about Baylor this season: Record vs ranked opponents: 0-3.
+
+Write ONE funny, sharp roast line (25-45 words) using whichever of these
+facts actually makes for the funniest line -- you don't need to use all
+of them if fewer works better. Real trash talk, sharp and a little mean.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+======================================================================
+STRATEGY: school_vibe
+======================================================================
+Write ONE funny line (25-45 words) about Baylor's general vibe as a
+football program and fanbase -- the stereotype, the culture, the kind of
+program it's known as (not necessarily historical facts, just the
+overall "personality" of the school in college football).
+
+Approximate/stereotypical is fine here -- this is about the joke, not
+precision. No profanity. At most one emoji. Return ONLY the line itself,
+no quotes, no preamble.
+
+
+======================================================================
+STRATEGY: school_rivalry
+======================================================================
+Write ONE funny line (25-45 words) about Baylor's biggest rivalry in
+college football -- who they hate playing, or who historically gives
+them trouble, or the general dynamic of that rivalry. Approximate
+details are fine, doesn't need to be perfectly accurate.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+======================================================================
+STRATEGY: school_mascot
+======================================================================
+Write ONE funny, absurd line (25-45 words) built around Baylor's
+mascot specifically -- treat the mascot almost like a character with its
+own personality, and build a joke out of that.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+======================================================================
+STRATEGY: school_reputation
+======================================================================
+Write ONE short, punchy line (15-25 words -- keep this one tight, not
+long) about Baylor's overall reputation in college football -- are they
+a blue blood, a perennial underachiever, a scrappy nobody, a program
+everyone overrates, etc. Whatever's genuinely recognizable about them.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
