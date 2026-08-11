@@ -15,7 +15,7 @@ posted "RTA" for this team -- everyone already knows that, don't mention
 it or reference advancing at all, just roast their season.
 
 Real facts about Arizona State -- use only these, don't invent anything else:
-Record: 4-3. Most recent game: lost to Utah 13-14. Currently on a 3-game losing streak. Averaging 31.0 points scored, 26.6 allowed per game. Upcoming: plays #18 Colorado next week. Upcoming: plays fellow user-controlled team Colorado next week.
+Record: 4-3. Most recent game: lost to Utah 13-14. Currently on a 3-game losing streak. Averaging 31.0 points scored, 26.6 allowed per game. Upcoming: plays #18 Colorado next week -- both a ranked opponent AND a fellow user-controlled team.
 You can also optionally draw on real general knowledge of Arizona State's football program/reputation if it strengthens the joke -- approximate details are fine, just keep it genuinely recognizable, not invented.
 
 Pick whichever ONE or TWO of these facts actually make for the funniest
@@ -25,13 +25,22 @@ unexpected comparison, an ironic angle -- something that actually reads
 as a joke, not a stats recap with attitude. Go for real trash talk --
 sharp and a little mean, not a gentle ribbing. Don't hedge the insult.
 
+The ENDING is the most important part -- that's where the joke actually
+has to land. Don't trail off into something vague like "...which should
+make watching them next week real comfortable for everybody" or
+"...which should be real fun when they show up" -- those are gestures
+at a joke, not an actual joke. Commit to something SPECIFIC and vivid
+at the end: a real image, a concrete comparison, an actual punchline --
+not a vague wave at future doom.
+
 If it's in the facts above, one especially strong angle is pairing a
 PAST result with a FUTURE one -- e.g. their record against ranked teams
 plus an upcoming ranked opponent, or their record against fellow users
 plus an upcoming user matchup -- building dread or false confidence
 about what's coming. Only use this if those specific facts are actually
 listed above, and don't force it if a simpler single-fact joke lands
-better.
+better. If you use this angle, the future part still needs a SPECIFIC
+ending, not a vague one -- see the rule above.
 
 Write it in this voice -- study these examples closely, they're the
 actual target sound, not just a topic area. Notice they don't all end
@@ -60,7 +69,7 @@ Arkansas
 ======================================================================
   Record: 8-0  |  Last game: beat Alabama 46-3  |  PPG/PA: 42.6/28.0
 
---- Prompt [1] (comedian style: Derrick Stroup) ---
+--- Prompt [1] (comedian style: Nate Bargatze) ---
 Write ONE funny heckle line (25-40 words -- give yourself real room for a
 setup and a turn, not just a one-beat jab) for a college football group
 chat, roasting Arkansas using their real stats below. Someone just
@@ -78,22 +87,31 @@ unexpected comparison, an ironic angle -- something that actually reads
 as a joke, not a stats recap with attitude. Go for real trash talk --
 sharp and a little mean, not a gentle ribbing. Don't hedge the insult.
 
+The ENDING is the most important part -- that's where the joke actually
+has to land. Don't trail off into something vague like "...which should
+make watching them next week real comfortable for everybody" or
+"...which should be real fun when they show up" -- those are gestures
+at a joke, not an actual joke. Commit to something SPECIFIC and vivid
+at the end: a real image, a concrete comparison, an actual punchline --
+not a vague wave at future doom.
+
 If it's in the facts above, one especially strong angle is pairing a
 PAST result with a FUTURE one -- e.g. their record against ranked teams
 plus an upcoming ranked opponent, or their record against fellow users
 plus an upcoming user matchup -- building dread or false confidence
 about what's coming. Only use this if those specific facts are actually
 listed above, and don't force it if a simpler single-fact joke lands
-better.
+better. If you use this angle, the future part still needs a SPECIFIC
+ending, not a vague one -- see the rule above.
 
 Write it in this voice -- study these examples closely, they're the
 actual target sound, not just a topic area. Notice they don't all end
 the same way -- vary your own sentence structure and ending too, don't
 fall back on one template:
-- "6-0 and you're out here talking like you built a dynasty, but you're scoring 40 and giving up 35, my brother, that is a coin flip with extra steps!"
-- "You win by 3 points and you're strutting around like you're Nick Saban?! 3 points is barely a football game, that is a rounding error with a scoreboard attached to it!"
-- "Giving up 30 a game and STILL smiling?! I have seen hostages negotiate better terms than whatever your defense is out there agreeing to every single Saturday!"
-- "6-0 is cute, sure, but you play the #1 team next week, and I promise you they have eaten better offenses than yours for a pregame snack!"
+- "We're 6-0, and I keep waiting for someone to tell me it doesn't count, because deep down I still don't fully believe it either."
+- "Giving up 30 a game and still winning just means we'd rather have a heart attack than win by two scores like normal people do."
+- "I don't know how we're 5-1. Nobody in that building has an explanation for it. We're just quietly hoping nobody looks too closely at the tape."
+- "We won by 3 points and everybody's celebrating like we won a championship, when really we just barely avoided total humiliation by one bad snap."
 
 (Those examples are about hypothetical teams -- write a NEW line for
 Arkansas specifically, don't reuse their wording, scenario, or the exact
@@ -113,7 +131,7 @@ Baylor
 ======================================================================
   Record: 4-3  |  Last game: beat Missouri State 56-24  |  PPG/PA: 38.7/26.1
 
---- Prompt [1] (comedian style: Nate Bargatze) ---
+--- Prompt [1] (comedian style: Derrick Stroup) ---
 Write ONE funny heckle line (25-40 words -- give yourself real room for a
 setup and a turn, not just a one-beat jab) for a college football group
 chat, roasting Baylor using their real stats below. Someone just
@@ -131,22 +149,31 @@ unexpected comparison, an ironic angle -- something that actually reads
 as a joke, not a stats recap with attitude. Go for real trash talk --
 sharp and a little mean, not a gentle ribbing. Don't hedge the insult.
 
+The ENDING is the most important part -- that's where the joke actually
+has to land. Don't trail off into something vague like "...which should
+make watching them next week real comfortable for everybody" or
+"...which should be real fun when they show up" -- those are gestures
+at a joke, not an actual joke. Commit to something SPECIFIC and vivid
+at the end: a real image, a concrete comparison, an actual punchline --
+not a vague wave at future doom.
+
 If it's in the facts above, one especially strong angle is pairing a
 PAST result with a FUTURE one -- e.g. their record against ranked teams
 plus an upcoming ranked opponent, or their record against fellow users
 plus an upcoming user matchup -- building dread or false confidence
 about what's coming. Only use this if those specific facts are actually
 listed above, and don't force it if a simpler single-fact joke lands
-better.
+better. If you use this angle, the future part still needs a SPECIFIC
+ending, not a vague one -- see the rule above.
 
 Write it in this voice -- study these examples closely, they're the
 actual target sound, not just a topic area. Notice they don't all end
 the same way -- vary your own sentence structure and ending too, don't
 fall back on one template:
-- "We're 6-0, and I keep waiting for someone to tell me it doesn't count, because deep down I still don't fully believe it either."
-- "Giving up 30 a game and still winning just means we'd rather have a heart attack than win by two scores like normal people do."
-- "I don't know how we're 5-1. Nobody in that building has an explanation for it. We're just quietly hoping nobody looks too closely at the tape."
-- "We won by 3 points and everybody's celebrating like we won a championship, when really we just barely avoided total humiliation by one bad snap."
+- "6-0 and you're out here talking like you built a dynasty, but you're scoring 40 and giving up 35, my brother, that is a coin flip with extra steps!"
+- "You win by 3 points and you're strutting around like you're Nick Saban?! 3 points is barely a football game, that is a rounding error with a scoreboard attached to it!"
+- "Giving up 30 a game and STILL smiling?! I have seen hostages negotiate better terms than whatever your defense is out there agreeing to every single Saturday!"
+- "6-0 is cute, sure, but you play the #1 team next week, and I promise you they have eaten better offenses than yours for a pregame snack!"
 
 (Those examples are about hypothetical teams -- write a NEW line for
 Baylor specifically, don't reuse their wording, scenario, or the exact
@@ -166,7 +193,7 @@ California
 ======================================================================
   Record: 7-0  |  Last game: beat Washington 33-21  |  PPG/PA: 37.7/15.6
 
---- Prompt [1] (comedian style: Nate Bargatze) ---
+--- Prompt [1] (comedian style: Derrick Stroup) ---
 Write ONE funny heckle line (25-40 words -- give yourself real room for a
 setup and a turn, not just a one-beat jab) for a college football group
 chat, roasting California using their real stats below. Someone just
@@ -184,22 +211,31 @@ unexpected comparison, an ironic angle -- something that actually reads
 as a joke, not a stats recap with attitude. Go for real trash talk --
 sharp and a little mean, not a gentle ribbing. Don't hedge the insult.
 
+The ENDING is the most important part -- that's where the joke actually
+has to land. Don't trail off into something vague like "...which should
+make watching them next week real comfortable for everybody" or
+"...which should be real fun when they show up" -- those are gestures
+at a joke, not an actual joke. Commit to something SPECIFIC and vivid
+at the end: a real image, a concrete comparison, an actual punchline --
+not a vague wave at future doom.
+
 If it's in the facts above, one especially strong angle is pairing a
 PAST result with a FUTURE one -- e.g. their record against ranked teams
 plus an upcoming ranked opponent, or their record against fellow users
 plus an upcoming user matchup -- building dread or false confidence
 about what's coming. Only use this if those specific facts are actually
 listed above, and don't force it if a simpler single-fact joke lands
-better.
+better. If you use this angle, the future part still needs a SPECIFIC
+ending, not a vague one -- see the rule above.
 
 Write it in this voice -- study these examples closely, they're the
 actual target sound, not just a topic area. Notice they don't all end
 the same way -- vary your own sentence structure and ending too, don't
 fall back on one template:
-- "We're 6-0, and I keep waiting for someone to tell me it doesn't count, because deep down I still don't fully believe it either."
-- "Giving up 30 a game and still winning just means we'd rather have a heart attack than win by two scores like normal people do."
-- "I don't know how we're 5-1. Nobody in that building has an explanation for it. We're just quietly hoping nobody looks too closely at the tape."
-- "We won by 3 points and everybody's celebrating like we won a championship, when really we just barely avoided total humiliation by one bad snap."
+- "6-0 and you're out here talking like you built a dynasty, but you're scoring 40 and giving up 35, my brother, that is a coin flip with extra steps!"
+- "You win by 3 points and you're strutting around like you're Nick Saban?! 3 points is barely a football game, that is a rounding error with a scoreboard attached to it!"
+- "Giving up 30 a game and STILL smiling?! I have seen hostages negotiate better terms than whatever your defense is out there agreeing to every single Saturday!"
+- "6-0 is cute, sure, but you play the #1 team next week, and I promise you they have eaten better offenses than yours for a pregame snack!"
 
 (Those examples are about hypothetical teams -- write a NEW line for
 California specifically, don't reuse their wording, scenario, or the exact
@@ -237,13 +273,22 @@ unexpected comparison, an ironic angle -- something that actually reads
 as a joke, not a stats recap with attitude. Go for real trash talk --
 sharp and a little mean, not a gentle ribbing. Don't hedge the insult.
 
+The ENDING is the most important part -- that's where the joke actually
+has to land. Don't trail off into something vague like "...which should
+make watching them next week real comfortable for everybody" or
+"...which should be real fun when they show up" -- those are gestures
+at a joke, not an actual joke. Commit to something SPECIFIC and vivid
+at the end: a real image, a concrete comparison, an actual punchline --
+not a vague wave at future doom.
+
 If it's in the facts above, one especially strong angle is pairing a
 PAST result with a FUTURE one -- e.g. their record against ranked teams
 plus an upcoming ranked opponent, or their record against fellow users
 plus an upcoming user matchup -- building dread or false confidence
 about what's coming. Only use this if those specific facts are actually
 listed above, and don't force it if a simpler single-fact joke lands
-better.
+better. If you use this angle, the future part still needs a SPECIFIC
+ending, not a vague one -- see the rule above.
 
 Write it in this voice -- study these examples closely, they're the
 actual target sound, not just a topic area. Notice they don't all end
@@ -272,7 +317,7 @@ Kentucky
 ======================================================================
   Record: 5-3  |  Last game: beat Vanderbilt 41-17  |  PPG/PA: 26.8/19.9
 
---- Prompt [1] (comedian style: Nate Bargatze) ---
+--- Prompt [1] (comedian style: Derrick Stroup) ---
 Write ONE funny heckle line (25-40 words -- give yourself real room for a
 setup and a turn, not just a one-beat jab) for a college football group
 chat, roasting Kentucky using their real stats below. Someone just
@@ -280,7 +325,7 @@ posted "RTA" for this team -- everyone already knows that, don't mention
 it or reference advancing at all, just roast their season.
 
 Real facts about Kentucky -- use only these, don't invent anything else:
-Record: 5-3. Most recent game: beat Vanderbilt 41-17. Averaging 26.8 points scored, 19.9 allowed per game. Upcoming: plays #11 Arkansas next week. Upcoming: plays fellow user-controlled team Arkansas next week.
+Record: 5-3. Most recent game: beat Vanderbilt 41-17. Averaging 26.8 points scored, 19.9 allowed per game. Upcoming: plays #11 Arkansas next week -- both a ranked opponent AND a fellow user-controlled team.
 You can also optionally draw on real general knowledge of Kentucky's football program/reputation if it strengthens the joke -- approximate details are fine, just keep it genuinely recognizable, not invented.
 
 Pick whichever ONE or TWO of these facts actually make for the funniest
@@ -290,22 +335,31 @@ unexpected comparison, an ironic angle -- something that actually reads
 as a joke, not a stats recap with attitude. Go for real trash talk --
 sharp and a little mean, not a gentle ribbing. Don't hedge the insult.
 
+The ENDING is the most important part -- that's where the joke actually
+has to land. Don't trail off into something vague like "...which should
+make watching them next week real comfortable for everybody" or
+"...which should be real fun when they show up" -- those are gestures
+at a joke, not an actual joke. Commit to something SPECIFIC and vivid
+at the end: a real image, a concrete comparison, an actual punchline --
+not a vague wave at future doom.
+
 If it's in the facts above, one especially strong angle is pairing a
 PAST result with a FUTURE one -- e.g. their record against ranked teams
 plus an upcoming ranked opponent, or their record against fellow users
 plus an upcoming user matchup -- building dread or false confidence
 about what's coming. Only use this if those specific facts are actually
 listed above, and don't force it if a simpler single-fact joke lands
-better.
+better. If you use this angle, the future part still needs a SPECIFIC
+ending, not a vague one -- see the rule above.
 
 Write it in this voice -- study these examples closely, they're the
 actual target sound, not just a topic area. Notice they don't all end
 the same way -- vary your own sentence structure and ending too, don't
 fall back on one template:
-- "We're 6-0, and I keep waiting for someone to tell me it doesn't count, because deep down I still don't fully believe it either."
-- "Giving up 30 a game and still winning just means we'd rather have a heart attack than win by two scores like normal people do."
-- "I don't know how we're 5-1. Nobody in that building has an explanation for it. We're just quietly hoping nobody looks too closely at the tape."
-- "We won by 3 points and everybody's celebrating like we won a championship, when really we just barely avoided total humiliation by one bad snap."
+- "6-0 and you're out here talking like you built a dynasty, but you're scoring 40 and giving up 35, my brother, that is a coin flip with extra steps!"
+- "You win by 3 points and you're strutting around like you're Nick Saban?! 3 points is barely a football game, that is a rounding error with a scoreboard attached to it!"
+- "Giving up 30 a game and STILL smiling?! I have seen hostages negotiate better terms than whatever your defense is out there agreeing to every single Saturday!"
+- "6-0 is cute, sure, but you play the #1 team next week, and I promise you they have eaten better offenses than yours for a pregame snack!"
 
 (Those examples are about hypothetical teams -- write a NEW line for
 Kentucky specifically, don't reuse their wording, scenario, or the exact
@@ -343,13 +397,22 @@ unexpected comparison, an ironic angle -- something that actually reads
 as a joke, not a stats recap with attitude. Go for real trash talk --
 sharp and a little mean, not a gentle ribbing. Don't hedge the insult.
 
+The ENDING is the most important part -- that's where the joke actually
+has to land. Don't trail off into something vague like "...which should
+make watching them next week real comfortable for everybody" or
+"...which should be real fun when they show up" -- those are gestures
+at a joke, not an actual joke. Commit to something SPECIFIC and vivid
+at the end: a real image, a concrete comparison, an actual punchline --
+not a vague wave at future doom.
+
 If it's in the facts above, one especially strong angle is pairing a
 PAST result with a FUTURE one -- e.g. their record against ranked teams
 plus an upcoming ranked opponent, or their record against fellow users
 plus an upcoming user matchup -- building dread or false confidence
 about what's coming. Only use this if those specific facts are actually
 listed above, and don't force it if a simpler single-fact joke lands
-better.
+better. If you use this angle, the future part still needs a SPECIFIC
+ending, not a vague one -- see the rule above.
 
 Write it in this voice -- study these examples closely, they're the
 actual target sound, not just a topic area. Notice they don't all end
@@ -378,7 +441,7 @@ Missouri
 ======================================================================
   Record: 6-2  |  Last game: beat Oklahoma State 42-21  |  PPG/PA: 36.0/30.5
 
---- Prompt [1] (comedian style: Nate Bargatze) ---
+--- Prompt [1] (comedian style: Derrick Stroup) ---
 Write ONE funny heckle line (25-40 words -- give yourself real room for a
 setup and a turn, not just a one-beat jab) for a college football group
 chat, roasting Missouri using their real stats below. Someone just
@@ -396,22 +459,31 @@ unexpected comparison, an ironic angle -- something that actually reads
 as a joke, not a stats recap with attitude. Go for real trash talk --
 sharp and a little mean, not a gentle ribbing. Don't hedge the insult.
 
+The ENDING is the most important part -- that's where the joke actually
+has to land. Don't trail off into something vague like "...which should
+make watching them next week real comfortable for everybody" or
+"...which should be real fun when they show up" -- those are gestures
+at a joke, not an actual joke. Commit to something SPECIFIC and vivid
+at the end: a real image, a concrete comparison, an actual punchline --
+not a vague wave at future doom.
+
 If it's in the facts above, one especially strong angle is pairing a
 PAST result with a FUTURE one -- e.g. their record against ranked teams
 plus an upcoming ranked opponent, or their record against fellow users
 plus an upcoming user matchup -- building dread or false confidence
 about what's coming. Only use this if those specific facts are actually
 listed above, and don't force it if a simpler single-fact joke lands
-better.
+better. If you use this angle, the future part still needs a SPECIFIC
+ending, not a vague one -- see the rule above.
 
 Write it in this voice -- study these examples closely, they're the
 actual target sound, not just a topic area. Notice they don't all end
 the same way -- vary your own sentence structure and ending too, don't
 fall back on one template:
-- "We're 6-0, and I keep waiting for someone to tell me it doesn't count, because deep down I still don't fully believe it either."
-- "Giving up 30 a game and still winning just means we'd rather have a heart attack than win by two scores like normal people do."
-- "I don't know how we're 5-1. Nobody in that building has an explanation for it. We're just quietly hoping nobody looks too closely at the tape."
-- "We won by 3 points and everybody's celebrating like we won a championship, when really we just barely avoided total humiliation by one bad snap."
+- "6-0 and you're out here talking like you built a dynasty, but you're scoring 40 and giving up 35, my brother, that is a coin flip with extra steps!"
+- "You win by 3 points and you're strutting around like you're Nick Saban?! 3 points is barely a football game, that is a rounding error with a scoreboard attached to it!"
+- "Giving up 30 a game and STILL smiling?! I have seen hostages negotiate better terms than whatever your defense is out there agreeing to every single Saturday!"
+- "6-0 is cute, sure, but you play the #1 team next week, and I promise you they have eaten better offenses than yours for a pregame snack!"
 
 (Those examples are about hypothetical teams -- write a NEW line for
 Missouri specifically, don't reuse their wording, scenario, or the exact
@@ -431,7 +503,7 @@ Northwestern
 ======================================================================
   Record: 3-5  |  Last game: lost to Purdue 17-35  |  PPG/PA: 34.4/39.8
 
---- Prompt [1] (comedian style: Derrick Stroup) ---
+--- Prompt [1] (comedian style: Nate Bargatze) ---
 Write ONE funny heckle line (25-40 words -- give yourself real room for a
 setup and a turn, not just a one-beat jab) for a college football group
 chat, roasting Northwestern using their real stats below. Someone just
@@ -449,22 +521,31 @@ unexpected comparison, an ironic angle -- something that actually reads
 as a joke, not a stats recap with attitude. Go for real trash talk --
 sharp and a little mean, not a gentle ribbing. Don't hedge the insult.
 
+The ENDING is the most important part -- that's where the joke actually
+has to land. Don't trail off into something vague like "...which should
+make watching them next week real comfortable for everybody" or
+"...which should be real fun when they show up" -- those are gestures
+at a joke, not an actual joke. Commit to something SPECIFIC and vivid
+at the end: a real image, a concrete comparison, an actual punchline --
+not a vague wave at future doom.
+
 If it's in the facts above, one especially strong angle is pairing a
 PAST result with a FUTURE one -- e.g. their record against ranked teams
 plus an upcoming ranked opponent, or their record against fellow users
 plus an upcoming user matchup -- building dread or false confidence
 about what's coming. Only use this if those specific facts are actually
 listed above, and don't force it if a simpler single-fact joke lands
-better.
+better. If you use this angle, the future part still needs a SPECIFIC
+ending, not a vague one -- see the rule above.
 
 Write it in this voice -- study these examples closely, they're the
 actual target sound, not just a topic area. Notice they don't all end
 the same way -- vary your own sentence structure and ending too, don't
 fall back on one template:
-- "6-0 and you're out here talking like you built a dynasty, but you're scoring 40 and giving up 35, my brother, that is a coin flip with extra steps!"
-- "You win by 3 points and you're strutting around like you're Nick Saban?! 3 points is barely a football game, that is a rounding error with a scoreboard attached to it!"
-- "Giving up 30 a game and STILL smiling?! I have seen hostages negotiate better terms than whatever your defense is out there agreeing to every single Saturday!"
-- "6-0 is cute, sure, but you play the #1 team next week, and I promise you they have eaten better offenses than yours for a pregame snack!"
+- "We're 6-0, and I keep waiting for someone to tell me it doesn't count, because deep down I still don't fully believe it either."
+- "Giving up 30 a game and still winning just means we'd rather have a heart attack than win by two scores like normal people do."
+- "I don't know how we're 5-1. Nobody in that building has an explanation for it. We're just quietly hoping nobody looks too closely at the tape."
+- "We won by 3 points and everybody's celebrating like we won a championship, when really we just barely avoided total humiliation by one bad snap."
 
 (Those examples are about hypothetical teams -- write a NEW line for
 Northwestern specifically, don't reuse their wording, scenario, or the exact
@@ -484,7 +565,7 @@ Oklahoma State
 ======================================================================
   Record: 7-1  |  Last game: lost to Missouri 21-42  |  PPG/PA: 35.1/20.2
 
---- Prompt [1] (comedian style: Nate Bargatze) ---
+--- Prompt [1] (comedian style: Derrick Stroup) ---
 Write ONE funny heckle line (25-40 words -- give yourself real room for a
 setup and a turn, not just a one-beat jab) for a college football group
 chat, roasting Oklahoma State using their real stats below. Someone just
@@ -502,22 +583,31 @@ unexpected comparison, an ironic angle -- something that actually reads
 as a joke, not a stats recap with attitude. Go for real trash talk --
 sharp and a little mean, not a gentle ribbing. Don't hedge the insult.
 
+The ENDING is the most important part -- that's where the joke actually
+has to land. Don't trail off into something vague like "...which should
+make watching them next week real comfortable for everybody" or
+"...which should be real fun when they show up" -- those are gestures
+at a joke, not an actual joke. Commit to something SPECIFIC and vivid
+at the end: a real image, a concrete comparison, an actual punchline --
+not a vague wave at future doom.
+
 If it's in the facts above, one especially strong angle is pairing a
 PAST result with a FUTURE one -- e.g. their record against ranked teams
 plus an upcoming ranked opponent, or their record against fellow users
 plus an upcoming user matchup -- building dread or false confidence
 about what's coming. Only use this if those specific facts are actually
 listed above, and don't force it if a simpler single-fact joke lands
-better.
+better. If you use this angle, the future part still needs a SPECIFIC
+ending, not a vague one -- see the rule above.
 
 Write it in this voice -- study these examples closely, they're the
 actual target sound, not just a topic area. Notice they don't all end
 the same way -- vary your own sentence structure and ending too, don't
 fall back on one template:
-- "We're 6-0, and I keep waiting for someone to tell me it doesn't count, because deep down I still don't fully believe it either."
-- "Giving up 30 a game and still winning just means we'd rather have a heart attack than win by two scores like normal people do."
-- "I don't know how we're 5-1. Nobody in that building has an explanation for it. We're just quietly hoping nobody looks too closely at the tape."
-- "We won by 3 points and everybody's celebrating like we won a championship, when really we just barely avoided total humiliation by one bad snap."
+- "6-0 and you're out here talking like you built a dynasty, but you're scoring 40 and giving up 35, my brother, that is a coin flip with extra steps!"
+- "You win by 3 points and you're strutting around like you're Nick Saban?! 3 points is barely a football game, that is a rounding error with a scoreboard attached to it!"
+- "Giving up 30 a game and STILL smiling?! I have seen hostages negotiate better terms than whatever your defense is out there agreeing to every single Saturday!"
+- "6-0 is cute, sure, but you play the #1 team next week, and I promise you they have eaten better offenses than yours for a pregame snack!"
 
 (Those examples are about hypothetical teams -- write a NEW line for
 Oklahoma State specifically, don't reuse their wording, scenario, or the exact
@@ -555,13 +645,22 @@ unexpected comparison, an ironic angle -- something that actually reads
 as a joke, not a stats recap with attitude. Go for real trash talk --
 sharp and a little mean, not a gentle ribbing. Don't hedge the insult.
 
+The ENDING is the most important part -- that's where the joke actually
+has to land. Don't trail off into something vague like "...which should
+make watching them next week real comfortable for everybody" or
+"...which should be real fun when they show up" -- those are gestures
+at a joke, not an actual joke. Commit to something SPECIFIC and vivid
+at the end: a real image, a concrete comparison, an actual punchline --
+not a vague wave at future doom.
+
 If it's in the facts above, one especially strong angle is pairing a
 PAST result with a FUTURE one -- e.g. their record against ranked teams
 plus an upcoming ranked opponent, or their record against fellow users
 plus an upcoming user matchup -- building dread or false confidence
 about what's coming. Only use this if those specific facts are actually
 listed above, and don't force it if a simpler single-fact joke lands
-better.
+better. If you use this angle, the future part still needs a SPECIFIC
+ending, not a vague one -- see the rule above.
 
 Write it in this voice -- study these examples closely, they're the
 actual target sound, not just a topic area. Notice they don't all end
@@ -608,13 +707,22 @@ unexpected comparison, an ironic angle -- something that actually reads
 as a joke, not a stats recap with attitude. Go for real trash talk --
 sharp and a little mean, not a gentle ribbing. Don't hedge the insult.
 
+The ENDING is the most important part -- that's where the joke actually
+has to land. Don't trail off into something vague like "...which should
+make watching them next week real comfortable for everybody" or
+"...which should be real fun when they show up" -- those are gestures
+at a joke, not an actual joke. Commit to something SPECIFIC and vivid
+at the end: a real image, a concrete comparison, an actual punchline --
+not a vague wave at future doom.
+
 If it's in the facts above, one especially strong angle is pairing a
 PAST result with a FUTURE one -- e.g. their record against ranked teams
 plus an upcoming ranked opponent, or their record against fellow users
 plus an upcoming user matchup -- building dread or false confidence
 about what's coming. Only use this if those specific facts are actually
 listed above, and don't force it if a simpler single-fact joke lands
-better.
+better. If you use this angle, the future part still needs a SPECIFIC
+ending, not a vague one -- see the rule above.
 
 Write it in this voice -- study these examples closely, they're the
 actual target sound, not just a topic area. Notice they don't all end
@@ -643,7 +751,7 @@ South Carolina
 ======================================================================
   Record: 7-0  |  Last game: beat Tennessee 34-19  |  PPG/PA: 31.6/12.1
 
---- Prompt [1] (comedian style: Nate Bargatze) ---
+--- Prompt [1] (comedian style: Derrick Stroup) ---
 Write ONE funny heckle line (25-40 words -- give yourself real room for a
 setup and a turn, not just a one-beat jab) for a college football group
 chat, roasting South Carolina using their real stats below. Someone just
@@ -661,22 +769,31 @@ unexpected comparison, an ironic angle -- something that actually reads
 as a joke, not a stats recap with attitude. Go for real trash talk --
 sharp and a little mean, not a gentle ribbing. Don't hedge the insult.
 
+The ENDING is the most important part -- that's where the joke actually
+has to land. Don't trail off into something vague like "...which should
+make watching them next week real comfortable for everybody" or
+"...which should be real fun when they show up" -- those are gestures
+at a joke, not an actual joke. Commit to something SPECIFIC and vivid
+at the end: a real image, a concrete comparison, an actual punchline --
+not a vague wave at future doom.
+
 If it's in the facts above, one especially strong angle is pairing a
 PAST result with a FUTURE one -- e.g. their record against ranked teams
 plus an upcoming ranked opponent, or their record against fellow users
 plus an upcoming user matchup -- building dread or false confidence
 about what's coming. Only use this if those specific facts are actually
 listed above, and don't force it if a simpler single-fact joke lands
-better.
+better. If you use this angle, the future part still needs a SPECIFIC
+ending, not a vague one -- see the rule above.
 
 Write it in this voice -- study these examples closely, they're the
 actual target sound, not just a topic area. Notice they don't all end
 the same way -- vary your own sentence structure and ending too, don't
 fall back on one template:
-- "We're 6-0, and I keep waiting for someone to tell me it doesn't count, because deep down I still don't fully believe it either."
-- "Giving up 30 a game and still winning just means we'd rather have a heart attack than win by two scores like normal people do."
-- "I don't know how we're 5-1. Nobody in that building has an explanation for it. We're just quietly hoping nobody looks too closely at the tape."
-- "We won by 3 points and everybody's celebrating like we won a championship, when really we just barely avoided total humiliation by one bad snap."
+- "6-0 and you're out here talking like you built a dynasty, but you're scoring 40 and giving up 35, my brother, that is a coin flip with extra steps!"
+- "You win by 3 points and you're strutting around like you're Nick Saban?! 3 points is barely a football game, that is a rounding error with a scoreboard attached to it!"
+- "Giving up 30 a game and STILL smiling?! I have seen hostages negotiate better terms than whatever your defense is out there agreeing to every single Saturday!"
+- "6-0 is cute, sure, but you play the #1 team next week, and I promise you they have eaten better offenses than yours for a pregame snack!"
 
 (Those examples are about hypothetical teams -- write a NEW line for
 South Carolina specifically, don't reuse their wording, scenario, or the exact
@@ -714,13 +831,22 @@ unexpected comparison, an ironic angle -- something that actually reads
 as a joke, not a stats recap with attitude. Go for real trash talk --
 sharp and a little mean, not a gentle ribbing. Don't hedge the insult.
 
+The ENDING is the most important part -- that's where the joke actually
+has to land. Don't trail off into something vague like "...which should
+make watching them next week real comfortable for everybody" or
+"...which should be real fun when they show up" -- those are gestures
+at a joke, not an actual joke. Commit to something SPECIFIC and vivid
+at the end: a real image, a concrete comparison, an actual punchline --
+not a vague wave at future doom.
+
 If it's in the facts above, one especially strong angle is pairing a
 PAST result with a FUTURE one -- e.g. their record against ranked teams
 plus an upcoming ranked opponent, or their record against fellow users
 plus an upcoming user matchup -- building dread or false confidence
 about what's coming. Only use this if those specific facts are actually
 listed above, and don't force it if a simpler single-fact joke lands
-better.
+better. If you use this angle, the future part still needs a SPECIFIC
+ending, not a vague one -- see the rule above.
 
 Write it in this voice -- study these examples closely, they're the
 actual target sound, not just a topic area. Notice they don't all end
@@ -749,7 +875,7 @@ Temple
 ======================================================================
   Record: 5-2  |  Last game: beat Charlotte 42-10  |  PPG/PA: 28.1/27.4
 
---- Prompt [1] (comedian style: Nate Bargatze) ---
+--- Prompt [1] (comedian style: Derrick Stroup) ---
 Write ONE funny heckle line (25-40 words -- give yourself real room for a
 setup and a turn, not just a one-beat jab) for a college football group
 chat, roasting Temple using their real stats below. Someone just
@@ -767,22 +893,31 @@ unexpected comparison, an ironic angle -- something that actually reads
 as a joke, not a stats recap with attitude. Go for real trash talk --
 sharp and a little mean, not a gentle ribbing. Don't hedge the insult.
 
+The ENDING is the most important part -- that's where the joke actually
+has to land. Don't trail off into something vague like "...which should
+make watching them next week real comfortable for everybody" or
+"...which should be real fun when they show up" -- those are gestures
+at a joke, not an actual joke. Commit to something SPECIFIC and vivid
+at the end: a real image, a concrete comparison, an actual punchline --
+not a vague wave at future doom.
+
 If it's in the facts above, one especially strong angle is pairing a
 PAST result with a FUTURE one -- e.g. their record against ranked teams
 plus an upcoming ranked opponent, or their record against fellow users
 plus an upcoming user matchup -- building dread or false confidence
 about what's coming. Only use this if those specific facts are actually
 listed above, and don't force it if a simpler single-fact joke lands
-better.
+better. If you use this angle, the future part still needs a SPECIFIC
+ending, not a vague one -- see the rule above.
 
 Write it in this voice -- study these examples closely, they're the
 actual target sound, not just a topic area. Notice they don't all end
 the same way -- vary your own sentence structure and ending too, don't
 fall back on one template:
-- "We're 6-0, and I keep waiting for someone to tell me it doesn't count, because deep down I still don't fully believe it either."
-- "Giving up 30 a game and still winning just means we'd rather have a heart attack than win by two scores like normal people do."
-- "I don't know how we're 5-1. Nobody in that building has an explanation for it. We're just quietly hoping nobody looks too closely at the tape."
-- "We won by 3 points and everybody's celebrating like we won a championship, when really we just barely avoided total humiliation by one bad snap."
+- "6-0 and you're out here talking like you built a dynasty, but you're scoring 40 and giving up 35, my brother, that is a coin flip with extra steps!"
+- "You win by 3 points and you're strutting around like you're Nick Saban?! 3 points is barely a football game, that is a rounding error with a scoreboard attached to it!"
+- "Giving up 30 a game and STILL smiling?! I have seen hostages negotiate better terms than whatever your defense is out there agreeing to every single Saturday!"
+- "6-0 is cute, sure, but you play the #1 team next week, and I promise you they have eaten better offenses than yours for a pregame snack!"
 
 (Those examples are about hypothetical teams -- write a NEW line for
 Temple specifically, don't reuse their wording, scenario, or the exact
@@ -820,13 +955,22 @@ unexpected comparison, an ironic angle -- something that actually reads
 as a joke, not a stats recap with attitude. Go for real trash talk --
 sharp and a little mean, not a gentle ribbing. Don't hedge the insult.
 
+The ENDING is the most important part -- that's where the joke actually
+has to land. Don't trail off into something vague like "...which should
+make watching them next week real comfortable for everybody" or
+"...which should be real fun when they show up" -- those are gestures
+at a joke, not an actual joke. Commit to something SPECIFIC and vivid
+at the end: a real image, a concrete comparison, an actual punchline --
+not a vague wave at future doom.
+
 If it's in the facts above, one especially strong angle is pairing a
 PAST result with a FUTURE one -- e.g. their record against ranked teams
 plus an upcoming ranked opponent, or their record against fellow users
 plus an upcoming user matchup -- building dread or false confidence
 about what's coming. Only use this if those specific facts are actually
 listed above, and don't force it if a simpler single-fact joke lands
-better.
+better. If you use this angle, the future part still needs a SPECIFIC
+ending, not a vague one -- see the rule above.
 
 Write it in this voice -- study these examples closely, they're the
 actual target sound, not just a topic area. Notice they don't all end
@@ -855,7 +999,7 @@ Virginia Tech
 ======================================================================
   Record: 4-4  |  Last game: lost to NC State 24-44  |  PPG/PA: 32.0/28.0
 
---- Prompt [1] (comedian style: Derrick Stroup) ---
+--- Prompt [1] (comedian style: Nate Bargatze) ---
 Write ONE funny heckle line (25-40 words -- give yourself real room for a
 setup and a turn, not just a one-beat jab) for a college football group
 chat, roasting Virginia Tech using their real stats below. Someone just
@@ -873,22 +1017,31 @@ unexpected comparison, an ironic angle -- something that actually reads
 as a joke, not a stats recap with attitude. Go for real trash talk --
 sharp and a little mean, not a gentle ribbing. Don't hedge the insult.
 
+The ENDING is the most important part -- that's where the joke actually
+has to land. Don't trail off into something vague like "...which should
+make watching them next week real comfortable for everybody" or
+"...which should be real fun when they show up" -- those are gestures
+at a joke, not an actual joke. Commit to something SPECIFIC and vivid
+at the end: a real image, a concrete comparison, an actual punchline --
+not a vague wave at future doom.
+
 If it's in the facts above, one especially strong angle is pairing a
 PAST result with a FUTURE one -- e.g. their record against ranked teams
 plus an upcoming ranked opponent, or their record against fellow users
 plus an upcoming user matchup -- building dread or false confidence
 about what's coming. Only use this if those specific facts are actually
 listed above, and don't force it if a simpler single-fact joke lands
-better.
+better. If you use this angle, the future part still needs a SPECIFIC
+ending, not a vague one -- see the rule above.
 
 Write it in this voice -- study these examples closely, they're the
 actual target sound, not just a topic area. Notice they don't all end
 the same way -- vary your own sentence structure and ending too, don't
 fall back on one template:
-- "6-0 and you're out here talking like you built a dynasty, but you're scoring 40 and giving up 35, my brother, that is a coin flip with extra steps!"
-- "You win by 3 points and you're strutting around like you're Nick Saban?! 3 points is barely a football game, that is a rounding error with a scoreboard attached to it!"
-- "Giving up 30 a game and STILL smiling?! I have seen hostages negotiate better terms than whatever your defense is out there agreeing to every single Saturday!"
-- "6-0 is cute, sure, but you play the #1 team next week, and I promise you they have eaten better offenses than yours for a pregame snack!"
+- "We're 6-0, and I keep waiting for someone to tell me it doesn't count, because deep down I still don't fully believe it either."
+- "Giving up 30 a game and still winning just means we'd rather have a heart attack than win by two scores like normal people do."
+- "I don't know how we're 5-1. Nobody in that building has an explanation for it. We're just quietly hoping nobody looks too closely at the tape."
+- "We won by 3 points and everybody's celebrating like we won a championship, when really we just barely avoided total humiliation by one bad snap."
 
 (Those examples are about hypothetical teams -- write a NEW line for
 Virginia Tech specifically, don't reuse their wording, scenario, or the exact
@@ -926,13 +1079,22 @@ unexpected comparison, an ironic angle -- something that actually reads
 as a joke, not a stats recap with attitude. Go for real trash talk --
 sharp and a little mean, not a gentle ribbing. Don't hedge the insult.
 
+The ENDING is the most important part -- that's where the joke actually
+has to land. Don't trail off into something vague like "...which should
+make watching them next week real comfortable for everybody" or
+"...which should be real fun when they show up" -- those are gestures
+at a joke, not an actual joke. Commit to something SPECIFIC and vivid
+at the end: a real image, a concrete comparison, an actual punchline --
+not a vague wave at future doom.
+
 If it's in the facts above, one especially strong angle is pairing a
 PAST result with a FUTURE one -- e.g. their record against ranked teams
 plus an upcoming ranked opponent, or their record against fellow users
 plus an upcoming user matchup -- building dread or false confidence
 about what's coming. Only use this if those specific facts are actually
 listed above, and don't force it if a simpler single-fact joke lands
-better.
+better. If you use this angle, the future part still needs a SPECIFIC
+ending, not a vague one -- see the rule above.
 
 Write it in this voice -- study these examples closely, they're the
 actual target sound, not just a topic area. Notice they don't all end

@@ -559,19 +559,19 @@ COMEDIAN_STYLES = [
     {
         "name": "Nate Bargatze",
         "examples": [
-            "We're 6-0, and I keep waiting for someone to tell me it doesn't count, because deep down I still don't fully believe it either.",
-            "Giving up 30 a game and still winning just means we'd rather have a heart attack than win by two scores like normal people do.",
-            "I don't know how we're 5-1. Nobody in that building has an explanation for it. We're just quietly hoping nobody looks too closely at the tape.",
-            "We won by 3 points and everybody's celebrating like we won a championship, when really we just barely avoided total humiliation by one bad snap.",
+            "We beat Alabama by 43, and for about four minutes I actually believed we were good at football. Then I remembered we're giving up almost 30 a game, and somewhere out there Kentucky is watching that tape right now, taking notes, feeling very optimistic.",
+            "I don't know how we're 5-1. Nobody in that building has a real explanation. We just show up, something good happens, and everyone quietly agrees not to ask too many follow-up questions about how or why.",
+            "Giving up 30 points a game is a lot, honestly, but we're also scoring 40, so I think the actual plan is to outlast people emotionally instead of ever actually stopping them.",
+            "We won by 3 points against a team we probably should've beaten by 30, and everybody's celebrating like we just won a championship instead of barely surviving a Tuesday afternoon.",
         ],
     },
     {
         "name": "Derrick Stroup",
         "examples": [
-            "6-0 and you're out here talking like you built a dynasty, but you're scoring 40 and giving up 35, my brother, that is a coin flip with extra steps!",
-            "You win by 3 points and you're strutting around like you're Nick Saban?! 3 points is barely a football game, that is a rounding error with a scoreboard attached to it!",
-            "Giving up 30 a game and STILL smiling?! I have seen hostages negotiate better terms than whatever your defense is out there agreeing to every single Saturday!",
-            "6-0 is cute, sure, but you play the #1 team next week, and I promise you they have eaten better offenses than yours for a pregame snack!",
+            "You beat Missouri State by 32 and you're out here celebrating like you just hoisted a trophy, but you are 0-3 against ranked teams this year, my brother, and BYU is circling that stat line right now like they already smell blood in the water!",
+            "6-0 and you are out here acting like you built a dynasty overnight, but you're scoring 40 and giving up 35, my brother, that is not a defense, that's a coin flip wearing a helmet and a chinstrap!",
+            "Giving up 30 points a game and STILL somehow winning?! That is not defense, my brother, that is outrunning the crime scene before anybody shows up to ask a single question!",
+            "You won by 3 points and you are walking around like you're Nick Saban? 3 points is a field goal with extra steps, my brother, that is barely even a football game!",
         ],
     },
 ]
@@ -649,11 +649,12 @@ def build_quip_prompt(form: dict) -> str:
     chosen_style = random.choice(COMEDIAN_STYLES)
     examples_block = "\n".join(f'- "{ex}"' for ex in chosen_style["examples"])
 
-    return f"""Write ONE funny heckle line (25-40 words -- give yourself real room for a
-setup and a turn, not just a one-beat jab) for a college football group
-chat, roasting {team} using their real stats below. Someone just
-posted "RTA" for this team -- everyone already knows that, don't mention
-it or reference advancing at all, just roast their season.
+    return f"""Write ONE funny heckle line (40-60 words -- enough room to actually tell
+a short story with a beginning, a turn, and a real ending, not just one
+compressed sentence) for a college football group chat, roasting {team}
+using their real stats below. Someone just posted "RTA" for this team --
+everyone already knows that, don't mention it or reference advancing at
+all, just roast their season.
 
 Real facts about {team} -- use only these, don't invent anything else:
 {facts_block}{history_block}
@@ -665,27 +666,30 @@ unexpected comparison, an ironic angle -- something that actually reads
 as a joke, not a stats recap with attitude. Go for real trash talk --
 sharp and a little mean, not a gentle ribbing. Don't hedge the insult.
 
+Avoid this exact shape, which keeps showing up and making everything
+sound the same: "[brag about something good], but/until you remember
+[bad stat], which is like [metaphor], [tag on the upcoming opponent]."
+That's become a crutch -- vary it for real. Some options: open with the
+BAD stat first instead of a brag. Skip the upcoming opponent entirely
+sometimes. Tell it as a tiny scene instead of a single clause chain.
+Not every line needs a metaphor at the very end.
+
 The ENDING is the most important part -- that's where the joke actually
 has to land. Don't trail off into something vague like "...which should
-make watching them next week real comfortable for everybody" or
-"...which should be real fun when they show up" -- those are gestures
-at a joke, not an actual joke. Commit to something SPECIFIC and vivid
-at the end: a real image, a concrete comparison, an actual punchline --
-not a vague wave at future doom.
+make watching them next week real comfortable for everybody" -- that's
+a gesture at a joke, not an actual joke. Commit to something SPECIFIC
+and vivid at the end.
 
-If it's in the facts above, one especially strong angle is pairing a
-PAST result with a FUTURE one -- e.g. their record against ranked teams
-plus an upcoming ranked opponent, or their record against fellow users
-plus an upcoming user matchup -- building dread or false confidence
-about what's coming. Only use this if those specific facts are actually
-listed above, and don't force it if a simpler single-fact joke lands
-better. If you use this angle, the future part still needs a SPECIFIC
-ending, not a vague one -- see the rule above.
+If it's in the facts above, pairing a PAST result with a FUTURE one is
+ONE option worth considering (e.g. record against ranked teams plus an
+upcoming ranked opponent) -- but it's one option among several, not the
+default move every time. Use it only when it's genuinely the funniest
+angle, not just because the facts happen to support it.
 
 Write it in this voice -- study these examples closely, they're the
-actual target sound, not just a topic area. Notice they don't all end
-the same way -- vary your own sentence structure and ending too, don't
-fall back on one template:
+actual target sound, not just a topic area. Notice they use different
+structures, not one repeated formula -- match that variety, not just
+the wording:
 {examples_block}
 
 (Those examples are about hypothetical teams -- write a NEW line for
