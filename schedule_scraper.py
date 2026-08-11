@@ -494,6 +494,32 @@ def get_sort_key(week_val) -> int:
     return 99
 
 
+STALE_SNAPSHOT_DAYS = 21  # ~3 weeks -- long enough that a genuinely
+# recent pre-game rank snapshot won't get second-guessed, short enough
+# to catch the real failure case: a row captured once at the season's
+# initial schedule build and never re-scraped again before the game
+# was actually played, weeks or months later.
+
+
+def _is_stale_snapshot(old_row, new_row) -> bool:
+    """True if old_row's Upcoming-status snapshot was captured too long
+    ago (relative to when it's now being marked Completed) to trust as
+    the true pre-game rank. Without this check, a rank captured once at
+    the season's very first schedule build -- and never re-scraped in
+    between, e.g. because later screenshots didn't scroll down far
+    enough to re-capture that far-future row -- would get blindly
+    trusted as "the rank right before kickoff" even if the opponent's
+    real ranking had completely changed in the months since."""
+    try:
+        old_ts = pd.to_datetime(old_row.get("Last_Updated"))
+        new_ts = pd.to_datetime(new_row.get("Last_Updated"))
+        if pd.isna(old_ts) or pd.isna(new_ts):
+            return False  # can't tell -- don't change existing behavior
+        return (new_ts - old_ts).days > STALE_SNAPSHOT_DAYS
+    except Exception:
+        return False  # never let a parsing hiccup break the merge
+
+
 def merge_records(df_existing, df_new: pd.DataFrame, season: int) -> pd.DataFrame:
     """
     Upserts df_new into df_existing keyed by (Season, Team, Week), and
@@ -512,7 +538,11 @@ def merge_records(df_existing, df_new: pd.DataFrame, season: int) -> pd.DataFram
     may already be showing that opponent's rank *after* the loss, not at
     kickoff. The transition uses the earlier Upcoming snapshot's rank
     rather than trusting whatever the newer screenshot says, since that's
-    the only rank value that was actually true at game time.
+    the only rank value that was actually true at game time -- UNLESS
+    that earlier snapshot is too stale (see _is_stale_snapshot): a rank
+    captured once at the season's initial schedule build and never
+    re-scraped again before the game was actually played, weeks or
+    months later, isn't a trustworthy "true pre-game rank" either.
     """
     df_new = df_new.drop_duplicates(subset=["Team", "Week"], keep="last").copy()
     df_new["Week"] = df_new["Week"].astype(str)
@@ -551,10 +581,10 @@ def merge_records(df_existing, df_new: pd.DataFrame, season: int) -> pd.DataFram
             if pd.notna(old_frozen) and str(old_frozen).strip() not in ("", "nan"):
                 frozen_rank = old_frozen  # already locked in a prior run
             elif new_row["Status"] == "Completed":
-                if old_row.get("Status") == "Upcoming":
+                if old_row.get("Status") == "Upcoming" and not _is_stale_snapshot(old_row, new_row):
                     frozen_rank = old_row.get("Opponent_Rank", "")  # true pre-game rank
                 else:
-                    frozen_rank = new_row.get("Opponent_Rank", "")  # no earlier snapshot; best available
+                    frozen_rank = new_row.get("Opponent_Rank", "")  # stale (or no) earlier snapshot; best available
         elif new_row["Status"] == "Completed":
             frozen_rank = new_row.get("Opponent_Rank", "")  # brand-new row, already completed
 
