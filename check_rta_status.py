@@ -297,7 +297,7 @@ def run() -> str:
             source = None  # for logging: exactly why this reply is what it is
 
             if use_dynamic_quips:
-                form = rl.get_team_recent_form(team)
+                form = rl.get_team_recent_form(team, current_week_sort=current_week_sort)
                 if form is None:
                     source = "static (no completed-game data yet for this team)"
                 else:
