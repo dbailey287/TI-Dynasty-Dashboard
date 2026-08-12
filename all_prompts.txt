@@ -1,1198 +1,2343 @@
-(Using current_week_sort=9 from rta_status.json)
-
-Building 1 prompt(s) each for 19 team(s) -- dry run, nothing sent to Gemini.
+Building 5 prompt(s) each for 19 team(s) -- dry run, nothing sent to Gemini.
 
 ======================================================================
 Arizona State
 ======================================================================
-  Record: 4-3  |  Last game: lost to Utah 13-14  |  PPG/PA: 31.0/26.6
+--- Prompt [1] (strategy: advance_team) ---
+Write ONE funny joke (20-40 words) about being the coach of Arizona State in a
+college football dynasty league, specifically about the experience of
+being ready to advance to the next week. Can reference Arizona State's general
+vibe, mascot, or identity -- doesn't need real season stats.
 
---- Prompt [1] (comedian style: Derrick Stroup) ---
-Write ONE funny heckle line (40-60 words -- enough room to actually tell
-a short story with a beginning, a turn, and a real ending, not just one
-compressed sentence) for a college football group chat, roasting Arizona State
-using their real stats below. Someone just posted "RTA" for this team --
-everyone already knows that, don't mention it or reference advancing at
-all, just roast their season.
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
 
-Real facts about Arizona State -- use only these, don't invent anything else:
-Record: 4-3. Most recent game: lost to Utah 13-14. Currently on a 3-game losing streak. Averaging 31.0 points scored, 26.6 allowed per game. Upcoming: plays #18 Colorado next week -- both a ranked opponent AND a fellow user-controlled team.
-You can also optionally draw on real general knowledge of Arizona State's football program/reputation if it strengthens the joke -- approximate details are fine, just keep it genuinely recognizable, not invented.
 
-Pick whichever ONE or TWO of these facts actually make for the funniest
-line -- you don't need to use all of them, and don't just list them with
-"while"/"after"/"since". This needs a real punchline: a genuine turn, an
-unexpected comparison, an ironic angle -- something that actually reads
-as a joke, not a stats recap with attitude. Go for real trash talk --
-sharp and a little mean, not a gentle ribbing. Don't hedge the insult.
+--- Prompt [2] (strategy: advance_program_history) ---
+You are the coach of Arizona State in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- while you're at it, roast your own program's HISTORY:
+a rough era, a coaching change, a well-known drought or stretch, a
+notable rise or fall, anything genuinely recognizable about Arizona State's
+program history specifically.
 
-Avoid this exact shape, which keeps showing up and making everything
-sound the same: "[brag about something good], but/until you remember
-[bad stat], which is like [metaphor], [tag on the upcoming opponent]."
-That's become a crutch -- vary it for real. Some options: open with the
-BAD stat first instead of a brag. Skip the upcoming opponent entirely
-sometimes. Tell it as a tiny scene instead of a single clause chain.
-Not every line needs a metaphor at the very end.
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate historical details
+are fine, this isn't a fact-check.
 
-The ENDING is the most important part -- that's where the joke actually
-has to land. Don't trail off into something vague like "...which should
-make watching them next week real comfortable for everybody" -- that's
-a gesture at a joke, not an actual joke. Commit to something SPECIFIC
-and vivid at the end.
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
 
-If it's in the facts above, pairing a PAST result with a FUTURE one is
-ONE option worth considering (e.g. record against ranked teams plus an
-upcoming ranked opponent) -- but it's one option among several, not the
-default move every time. Use it only when it's genuinely the funniest
-angle, not just because the facts happen to support it.
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
 
-Write it in this voice -- study these examples closely, they're the
-actual target sound, not just a topic area. Notice they use different
-structures, not one repeated formula -- match that variety, not just
-the wording:
-- "You beat Missouri State by 32 and you're out here celebrating like you just hoisted a trophy, but you are 0-3 against ranked teams this year, my brother, and BYU is circling that stat line right now like they already smell blood in the water!"
-- "6-0 and you are out here acting like you built a dynasty overnight, but you're scoring 40 and giving up 35, my brother, that is not a defense, that's a coin flip wearing a helmet and a chinstrap!"
-- "Giving up 30 points a game and STILL somehow winning?! That is not defense, my brother, that is outrunning the crime scene before anybody shows up to ask a single question!"
-- "You won by 3 points and you are walking around like you're Nick Saban? 3 points is a field goal with extra steps, my brother, that is barely even a football game!"
 
-(Those examples are about hypothetical teams -- write a NEW line for
-Arizona State specifically, don't reuse their wording, scenario, or the exact
-way any of them end.)
+--- Prompt [3] (strategy: advance_town) ---
+You are the coach of Arizona State in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- work in something about the actual TOWN or CITY Arizona State
+is located in: local geography, culture, a well-known local stereotype,
+whatever's genuinely specific to that actual place (not the football
+program itself).
 
-Hard rules: numbers as numerals ("4-4" and "47-45", never spelled out).
-No profanity. No mention of RTA/advancing. You CAN reference an upcoming
-opponent as a real schedule fact (who they play, when) if it's listed
-above, but never predict or claim to know how that game actually turns
-out -- nobody knows that yet. At most one emoji. Return ONLY the line
-itself, nothing else.
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details about the
+town are fine.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+--- Prompt [4] (strategy: advance_player) ---
+You are the coach of Arizona State in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- reference ONE specific real player from Arizona State's
+history (a legend, a bust, someone with a famous moment good or bad) as
+part of the joke.
+
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details about the
+player are fine, this isn't a fact-check.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+--- Prompt [5] (strategy: advance_program_issues) ---
+You are the coach of Arizona State in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- roast your own program's rougher moments specifically:
+a scandal, a controversy, a coaching mess, an embarrassing stretch --
+an actual ISSUE from Arizona State's past, not just a bad record.
+
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details are fine,
+this isn't a fact-check.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+--- Prompt [6] (strategy: advance_combo) ---
+You are the coach of Arizona State in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week. Roast your own team using WHICHEVER of these actually
+makes for the funniest line: Arizona State's program history, a rough or
+embarrassing moment in their past, the actual town/city Arizona State is
+located in, or a specific real player from their history. Pick ONE
+angle -- whichever is funniest -- don't try to cram in more than one.
+
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details are fine,
+this isn't a fact-check.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing, don't play it safe.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
 
 
 
 ======================================================================
 Arkansas
 ======================================================================
-  Record: 8-0  |  Last game: beat Alabama 46-3  |  PPG/PA: 42.6/28.0
+--- Prompt [1] (strategy: advance_team) ---
+Write ONE funny joke (20-40 words) about being the coach of Arkansas in a
+college football dynasty league, specifically about the experience of
+being ready to advance to the next week. Can reference Arkansas's general
+vibe, mascot, or identity -- doesn't need real season stats.
 
---- Prompt [1] (comedian style: Derrick Stroup) ---
-Write ONE funny heckle line (40-60 words -- enough room to actually tell
-a short story with a beginning, a turn, and a real ending, not just one
-compressed sentence) for a college football group chat, roasting Arkansas
-using their real stats below. Someone just posted "RTA" for this team --
-everyone already knows that, don't mention it or reference advancing at
-all, just roast their season.
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
 
-Real facts about Arkansas -- use only these, don't invent anything else:
-Record: 8-0. Most recent game: beat Alabama 46-3. Currently on a 8-game winning streak. Averaging 42.6 points scored, 28.0 allowed per game. Record vs ranked opponents this season: 2-0. Record vs fellow user-controlled teams this season: 1-0. Upcoming: plays #2 South Carolina in 2 weeks. Upcoming: plays fellow user-controlled team Kentucky next week.
-You can also optionally draw on real general knowledge of Arkansas's football program/reputation if it strengthens the joke -- approximate details are fine, just keep it genuinely recognizable, not invented.
 
-Pick whichever ONE or TWO of these facts actually make for the funniest
-line -- you don't need to use all of them, and don't just list them with
-"while"/"after"/"since". This needs a real punchline: a genuine turn, an
-unexpected comparison, an ironic angle -- something that actually reads
-as a joke, not a stats recap with attitude. Go for real trash talk --
-sharp and a little mean, not a gentle ribbing. Don't hedge the insult.
+--- Prompt [2] (strategy: advance_program_history) ---
+You are the coach of Arkansas in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- while you're at it, roast your own program's HISTORY:
+a rough era, a coaching change, a well-known drought or stretch, a
+notable rise or fall, anything genuinely recognizable about Arkansas's
+program history specifically.
 
-Avoid this exact shape, which keeps showing up and making everything
-sound the same: "[brag about something good], but/until you remember
-[bad stat], which is like [metaphor], [tag on the upcoming opponent]."
-That's become a crutch -- vary it for real. Some options: open with the
-BAD stat first instead of a brag. Skip the upcoming opponent entirely
-sometimes. Tell it as a tiny scene instead of a single clause chain.
-Not every line needs a metaphor at the very end.
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate historical details
+are fine, this isn't a fact-check.
 
-The ENDING is the most important part -- that's where the joke actually
-has to land. Don't trail off into something vague like "...which should
-make watching them next week real comfortable for everybody" -- that's
-a gesture at a joke, not an actual joke. Commit to something SPECIFIC
-and vivid at the end.
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
 
-If it's in the facts above, pairing a PAST result with a FUTURE one is
-ONE option worth considering (e.g. record against ranked teams plus an
-upcoming ranked opponent) -- but it's one option among several, not the
-default move every time. Use it only when it's genuinely the funniest
-angle, not just because the facts happen to support it.
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
 
-Write it in this voice -- study these examples closely, they're the
-actual target sound, not just a topic area. Notice they use different
-structures, not one repeated formula -- match that variety, not just
-the wording:
-- "You beat Missouri State by 32 and you're out here celebrating like you just hoisted a trophy, but you are 0-3 against ranked teams this year, my brother, and BYU is circling that stat line right now like they already smell blood in the water!"
-- "6-0 and you are out here acting like you built a dynasty overnight, but you're scoring 40 and giving up 35, my brother, that is not a defense, that's a coin flip wearing a helmet and a chinstrap!"
-- "Giving up 30 points a game and STILL somehow winning?! That is not defense, my brother, that is outrunning the crime scene before anybody shows up to ask a single question!"
-- "You won by 3 points and you are walking around like you're Nick Saban? 3 points is a field goal with extra steps, my brother, that is barely even a football game!"
 
-(Those examples are about hypothetical teams -- write a NEW line for
-Arkansas specifically, don't reuse their wording, scenario, or the exact
-way any of them end.)
+--- Prompt [3] (strategy: advance_town) ---
+You are the coach of Arkansas in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- work in something about the actual TOWN or CITY Arkansas
+is located in: local geography, culture, a well-known local stereotype,
+whatever's genuinely specific to that actual place (not the football
+program itself).
 
-Hard rules: numbers as numerals ("4-4" and "47-45", never spelled out).
-No profanity. No mention of RTA/advancing. You CAN reference an upcoming
-opponent as a real schedule fact (who they play, when) if it's listed
-above, but never predict or claim to know how that game actually turns
-out -- nobody knows that yet. At most one emoji. Return ONLY the line
-itself, nothing else.
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details about the
+town are fine.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+--- Prompt [4] (strategy: advance_player) ---
+You are the coach of Arkansas in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- reference ONE specific real player from Arkansas's
+history (a legend, a bust, someone with a famous moment good or bad) as
+part of the joke.
+
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details about the
+player are fine, this isn't a fact-check.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+--- Prompt [5] (strategy: advance_program_issues) ---
+You are the coach of Arkansas in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- roast your own program's rougher moments specifically:
+a scandal, a controversy, a coaching mess, an embarrassing stretch --
+an actual ISSUE from Arkansas's past, not just a bad record.
+
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details are fine,
+this isn't a fact-check.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+--- Prompt [6] (strategy: advance_combo) ---
+You are the coach of Arkansas in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week. Roast your own team using WHICHEVER of these actually
+makes for the funniest line: Arkansas's program history, a rough or
+embarrassing moment in their past, the actual town/city Arkansas is
+located in, or a specific real player from their history. Pick ONE
+angle -- whichever is funniest -- don't try to cram in more than one.
+
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details are fine,
+this isn't a fact-check.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing, don't play it safe.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
 
 
 
 ======================================================================
 Baylor
 ======================================================================
-  Record: 4-3  |  Last game: beat Missouri State 56-24  |  PPG/PA: 38.7/26.1
+--- Prompt [1] (strategy: advance_team) ---
+Write ONE funny joke (20-40 words) about being the coach of Baylor in a
+college football dynasty league, specifically about the experience of
+being ready to advance to the next week. Can reference Baylor's general
+vibe, mascot, or identity -- doesn't need real season stats.
 
---- Prompt [1] (comedian style: Derrick Stroup) ---
-Write ONE funny heckle line (40-60 words -- enough room to actually tell
-a short story with a beginning, a turn, and a real ending, not just one
-compressed sentence) for a college football group chat, roasting Baylor
-using their real stats below. Someone just posted "RTA" for this team --
-everyone already knows that, don't mention it or reference advancing at
-all, just roast their season.
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
 
-Real facts about Baylor -- use only these, don't invent anything else:
-Record: 4-3. Most recent game: beat Missouri State 56-24. Averaging 38.7 points scored, 26.1 allowed per game. Record vs ranked opponents this season: 0-3. Record vs fellow user-controlled teams this season: 1-2. Upcoming: plays #9 BYU in 2 weeks.
-You can also optionally draw on real general knowledge of Baylor's football program/reputation if it strengthens the joke -- approximate details are fine, just keep it genuinely recognizable, not invented.
 
-Pick whichever ONE or TWO of these facts actually make for the funniest
-line -- you don't need to use all of them, and don't just list them with
-"while"/"after"/"since". This needs a real punchline: a genuine turn, an
-unexpected comparison, an ironic angle -- something that actually reads
-as a joke, not a stats recap with attitude. Go for real trash talk --
-sharp and a little mean, not a gentle ribbing. Don't hedge the insult.
+--- Prompt [2] (strategy: advance_program_history) ---
+You are the coach of Baylor in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- while you're at it, roast your own program's HISTORY:
+a rough era, a coaching change, a well-known drought or stretch, a
+notable rise or fall, anything genuinely recognizable about Baylor's
+program history specifically.
 
-Avoid this exact shape, which keeps showing up and making everything
-sound the same: "[brag about something good], but/until you remember
-[bad stat], which is like [metaphor], [tag on the upcoming opponent]."
-That's become a crutch -- vary it for real. Some options: open with the
-BAD stat first instead of a brag. Skip the upcoming opponent entirely
-sometimes. Tell it as a tiny scene instead of a single clause chain.
-Not every line needs a metaphor at the very end.
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate historical details
+are fine, this isn't a fact-check.
 
-The ENDING is the most important part -- that's where the joke actually
-has to land. Don't trail off into something vague like "...which should
-make watching them next week real comfortable for everybody" -- that's
-a gesture at a joke, not an actual joke. Commit to something SPECIFIC
-and vivid at the end.
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
 
-If it's in the facts above, pairing a PAST result with a FUTURE one is
-ONE option worth considering (e.g. record against ranked teams plus an
-upcoming ranked opponent) -- but it's one option among several, not the
-default move every time. Use it only when it's genuinely the funniest
-angle, not just because the facts happen to support it.
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
 
-Write it in this voice -- study these examples closely, they're the
-actual target sound, not just a topic area. Notice they use different
-structures, not one repeated formula -- match that variety, not just
-the wording:
-- "You beat Missouri State by 32 and you're out here celebrating like you just hoisted a trophy, but you are 0-3 against ranked teams this year, my brother, and BYU is circling that stat line right now like they already smell blood in the water!"
-- "6-0 and you are out here acting like you built a dynasty overnight, but you're scoring 40 and giving up 35, my brother, that is not a defense, that's a coin flip wearing a helmet and a chinstrap!"
-- "Giving up 30 points a game and STILL somehow winning?! That is not defense, my brother, that is outrunning the crime scene before anybody shows up to ask a single question!"
-- "You won by 3 points and you are walking around like you're Nick Saban? 3 points is a field goal with extra steps, my brother, that is barely even a football game!"
 
-(Those examples are about hypothetical teams -- write a NEW line for
-Baylor specifically, don't reuse their wording, scenario, or the exact
-way any of them end.)
+--- Prompt [3] (strategy: advance_town) ---
+You are the coach of Baylor in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- work in something about the actual TOWN or CITY Baylor
+is located in: local geography, culture, a well-known local stereotype,
+whatever's genuinely specific to that actual place (not the football
+program itself).
 
-Hard rules: numbers as numerals ("4-4" and "47-45", never spelled out).
-No profanity. No mention of RTA/advancing. You CAN reference an upcoming
-opponent as a real schedule fact (who they play, when) if it's listed
-above, but never predict or claim to know how that game actually turns
-out -- nobody knows that yet. At most one emoji. Return ONLY the line
-itself, nothing else.
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details about the
+town are fine.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+--- Prompt [4] (strategy: advance_player) ---
+You are the coach of Baylor in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- reference ONE specific real player from Baylor's
+history (a legend, a bust, someone with a famous moment good or bad) as
+part of the joke.
+
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details about the
+player are fine, this isn't a fact-check.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+--- Prompt [5] (strategy: advance_program_issues) ---
+You are the coach of Baylor in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- roast your own program's rougher moments specifically:
+a scandal, a controversy, a coaching mess, an embarrassing stretch --
+an actual ISSUE from Baylor's past, not just a bad record.
+
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details are fine,
+this isn't a fact-check.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+--- Prompt [6] (strategy: advance_combo) ---
+You are the coach of Baylor in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week. Roast your own team using WHICHEVER of these actually
+makes for the funniest line: Baylor's program history, a rough or
+embarrassing moment in their past, the actual town/city Baylor is
+located in, or a specific real player from their history. Pick ONE
+angle -- whichever is funniest -- don't try to cram in more than one.
+
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details are fine,
+this isn't a fact-check.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing, don't play it safe.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
 
 
 
 ======================================================================
 California
 ======================================================================
-  Record: 7-0  |  Last game: beat Washington 33-21  |  PPG/PA: 37.7/15.6
+--- Prompt [1] (strategy: advance_team) ---
+Write ONE funny joke (20-40 words) about being the coach of California in a
+college football dynasty league, specifically about the experience of
+being ready to advance to the next week. Can reference California's general
+vibe, mascot, or identity -- doesn't need real season stats.
 
---- Prompt [1] (comedian style: Derrick Stroup) ---
-Write ONE funny heckle line (40-60 words -- enough room to actually tell
-a short story with a beginning, a turn, and a real ending, not just one
-compressed sentence) for a college football group chat, roasting California
-using their real stats below. Someone just posted "RTA" for this team --
-everyone already knows that, don't mention it or reference advancing at
-all, just roast their season.
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
 
-Real facts about California -- use only these, don't invent anything else:
-Record: 7-0. Most recent game: beat Washington 33-21. Currently on a 7-game winning streak. Averaging 37.7 points scored, 15.6 allowed per game. Record vs ranked opponents this season: 1-0. Record vs fellow user-controlled teams this season: 1-0. Upcoming: plays #21 Boise State in 2 weeks. Upcoming: plays fellow user-controlled team Arizona State in 3 weeks.
-You can also optionally draw on real general knowledge of California's football program/reputation if it strengthens the joke -- approximate details are fine, just keep it genuinely recognizable, not invented.
 
-Pick whichever ONE or TWO of these facts actually make for the funniest
-line -- you don't need to use all of them, and don't just list them with
-"while"/"after"/"since". This needs a real punchline: a genuine turn, an
-unexpected comparison, an ironic angle -- something that actually reads
-as a joke, not a stats recap with attitude. Go for real trash talk --
-sharp and a little mean, not a gentle ribbing. Don't hedge the insult.
+--- Prompt [2] (strategy: advance_program_history) ---
+You are the coach of California in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- while you're at it, roast your own program's HISTORY:
+a rough era, a coaching change, a well-known drought or stretch, a
+notable rise or fall, anything genuinely recognizable about California's
+program history specifically.
 
-Avoid this exact shape, which keeps showing up and making everything
-sound the same: "[brag about something good], but/until you remember
-[bad stat], which is like [metaphor], [tag on the upcoming opponent]."
-That's become a crutch -- vary it for real. Some options: open with the
-BAD stat first instead of a brag. Skip the upcoming opponent entirely
-sometimes. Tell it as a tiny scene instead of a single clause chain.
-Not every line needs a metaphor at the very end.
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate historical details
+are fine, this isn't a fact-check.
 
-The ENDING is the most important part -- that's where the joke actually
-has to land. Don't trail off into something vague like "...which should
-make watching them next week real comfortable for everybody" -- that's
-a gesture at a joke, not an actual joke. Commit to something SPECIFIC
-and vivid at the end.
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
 
-If it's in the facts above, pairing a PAST result with a FUTURE one is
-ONE option worth considering (e.g. record against ranked teams plus an
-upcoming ranked opponent) -- but it's one option among several, not the
-default move every time. Use it only when it's genuinely the funniest
-angle, not just because the facts happen to support it.
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
 
-Write it in this voice -- study these examples closely, they're the
-actual target sound, not just a topic area. Notice they use different
-structures, not one repeated formula -- match that variety, not just
-the wording:
-- "You beat Missouri State by 32 and you're out here celebrating like you just hoisted a trophy, but you are 0-3 against ranked teams this year, my brother, and BYU is circling that stat line right now like they already smell blood in the water!"
-- "6-0 and you are out here acting like you built a dynasty overnight, but you're scoring 40 and giving up 35, my brother, that is not a defense, that's a coin flip wearing a helmet and a chinstrap!"
-- "Giving up 30 points a game and STILL somehow winning?! That is not defense, my brother, that is outrunning the crime scene before anybody shows up to ask a single question!"
-- "You won by 3 points and you are walking around like you're Nick Saban? 3 points is a field goal with extra steps, my brother, that is barely even a football game!"
 
-(Those examples are about hypothetical teams -- write a NEW line for
-California specifically, don't reuse their wording, scenario, or the exact
-way any of them end.)
+--- Prompt [3] (strategy: advance_town) ---
+You are the coach of California in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- work in something about the actual TOWN or CITY California
+is located in: local geography, culture, a well-known local stereotype,
+whatever's genuinely specific to that actual place (not the football
+program itself).
 
-Hard rules: numbers as numerals ("4-4" and "47-45", never spelled out).
-No profanity. No mention of RTA/advancing. You CAN reference an upcoming
-opponent as a real schedule fact (who they play, when) if it's listed
-above, but never predict or claim to know how that game actually turns
-out -- nobody knows that yet. At most one emoji. Return ONLY the line
-itself, nothing else.
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details about the
+town are fine.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+--- Prompt [4] (strategy: advance_player) ---
+You are the coach of California in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- reference ONE specific real player from California's
+history (a legend, a bust, someone with a famous moment good or bad) as
+part of the joke.
+
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details about the
+player are fine, this isn't a fact-check.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+--- Prompt [5] (strategy: advance_program_issues) ---
+You are the coach of California in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- roast your own program's rougher moments specifically:
+a scandal, a controversy, a coaching mess, an embarrassing stretch --
+an actual ISSUE from California's past, not just a bad record.
+
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details are fine,
+this isn't a fact-check.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+--- Prompt [6] (strategy: advance_combo) ---
+You are the coach of California in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week. Roast your own team using WHICHEVER of these actually
+makes for the funniest line: California's program history, a rough or
+embarrassing moment in their past, the actual town/city California is
+located in, or a specific real player from their history. Pick ONE
+angle -- whichever is funniest -- don't try to cram in more than one.
+
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details are fine,
+this isn't a fact-check.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing, don't play it safe.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
 
 
 
 ======================================================================
 Colorado
 ======================================================================
-  Record: 7-0  |  Last game: beat Nebraska 37-24  |  PPG/PA: 33.1/15.0
+--- Prompt [1] (strategy: advance_team) ---
+Write ONE funny joke (20-40 words) about being the coach of Colorado in a
+college football dynasty league, specifically about the experience of
+being ready to advance to the next week. Can reference Colorado's general
+vibe, mascot, or identity -- doesn't need real season stats.
 
---- Prompt [1] (comedian style: Nate Bargatze) ---
-Write ONE funny heckle line (40-60 words -- enough room to actually tell
-a short story with a beginning, a turn, and a real ending, not just one
-compressed sentence) for a college football group chat, roasting Colorado
-using their real stats below. Someone just posted "RTA" for this team --
-everyone already knows that, don't mention it or reference advancing at
-all, just roast their season.
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
 
-Real facts about Colorado -- use only these, don't invent anything else:
-Record: 7-0. Most recent game: beat Nebraska 37-24. Currently on a 7-game winning streak. Averaging 33.1 points scored, 15.0 allowed per game. Record vs ranked opponents this season: 2-0. Record vs fellow user-controlled teams this season: 1-0. Upcoming: plays fellow user-controlled team Arizona State next week.
-You can also optionally draw on real general knowledge of Colorado's football program/reputation if it strengthens the joke -- approximate details are fine, just keep it genuinely recognizable, not invented.
 
-Pick whichever ONE or TWO of these facts actually make for the funniest
-line -- you don't need to use all of them, and don't just list them with
-"while"/"after"/"since". This needs a real punchline: a genuine turn, an
-unexpected comparison, an ironic angle -- something that actually reads
-as a joke, not a stats recap with attitude. Go for real trash talk --
-sharp and a little mean, not a gentle ribbing. Don't hedge the insult.
+--- Prompt [2] (strategy: advance_program_history) ---
+You are the coach of Colorado in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- while you're at it, roast your own program's HISTORY:
+a rough era, a coaching change, a well-known drought or stretch, a
+notable rise or fall, anything genuinely recognizable about Colorado's
+program history specifically.
 
-Avoid this exact shape, which keeps showing up and making everything
-sound the same: "[brag about something good], but/until you remember
-[bad stat], which is like [metaphor], [tag on the upcoming opponent]."
-That's become a crutch -- vary it for real. Some options: open with the
-BAD stat first instead of a brag. Skip the upcoming opponent entirely
-sometimes. Tell it as a tiny scene instead of a single clause chain.
-Not every line needs a metaphor at the very end.
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate historical details
+are fine, this isn't a fact-check.
 
-The ENDING is the most important part -- that's where the joke actually
-has to land. Don't trail off into something vague like "...which should
-make watching them next week real comfortable for everybody" -- that's
-a gesture at a joke, not an actual joke. Commit to something SPECIFIC
-and vivid at the end.
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
 
-If it's in the facts above, pairing a PAST result with a FUTURE one is
-ONE option worth considering (e.g. record against ranked teams plus an
-upcoming ranked opponent) -- but it's one option among several, not the
-default move every time. Use it only when it's genuinely the funniest
-angle, not just because the facts happen to support it.
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
 
-Write it in this voice -- study these examples closely, they're the
-actual target sound, not just a topic area. Notice they use different
-structures, not one repeated formula -- match that variety, not just
-the wording:
-- "We beat Alabama by 43, and for about four minutes I actually believed we were good at football. Then I remembered we're giving up almost 30 a game, and somewhere out there Kentucky is watching that tape right now, taking notes, feeling very optimistic."
-- "I don't know how we're 5-1. Nobody in that building has a real explanation. We just show up, something good happens, and everyone quietly agrees not to ask too many follow-up questions about how or why."
-- "Giving up 30 points a game is a lot, honestly, but we're also scoring 40, so I think the actual plan is to outlast people emotionally instead of ever actually stopping them."
-- "We won by 3 points against a team we probably should've beaten by 30, and everybody's celebrating like we just won a championship instead of barely surviving a Tuesday afternoon."
 
-(Those examples are about hypothetical teams -- write a NEW line for
-Colorado specifically, don't reuse their wording, scenario, or the exact
-way any of them end.)
+--- Prompt [3] (strategy: advance_town) ---
+You are the coach of Colorado in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- work in something about the actual TOWN or CITY Colorado
+is located in: local geography, culture, a well-known local stereotype,
+whatever's genuinely specific to that actual place (not the football
+program itself).
 
-Hard rules: numbers as numerals ("4-4" and "47-45", never spelled out).
-No profanity. No mention of RTA/advancing. You CAN reference an upcoming
-opponent as a real schedule fact (who they play, when) if it's listed
-above, but never predict or claim to know how that game actually turns
-out -- nobody knows that yet. At most one emoji. Return ONLY the line
-itself, nothing else.
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details about the
+town are fine.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+--- Prompt [4] (strategy: advance_player) ---
+You are the coach of Colorado in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- reference ONE specific real player from Colorado's
+history (a legend, a bust, someone with a famous moment good or bad) as
+part of the joke.
+
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details about the
+player are fine, this isn't a fact-check.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+--- Prompt [5] (strategy: advance_program_issues) ---
+You are the coach of Colorado in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- roast your own program's rougher moments specifically:
+a scandal, a controversy, a coaching mess, an embarrassing stretch --
+an actual ISSUE from Colorado's past, not just a bad record.
+
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details are fine,
+this isn't a fact-check.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+--- Prompt [6] (strategy: advance_combo) ---
+You are the coach of Colorado in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week. Roast your own team using WHICHEVER of these actually
+makes for the funniest line: Colorado's program history, a rough or
+embarrassing moment in their past, the actual town/city Colorado is
+located in, or a specific real player from their history. Pick ONE
+angle -- whichever is funniest -- don't try to cram in more than one.
+
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details are fine,
+this isn't a fact-check.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing, don't play it safe.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
 
 
 
 ======================================================================
 Kentucky
 ======================================================================
-  Record: 5-3  |  Last game: beat Vanderbilt 41-17  |  PPG/PA: 26.8/19.9
+--- Prompt [1] (strategy: advance_team) ---
+Write ONE funny joke (20-40 words) about being the coach of Kentucky in a
+college football dynasty league, specifically about the experience of
+being ready to advance to the next week. Can reference Kentucky's general
+vibe, mascot, or identity -- doesn't need real season stats.
 
---- Prompt [1] (comedian style: Derrick Stroup) ---
-Write ONE funny heckle line (40-60 words -- enough room to actually tell
-a short story with a beginning, a turn, and a real ending, not just one
-compressed sentence) for a college football group chat, roasting Kentucky
-using their real stats below. Someone just posted "RTA" for this team --
-everyone already knows that, don't mention it or reference advancing at
-all, just roast their season.
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
 
-Real facts about Kentucky -- use only these, don't invent anything else:
-Record: 5-3. Most recent game: beat Vanderbilt 41-17. Averaging 26.8 points scored, 19.9 allowed per game. Upcoming: plays #11 Arkansas next week -- both a ranked opponent AND a fellow user-controlled team.
-You can also optionally draw on real general knowledge of Kentucky's football program/reputation if it strengthens the joke -- approximate details are fine, just keep it genuinely recognizable, not invented.
 
-Pick whichever ONE or TWO of these facts actually make for the funniest
-line -- you don't need to use all of them, and don't just list them with
-"while"/"after"/"since". This needs a real punchline: a genuine turn, an
-unexpected comparison, an ironic angle -- something that actually reads
-as a joke, not a stats recap with attitude. Go for real trash talk --
-sharp and a little mean, not a gentle ribbing. Don't hedge the insult.
+--- Prompt [2] (strategy: advance_program_history) ---
+You are the coach of Kentucky in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- while you're at it, roast your own program's HISTORY:
+a rough era, a coaching change, a well-known drought or stretch, a
+notable rise or fall, anything genuinely recognizable about Kentucky's
+program history specifically.
 
-Avoid this exact shape, which keeps showing up and making everything
-sound the same: "[brag about something good], but/until you remember
-[bad stat], which is like [metaphor], [tag on the upcoming opponent]."
-That's become a crutch -- vary it for real. Some options: open with the
-BAD stat first instead of a brag. Skip the upcoming opponent entirely
-sometimes. Tell it as a tiny scene instead of a single clause chain.
-Not every line needs a metaphor at the very end.
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate historical details
+are fine, this isn't a fact-check.
 
-The ENDING is the most important part -- that's where the joke actually
-has to land. Don't trail off into something vague like "...which should
-make watching them next week real comfortable for everybody" -- that's
-a gesture at a joke, not an actual joke. Commit to something SPECIFIC
-and vivid at the end.
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
 
-If it's in the facts above, pairing a PAST result with a FUTURE one is
-ONE option worth considering (e.g. record against ranked teams plus an
-upcoming ranked opponent) -- but it's one option among several, not the
-default move every time. Use it only when it's genuinely the funniest
-angle, not just because the facts happen to support it.
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
 
-Write it in this voice -- study these examples closely, they're the
-actual target sound, not just a topic area. Notice they use different
-structures, not one repeated formula -- match that variety, not just
-the wording:
-- "You beat Missouri State by 32 and you're out here celebrating like you just hoisted a trophy, but you are 0-3 against ranked teams this year, my brother, and BYU is circling that stat line right now like they already smell blood in the water!"
-- "6-0 and you are out here acting like you built a dynasty overnight, but you're scoring 40 and giving up 35, my brother, that is not a defense, that's a coin flip wearing a helmet and a chinstrap!"
-- "Giving up 30 points a game and STILL somehow winning?! That is not defense, my brother, that is outrunning the crime scene before anybody shows up to ask a single question!"
-- "You won by 3 points and you are walking around like you're Nick Saban? 3 points is a field goal with extra steps, my brother, that is barely even a football game!"
 
-(Those examples are about hypothetical teams -- write a NEW line for
-Kentucky specifically, don't reuse their wording, scenario, or the exact
-way any of them end.)
+--- Prompt [3] (strategy: advance_town) ---
+You are the coach of Kentucky in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- work in something about the actual TOWN or CITY Kentucky
+is located in: local geography, culture, a well-known local stereotype,
+whatever's genuinely specific to that actual place (not the football
+program itself).
 
-Hard rules: numbers as numerals ("4-4" and "47-45", never spelled out).
-No profanity. No mention of RTA/advancing. You CAN reference an upcoming
-opponent as a real schedule fact (who they play, when) if it's listed
-above, but never predict or claim to know how that game actually turns
-out -- nobody knows that yet. At most one emoji. Return ONLY the line
-itself, nothing else.
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details about the
+town are fine.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+--- Prompt [4] (strategy: advance_player) ---
+You are the coach of Kentucky in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- reference ONE specific real player from Kentucky's
+history (a legend, a bust, someone with a famous moment good or bad) as
+part of the joke.
+
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details about the
+player are fine, this isn't a fact-check.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+--- Prompt [5] (strategy: advance_program_issues) ---
+You are the coach of Kentucky in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- roast your own program's rougher moments specifically:
+a scandal, a controversy, a coaching mess, an embarrassing stretch --
+an actual ISSUE from Kentucky's past, not just a bad record.
+
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details are fine,
+this isn't a fact-check.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+--- Prompt [6] (strategy: advance_combo) ---
+You are the coach of Kentucky in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week. Roast your own team using WHICHEVER of these actually
+makes for the funniest line: Kentucky's program history, a rough or
+embarrassing moment in their past, the actual town/city Kentucky is
+located in, or a specific real player from their history. Pick ONE
+angle -- whichever is funniest -- don't try to cram in more than one.
+
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details are fine,
+this isn't a fact-check.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing, don't play it safe.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
 
 
 
 ======================================================================
 Maryland
 ======================================================================
-  Record: 5-4  |  Last game: beat Illinois 20-17  |  PPG/PA: 28.8/22.2
+--- Prompt [1] (strategy: advance_team) ---
+Write ONE funny joke (20-40 words) about being the coach of Maryland in a
+college football dynasty league, specifically about the experience of
+being ready to advance to the next week. Can reference Maryland's general
+vibe, mascot, or identity -- doesn't need real season stats.
 
---- Prompt [1] (comedian style: Derrick Stroup) ---
-Write ONE funny heckle line (40-60 words -- enough room to actually tell
-a short story with a beginning, a turn, and a real ending, not just one
-compressed sentence) for a college football group chat, roasting Maryland
-using their real stats below. Someone just posted "RTA" for this team --
-everyone already knows that, don't mention it or reference advancing at
-all, just roast their season.
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
 
-Real facts about Maryland -- use only these, don't invent anything else:
-Record: 5-4. Most recent game: beat Illinois 20-17. Currently on a 3-game winning streak. Averaging 28.8 points scored, 22.2 allowed per game. Record vs ranked opponents this season: 0-1. Record vs fellow user-controlled teams this season: 0-1. Upcoming: plays #4 Indiana next week. Upcoming: plays fellow user-controlled team Northwestern in 4 weeks.
-You can also optionally draw on real general knowledge of Maryland's football program/reputation if it strengthens the joke -- approximate details are fine, just keep it genuinely recognizable, not invented.
 
-Pick whichever ONE or TWO of these facts actually make for the funniest
-line -- you don't need to use all of them, and don't just list them with
-"while"/"after"/"since". This needs a real punchline: a genuine turn, an
-unexpected comparison, an ironic angle -- something that actually reads
-as a joke, not a stats recap with attitude. Go for real trash talk --
-sharp and a little mean, not a gentle ribbing. Don't hedge the insult.
+--- Prompt [2] (strategy: advance_program_history) ---
+You are the coach of Maryland in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- while you're at it, roast your own program's HISTORY:
+a rough era, a coaching change, a well-known drought or stretch, a
+notable rise or fall, anything genuinely recognizable about Maryland's
+program history specifically.
 
-Avoid this exact shape, which keeps showing up and making everything
-sound the same: "[brag about something good], but/until you remember
-[bad stat], which is like [metaphor], [tag on the upcoming opponent]."
-That's become a crutch -- vary it for real. Some options: open with the
-BAD stat first instead of a brag. Skip the upcoming opponent entirely
-sometimes. Tell it as a tiny scene instead of a single clause chain.
-Not every line needs a metaphor at the very end.
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate historical details
+are fine, this isn't a fact-check.
 
-The ENDING is the most important part -- that's where the joke actually
-has to land. Don't trail off into something vague like "...which should
-make watching them next week real comfortable for everybody" -- that's
-a gesture at a joke, not an actual joke. Commit to something SPECIFIC
-and vivid at the end.
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
 
-If it's in the facts above, pairing a PAST result with a FUTURE one is
-ONE option worth considering (e.g. record against ranked teams plus an
-upcoming ranked opponent) -- but it's one option among several, not the
-default move every time. Use it only when it's genuinely the funniest
-angle, not just because the facts happen to support it.
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
 
-Write it in this voice -- study these examples closely, they're the
-actual target sound, not just a topic area. Notice they use different
-structures, not one repeated formula -- match that variety, not just
-the wording:
-- "You beat Missouri State by 32 and you're out here celebrating like you just hoisted a trophy, but you are 0-3 against ranked teams this year, my brother, and BYU is circling that stat line right now like they already smell blood in the water!"
-- "6-0 and you are out here acting like you built a dynasty overnight, but you're scoring 40 and giving up 35, my brother, that is not a defense, that's a coin flip wearing a helmet and a chinstrap!"
-- "Giving up 30 points a game and STILL somehow winning?! That is not defense, my brother, that is outrunning the crime scene before anybody shows up to ask a single question!"
-- "You won by 3 points and you are walking around like you're Nick Saban? 3 points is a field goal with extra steps, my brother, that is barely even a football game!"
 
-(Those examples are about hypothetical teams -- write a NEW line for
-Maryland specifically, don't reuse their wording, scenario, or the exact
-way any of them end.)
+--- Prompt [3] (strategy: advance_town) ---
+You are the coach of Maryland in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- work in something about the actual TOWN or CITY Maryland
+is located in: local geography, culture, a well-known local stereotype,
+whatever's genuinely specific to that actual place (not the football
+program itself).
 
-Hard rules: numbers as numerals ("4-4" and "47-45", never spelled out).
-No profanity. No mention of RTA/advancing. You CAN reference an upcoming
-opponent as a real schedule fact (who they play, when) if it's listed
-above, but never predict or claim to know how that game actually turns
-out -- nobody knows that yet. At most one emoji. Return ONLY the line
-itself, nothing else.
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details about the
+town are fine.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+--- Prompt [4] (strategy: advance_player) ---
+You are the coach of Maryland in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- reference ONE specific real player from Maryland's
+history (a legend, a bust, someone with a famous moment good or bad) as
+part of the joke.
+
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details about the
+player are fine, this isn't a fact-check.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+--- Prompt [5] (strategy: advance_program_issues) ---
+You are the coach of Maryland in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- roast your own program's rougher moments specifically:
+a scandal, a controversy, a coaching mess, an embarrassing stretch --
+an actual ISSUE from Maryland's past, not just a bad record.
+
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details are fine,
+this isn't a fact-check.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+--- Prompt [6] (strategy: advance_combo) ---
+You are the coach of Maryland in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week. Roast your own team using WHICHEVER of these actually
+makes for the funniest line: Maryland's program history, a rough or
+embarrassing moment in their past, the actual town/city Maryland is
+located in, or a specific real player from their history. Pick ONE
+angle -- whichever is funniest -- don't try to cram in more than one.
+
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details are fine,
+this isn't a fact-check.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing, don't play it safe.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
 
 
 
 ======================================================================
 Missouri
 ======================================================================
-  Record: 6-2  |  Last game: beat Oklahoma State 42-21  |  PPG/PA: 36.0/30.5
+--- Prompt [1] (strategy: advance_team) ---
+Write ONE funny joke (20-40 words) about being the coach of Missouri in a
+college football dynasty league, specifically about the experience of
+being ready to advance to the next week. Can reference Missouri's general
+vibe, mascot, or identity -- doesn't need real season stats.
 
---- Prompt [1] (comedian style: Nate Bargatze) ---
-Write ONE funny heckle line (40-60 words -- enough room to actually tell
-a short story with a beginning, a turn, and a real ending, not just one
-compressed sentence) for a college football group chat, roasting Missouri
-using their real stats below. Someone just posted "RTA" for this team --
-everyone already knows that, don't mention it or reference advancing at
-all, just roast their season.
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
 
-Real facts about Missouri -- use only these, don't invent anything else:
-Record: 6-2. Most recent game: beat Oklahoma State 42-21. Currently on a 5-game winning streak. Averaging 36.0 points scored, 30.5 allowed per game. Record vs ranked opponents this season: 1-1. Record vs fellow user-controlled teams this season: 1-1. Upcoming: plays #17 Texas Tech next week. Upcoming: plays fellow user-controlled team Kentucky in 3 weeks.
-You can also optionally draw on real general knowledge of Missouri's football program/reputation if it strengthens the joke -- approximate details are fine, just keep it genuinely recognizable, not invented.
 
-Pick whichever ONE or TWO of these facts actually make for the funniest
-line -- you don't need to use all of them, and don't just list them with
-"while"/"after"/"since". This needs a real punchline: a genuine turn, an
-unexpected comparison, an ironic angle -- something that actually reads
-as a joke, not a stats recap with attitude. Go for real trash talk --
-sharp and a little mean, not a gentle ribbing. Don't hedge the insult.
+--- Prompt [2] (strategy: advance_program_history) ---
+You are the coach of Missouri in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- while you're at it, roast your own program's HISTORY:
+a rough era, a coaching change, a well-known drought or stretch, a
+notable rise or fall, anything genuinely recognizable about Missouri's
+program history specifically.
 
-Avoid this exact shape, which keeps showing up and making everything
-sound the same: "[brag about something good], but/until you remember
-[bad stat], which is like [metaphor], [tag on the upcoming opponent]."
-That's become a crutch -- vary it for real. Some options: open with the
-BAD stat first instead of a brag. Skip the upcoming opponent entirely
-sometimes. Tell it as a tiny scene instead of a single clause chain.
-Not every line needs a metaphor at the very end.
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate historical details
+are fine, this isn't a fact-check.
 
-The ENDING is the most important part -- that's where the joke actually
-has to land. Don't trail off into something vague like "...which should
-make watching them next week real comfortable for everybody" -- that's
-a gesture at a joke, not an actual joke. Commit to something SPECIFIC
-and vivid at the end.
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
 
-If it's in the facts above, pairing a PAST result with a FUTURE one is
-ONE option worth considering (e.g. record against ranked teams plus an
-upcoming ranked opponent) -- but it's one option among several, not the
-default move every time. Use it only when it's genuinely the funniest
-angle, not just because the facts happen to support it.
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
 
-Write it in this voice -- study these examples closely, they're the
-actual target sound, not just a topic area. Notice they use different
-structures, not one repeated formula -- match that variety, not just
-the wording:
-- "We beat Alabama by 43, and for about four minutes I actually believed we were good at football. Then I remembered we're giving up almost 30 a game, and somewhere out there Kentucky is watching that tape right now, taking notes, feeling very optimistic."
-- "I don't know how we're 5-1. Nobody in that building has a real explanation. We just show up, something good happens, and everyone quietly agrees not to ask too many follow-up questions about how or why."
-- "Giving up 30 points a game is a lot, honestly, but we're also scoring 40, so I think the actual plan is to outlast people emotionally instead of ever actually stopping them."
-- "We won by 3 points against a team we probably should've beaten by 30, and everybody's celebrating like we just won a championship instead of barely surviving a Tuesday afternoon."
 
-(Those examples are about hypothetical teams -- write a NEW line for
-Missouri specifically, don't reuse their wording, scenario, or the exact
-way any of them end.)
+--- Prompt [3] (strategy: advance_town) ---
+You are the coach of Missouri in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- work in something about the actual TOWN or CITY Missouri
+is located in: local geography, culture, a well-known local stereotype,
+whatever's genuinely specific to that actual place (not the football
+program itself).
 
-Hard rules: numbers as numerals ("4-4" and "47-45", never spelled out).
-No profanity. No mention of RTA/advancing. You CAN reference an upcoming
-opponent as a real schedule fact (who they play, when) if it's listed
-above, but never predict or claim to know how that game actually turns
-out -- nobody knows that yet. At most one emoji. Return ONLY the line
-itself, nothing else.
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details about the
+town are fine.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+--- Prompt [4] (strategy: advance_player) ---
+You are the coach of Missouri in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- reference ONE specific real player from Missouri's
+history (a legend, a bust, someone with a famous moment good or bad) as
+part of the joke.
+
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details about the
+player are fine, this isn't a fact-check.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+--- Prompt [5] (strategy: advance_program_issues) ---
+You are the coach of Missouri in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- roast your own program's rougher moments specifically:
+a scandal, a controversy, a coaching mess, an embarrassing stretch --
+an actual ISSUE from Missouri's past, not just a bad record.
+
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details are fine,
+this isn't a fact-check.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+--- Prompt [6] (strategy: advance_combo) ---
+You are the coach of Missouri in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week. Roast your own team using WHICHEVER of these actually
+makes for the funniest line: Missouri's program history, a rough or
+embarrassing moment in their past, the actual town/city Missouri is
+located in, or a specific real player from their history. Pick ONE
+angle -- whichever is funniest -- don't try to cram in more than one.
+
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details are fine,
+this isn't a fact-check.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing, don't play it safe.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
 
 
 
 ======================================================================
 Northwestern
 ======================================================================
-  Record: 3-5  |  Last game: lost to Purdue 17-35  |  PPG/PA: 34.4/39.8
+--- Prompt [1] (strategy: advance_team) ---
+Write ONE funny joke (20-40 words) about being the coach of Northwestern in a
+college football dynasty league, specifically about the experience of
+being ready to advance to the next week. Can reference Northwestern's general
+vibe, mascot, or identity -- doesn't need real season stats.
 
---- Prompt [1] (comedian style: Nate Bargatze) ---
-Write ONE funny heckle line (40-60 words -- enough room to actually tell
-a short story with a beginning, a turn, and a real ending, not just one
-compressed sentence) for a college football group chat, roasting Northwestern
-using their real stats below. Someone just posted "RTA" for this team --
-everyone already knows that, don't mention it or reference advancing at
-all, just roast their season.
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
 
-Real facts about Northwestern -- use only these, don't invent anything else:
-Record: 3-5. Most recent game: lost to Purdue 17-35. Averaging 34.4 points scored, 39.8 allowed per game. Record vs fellow user-controlled teams this season: 0-1. Upcoming: plays #6 Ohio State in 2 weeks. Upcoming: plays fellow user-controlled team Maryland in 4 weeks.
-You can also optionally draw on real general knowledge of Northwestern's football program/reputation if it strengthens the joke -- approximate details are fine, just keep it genuinely recognizable, not invented.
 
-Pick whichever ONE or TWO of these facts actually make for the funniest
-line -- you don't need to use all of them, and don't just list them with
-"while"/"after"/"since". This needs a real punchline: a genuine turn, an
-unexpected comparison, an ironic angle -- something that actually reads
-as a joke, not a stats recap with attitude. Go for real trash talk --
-sharp and a little mean, not a gentle ribbing. Don't hedge the insult.
+--- Prompt [2] (strategy: advance_program_history) ---
+You are the coach of Northwestern in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- while you're at it, roast your own program's HISTORY:
+a rough era, a coaching change, a well-known drought or stretch, a
+notable rise or fall, anything genuinely recognizable about Northwestern's
+program history specifically.
 
-Avoid this exact shape, which keeps showing up and making everything
-sound the same: "[brag about something good], but/until you remember
-[bad stat], which is like [metaphor], [tag on the upcoming opponent]."
-That's become a crutch -- vary it for real. Some options: open with the
-BAD stat first instead of a brag. Skip the upcoming opponent entirely
-sometimes. Tell it as a tiny scene instead of a single clause chain.
-Not every line needs a metaphor at the very end.
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate historical details
+are fine, this isn't a fact-check.
 
-The ENDING is the most important part -- that's where the joke actually
-has to land. Don't trail off into something vague like "...which should
-make watching them next week real comfortable for everybody" -- that's
-a gesture at a joke, not an actual joke. Commit to something SPECIFIC
-and vivid at the end.
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
 
-If it's in the facts above, pairing a PAST result with a FUTURE one is
-ONE option worth considering (e.g. record against ranked teams plus an
-upcoming ranked opponent) -- but it's one option among several, not the
-default move every time. Use it only when it's genuinely the funniest
-angle, not just because the facts happen to support it.
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
 
-Write it in this voice -- study these examples closely, they're the
-actual target sound, not just a topic area. Notice they use different
-structures, not one repeated formula -- match that variety, not just
-the wording:
-- "We beat Alabama by 43, and for about four minutes I actually believed we were good at football. Then I remembered we're giving up almost 30 a game, and somewhere out there Kentucky is watching that tape right now, taking notes, feeling very optimistic."
-- "I don't know how we're 5-1. Nobody in that building has a real explanation. We just show up, something good happens, and everyone quietly agrees not to ask too many follow-up questions about how or why."
-- "Giving up 30 points a game is a lot, honestly, but we're also scoring 40, so I think the actual plan is to outlast people emotionally instead of ever actually stopping them."
-- "We won by 3 points against a team we probably should've beaten by 30, and everybody's celebrating like we just won a championship instead of barely surviving a Tuesday afternoon."
 
-(Those examples are about hypothetical teams -- write a NEW line for
-Northwestern specifically, don't reuse their wording, scenario, or the exact
-way any of them end.)
+--- Prompt [3] (strategy: advance_town) ---
+You are the coach of Northwestern in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- work in something about the actual TOWN or CITY Northwestern
+is located in: local geography, culture, a well-known local stereotype,
+whatever's genuinely specific to that actual place (not the football
+program itself).
 
-Hard rules: numbers as numerals ("4-4" and "47-45", never spelled out).
-No profanity. No mention of RTA/advancing. You CAN reference an upcoming
-opponent as a real schedule fact (who they play, when) if it's listed
-above, but never predict or claim to know how that game actually turns
-out -- nobody knows that yet. At most one emoji. Return ONLY the line
-itself, nothing else.
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details about the
+town are fine.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+--- Prompt [4] (strategy: advance_player) ---
+You are the coach of Northwestern in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- reference ONE specific real player from Northwestern's
+history (a legend, a bust, someone with a famous moment good or bad) as
+part of the joke.
+
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details about the
+player are fine, this isn't a fact-check.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+--- Prompt [5] (strategy: advance_program_issues) ---
+You are the coach of Northwestern in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- roast your own program's rougher moments specifically:
+a scandal, a controversy, a coaching mess, an embarrassing stretch --
+an actual ISSUE from Northwestern's past, not just a bad record.
+
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details are fine,
+this isn't a fact-check.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+--- Prompt [6] (strategy: advance_combo) ---
+You are the coach of Northwestern in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week. Roast your own team using WHICHEVER of these actually
+makes for the funniest line: Northwestern's program history, a rough or
+embarrassing moment in their past, the actual town/city Northwestern is
+located in, or a specific real player from their history. Pick ONE
+angle -- whichever is funniest -- don't try to cram in more than one.
+
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details are fine,
+this isn't a fact-check.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing, don't play it safe.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
 
 
 
 ======================================================================
 Oklahoma State
 ======================================================================
-  Record: 7-1  |  Last game: lost to Missouri 21-42  |  PPG/PA: 35.1/20.2
+--- Prompt [1] (strategy: advance_team) ---
+Write ONE funny joke (20-40 words) about being the coach of Oklahoma State in a
+college football dynasty league, specifically about the experience of
+being ready to advance to the next week. Can reference Oklahoma State's general
+vibe, mascot, or identity -- doesn't need real season stats.
 
---- Prompt [1] (comedian style: Nate Bargatze) ---
-Write ONE funny heckle line (40-60 words -- enough room to actually tell
-a short story with a beginning, a turn, and a real ending, not just one
-compressed sentence) for a college football group chat, roasting Oklahoma State
-using their real stats below. Someone just posted "RTA" for this team --
-everyone already knows that, don't mention it or reference advancing at
-all, just roast their season.
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
 
-Real facts about Oklahoma State -- use only these, don't invent anything else:
-Record: 7-1. Most recent game: lost to Missouri 21-42. Averaging 35.1 points scored, 20.2 allowed per game. Record vs ranked opponents this season: 1-1. Record vs fellow user-controlled teams this season: 1-1. Upcoming: plays #17 Texas Tech in 2 weeks.
-You can also optionally draw on real general knowledge of Oklahoma State's football program/reputation if it strengthens the joke -- approximate details are fine, just keep it genuinely recognizable, not invented.
 
-Pick whichever ONE or TWO of these facts actually make for the funniest
-line -- you don't need to use all of them, and don't just list them with
-"while"/"after"/"since". This needs a real punchline: a genuine turn, an
-unexpected comparison, an ironic angle -- something that actually reads
-as a joke, not a stats recap with attitude. Go for real trash talk --
-sharp and a little mean, not a gentle ribbing. Don't hedge the insult.
+--- Prompt [2] (strategy: advance_program_history) ---
+You are the coach of Oklahoma State in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- while you're at it, roast your own program's HISTORY:
+a rough era, a coaching change, a well-known drought or stretch, a
+notable rise or fall, anything genuinely recognizable about Oklahoma State's
+program history specifically.
 
-Avoid this exact shape, which keeps showing up and making everything
-sound the same: "[brag about something good], but/until you remember
-[bad stat], which is like [metaphor], [tag on the upcoming opponent]."
-That's become a crutch -- vary it for real. Some options: open with the
-BAD stat first instead of a brag. Skip the upcoming opponent entirely
-sometimes. Tell it as a tiny scene instead of a single clause chain.
-Not every line needs a metaphor at the very end.
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate historical details
+are fine, this isn't a fact-check.
 
-The ENDING is the most important part -- that's where the joke actually
-has to land. Don't trail off into something vague like "...which should
-make watching them next week real comfortable for everybody" -- that's
-a gesture at a joke, not an actual joke. Commit to something SPECIFIC
-and vivid at the end.
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
 
-If it's in the facts above, pairing a PAST result with a FUTURE one is
-ONE option worth considering (e.g. record against ranked teams plus an
-upcoming ranked opponent) -- but it's one option among several, not the
-default move every time. Use it only when it's genuinely the funniest
-angle, not just because the facts happen to support it.
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
 
-Write it in this voice -- study these examples closely, they're the
-actual target sound, not just a topic area. Notice they use different
-structures, not one repeated formula -- match that variety, not just
-the wording:
-- "We beat Alabama by 43, and for about four minutes I actually believed we were good at football. Then I remembered we're giving up almost 30 a game, and somewhere out there Kentucky is watching that tape right now, taking notes, feeling very optimistic."
-- "I don't know how we're 5-1. Nobody in that building has a real explanation. We just show up, something good happens, and everyone quietly agrees not to ask too many follow-up questions about how or why."
-- "Giving up 30 points a game is a lot, honestly, but we're also scoring 40, so I think the actual plan is to outlast people emotionally instead of ever actually stopping them."
-- "We won by 3 points against a team we probably should've beaten by 30, and everybody's celebrating like we just won a championship instead of barely surviving a Tuesday afternoon."
 
-(Those examples are about hypothetical teams -- write a NEW line for
-Oklahoma State specifically, don't reuse their wording, scenario, or the exact
-way any of them end.)
+--- Prompt [3] (strategy: advance_town) ---
+You are the coach of Oklahoma State in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- work in something about the actual TOWN or CITY Oklahoma State
+is located in: local geography, culture, a well-known local stereotype,
+whatever's genuinely specific to that actual place (not the football
+program itself).
 
-Hard rules: numbers as numerals ("4-4" and "47-45", never spelled out).
-No profanity. No mention of RTA/advancing. You CAN reference an upcoming
-opponent as a real schedule fact (who they play, when) if it's listed
-above, but never predict or claim to know how that game actually turns
-out -- nobody knows that yet. At most one emoji. Return ONLY the line
-itself, nothing else.
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details about the
+town are fine.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+--- Prompt [4] (strategy: advance_player) ---
+You are the coach of Oklahoma State in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- reference ONE specific real player from Oklahoma State's
+history (a legend, a bust, someone with a famous moment good or bad) as
+part of the joke.
+
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details about the
+player are fine, this isn't a fact-check.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+--- Prompt [5] (strategy: advance_program_issues) ---
+You are the coach of Oklahoma State in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- roast your own program's rougher moments specifically:
+a scandal, a controversy, a coaching mess, an embarrassing stretch --
+an actual ISSUE from Oklahoma State's past, not just a bad record.
+
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details are fine,
+this isn't a fact-check.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+--- Prompt [6] (strategy: advance_combo) ---
+You are the coach of Oklahoma State in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week. Roast your own team using WHICHEVER of these actually
+makes for the funniest line: Oklahoma State's program history, a rough or
+embarrassing moment in their past, the actual town/city Oklahoma State is
+located in, or a specific real player from their history. Pick ONE
+angle -- whichever is funniest -- don't try to cram in more than one.
+
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details are fine,
+this isn't a fact-check.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing, don't play it safe.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
 
 
 
 ======================================================================
 Pittsburgh
 ======================================================================
-  Record: 9-0  |  Last game: beat Duke 73-7  |  PPG/PA: 56.8/28.8
+--- Prompt [1] (strategy: advance_team) ---
+Write ONE funny joke (20-40 words) about being the coach of Pittsburgh in a
+college football dynasty league, specifically about the experience of
+being ready to advance to the next week. Can reference Pittsburgh's general
+vibe, mascot, or identity -- doesn't need real season stats.
 
---- Prompt [1] (comedian style: Nate Bargatze) ---
-Write ONE funny heckle line (40-60 words -- enough room to actually tell
-a short story with a beginning, a turn, and a real ending, not just one
-compressed sentence) for a college football group chat, roasting Pittsburgh
-using their real stats below. Someone just posted "RTA" for this team --
-everyone already knows that, don't mention it or reference advancing at
-all, just roast their season.
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
 
-Real facts about Pittsburgh -- use only these, don't invent anything else:
-Record: 9-0. Most recent game: beat Duke 73-7. Currently on a 9-game winning streak. Averaging 56.8 points scored, 28.8 allowed per game. Record vs ranked opponents this season: 1-0. Record vs fellow user-controlled teams this season: 2-0.
-You can also optionally draw on real general knowledge of Pittsburgh's football program/reputation if it strengthens the joke -- approximate details are fine, just keep it genuinely recognizable, not invented.
 
-Pick whichever ONE or TWO of these facts actually make for the funniest
-line -- you don't need to use all of them, and don't just list them with
-"while"/"after"/"since". This needs a real punchline: a genuine turn, an
-unexpected comparison, an ironic angle -- something that actually reads
-as a joke, not a stats recap with attitude. Go for real trash talk --
-sharp and a little mean, not a gentle ribbing. Don't hedge the insult.
+--- Prompt [2] (strategy: advance_program_history) ---
+You are the coach of Pittsburgh in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- while you're at it, roast your own program's HISTORY:
+a rough era, a coaching change, a well-known drought or stretch, a
+notable rise or fall, anything genuinely recognizable about Pittsburgh's
+program history specifically.
 
-Avoid this exact shape, which keeps showing up and making everything
-sound the same: "[brag about something good], but/until you remember
-[bad stat], which is like [metaphor], [tag on the upcoming opponent]."
-That's become a crutch -- vary it for real. Some options: open with the
-BAD stat first instead of a brag. Skip the upcoming opponent entirely
-sometimes. Tell it as a tiny scene instead of a single clause chain.
-Not every line needs a metaphor at the very end.
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate historical details
+are fine, this isn't a fact-check.
 
-The ENDING is the most important part -- that's where the joke actually
-has to land. Don't trail off into something vague like "...which should
-make watching them next week real comfortable for everybody" -- that's
-a gesture at a joke, not an actual joke. Commit to something SPECIFIC
-and vivid at the end.
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
 
-If it's in the facts above, pairing a PAST result with a FUTURE one is
-ONE option worth considering (e.g. record against ranked teams plus an
-upcoming ranked opponent) -- but it's one option among several, not the
-default move every time. Use it only when it's genuinely the funniest
-angle, not just because the facts happen to support it.
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
 
-Write it in this voice -- study these examples closely, they're the
-actual target sound, not just a topic area. Notice they use different
-structures, not one repeated formula -- match that variety, not just
-the wording:
-- "We beat Alabama by 43, and for about four minutes I actually believed we were good at football. Then I remembered we're giving up almost 30 a game, and somewhere out there Kentucky is watching that tape right now, taking notes, feeling very optimistic."
-- "I don't know how we're 5-1. Nobody in that building has a real explanation. We just show up, something good happens, and everyone quietly agrees not to ask too many follow-up questions about how or why."
-- "Giving up 30 points a game is a lot, honestly, but we're also scoring 40, so I think the actual plan is to outlast people emotionally instead of ever actually stopping them."
-- "We won by 3 points against a team we probably should've beaten by 30, and everybody's celebrating like we just won a championship instead of barely surviving a Tuesday afternoon."
 
-(Those examples are about hypothetical teams -- write a NEW line for
-Pittsburgh specifically, don't reuse their wording, scenario, or the exact
-way any of them end.)
+--- Prompt [3] (strategy: advance_town) ---
+You are the coach of Pittsburgh in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- work in something about the actual TOWN or CITY Pittsburgh
+is located in: local geography, culture, a well-known local stereotype,
+whatever's genuinely specific to that actual place (not the football
+program itself).
 
-Hard rules: numbers as numerals ("4-4" and "47-45", never spelled out).
-No profanity. No mention of RTA/advancing. You CAN reference an upcoming
-opponent as a real schedule fact (who they play, when) if it's listed
-above, but never predict or claim to know how that game actually turns
-out -- nobody knows that yet. At most one emoji. Return ONLY the line
-itself, nothing else.
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details about the
+town are fine.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+--- Prompt [4] (strategy: advance_player) ---
+You are the coach of Pittsburgh in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- reference ONE specific real player from Pittsburgh's
+history (a legend, a bust, someone with a famous moment good or bad) as
+part of the joke.
+
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details about the
+player are fine, this isn't a fact-check.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+--- Prompt [5] (strategy: advance_program_issues) ---
+You are the coach of Pittsburgh in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- roast your own program's rougher moments specifically:
+a scandal, a controversy, a coaching mess, an embarrassing stretch --
+an actual ISSUE from Pittsburgh's past, not just a bad record.
+
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details are fine,
+this isn't a fact-check.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+--- Prompt [6] (strategy: advance_combo) ---
+You are the coach of Pittsburgh in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week. Roast your own team using WHICHEVER of these actually
+makes for the funniest line: Pittsburgh's program history, a rough or
+embarrassing moment in their past, the actual town/city Pittsburgh is
+located in, or a specific real player from their history. Pick ONE
+angle -- whichever is funniest -- don't try to cram in more than one.
+
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details are fine,
+this isn't a fact-check.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing, don't play it safe.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
 
 
 
 ======================================================================
 SMU
 ======================================================================
-  Record: 8-0  |  Last game: beat Utah State 59-24  |  PPG/PA: 63.1/22.5
+--- Prompt [1] (strategy: advance_team) ---
+Write ONE funny joke (20-40 words) about being the coach of SMU in a
+college football dynasty league, specifically about the experience of
+being ready to advance to the next week. Can reference SMU's general
+vibe, mascot, or identity -- doesn't need real season stats.
 
---- Prompt [1] (comedian style: Nate Bargatze) ---
-Write ONE funny heckle line (40-60 words -- enough room to actually tell
-a short story with a beginning, a turn, and a real ending, not just one
-compressed sentence) for a college football group chat, roasting SMU
-using their real stats below. Someone just posted "RTA" for this team --
-everyone already knows that, don't mention it or reference advancing at
-all, just roast their season.
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
 
-Real facts about SMU -- use only these, don't invent anything else:
-Record: 8-0. Most recent game: beat Utah State 59-24. Currently on a 8-game winning streak. Averaging 63.1 points scored, 22.5 allowed per game. Record vs ranked opponents this season: 1-0. Record vs fellow user-controlled teams this season: 1-0. Upcoming: plays #13 Notre Dame in 4 weeks.
-You can also optionally draw on real general knowledge of SMU's football program/reputation if it strengthens the joke -- approximate details are fine, just keep it genuinely recognizable, not invented.
 
-Pick whichever ONE or TWO of these facts actually make for the funniest
-line -- you don't need to use all of them, and don't just list them with
-"while"/"after"/"since". This needs a real punchline: a genuine turn, an
-unexpected comparison, an ironic angle -- something that actually reads
-as a joke, not a stats recap with attitude. Go for real trash talk --
-sharp and a little mean, not a gentle ribbing. Don't hedge the insult.
+--- Prompt [2] (strategy: advance_program_history) ---
+You are the coach of SMU in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- while you're at it, roast your own program's HISTORY:
+a rough era, a coaching change, a well-known drought or stretch, a
+notable rise or fall, anything genuinely recognizable about SMU's
+program history specifically.
 
-Avoid this exact shape, which keeps showing up and making everything
-sound the same: "[brag about something good], but/until you remember
-[bad stat], which is like [metaphor], [tag on the upcoming opponent]."
-That's become a crutch -- vary it for real. Some options: open with the
-BAD stat first instead of a brag. Skip the upcoming opponent entirely
-sometimes. Tell it as a tiny scene instead of a single clause chain.
-Not every line needs a metaphor at the very end.
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate historical details
+are fine, this isn't a fact-check.
 
-The ENDING is the most important part -- that's where the joke actually
-has to land. Don't trail off into something vague like "...which should
-make watching them next week real comfortable for everybody" -- that's
-a gesture at a joke, not an actual joke. Commit to something SPECIFIC
-and vivid at the end.
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
 
-If it's in the facts above, pairing a PAST result with a FUTURE one is
-ONE option worth considering (e.g. record against ranked teams plus an
-upcoming ranked opponent) -- but it's one option among several, not the
-default move every time. Use it only when it's genuinely the funniest
-angle, not just because the facts happen to support it.
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
 
-Write it in this voice -- study these examples closely, they're the
-actual target sound, not just a topic area. Notice they use different
-structures, not one repeated formula -- match that variety, not just
-the wording:
-- "We beat Alabama by 43, and for about four minutes I actually believed we were good at football. Then I remembered we're giving up almost 30 a game, and somewhere out there Kentucky is watching that tape right now, taking notes, feeling very optimistic."
-- "I don't know how we're 5-1. Nobody in that building has a real explanation. We just show up, something good happens, and everyone quietly agrees not to ask too many follow-up questions about how or why."
-- "Giving up 30 points a game is a lot, honestly, but we're also scoring 40, so I think the actual plan is to outlast people emotionally instead of ever actually stopping them."
-- "We won by 3 points against a team we probably should've beaten by 30, and everybody's celebrating like we just won a championship instead of barely surviving a Tuesday afternoon."
 
-(Those examples are about hypothetical teams -- write a NEW line for
-SMU specifically, don't reuse their wording, scenario, or the exact
-way any of them end.)
+--- Prompt [3] (strategy: advance_town) ---
+You are the coach of SMU in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- work in something about the actual TOWN or CITY SMU
+is located in: local geography, culture, a well-known local stereotype,
+whatever's genuinely specific to that actual place (not the football
+program itself).
 
-Hard rules: numbers as numerals ("4-4" and "47-45", never spelled out).
-No profanity. No mention of RTA/advancing. You CAN reference an upcoming
-opponent as a real schedule fact (who they play, when) if it's listed
-above, but never predict or claim to know how that game actually turns
-out -- nobody knows that yet. At most one emoji. Return ONLY the line
-itself, nothing else.
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details about the
+town are fine.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+--- Prompt [4] (strategy: advance_player) ---
+You are the coach of SMU in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- reference ONE specific real player from SMU's
+history (a legend, a bust, someone with a famous moment good or bad) as
+part of the joke.
+
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details about the
+player are fine, this isn't a fact-check.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+--- Prompt [5] (strategy: advance_program_issues) ---
+You are the coach of SMU in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- roast your own program's rougher moments specifically:
+a scandal, a controversy, a coaching mess, an embarrassing stretch --
+an actual ISSUE from SMU's past, not just a bad record.
+
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details are fine,
+this isn't a fact-check.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+--- Prompt [6] (strategy: advance_combo) ---
+You are the coach of SMU in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week. Roast your own team using WHICHEVER of these actually
+makes for the funniest line: SMU's program history, a rough or
+embarrassing moment in their past, the actual town/city SMU is
+located in, or a specific real player from their history. Pick ONE
+angle -- whichever is funniest -- don't try to cram in more than one.
+
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details are fine,
+this isn't a fact-check.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing, don't play it safe.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
 
 
 
 ======================================================================
 South Carolina
 ======================================================================
-  Record: 7-0  |  Last game: beat Tennessee 34-19  |  PPG/PA: 31.6/12.1
+--- Prompt [1] (strategy: advance_team) ---
+Write ONE funny joke (20-40 words) about being the coach of South Carolina in a
+college football dynasty league, specifically about the experience of
+being ready to advance to the next week. Can reference South Carolina's general
+vibe, mascot, or identity -- doesn't need real season stats.
 
---- Prompt [1] (comedian style: Nate Bargatze) ---
-Write ONE funny heckle line (40-60 words -- enough room to actually tell
-a short story with a beginning, a turn, and a real ending, not just one
-compressed sentence) for a college football group chat, roasting South Carolina
-using their real stats below. Someone just posted "RTA" for this team --
-everyone already knows that, don't mention it or reference advancing at
-all, just roast their season.
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
 
-Real facts about South Carolina -- use only these, don't invent anything else:
-Record: 7-0. Most recent game: beat Tennessee 34-19. Currently on a 7-game winning streak. Averaging 31.6 points scored, 12.1 allowed per game. Upcoming: plays #24 Texas A&M next week. Upcoming: plays fellow user-controlled team Arkansas in 2 weeks.
-You can also optionally draw on real general knowledge of South Carolina's football program/reputation if it strengthens the joke -- approximate details are fine, just keep it genuinely recognizable, not invented.
 
-Pick whichever ONE or TWO of these facts actually make for the funniest
-line -- you don't need to use all of them, and don't just list them with
-"while"/"after"/"since". This needs a real punchline: a genuine turn, an
-unexpected comparison, an ironic angle -- something that actually reads
-as a joke, not a stats recap with attitude. Go for real trash talk --
-sharp and a little mean, not a gentle ribbing. Don't hedge the insult.
+--- Prompt [2] (strategy: advance_program_history) ---
+You are the coach of South Carolina in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- while you're at it, roast your own program's HISTORY:
+a rough era, a coaching change, a well-known drought or stretch, a
+notable rise or fall, anything genuinely recognizable about South Carolina's
+program history specifically.
 
-Avoid this exact shape, which keeps showing up and making everything
-sound the same: "[brag about something good], but/until you remember
-[bad stat], which is like [metaphor], [tag on the upcoming opponent]."
-That's become a crutch -- vary it for real. Some options: open with the
-BAD stat first instead of a brag. Skip the upcoming opponent entirely
-sometimes. Tell it as a tiny scene instead of a single clause chain.
-Not every line needs a metaphor at the very end.
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate historical details
+are fine, this isn't a fact-check.
 
-The ENDING is the most important part -- that's where the joke actually
-has to land. Don't trail off into something vague like "...which should
-make watching them next week real comfortable for everybody" -- that's
-a gesture at a joke, not an actual joke. Commit to something SPECIFIC
-and vivid at the end.
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
 
-If it's in the facts above, pairing a PAST result with a FUTURE one is
-ONE option worth considering (e.g. record against ranked teams plus an
-upcoming ranked opponent) -- but it's one option among several, not the
-default move every time. Use it only when it's genuinely the funniest
-angle, not just because the facts happen to support it.
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
 
-Write it in this voice -- study these examples closely, they're the
-actual target sound, not just a topic area. Notice they use different
-structures, not one repeated formula -- match that variety, not just
-the wording:
-- "We beat Alabama by 43, and for about four minutes I actually believed we were good at football. Then I remembered we're giving up almost 30 a game, and somewhere out there Kentucky is watching that tape right now, taking notes, feeling very optimistic."
-- "I don't know how we're 5-1. Nobody in that building has a real explanation. We just show up, something good happens, and everyone quietly agrees not to ask too many follow-up questions about how or why."
-- "Giving up 30 points a game is a lot, honestly, but we're also scoring 40, so I think the actual plan is to outlast people emotionally instead of ever actually stopping them."
-- "We won by 3 points against a team we probably should've beaten by 30, and everybody's celebrating like we just won a championship instead of barely surviving a Tuesday afternoon."
 
-(Those examples are about hypothetical teams -- write a NEW line for
-South Carolina specifically, don't reuse their wording, scenario, or the exact
-way any of them end.)
+--- Prompt [3] (strategy: advance_town) ---
+You are the coach of South Carolina in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- work in something about the actual TOWN or CITY South Carolina
+is located in: local geography, culture, a well-known local stereotype,
+whatever's genuinely specific to that actual place (not the football
+program itself).
 
-Hard rules: numbers as numerals ("4-4" and "47-45", never spelled out).
-No profanity. No mention of RTA/advancing. You CAN reference an upcoming
-opponent as a real schedule fact (who they play, when) if it's listed
-above, but never predict or claim to know how that game actually turns
-out -- nobody knows that yet. At most one emoji. Return ONLY the line
-itself, nothing else.
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details about the
+town are fine.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+--- Prompt [4] (strategy: advance_player) ---
+You are the coach of South Carolina in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- reference ONE specific real player from South Carolina's
+history (a legend, a bust, someone with a famous moment good or bad) as
+part of the joke.
+
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details about the
+player are fine, this isn't a fact-check.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+--- Prompt [5] (strategy: advance_program_issues) ---
+You are the coach of South Carolina in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- roast your own program's rougher moments specifically:
+a scandal, a controversy, a coaching mess, an embarrassing stretch --
+an actual ISSUE from South Carolina's past, not just a bad record.
+
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details are fine,
+this isn't a fact-check.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+--- Prompt [6] (strategy: advance_combo) ---
+You are the coach of South Carolina in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week. Roast your own team using WHICHEVER of these actually
+makes for the funniest line: South Carolina's program history, a rough or
+embarrassing moment in their past, the actual town/city South Carolina is
+located in, or a specific real player from their history. Pick ONE
+angle -- whichever is funniest -- don't try to cram in more than one.
+
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details are fine,
+this isn't a fact-check.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing, don't play it safe.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
 
 
 
 ======================================================================
 Stanford
 ======================================================================
-  Record: 4-4  |  Last game: lost to USC 34-52  |  PPG/PA: 34.2/34.5
+--- Prompt [1] (strategy: advance_team) ---
+Write ONE funny joke (20-40 words) about being the coach of Stanford in a
+college football dynasty league, specifically about the experience of
+being ready to advance to the next week. Can reference Stanford's general
+vibe, mascot, or identity -- doesn't need real season stats.
 
---- Prompt [1] (comedian style: Nate Bargatze) ---
-Write ONE funny heckle line (40-60 words -- enough room to actually tell
-a short story with a beginning, a turn, and a real ending, not just one
-compressed sentence) for a college football group chat, roasting Stanford
-using their real stats below. Someone just posted "RTA" for this team --
-everyone already knows that, don't mention it or reference advancing at
-all, just roast their season.
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
 
-Real facts about Stanford -- use only these, don't invent anything else:
-Record: 4-4. Most recent game: lost to USC 34-52. Averaging 34.2 points scored, 34.5 allowed per game. Record vs ranked opponents this season: 1-4. Record vs fellow user-controlled teams this season: 0-1.
-You can also optionally draw on real general knowledge of Stanford's football program/reputation if it strengthens the joke -- approximate details are fine, just keep it genuinely recognizable, not invented.
 
-Pick whichever ONE or TWO of these facts actually make for the funniest
-line -- you don't need to use all of them, and don't just list them with
-"while"/"after"/"since". This needs a real punchline: a genuine turn, an
-unexpected comparison, an ironic angle -- something that actually reads
-as a joke, not a stats recap with attitude. Go for real trash talk --
-sharp and a little mean, not a gentle ribbing. Don't hedge the insult.
+--- Prompt [2] (strategy: advance_program_history) ---
+You are the coach of Stanford in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- while you're at it, roast your own program's HISTORY:
+a rough era, a coaching change, a well-known drought or stretch, a
+notable rise or fall, anything genuinely recognizable about Stanford's
+program history specifically.
 
-Avoid this exact shape, which keeps showing up and making everything
-sound the same: "[brag about something good], but/until you remember
-[bad stat], which is like [metaphor], [tag on the upcoming opponent]."
-That's become a crutch -- vary it for real. Some options: open with the
-BAD stat first instead of a brag. Skip the upcoming opponent entirely
-sometimes. Tell it as a tiny scene instead of a single clause chain.
-Not every line needs a metaphor at the very end.
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate historical details
+are fine, this isn't a fact-check.
 
-The ENDING is the most important part -- that's where the joke actually
-has to land. Don't trail off into something vague like "...which should
-make watching them next week real comfortable for everybody" -- that's
-a gesture at a joke, not an actual joke. Commit to something SPECIFIC
-and vivid at the end.
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
 
-If it's in the facts above, pairing a PAST result with a FUTURE one is
-ONE option worth considering (e.g. record against ranked teams plus an
-upcoming ranked opponent) -- but it's one option among several, not the
-default move every time. Use it only when it's genuinely the funniest
-angle, not just because the facts happen to support it.
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
 
-Write it in this voice -- study these examples closely, they're the
-actual target sound, not just a topic area. Notice they use different
-structures, not one repeated formula -- match that variety, not just
-the wording:
-- "We beat Alabama by 43, and for about four minutes I actually believed we were good at football. Then I remembered we're giving up almost 30 a game, and somewhere out there Kentucky is watching that tape right now, taking notes, feeling very optimistic."
-- "I don't know how we're 5-1. Nobody in that building has a real explanation. We just show up, something good happens, and everyone quietly agrees not to ask too many follow-up questions about how or why."
-- "Giving up 30 points a game is a lot, honestly, but we're also scoring 40, so I think the actual plan is to outlast people emotionally instead of ever actually stopping them."
-- "We won by 3 points against a team we probably should've beaten by 30, and everybody's celebrating like we just won a championship instead of barely surviving a Tuesday afternoon."
 
-(Those examples are about hypothetical teams -- write a NEW line for
-Stanford specifically, don't reuse their wording, scenario, or the exact
-way any of them end.)
+--- Prompt [3] (strategy: advance_town) ---
+You are the coach of Stanford in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- work in something about the actual TOWN or CITY Stanford
+is located in: local geography, culture, a well-known local stereotype,
+whatever's genuinely specific to that actual place (not the football
+program itself).
 
-Hard rules: numbers as numerals ("4-4" and "47-45", never spelled out).
-No profanity. No mention of RTA/advancing. You CAN reference an upcoming
-opponent as a real schedule fact (who they play, when) if it's listed
-above, but never predict or claim to know how that game actually turns
-out -- nobody knows that yet. At most one emoji. Return ONLY the line
-itself, nothing else.
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details about the
+town are fine.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+--- Prompt [4] (strategy: advance_player) ---
+You are the coach of Stanford in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- reference ONE specific real player from Stanford's
+history (a legend, a bust, someone with a famous moment good or bad) as
+part of the joke.
+
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details about the
+player are fine, this isn't a fact-check.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+--- Prompt [5] (strategy: advance_program_issues) ---
+You are the coach of Stanford in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- roast your own program's rougher moments specifically:
+a scandal, a controversy, a coaching mess, an embarrassing stretch --
+an actual ISSUE from Stanford's past, not just a bad record.
+
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details are fine,
+this isn't a fact-check.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+--- Prompt [6] (strategy: advance_combo) ---
+You are the coach of Stanford in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week. Roast your own team using WHICHEVER of these actually
+makes for the funniest line: Stanford's program history, a rough or
+embarrassing moment in their past, the actual town/city Stanford is
+located in, or a specific real player from their history. Pick ONE
+angle -- whichever is funniest -- don't try to cram in more than one.
+
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details are fine,
+this isn't a fact-check.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing, don't play it safe.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
 
 
 
 ======================================================================
 Temple
 ======================================================================
-  Record: 5-2  |  Last game: beat Charlotte 42-10  |  PPG/PA: 28.1/27.4
+--- Prompt [1] (strategy: advance_team) ---
+Write ONE funny joke (20-40 words) about being the coach of Temple in a
+college football dynasty league, specifically about the experience of
+being ready to advance to the next week. Can reference Temple's general
+vibe, mascot, or identity -- doesn't need real season stats.
 
---- Prompt [1] (comedian style: Nate Bargatze) ---
-Write ONE funny heckle line (40-60 words -- enough room to actually tell
-a short story with a beginning, a turn, and a real ending, not just one
-compressed sentence) for a college football group chat, roasting Temple
-using their real stats below. Someone just posted "RTA" for this team --
-everyone already knows that, don't mention it or reference advancing at
-all, just roast their season.
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
 
-Real facts about Temple -- use only these, don't invent anything else:
-Record: 5-2. Most recent game: beat Charlotte 42-10. Currently on a 4-game winning streak. Averaging 28.1 points scored, 27.4 allowed per game. Record vs ranked opponents this season: 0-1. Record vs fellow user-controlled teams this season: 0-1.
-You can also optionally draw on real general knowledge of Temple's football program/reputation if it strengthens the joke -- approximate details are fine, just keep it genuinely recognizable, not invented.
 
-Pick whichever ONE or TWO of these facts actually make for the funniest
-line -- you don't need to use all of them, and don't just list them with
-"while"/"after"/"since". This needs a real punchline: a genuine turn, an
-unexpected comparison, an ironic angle -- something that actually reads
-as a joke, not a stats recap with attitude. Go for real trash talk --
-sharp and a little mean, not a gentle ribbing. Don't hedge the insult.
+--- Prompt [2] (strategy: advance_program_history) ---
+You are the coach of Temple in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- while you're at it, roast your own program's HISTORY:
+a rough era, a coaching change, a well-known drought or stretch, a
+notable rise or fall, anything genuinely recognizable about Temple's
+program history specifically.
 
-Avoid this exact shape, which keeps showing up and making everything
-sound the same: "[brag about something good], but/until you remember
-[bad stat], which is like [metaphor], [tag on the upcoming opponent]."
-That's become a crutch -- vary it for real. Some options: open with the
-BAD stat first instead of a brag. Skip the upcoming opponent entirely
-sometimes. Tell it as a tiny scene instead of a single clause chain.
-Not every line needs a metaphor at the very end.
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate historical details
+are fine, this isn't a fact-check.
 
-The ENDING is the most important part -- that's where the joke actually
-has to land. Don't trail off into something vague like "...which should
-make watching them next week real comfortable for everybody" -- that's
-a gesture at a joke, not an actual joke. Commit to something SPECIFIC
-and vivid at the end.
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
 
-If it's in the facts above, pairing a PAST result with a FUTURE one is
-ONE option worth considering (e.g. record against ranked teams plus an
-upcoming ranked opponent) -- but it's one option among several, not the
-default move every time. Use it only when it's genuinely the funniest
-angle, not just because the facts happen to support it.
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
 
-Write it in this voice -- study these examples closely, they're the
-actual target sound, not just a topic area. Notice they use different
-structures, not one repeated formula -- match that variety, not just
-the wording:
-- "We beat Alabama by 43, and for about four minutes I actually believed we were good at football. Then I remembered we're giving up almost 30 a game, and somewhere out there Kentucky is watching that tape right now, taking notes, feeling very optimistic."
-- "I don't know how we're 5-1. Nobody in that building has a real explanation. We just show up, something good happens, and everyone quietly agrees not to ask too many follow-up questions about how or why."
-- "Giving up 30 points a game is a lot, honestly, but we're also scoring 40, so I think the actual plan is to outlast people emotionally instead of ever actually stopping them."
-- "We won by 3 points against a team we probably should've beaten by 30, and everybody's celebrating like we just won a championship instead of barely surviving a Tuesday afternoon."
 
-(Those examples are about hypothetical teams -- write a NEW line for
-Temple specifically, don't reuse their wording, scenario, or the exact
-way any of them end.)
+--- Prompt [3] (strategy: advance_town) ---
+You are the coach of Temple in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- work in something about the actual TOWN or CITY Temple
+is located in: local geography, culture, a well-known local stereotype,
+whatever's genuinely specific to that actual place (not the football
+program itself).
 
-Hard rules: numbers as numerals ("4-4" and "47-45", never spelled out).
-No profanity. No mention of RTA/advancing. You CAN reference an upcoming
-opponent as a real schedule fact (who they play, when) if it's listed
-above, but never predict or claim to know how that game actually turns
-out -- nobody knows that yet. At most one emoji. Return ONLY the line
-itself, nothing else.
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details about the
+town are fine.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+--- Prompt [4] (strategy: advance_player) ---
+You are the coach of Temple in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- reference ONE specific real player from Temple's
+history (a legend, a bust, someone with a famous moment good or bad) as
+part of the joke.
+
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details about the
+player are fine, this isn't a fact-check.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+--- Prompt [5] (strategy: advance_program_issues) ---
+You are the coach of Temple in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- roast your own program's rougher moments specifically:
+a scandal, a controversy, a coaching mess, an embarrassing stretch --
+an actual ISSUE from Temple's past, not just a bad record.
+
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details are fine,
+this isn't a fact-check.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+--- Prompt [6] (strategy: advance_combo) ---
+You are the coach of Temple in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week. Roast your own team using WHICHEVER of these actually
+makes for the funniest line: Temple's program history, a rough or
+embarrassing moment in their past, the actual town/city Temple is
+located in, or a specific real player from their history. Pick ONE
+angle -- whichever is funniest -- don't try to cram in more than one.
+
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details are fine,
+this isn't a fact-check.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing, don't play it safe.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
 
 
 
 ======================================================================
 Virginia
 ======================================================================
-  Record: 5-2  |  Last game: lost to Miami 30-48  |  PPG/PA: 28.9/28.1
+--- Prompt [1] (strategy: advance_team) ---
+Write ONE funny joke (20-40 words) about being the coach of Virginia in a
+college football dynasty league, specifically about the experience of
+being ready to advance to the next week. Can reference Virginia's general
+vibe, mascot, or identity -- doesn't need real season stats.
 
---- Prompt [1] (comedian style: Nate Bargatze) ---
-Write ONE funny heckle line (40-60 words -- enough room to actually tell
-a short story with a beginning, a turn, and a real ending, not just one
-compressed sentence) for a college football group chat, roasting Virginia
-using their real stats below. Someone just posted "RTA" for this team --
-everyone already knows that, don't mention it or reference advancing at
-all, just roast their season.
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
 
-Real facts about Virginia -- use only these, don't invent anything else:
-Record: 5-2. Most recent game: lost to Miami 30-48. Averaging 28.9 points scored, 28.1 allowed per game. Record vs ranked opponents this season: 1-2. Record vs fellow user-controlled teams this season: 0-1. Upcoming: plays #5 Louisville in 3 weeks. Upcoming: plays fellow user-controlled team Virginia Tech in 4 weeks.
-You can also optionally draw on real general knowledge of Virginia's football program/reputation if it strengthens the joke -- approximate details are fine, just keep it genuinely recognizable, not invented.
 
-Pick whichever ONE or TWO of these facts actually make for the funniest
-line -- you don't need to use all of them, and don't just list them with
-"while"/"after"/"since". This needs a real punchline: a genuine turn, an
-unexpected comparison, an ironic angle -- something that actually reads
-as a joke, not a stats recap with attitude. Go for real trash talk --
-sharp and a little mean, not a gentle ribbing. Don't hedge the insult.
+--- Prompt [2] (strategy: advance_program_history) ---
+You are the coach of Virginia in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- while you're at it, roast your own program's HISTORY:
+a rough era, a coaching change, a well-known drought or stretch, a
+notable rise or fall, anything genuinely recognizable about Virginia's
+program history specifically.
 
-Avoid this exact shape, which keeps showing up and making everything
-sound the same: "[brag about something good], but/until you remember
-[bad stat], which is like [metaphor], [tag on the upcoming opponent]."
-That's become a crutch -- vary it for real. Some options: open with the
-BAD stat first instead of a brag. Skip the upcoming opponent entirely
-sometimes. Tell it as a tiny scene instead of a single clause chain.
-Not every line needs a metaphor at the very end.
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate historical details
+are fine, this isn't a fact-check.
 
-The ENDING is the most important part -- that's where the joke actually
-has to land. Don't trail off into something vague like "...which should
-make watching them next week real comfortable for everybody" -- that's
-a gesture at a joke, not an actual joke. Commit to something SPECIFIC
-and vivid at the end.
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
 
-If it's in the facts above, pairing a PAST result with a FUTURE one is
-ONE option worth considering (e.g. record against ranked teams plus an
-upcoming ranked opponent) -- but it's one option among several, not the
-default move every time. Use it only when it's genuinely the funniest
-angle, not just because the facts happen to support it.
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
 
-Write it in this voice -- study these examples closely, they're the
-actual target sound, not just a topic area. Notice they use different
-structures, not one repeated formula -- match that variety, not just
-the wording:
-- "We beat Alabama by 43, and for about four minutes I actually believed we were good at football. Then I remembered we're giving up almost 30 a game, and somewhere out there Kentucky is watching that tape right now, taking notes, feeling very optimistic."
-- "I don't know how we're 5-1. Nobody in that building has a real explanation. We just show up, something good happens, and everyone quietly agrees not to ask too many follow-up questions about how or why."
-- "Giving up 30 points a game is a lot, honestly, but we're also scoring 40, so I think the actual plan is to outlast people emotionally instead of ever actually stopping them."
-- "We won by 3 points against a team we probably should've beaten by 30, and everybody's celebrating like we just won a championship instead of barely surviving a Tuesday afternoon."
 
-(Those examples are about hypothetical teams -- write a NEW line for
-Virginia specifically, don't reuse their wording, scenario, or the exact
-way any of them end.)
+--- Prompt [3] (strategy: advance_town) ---
+You are the coach of Virginia in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- work in something about the actual TOWN or CITY Virginia
+is located in: local geography, culture, a well-known local stereotype,
+whatever's genuinely specific to that actual place (not the football
+program itself).
 
-Hard rules: numbers as numerals ("4-4" and "47-45", never spelled out).
-No profanity. No mention of RTA/advancing. You CAN reference an upcoming
-opponent as a real schedule fact (who they play, when) if it's listed
-above, but never predict or claim to know how that game actually turns
-out -- nobody knows that yet. At most one emoji. Return ONLY the line
-itself, nothing else.
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details about the
+town are fine.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+--- Prompt [4] (strategy: advance_player) ---
+You are the coach of Virginia in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- reference ONE specific real player from Virginia's
+history (a legend, a bust, someone with a famous moment good or bad) as
+part of the joke.
+
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details about the
+player are fine, this isn't a fact-check.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+--- Prompt [5] (strategy: advance_program_issues) ---
+You are the coach of Virginia in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- roast your own program's rougher moments specifically:
+a scandal, a controversy, a coaching mess, an embarrassing stretch --
+an actual ISSUE from Virginia's past, not just a bad record.
+
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details are fine,
+this isn't a fact-check.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+--- Prompt [6] (strategy: advance_combo) ---
+You are the coach of Virginia in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week. Roast your own team using WHICHEVER of these actually
+makes for the funniest line: Virginia's program history, a rough or
+embarrassing moment in their past, the actual town/city Virginia is
+located in, or a specific real player from their history. Pick ONE
+angle -- whichever is funniest -- don't try to cram in more than one.
+
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details are fine,
+this isn't a fact-check.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing, don't play it safe.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
 
 
 
 ======================================================================
 Virginia Tech
 ======================================================================
-  Record: 4-4  |  Last game: lost to NC State 24-44  |  PPG/PA: 32.0/28.0
+--- Prompt [1] (strategy: advance_team) ---
+Write ONE funny joke (20-40 words) about being the coach of Virginia Tech in a
+college football dynasty league, specifically about the experience of
+being ready to advance to the next week. Can reference Virginia Tech's general
+vibe, mascot, or identity -- doesn't need real season stats.
 
---- Prompt [1] (comedian style: Derrick Stroup) ---
-Write ONE funny heckle line (40-60 words -- enough room to actually tell
-a short story with a beginning, a turn, and a real ending, not just one
-compressed sentence) for a college football group chat, roasting Virginia Tech
-using their real stats below. Someone just posted "RTA" for this team --
-everyone already knows that, don't mention it or reference advancing at
-all, just roast their season.
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
 
-Real facts about Virginia Tech -- use only these, don't invent anything else:
-Record: 4-4. Most recent game: lost to NC State 24-44. Averaging 32.0 points scored, 28.0 allowed per game. Record vs ranked opponents this season: 1-1. Record vs fellow user-controlled teams this season: 1-1. Upcoming: plays #12 Miami in 3 weeks. Upcoming: plays fellow user-controlled team Virginia in 4 weeks.
-You can also optionally draw on real general knowledge of Virginia Tech's football program/reputation if it strengthens the joke -- approximate details are fine, just keep it genuinely recognizable, not invented.
 
-Pick whichever ONE or TWO of these facts actually make for the funniest
-line -- you don't need to use all of them, and don't just list them with
-"while"/"after"/"since". This needs a real punchline: a genuine turn, an
-unexpected comparison, an ironic angle -- something that actually reads
-as a joke, not a stats recap with attitude. Go for real trash talk --
-sharp and a little mean, not a gentle ribbing. Don't hedge the insult.
+--- Prompt [2] (strategy: advance_program_history) ---
+You are the coach of Virginia Tech in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- while you're at it, roast your own program's HISTORY:
+a rough era, a coaching change, a well-known drought or stretch, a
+notable rise or fall, anything genuinely recognizable about Virginia Tech's
+program history specifically.
 
-Avoid this exact shape, which keeps showing up and making everything
-sound the same: "[brag about something good], but/until you remember
-[bad stat], which is like [metaphor], [tag on the upcoming opponent]."
-That's become a crutch -- vary it for real. Some options: open with the
-BAD stat first instead of a brag. Skip the upcoming opponent entirely
-sometimes. Tell it as a tiny scene instead of a single clause chain.
-Not every line needs a metaphor at the very end.
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate historical details
+are fine, this isn't a fact-check.
 
-The ENDING is the most important part -- that's where the joke actually
-has to land. Don't trail off into something vague like "...which should
-make watching them next week real comfortable for everybody" -- that's
-a gesture at a joke, not an actual joke. Commit to something SPECIFIC
-and vivid at the end.
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
 
-If it's in the facts above, pairing a PAST result with a FUTURE one is
-ONE option worth considering (e.g. record against ranked teams plus an
-upcoming ranked opponent) -- but it's one option among several, not the
-default move every time. Use it only when it's genuinely the funniest
-angle, not just because the facts happen to support it.
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
 
-Write it in this voice -- study these examples closely, they're the
-actual target sound, not just a topic area. Notice they use different
-structures, not one repeated formula -- match that variety, not just
-the wording:
-- "You beat Missouri State by 32 and you're out here celebrating like you just hoisted a trophy, but you are 0-3 against ranked teams this year, my brother, and BYU is circling that stat line right now like they already smell blood in the water!"
-- "6-0 and you are out here acting like you built a dynasty overnight, but you're scoring 40 and giving up 35, my brother, that is not a defense, that's a coin flip wearing a helmet and a chinstrap!"
-- "Giving up 30 points a game and STILL somehow winning?! That is not defense, my brother, that is outrunning the crime scene before anybody shows up to ask a single question!"
-- "You won by 3 points and you are walking around like you're Nick Saban? 3 points is a field goal with extra steps, my brother, that is barely even a football game!"
 
-(Those examples are about hypothetical teams -- write a NEW line for
-Virginia Tech specifically, don't reuse their wording, scenario, or the exact
-way any of them end.)
+--- Prompt [3] (strategy: advance_town) ---
+You are the coach of Virginia Tech in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- work in something about the actual TOWN or CITY Virginia Tech
+is located in: local geography, culture, a well-known local stereotype,
+whatever's genuinely specific to that actual place (not the football
+program itself).
 
-Hard rules: numbers as numerals ("4-4" and "47-45", never spelled out).
-No profanity. No mention of RTA/advancing. You CAN reference an upcoming
-opponent as a real schedule fact (who they play, when) if it's listed
-above, but never predict or claim to know how that game actually turns
-out -- nobody knows that yet. At most one emoji. Return ONLY the line
-itself, nothing else.
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details about the
+town are fine.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+--- Prompt [4] (strategy: advance_player) ---
+You are the coach of Virginia Tech in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- reference ONE specific real player from Virginia Tech's
+history (a legend, a bust, someone with a famous moment good or bad) as
+part of the joke.
+
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details about the
+player are fine, this isn't a fact-check.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+--- Prompt [5] (strategy: advance_program_issues) ---
+You are the coach of Virginia Tech in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- roast your own program's rougher moments specifically:
+a scandal, a controversy, a coaching mess, an embarrassing stretch --
+an actual ISSUE from Virginia Tech's past, not just a bad record.
+
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details are fine,
+this isn't a fact-check.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+--- Prompt [6] (strategy: advance_combo) ---
+You are the coach of Virginia Tech in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week. Roast your own team using WHICHEVER of these actually
+makes for the funniest line: Virginia Tech's program history, a rough or
+embarrassing moment in their past, the actual town/city Virginia Tech is
+located in, or a specific real player from their history. Pick ONE
+angle -- whichever is funniest -- don't try to cram in more than one.
+
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details are fine,
+this isn't a fact-check.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing, don't play it safe.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
 
 
 
 ======================================================================
 West Virginia
 ======================================================================
-  Record: 6-1  |  Last game: beat Louisiana Tech 49-20  |  PPG/PA: 29.0/24.3
+--- Prompt [1] (strategy: advance_team) ---
+Write ONE funny joke (20-40 words) about being the coach of West Virginia in a
+college football dynasty league, specifically about the experience of
+being ready to advance to the next week. Can reference West Virginia's general
+vibe, mascot, or identity -- doesn't need real season stats.
 
---- Prompt [1] (comedian style: Derrick Stroup) ---
-Write ONE funny heckle line (40-60 words -- enough room to actually tell
-a short story with a beginning, a turn, and a real ending, not just one
-compressed sentence) for a college football group chat, roasting West Virginia
-using their real stats below. Someone just posted "RTA" for this team --
-everyone already knows that, don't mention it or reference advancing at
-all, just roast their season.
-
-Real facts about West Virginia -- use only these, don't invent anything else:
-Record: 6-1. Most recent game: beat Louisiana Tech 49-20. Averaging 29.0 points scored, 24.3 allowed per game.
-You can also optionally draw on real general knowledge of West Virginia's football program/reputation if it strengthens the joke -- approximate details are fine, just keep it genuinely recognizable, not invented.
-
-Pick whichever ONE or TWO of these facts actually make for the funniest
-line -- you don't need to use all of them, and don't just list them with
-"while"/"after"/"since". This needs a real punchline: a genuine turn, an
-unexpected comparison, an ironic angle -- something that actually reads
-as a joke, not a stats recap with attitude. Go for real trash talk --
-sharp and a little mean, not a gentle ribbing. Don't hedge the insult.
-
-Avoid this exact shape, which keeps showing up and making everything
-sound the same: "[brag about something good], but/until you remember
-[bad stat], which is like [metaphor], [tag on the upcoming opponent]."
-That's become a crutch -- vary it for real. Some options: open with the
-BAD stat first instead of a brag. Skip the upcoming opponent entirely
-sometimes. Tell it as a tiny scene instead of a single clause chain.
-Not every line needs a metaphor at the very end.
-
-The ENDING is the most important part -- that's where the joke actually
-has to land. Don't trail off into something vague like "...which should
-make watching them next week real comfortable for everybody" -- that's
-a gesture at a joke, not an actual joke. Commit to something SPECIFIC
-and vivid at the end.
-
-If it's in the facts above, pairing a PAST result with a FUTURE one is
-ONE option worth considering (e.g. record against ranked teams plus an
-upcoming ranked opponent) -- but it's one option among several, not the
-default move every time. Use it only when it's genuinely the funniest
-angle, not just because the facts happen to support it.
-
-Write it in this voice -- study these examples closely, they're the
-actual target sound, not just a topic area. Notice they use different
-structures, not one repeated formula -- match that variety, not just
-the wording:
-- "You beat Missouri State by 32 and you're out here celebrating like you just hoisted a trophy, but you are 0-3 against ranked teams this year, my brother, and BYU is circling that stat line right now like they already smell blood in the water!"
-- "6-0 and you are out here acting like you built a dynasty overnight, but you're scoring 40 and giving up 35, my brother, that is not a defense, that's a coin flip wearing a helmet and a chinstrap!"
-- "Giving up 30 points a game and STILL somehow winning?! That is not defense, my brother, that is outrunning the crime scene before anybody shows up to ask a single question!"
-- "You won by 3 points and you are walking around like you're Nick Saban? 3 points is a field goal with extra steps, my brother, that is barely even a football game!"
-
-(Those examples are about hypothetical teams -- write a NEW line for
-West Virginia specifically, don't reuse their wording, scenario, or the exact
-way any of them end.)
-
-Hard rules: numbers as numerals ("4-4" and "47-45", never spelled out).
-No profanity. No mention of RTA/advancing. You CAN reference an upcoming
-opponent as a real schedule fact (who they play, when) if it's listed
-above, but never predict or claim to know how that game actually turns
-out -- nobody knows that yet. At most one emoji. Return ONLY the line
-itself, nothing else.
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
 
 
+--- Prompt [2] (strategy: advance_program_history) ---
+You are the coach of West Virginia in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- while you're at it, roast your own program's HISTORY:
+a rough era, a coaching change, a well-known drought or stretch, a
+notable rise or fall, anything genuinely recognizable about West Virginia's
+program history specifically.
 
-⚠️  No completed-game data yet for Wisconsin -- skipping.
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate historical details
+are fine, this isn't a fact-check.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+--- Prompt [3] (strategy: advance_town) ---
+You are the coach of West Virginia in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- work in something about the actual TOWN or CITY West Virginia
+is located in: local geography, culture, a well-known local stereotype,
+whatever's genuinely specific to that actual place (not the football
+program itself).
+
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details about the
+town are fine.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+--- Prompt [4] (strategy: advance_player) ---
+You are the coach of West Virginia in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- reference ONE specific real player from West Virginia's
+history (a legend, a bust, someone with a famous moment good or bad) as
+part of the joke.
+
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details about the
+player are fine, this isn't a fact-check.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+--- Prompt [5] (strategy: advance_program_issues) ---
+You are the coach of West Virginia in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- roast your own program's rougher moments specifically:
+a scandal, a controversy, a coaching mess, an embarrassing stretch --
+an actual ISSUE from West Virginia's past, not just a bad record.
+
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details are fine,
+this isn't a fact-check.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+--- Prompt [6] (strategy: advance_combo) ---
+You are the coach of West Virginia in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week. Roast your own team using WHICHEVER of these actually
+makes for the funniest line: West Virginia's program history, a rough or
+embarrassing moment in their past, the actual town/city West Virginia is
+located in, or a specific real player from their history. Pick ONE
+angle -- whichever is funniest -- don't try to cram in more than one.
+
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details are fine,
+this isn't a fact-check.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing, don't play it safe.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+
+======================================================================
+Wisconsin
+======================================================================
+--- Prompt [1] (strategy: advance_team) ---
+Write ONE funny joke (20-40 words) about being the coach of Wisconsin in a
+college football dynasty league, specifically about the experience of
+being ready to advance to the next week. Can reference Wisconsin's general
+vibe, mascot, or identity -- doesn't need real season stats.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+--- Prompt [2] (strategy: advance_program_history) ---
+You are the coach of Wisconsin in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- while you're at it, roast your own program's HISTORY:
+a rough era, a coaching change, a well-known drought or stretch, a
+notable rise or fall, anything genuinely recognizable about Wisconsin's
+program history specifically.
+
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate historical details
+are fine, this isn't a fact-check.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+--- Prompt [3] (strategy: advance_town) ---
+You are the coach of Wisconsin in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- work in something about the actual TOWN or CITY Wisconsin
+is located in: local geography, culture, a well-known local stereotype,
+whatever's genuinely specific to that actual place (not the football
+program itself).
+
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details about the
+town are fine.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+--- Prompt [4] (strategy: advance_player) ---
+You are the coach of Wisconsin in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- reference ONE specific real player from Wisconsin's
+history (a legend, a bust, someone with a famous moment good or bad) as
+part of the joke.
+
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details about the
+player are fine, this isn't a fact-check.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+--- Prompt [5] (strategy: advance_program_issues) ---
+You are the coach of Wisconsin in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week -- roast your own program's rougher moments specifically:
+a scandal, a controversy, a coaching mess, an embarrassing stretch --
+an actual ISSUE from Wisconsin's past, not just a bad record.
+
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details are fine,
+this isn't a fact-check.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing here.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
+--- Prompt [6] (strategy: advance_combo) ---
+You are the coach of Wisconsin in a college football dynasty league. You
+just finished your game and are posting that you're ready to advance to
+the next week. Roast your own team using WHICHEVER of these actually
+makes for the funniest line: Wisconsin's program history, a rough or
+embarrassing moment in their past, the actual town/city Wisconsin is
+located in, or a specific real player from their history. Pick ONE
+angle -- whichever is funniest -- don't try to cram in more than one.
+
+Write this in ROAST format (30-50 words): a setup that sounds almost
+like a brag or a neutral statement, then a hard pivot into a real,
+specific insult -- not just an observation. First person, as if you're
+actually posting this in the group chat. Approximate details are fine,
+this isn't a fact-check.
+
+Push for something genuinely clever and surprising -- the kind of line
+that gets an actual laugh, not just a knowing nod. Take a real creative
+swing, don't play it safe.
+
+No profanity. At most one emoji. Return ONLY the line itself, no
+quotes, no preamble.
+
+
 
 ======================================================================
 SUMMARY
 ======================================================================
-Skipped (no completed-game data yet): Wisconsin
+Overall strategy distribution: {'advance_team': 19, 'advance_program_history': 19, 'advance_town': 19, 'advance_player': 19, 'advance_program_issues': 19, 'advance_combo': 19}

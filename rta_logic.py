@@ -541,6 +541,14 @@ BANNED_OPENERS = (
 PROFANITY_MARKERS = ("fuck", "shit", "bitch", "asshole", "cunt", "damn it", "goddamn")
 
 
+# Catches things like "45-14" or "45 to 14" -- a factual-accuracy
+# backstop, not just a style rule like the others here. The prompts
+# already instruct against inventing a score, but that's proven
+# unreliable on its own before (banned openers got reworded around it),
+# and getting a real result wrong is worse than a repetitive joke.
+SCORE_PATTERN = re.compile(r"\b\d{1,3}\s*(?:-|–|to)\s*\d{1,3}\b", re.IGNORECASE)
+
+
 def _quip_violates_rules(text: str) -> str | None:
     """Returns a short reason string if the generated text breaks a hard
     rule, else None. Used to trigger a retry rather than just log and
@@ -552,6 +560,8 @@ def _quip_violates_rules(text: str) -> str | None:
     for word in PROFANITY_MARKERS:
         if word in lower:
             return f"contains profanity marker '{word}'"
+    if SCORE_PATTERN.search(text):
+        return "contains what looks like a specific score (e.g. '45-14') -- not allowed, the model doesn't actually know real results"
     return None
 
 
@@ -559,19 +569,19 @@ COMEDIAN_STYLES = [
     {
         "name": "Nate Bargatze",
         "examples": [
-            "We beat Alabama by 43, and for about four minutes I actually believed we were good at football. Then I remembered we're giving up almost 30 a game, and somewhere out there Kentucky is watching that tape right now, taking notes, feeling very optimistic.",
-            "I don't know how we're 5-1. Nobody in that building has a real explanation. We just show up, something good happens, and everyone quietly agrees not to ask too many follow-up questions about how or why.",
-            "Giving up 30 points a game is a lot, honestly, but we're also scoring 40, so I think the actual plan is to outlast people emotionally instead of ever actually stopping them.",
-            "We won by 3 points against a team we probably should've beaten by 30, and everybody's celebrating like we just won a championship instead of barely surviving a Tuesday afternoon.",
+            "We beat Alabama by what felt like a lot, and for about four minutes I actually believed we were good at football. Then I remembered our defense lets everybody hang around way too long, and somewhere out there Kentucky is watching that tape right now, taking notes, feeling very optimistic.",
+            "I don't know how we're doing this well. Nobody in that building has a real explanation. We just show up, something good happens, and everyone quietly agrees not to ask too many follow-up questions about how or why.",
+            "Giving up points in bunches is a lot, honestly, but we're also scoring plenty, so I think the actual plan is to outlast people emotionally instead of ever actually stopping them.",
+            "We won by basically nothing against a team we probably should've handled easily, and everybody's celebrating like we just won a championship instead of barely surviving a Tuesday afternoon.",
         ],
     },
     {
         "name": "Derrick Stroup",
         "examples": [
-            "You beat Missouri State by 32 and you're out here celebrating like you just hoisted a trophy, but you are 0-3 against ranked teams this year, my brother, and BYU is circling that stat line right now like they already smell blood in the water!",
-            "6-0 and you are out here acting like you built a dynasty overnight, but you're scoring 40 and giving up 35, my brother, that is not a defense, that's a coin flip wearing a helmet and a chinstrap!",
-            "Giving up 30 points a game and STILL somehow winning?! That is not defense, my brother, that is outrunning the crime scene before anybody shows up to ask a single question!",
-            "You won by 3 points and you are walking around like you're Nick Saban? 3 points is a field goal with extra steps, my brother, that is barely even a football game!",
+            "You beat a team you were supposed to beat and you're out here celebrating like you just hoisted a trophy, but you can't buy a win against a ranked opponent, my brother, and BYU is circling that reputation right now like they already smell blood in the water!",
+            "You're undefeated and out here acting like you built a dynasty overnight, but your defense lets everybody hang around way too long, my brother, that is not a defense, that's a coin flip wearing a helmet and a chinstrap!",
+            "Giving up points in bunches and STILL somehow winning?! That is not defense, my brother, that is outrunning the crime scene before anybody shows up to ask a single question!",
+            "You won by the skin of your teeth and you are walking around like you're Nick Saban? That was basically a coin flip, my brother, that is barely even a football game!",
         ],
     },
 ]
@@ -721,6 +731,11 @@ college football dynasty league, specifically about the experience of
 being ready to advance to the next week. Can reference {team}'s general
 vibe, mascot, or identity -- doesn't need real season stats.
 
+Do NOT invent a specific score, or state that they won or lost their
+most recent or current game -- you genuinely don't know how their
+season is actually going right now, so don't claim a specific result as
+if it's a real fact.
+
 No profanity. At most one emoji. Return ONLY the line itself, no
 quotes, no preamble.
 """
@@ -743,6 +758,12 @@ are fine, this isn't a fact-check.
 Push for something genuinely clever and surprising -- the kind of line
 that gets an actual laugh, not just a knowing nod. Take a real creative
 swing here.
+
+Do NOT invent a specific score, or state that they won or lost their
+most recent or current game -- you genuinely don't know how their
+season is actually going right now, so don't claim a specific result as
+if it's a real fact. General program history/reputation is fine (that's
+the whole point of this one) -- just not a made-up recent result.
 
 No profanity. At most one emoji. Return ONLY the line itself, no
 quotes, no preamble.
@@ -767,6 +788,11 @@ Push for something genuinely clever and surprising -- the kind of line
 that gets an actual laugh, not just a knowing nod. Take a real creative
 swing here.
 
+Do NOT invent a specific score, or state that they won or lost their
+most recent or current game -- you genuinely don't know how their
+season is actually going right now, so don't claim a specific result as
+if it's a real fact.
+
 No profanity. At most one emoji. Return ONLY the line itself, no
 quotes, no preamble.
 """
@@ -789,6 +815,12 @@ Push for something genuinely clever and surprising -- the kind of line
 that gets an actual laugh, not just a knowing nod. Take a real creative
 swing here.
 
+Do NOT invent a specific score, or state that they won or lost their
+most recent or current game -- you genuinely don't know how their
+season is actually going right now, so don't claim a specific result as
+if it's a real fact. Historical facts about the player are fine -- just
+not a made-up recent game result.
+
 No profanity. At most one emoji. Return ONLY the line itself, no
 quotes, no preamble.
 """
@@ -810,6 +842,12 @@ this isn't a fact-check.
 Push for something genuinely clever and surprising -- the kind of line
 that gets an actual laugh, not just a knowing nod. Take a real creative
 swing here.
+
+Do NOT invent a specific score, or state that they won or lost their
+most recent or current game -- you genuinely don't know how their
+season is actually going right now, so don't claim a specific result as
+if it's a real fact. Historical issues/controversies are fine -- just
+not a made-up recent game result.
 
 No profanity. At most one emoji. Return ONLY the line itself, no
 quotes, no preamble.
@@ -834,6 +872,11 @@ this isn't a fact-check.
 Push for something genuinely clever and surprising -- the kind of line
 that gets an actual laugh, not just a knowing nod. Take a real creative
 swing, don't play it safe.
+
+Do NOT invent a specific score, or state that they won or lost their
+most recent or current game -- you genuinely don't know how their
+season is actually going right now, so don't claim a specific result as
+if it's a real fact.
 
 No profanity. At most one emoji. Return ONLY the line itself, no
 quotes, no preamble.
