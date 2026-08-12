@@ -32,6 +32,16 @@ import roster as _roster
 
 log = logging.getLogger("rta_logic")
 
+# Bump this any time ADVANCE_PROMPT_STRATEGIES, COMEDIAN_STYLES, or any
+# other wording that affects what actually gets sent to Gemini changes
+# meaningfully -- logged alongside every dynamic quip in quip_log.csv,
+# so a logged line can be traced back to the exact prompt version that
+# produced it. Given how many rounds of prompt changes this has already
+# been through, this matters for real debugging later, not just
+# record-keeping -- e.g. "was this line from before or after the
+# first-person-coach fix?" is answerable by checking this value.
+RTA_LOGIC_VERSION = "1.0"
+
 # Matches the standalone word "RTA" (case-insensitive), not a substring
 # inside a longer word (e.g. won't fire on "mortar").
 RTA_PATTERN = re.compile(r"\brta\b", re.IGNORECASE)
@@ -947,16 +957,23 @@ def build_advance_prompt(team: str) -> str:
 
 
 QUIP_LOG_FILE = "quip_log.csv"
-QUIP_LOG_HEADER = ["Timestamp", "Season", "Week", "Team", "Prompt", "Response"]
+QUIP_LOG_HEADER = ["Timestamp", "Season", "Week", "Team", "Version", "Prompt", "Response"]
 
 
 def log_quip_response(team: str, week_sort, response_text: str, prompt: str = "", directory: str = ".") -> None:
     """Appends one row to quip_log.csv -- timestamp, season, week, team,
-    the exact prompt sent to Gemini, and the actual response text. One
-    ongoing file across all seasons (not reset each year) so it's a
-    running history, same as the tagline queue state; a Season column
-    is included so it can still be filtered/segmented later if that's
+    the RTA_LOGIC_VERSION active when this was generated, the exact
+    prompt sent to Gemini, and the actual response text. One ongoing
+    file across all seasons (not reset each year) so it's a running
+    history, same as the tagline queue state; a Season column is
+    included so it can still be filtered/segmented later if that's
     ever useful.
+
+    The Version column matters because the prompt wording itself has
+    already changed many times -- it lets a logged line be matched back
+    to the exact ADVANCE_PROMPT_STRATEGIES wording that was live when it
+    was generated, e.g. confirming whether a given line predates or
+    postdates a specific fix.
 
     The Prompt column matters for real diagnosis, not just record-keeping
     -- e.g. if a response cites a specific score that doesn't match the
@@ -987,6 +1004,7 @@ def log_quip_response(team: str, week_sort, response_text: str, prompt: str = ""
                 season if season is not None else "",
                 week_sort if week_sort is not None else "",
                 team,
+                RTA_LOGIC_VERSION,
                 prompt,
                 response_text,
             ])
