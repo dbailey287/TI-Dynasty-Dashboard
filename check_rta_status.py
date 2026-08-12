@@ -297,10 +297,10 @@ def run() -> str:
             source = None  # for logging: exactly why this reply is what it is
 
             if use_dynamic_quips:
-                reply_text = rl.generate_dynamic_quip(team, GEMINI_API_KEY)
+                reply_text, used_prompt = rl.generate_dynamic_quip(team, GEMINI_API_KEY)
                 if reply_text:
                     source = "DYNAMIC (Gemini)"
-                    rl.log_quip_response(team, current_week_sort, reply_text)
+                    rl.log_quip_response(team, current_week_sort, reply_text, prompt=used_prompt)
                 else:
                     source = "static (Gemini call failed or returned nothing -- check GENAI_API_KEY / API status)"
             else:

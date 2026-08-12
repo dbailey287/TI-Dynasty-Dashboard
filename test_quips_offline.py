@@ -24,6 +24,10 @@ Usage:
     # needed at all -- nothing goes to Gemini in this mode:
     python test_quips_offline.py Arkansas --dry-run
     python test_quips_offline.py --all-teams --dry-run --count 1
+
+    # Every one of the 6 strategies for every team, as a complete
+    # reference set rather than a random sample:
+    python test_quips_offline.py --all-teams --all-strategies --dry-run > all_prompts.txt
 """
 import argparse
 import os
@@ -47,12 +51,16 @@ except AttributeError:
 import rta_logic as rl
 
 
-def generate_examples_for_team(client, gen_config, team: str, count: int, dry_run: bool = False) -> dict:
+def generate_examples_for_team(client, gen_config, team: str, count: int, dry_run: bool = False, all_strategies: bool = False) -> dict:
     """Prints generated examples (or, in dry-run mode, just the
     constructed prompts themselves -- no API call at all) for one team,
     using the current production mechanism: one of the 6
-    ADVANCE_PROMPT_STRATEGIES, picked randomly per line. Returns a dict
-    of {strategy_name: count}.
+    ADVANCE_PROMPT_STRATEGIES. Returns a dict of {strategy_name: count}.
+
+    In all_strategies mode, deterministically runs EVERY one of the 6
+    strategies once (ignoring `count`) instead of randomly sampling --
+    useful for building a complete reference set covering every possible
+    prompt for a team, rather than a random sample of them.
 
     Picks the strategy directly here (rather than through
     generate_dynamic_quip's internal build_advance_prompt call) so the
@@ -64,9 +72,13 @@ def generate_examples_for_team(client, gen_config, team: str, count: int, dry_ru
     print(f"{team}")
     print("=" * 70)
 
+    if all_strategies:
+        strategy_fns = list(rl.ADVANCE_PROMPT_STRATEGIES)
+    else:
+        strategy_fns = [random.choice(rl.ADVANCE_PROMPT_STRATEGIES) for _ in range(count)]
+
     strategy_counts = {}
-    for i in range(1, count + 1):
-        strategy_fn = random.choice(rl.ADVANCE_PROMPT_STRATEGIES)
+    for i, strategy_fn in enumerate(strategy_fns, start=1):
         strategy_name = strategy_fn.__name__.replace("strategy_", "")
         prompt = strategy_fn(team)
 
@@ -104,6 +116,8 @@ def main():
                          help="Generate examples for every tracked team instead of just one")
     parser.add_argument("--dry-run", action="store_true",
                          help="Just print the constructed prompt(s) -- no API call, no API key needed, nothing sent to Gemini at all")
+    parser.add_argument("--all-strategies", action="store_true",
+                         help="Run every one of the 6 production strategies once per team (ignores --count) instead of randomly sampling -- builds a complete reference set rather than a random sample")
     args = parser.parse_args()
 
     if not args.all_teams and not args.team:
@@ -145,7 +159,7 @@ def main():
         print()
         overall_strategy_counts = {}
         for team in teams:
-            result = generate_examples_for_team(client, gen_config, team, args.count, dry_run=args.dry_run)
+            result = generate_examples_for_team(client, gen_config, team, args.count, dry_run=args.dry_run, all_strategies=args.all_strategies)
             for strategy, n in result.items():
                 overall_strategy_counts[strategy] = overall_strategy_counts.get(strategy, 0) + n
 
@@ -154,7 +168,7 @@ def main():
         print("=" * 70)
         print("Overall strategy distribution:", overall_strategy_counts)
     else:
-        strategy_counts = generate_examples_for_team(client, gen_config, args.team, args.count, dry_run=args.dry_run)
+        strategy_counts = generate_examples_for_team(client, gen_config, args.team, args.count, dry_run=args.dry_run, all_strategies=args.all_strategies)
         print("=" * 70)
         print("Strategy distribution this run:", strategy_counts)
         print("(Random per call -- run again to see a different mix.)")

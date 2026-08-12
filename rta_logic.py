@@ -858,21 +858,29 @@ def build_advance_prompt(team: str) -> str:
 
 
 QUIP_LOG_FILE = "quip_log.csv"
-QUIP_LOG_HEADER = ["Timestamp", "Season", "Week", "Team", "Response"]
+QUIP_LOG_HEADER = ["Timestamp", "Season", "Week", "Team", "Prompt", "Response"]
 
 
-def log_quip_response(team: str, week_sort, response_text: str, directory: str = ".") -> None:
+def log_quip_response(team: str, week_sort, response_text: str, prompt: str = "", directory: str = ".") -> None:
     """Appends one row to quip_log.csv -- timestamp, season, week, team,
-    and the actual Gemini response text. One ongoing file across all
-    seasons (not reset each year) so it's a running history, same as
-    the tagline queue state; a Season column is included so it can
-    still be filtered/segmented later if that's ever useful.
+    the exact prompt sent to Gemini, and the actual response text. One
+    ongoing file across all seasons (not reset each year) so it's a
+    running history, same as the tagline queue state; a Season column
+    is included so it can still be filtered/segmented later if that's
+    ever useful.
+
+    The Prompt column matters for real diagnosis, not just record-keeping
+    -- e.g. if a response cites a specific score that doesn't match the
+    team's actual schedule, seeing the exact prompt confirms whether
+    Gemini invented it unprompted (none of the 6 ADVANCE_PROMPT_STRATEGIES
+    provide real stats at all) versus something in the prompt wording
+    itself suggesting it.
 
     Only called for actual DYNAMIC (Gemini-sourced) replies -- static
     tagline-bank fallbacks aren't "a response from Gemini" and aren't
     logged here. Uses the csv module rather than a naive comma-join,
-    since real Gemini responses routinely contain commas and quotes
-    that would otherwise corrupt the file.
+    since real prompts and responses routinely contain commas, quotes,
+    and newlines that would otherwise corrupt the file.
 
     Never raises -- a logging failure should never break a real RTA
     reply. Logs a warning and silently continues on any I/O problem."""
@@ -890,28 +898,33 @@ def log_quip_response(team: str, week_sort, response_text: str, directory: str =
                 season if season is not None else "",
                 week_sort if week_sort is not None else "",
                 team,
+                prompt,
                 response_text,
             ])
     except OSError as e:
         log.warning("log_quip_response: couldn't write to %s: %s", path, e)
 
 
-def generate_dynamic_quip(team: str, api_key: str) -> str | None:
+def generate_dynamic_quip(team: str, api_key: str) -> tuple[str, str] | tuple[None, None]:
     """Synchronous Gemini call (this script has no async event loop, so
     no need to wrap it) generating one fresh line via build_advance_prompt()
     -- a randomly-picked one of the 6 ADVANCE_PROMPT_STRATEGIES. Returns
-    None on any failure -- missing key, API error, empty response -- so
-    the caller can fall back to the static tagline bank rather than skip
-    the reply entirely."""
+    (text, prompt) on success -- the prompt is returned alongside the
+    text specifically so it can be logged; a retry can pick a DIFFERENT
+    random strategy than the attempt before it, so the prompt that
+    actually produced the returned text isn't otherwise knowable from
+    outside this function. Returns (None, None) on any failure --
+    missing key, API error, empty response -- so the caller can fall
+    back to the static tagline bank rather than skip the reply entirely."""
     if not api_key:
         log.warning("generate_dynamic_quip: no API key provided (GENAI_API_KEY not set).")
-        return None
+        return None, None
     try:
         from google import genai
         from google.genai.errors import APIError
     except ImportError as e:
         log.error("generate_dynamic_quip: google-genai package not installed (%s) -- check the workflow's pip install step.", e)
-        return None
+        return None, None
 
     client = genai.Client(api_key=api_key)
     # Explicit higher temperature -- previously unset (whatever the
@@ -940,12 +953,12 @@ def generate_dynamic_quip(team: str, api_key: str) -> str | None:
                 if violation:
                     log.warning("generate_dynamic_quip: %s (attempt %d) rejected -- %s. Text was: %r", model_name, attempt, violation, text)
                     continue
-                return text
+                return text, prompt
             except APIError as e:
                 last_error = e
                 log.warning("generate_dynamic_quip: %s (attempt %d) failed: %s", model_name, attempt, e)
     log.error("generate_dynamic_quip: all models/retries exhausted. Last error: %s", last_error)
-    return None
+    return None, None
 
 
 def pick_announcement() -> str:
