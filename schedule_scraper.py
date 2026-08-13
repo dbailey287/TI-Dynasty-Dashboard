@@ -771,64 +771,91 @@ async def on_ready():
             log.info("Found %d new schedule image(s) to process.", len(image_attachments))
 
             semaphore = asyncio.Semaphore(MAX_CONCURRENT_REQUESTS)
+
+            async def _process_and_tag(attachment, msg_id):
+                """Wraps process_one_attachment so the attachment/msg_id
+                travel WITH the result. asyncio.as_completed() does not
+                reliably preserve task object identity for a dict lookup
+                (confirmed by direct testing, not assumed) -- self-tagging
+                the return value sidesteps that entirely."""
+                try:
+                    records, failure_record = await process_one_attachment(attachment, semaphore, channel_id, msg_id)
+                    return attachment, msg_id, records, failure_record, None
+                except Exception as e:
+                    return attachment, msg_id, None, None, e
+
             tasks = [
-                process_one_attachment(a, semaphore, channel_id, msg_id)
+                asyncio.create_task(_process_and_tag(a, msg_id))
                 for a, msg_id in image_attachments
             ]
-            results = await asyncio.gather(*tasks, return_exceptions=True)
 
-            for (attachment, msg_id), result in zip(image_attachments, results):
-                if isinstance(result, Exception):
-                    log.error("Attachment %s failed with %s: %s", attachment.filename, type(result).__name__, result)
+            # as_completed (not gather) is the actual point here: results are
+            # handled and SAVED TO DISK one at a time, as each image finishes,
+            # rather than waiting for the entire batch. Without this, a run
+            # that gets cancelled or times out partway through (e.g. a
+            # sustained Gemini 503 streak burning most of the run's time on
+            # a handful of stuck images) loses every already-successful
+            # result too, not just the ones that were still in flight --
+            # forcing a full re-parse of images that had already succeeded.
+            # Since this loop has no `await` between reading a task's result
+            # and writing it to disk, each iteration completes atomically
+            # before the next task's result is handled (asyncio is
+            # single-threaded/cooperative) -- no risk of two saves racing.
+            for task in asyncio.as_completed(tasks):
+                attachment, msg_id, records, failure_record, exc = await task
+                if exc is not None:
+                    log.error("Attachment %s failed with %s: %s", attachment.filename, type(exc).__name__, exc)
                     failed_images[str(attachment.id)] = {
                         "attachment_id": attachment.id,
                         "filename": attachment.filename,
                         "channel_id": channel_id,
                         "message_id": msg_id,
                         "last_attempt": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-                        "reason": f"Unexpected exception: {type(result).__name__}: {result}",
+                        "reason": f"Unexpected exception: {type(exc).__name__}: {exc}",
                     }
+                    save_failed_images(failed_images)
                     continue
 
-                records, failure_record = result
                 if records:
                     all_records.extend(records)
                     newly_processed.append(attachment.id)
-                    failed_images.pop(str(attachment.id), None)  # succeeded on retry, clear old failure if any
+                    failed_images.pop(str(attachment.id), None)
+
+                    # Save THIS image's records right away rather than
+                    # waiting for the whole batch -- merge_records matches
+                    # on (Season, Team, Week), so merging one image's rows
+                    # at a time produces the same final result as one big
+                    # batch merge, just with progress persisted along the way.
+                    df_new = pd.DataFrame(records)
+                    df_existing = pd.read_csv(CSV_FILE) if os.path.exists(CSV_FILE) else None
+                    df_combined = merge_records(df_existing, df_new, SEASON)
+                    df_combined["Week_Sort"] = df_combined["Week"].apply(get_sort_key)
+                    df_combined = df_combined.sort_values(by=["Team", "Week_Sort"]).drop(columns=["Week_Sort"])
+                    df_combined.to_csv(CSV_FILE, index=False)
+
+                    processed_ids.add(attachment.id)
+                    save_processed_ids(processed_ids)
+                    save_failed_images(failed_images)
+                    for r in records:
+                        per_team_rows[r["Team"]] = per_team_rows.get(r["Team"], 0) + 1
+                    log.info("[SAVED] %s -> %d record(s) written to %s.", attachment.filename, len(records), CSV_FILE)
                 elif failure_record:
                     log.error(
                         "[LOGGED FAILURE] %s could not be parsed by any model — saved to %s for later retry.",
                         attachment.filename, FAILED_FILE,
                     )
                     failed_images[str(attachment.id)] = failure_record
+                    save_failed_images(failed_images)
 
-        if all_records:
-            df_new = pd.DataFrame(all_records)
-            df_existing = pd.read_csv(CSV_FILE) if os.path.exists(CSV_FILE) else None
-            df_combined = merge_records(df_existing, df_new, SEASON)
-
-            df_combined["Week_Sort"] = df_combined["Week"].apply(get_sort_key)
-            df_combined = df_combined.sort_values(by=["Team", "Week_Sort"]).drop(columns=["Week_Sort"])
-            df_combined.to_csv(CSV_FILE, index=False)
-            log.info("COMPLETED: Saved %d total records to %s.", len(df_combined), CSV_FILE)
-        else:
+        if not all_records:
             log.info("No new schedule entries were parsed this run.")
-
         if newly_processed:
-            processed_ids.update(newly_processed)
-            save_processed_ids(processed_ids)
             log.info("Marked %d image(s) as processed (won't be re-scanned next run).", len(newly_processed))
-
-        save_failed_images(failed_images)
         if failed_images:
             log.warning(
                 "%d image(s) still failing after all models — run with --retry-failed to retry them. See %s.",
                 len(failed_images), FAILED_FILE,
             )
-
-        per_team_rows = {}
-        for r in all_records:
-            per_team_rows[r["Team"]] = per_team_rows.get(r["Team"], 0) + 1
     except Exception as e:
         run_failed = True
         error_text = f"{type(e).__name__}: {e}"
