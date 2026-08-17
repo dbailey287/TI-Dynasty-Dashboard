@@ -20,7 +20,7 @@ jobs:
           python-version: "3.12"
 
       - name: Install dependencies
-        run: pip install discord.py google-genai pillow requests
+        run: pip install discord.py google-genai pillow requests pandas
 
       - name: Run bracket scraper
         env:
