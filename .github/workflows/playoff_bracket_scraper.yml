@@ -35,6 +35,12 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add playoff_bracket_*.json processed_bracket_images.json failed_bracket_images.json
+          shopt -s nullglob
+          FILES_TO_ADD=(playoff_bracket_*.json predicted_bracket_*.json)
+          if [ -f processed_bracket_images.json ]; then FILES_TO_ADD+=(processed_bracket_images.json); fi
+          if [ -f failed_bracket_images.json ]; then FILES_TO_ADD+=(failed_bracket_images.json); fi
+          if [ ${#FILES_TO_ADD[@]} -gt 0 ]; then
+            git add "${FILES_TO_ADD[@]}"
+          fi
           git diff --staged --quiet || git commit -m "Update playoff bracket data"
           git push
