@@ -1,0 +1,160 @@
+{
+  "season": 2026,
+  "host_city": "Las Vegas, NV",
+  "champion": "",
+  "rounds": {
+    "first_round": [
+      {
+        "bowl": "",
+        "seed1": 13,
+        "team1": "OHIO STATE",
+        "score1": null,
+        "auto_qualifier1": true,
+        "seed2": 5,
+        "team2": "NOTRE DAME",
+        "score2": null,
+        "auto_qualifier2": true
+      },
+      {
+        "bowl": "",
+        "seed1": 9,
+        "team1": "COLORADO",
+        "score1": null,
+        "auto_qualifier1": true,
+        "seed2": 8,
+        "team2": "CALIFORNIA",
+        "score2": null,
+        "auto_qualifier2": false
+      },
+      {
+        "bowl": "",
+        "seed1": 11,
+        "team1": "OKLAHOMA",
+        "score1": null,
+        "auto_qualifier1": false,
+        "seed2": 6,
+        "team2": "SMU",
+        "score2": null,
+        "auto_qualifier2": true
+      },
+      {
+        "bowl": "",
+        "seed1": 10,
+        "team1": "USC",
+        "score1": null,
+        "auto_qualifier1": false,
+        "seed2": 7,
+        "team2": "PITTSBURGH",
+        "score2": null,
+        "auto_qualifier2": true
+      }
+    ],
+    "quarterfinal": [
+      {
+        "bowl": "",
+        "seed1": null,
+        "team1": "",
+        "score1": null,
+        "auto_qualifier1": false,
+        "seed2": 4,
+        "team2": "TEXAS",
+        "score2": null,
+        "auto_qualifier2": false
+      },
+      {
+        "bowl": "",
+        "seed1": 1,
+        "team1": "ARKANSAS",
+        "score1": null,
+        "auto_qualifier1": true,
+        "seed2": null,
+        "team2": "",
+        "score2": null,
+        "auto_qualifier2": false
+      },
+      {
+        "bowl": "",
+        "seed1": 3,
+        "team1": "SOUTH CAROLINA",
+        "score1": null,
+        "auto_qualifier1": false,
+        "seed2": null,
+        "team2": "",
+        "score2": null,
+        "auto_qualifier2": false
+      },
+      {
+        "bowl": "",
+        "seed1": null,
+        "team1": "",
+        "score1": null,
+        "auto_qualifier1": false,
+        "seed2": 2,
+        "team2": "LOUISVILLE",
+        "score2": null,
+        "auto_qualifier2": false
+      }
+    ],
+    "semifinal": [
+      {
+        "bowl": "Rose Bowl Game",
+        "seed1": null,
+        "team1": "",
+        "score1": null,
+        "auto_qualifier1": false,
+        "seed2": null,
+        "team2": "",
+        "score2": null,
+        "auto_qualifier2": false
+      },
+      {
+        "bowl": "Peach Bowl",
+        "seed1": null,
+        "team1": "",
+        "score1": null,
+        "auto_qualifier1": false,
+        "seed2": null,
+        "team2": "",
+        "score2": null,
+        "auto_qualifier2": false
+      },
+      {
+        "bowl": "Cotton Bowl",
+        "seed1": null,
+        "team1": "",
+        "score1": null,
+        "auto_qualifier1": false,
+        "seed2": null,
+        "team2": "",
+        "score2": null,
+        "auto_qualifier2": false
+      },
+      {
+        "bowl": "Allstate Sugar Bowl",
+        "seed1": null,
+        "team1": "",
+        "score1": null,
+        "auto_qualifier1": false,
+        "seed2": null,
+        "team2": "",
+        "score2": null,
+        "auto_qualifier2": false
+      }
+    ],
+    "national_championship": [
+      {
+        "bowl": "",
+        "seed1": null,
+        "team1": "",
+        "score1": null,
+        "auto_qualifier1": false,
+        "seed2": null,
+        "team2": "",
+        "score2": null,
+        "auto_qualifier2": false
+      }
+    ]
+  },
+  "last_updated": "2026-08-17T02:27:12.300326+00:00",
+  "is_predicted": true
+}
