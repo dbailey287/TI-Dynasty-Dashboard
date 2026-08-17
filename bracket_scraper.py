@@ -18,6 +18,13 @@ a bracket only updates a handful of times across an entire season
 (First Round, Quarterfinal, Semifinal, National Championship), so a
 recurring cron would spend almost all its runs doing nothing.
 
+Season isn't passed in or auto-detected from other files -- it's read
+directly off the parsed bracket image itself. Gemini's parse schema
+includes the year shown in the bracket's own title (e.g. "2026"), which
+is what actually determines which playoff_bracket_<season>.json /
+predicted_bracket_<season>.json gets written to. Falls back to the
+current calendar year only if that field is ever missing from a parse.
+
 Required environment variables:
     DISCORD_TOKEN                  Bot token (same one everything else uses)
     GENAI_API_KEY                   Gemini API key
@@ -26,7 +33,6 @@ Required environment variables:
 Optional:
     SUMMARY_CHANNEL_ID              #bot-admin-alerts (reused from other scripts)
     ADMIN_LOG_CHANNEL_ID            #bot-admin-logs (reused from other scripts)
-    SEASON                          Defaults to auto-detected from existing dynasty_data files
 """
 import asyncio
 import io
