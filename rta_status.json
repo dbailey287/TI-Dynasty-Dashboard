@@ -1,8 +1,10 @@
 {
-  "ready_user_ids": [],
-  "last_message_id_main": "1538730871568466052",
+  "ready_user_ids": [
+    "1518725345149321337"
+  ],
+  "last_message_id_main": "1538973117698019328",
   "last_message_id_admin": "1538729980307963996",
-  "last_updated": "2026-08-17T02:07:09.322905+00:00",
+  "last_updated": "2026-08-17T18:15:56.552664+00:00",
   "last_reset_at": "2026-08-17T02:07:05.935396+00:00",
   "cycle_count": 11,
   "current_week_sort": 12,
