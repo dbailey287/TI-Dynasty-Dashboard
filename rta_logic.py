@@ -1072,12 +1072,13 @@ def generate_dynamic_quip(team: str, api_key: str) -> tuple[str, str] | tuple[No
     client = genai.Client(api_key=api_key)
     # Explicit higher temperature + top_p. Earlier runs at the model
     # default (and even at 1.3) converged hard: some generations for the
-    # same team came back character-for-character identical. 1.5 pushes
-    # toward meaningfully more varied phrasing while staying coherent
-    # for short creative text; top_p=0.95 keeps the tail from going fully
-    # off the rails. QUIP_MODEL_CHAIN's flash-lite models tolerate this
+    # same team came back character-for-character identical. 1.8 pushes
+    # hard toward varied, surprising phrasing for short creative text;
+    # top_p=0.95 keeps the tail from going fully off the rails. The
+    # quality gate (_quip_violates_rules) absorbs most of the extra
+    # incoherence. QUIP_MODEL_CHAIN's flash-lite models tolerate this
     # range fine.
-    gen_config = genai.types.GenerateContentConfig(temperature=1.5, top_p=0.95)
+    gen_config = genai.types.GenerateContentConfig(temperature=1.8, top_p=0.95)
 
     last_error = None
     for model_name in QUIP_MODEL_CHAIN:
