@@ -99,7 +99,7 @@ def resolve_season() -> int | None:
     return get_current_season(".")
 
 
-def build_power_rankings_message(season: int, team_emoji: dict, directory: str = ".") -> str | None:
+def build_power_rankings_message(season: int, team_to_user_id: dict, team_emoji: dict, directory: str = ".") -> str | None:
     path = os.path.join(directory, f"dynasty_data_{season}.csv")
     if not os.path.exists(path):
         log.warning("No dynasty_data_%d.csv found -- skipping Power Rankings.", season)
@@ -126,7 +126,9 @@ def build_power_rankings_message(season: int, team_emoji: dict, directory: str =
     for team, row in rated.iterrows():
         logo = team_emoji.get(team, "")
         prefix = f"{logo} " if logo else ""
-        lines.append(f"**{int(row['Rank'])}.** {prefix}{team} — {row['Dynasty_Rating']:.1f}")
+        user_id = team_to_user_id.get(team)
+        tag = f" ({roster.mention(user_id)})" if user_id else ""
+        lines.append(f"**{int(row['Rank'])}.** {prefix}{team}{tag} — {row['Dynasty_Rating']:.1f}")
 
     return "\n".join(lines)
 
@@ -157,7 +159,7 @@ def build_cfp_rankings_message(season: int, team_to_user_id: dict, team_emoji: d
     return "\n".join(lines)
 
 
-def build_recruiting_message(season: int, team_emoji: dict, directory: str = ".") -> str | None:
+def build_recruiting_message(season: int, team_to_user_id: dict, team_emoji: dict, directory: str = ".") -> str | None:
     path = os.path.join(directory, f"recruiting_ranks_{season}.csv")
     if not os.path.exists(path):
         log.warning("No recruiting_ranks_%d.csv found -- skipping Recruiting Rankings.", season)
@@ -176,7 +178,9 @@ def build_recruiting_message(season: int, team_emoji: dict, directory: str = "."
         team = r["Team"]
         logo = team_emoji.get(team, "")
         prefix = f"{logo} " if logo else ""
-        lines.append(f"**{int(r['National_Rank'])}.** {prefix}{team} — {int(r['Total_Commits'])} commits")
+        user_id = team_to_user_id.get(team)
+        tag = f" ({roster.mention(user_id)})" if user_id else ""
+        lines.append(f"**{int(r['National_Rank'])}.** {prefix}{team}{tag} — {int(r['Total_Commits'])} commits")
 
     return "\n".join(lines)
 
@@ -198,13 +202,13 @@ def main():
     team_emoji = roster.load_team_emoji_map(".")
 
     messages = []
-    power_msg = build_power_rankings_message(season, team_emoji)
+    power_msg = build_power_rankings_message(season, team_to_user_id, team_emoji)
     if power_msg:
         messages.append(power_msg)
     cfp_msg = build_cfp_rankings_message(season, team_to_user_id, team_emoji)
     if cfp_msg:
         messages.append(cfp_msg)
-    recruiting_msg = build_recruiting_message(season, team_emoji)
+    recruiting_msg = build_recruiting_message(season, team_to_user_id, team_emoji)
     if recruiting_msg:
         messages.append(recruiting_msg)
 
