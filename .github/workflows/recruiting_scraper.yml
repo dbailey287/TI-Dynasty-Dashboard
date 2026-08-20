@@ -1,0 +1,57 @@
+name: Recruiting Rankings Scraper
+
+on:
+  workflow_dispatch:
+    inputs:
+      season:
+        description: "Season these screenshots are for (e.g. 2027). Leave blank to auto-default to next season based on existing data."
+        required: false
+        type: string
+        # No default set -- an unset input becomes an empty string in
+        # ${{ }}, which the "Run" step below turns into simply not
+        # passing --season at all, letting the script's own
+        # get_current_season()+1 auto-default take over.
+
+permissions:
+  contents: write         # needed to commit recruiting_ranks_<season>.csv back to the repo
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install discord.py google-genai pillow requests
+
+      - name: Run recruiting scraper
+        env:
+          DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
+          GENAI_API_KEY: ${{ secrets.GENAI_API_KEY }}
+          RECRUITING_CHANNEL_ID: ${{ secrets.RECRUITING_CHANNEL_ID }}
+          SUMMARY_CHANNEL_ID: ${{ secrets.SUMMARY_CHANNEL_ID }}
+          ADMIN_LOG_CHANNEL_ID: ${{ secrets.ADMIN_LOG_CHANNEL_ID }}
+        run: |
+          if [ -n "${{ inputs.season }}" ]; then
+            python recruiting_scraper.py --season "${{ inputs.season }}"
+          else
+            python recruiting_scraper.py
+          fi
+
+      - name: Commit updated recruiting data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          shopt -s nullglob
+          FILES_TO_ADD=(recruiting_ranks_*.csv)
+          if [ -f processed_recruiting_images.json ]; then FILES_TO_ADD+=(processed_recruiting_images.json); fi
+          if [ -f failed_recruiting_images.json ]; then FILES_TO_ADD+=(failed_recruiting_images.json); fi
+          if [ ${#FILES_TO_ADD[@]} -gt 0 ]; then
+            git add "${FILES_TO_ADD[@]}"
+          fi
+          git diff --staged --quiet || git commit -m "Update recruiting rankings data"
+          git push

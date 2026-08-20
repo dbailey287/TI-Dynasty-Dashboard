@@ -1,0 +1,53 @@
+name: Roster Construction Scraper
+
+on:
+  workflow_dispatch:
+    inputs:
+      season:
+        description: "Season these screenshots are for (e.g. 2027). Leave blank to auto-default to next season based on existing data."
+        required: false
+        type: string
+
+permissions:
+  contents: write         # needed to commit roster_construction_<season>.csv back to the repo
+
+jobs:
+  scrape:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install discord.py google-genai pillow requests
+
+      - name: Run roster construction scraper
+        env:
+          DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
+          GENAI_API_KEY: ${{ secrets.GENAI_API_KEY }}
+          ROSTER_CHANNEL_ID: ${{ secrets.ROSTER_CHANNEL_ID }}
+          SUMMARY_CHANNEL_ID: ${{ secrets.SUMMARY_CHANNEL_ID }}
+          ADMIN_LOG_CHANNEL_ID: ${{ secrets.ADMIN_LOG_CHANNEL_ID }}
+        run: |
+          if [ -n "${{ inputs.season }}" ]; then
+            python roster_construction_scraper.py --season "${{ inputs.season }}"
+          else
+            python roster_construction_scraper.py
+          fi
+
+      - name: Commit updated roster construction data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          shopt -s nullglob
+          FILES_TO_ADD=(roster_construction_*.csv)
+          if [ -f processed_roster_images.json ]; then FILES_TO_ADD+=(processed_roster_images.json); fi
+          if [ -f failed_roster_images.json ]; then FILES_TO_ADD+=(failed_roster_images.json); fi
+          if [ ${#FILES_TO_ADD[@]} -gt 0 ]; then
+            git add "${FILES_TO_ADD[@]}"
+          fi
+          git diff --staged --quiet || git commit -m "Update roster construction data"
+          git push
