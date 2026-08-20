@@ -50,6 +50,7 @@ FORCE_RUN = os.environ.get("RTA_FORCE_RUN") == "1"
 
 API_BASE = "https://discord.com/api/v10"
 EASTERN = ZoneInfo("America/New_York")
+DASHBOARD_URL = "https://ti-dynasty-dashboard-2027.streamlit.app/"
 
 logging.basicConfig(level=logging.INFO, format="[%(asctime)s] [%(levelname)-5s] %(message)s", datefmt="%Y-%m-%d %H:%M:%S")
 log = logging.getLogger("rta_reminder")
@@ -87,6 +88,7 @@ def format_reminder_message(not_ready_ids: list, id_to_team: dict, week_label: s
         lines.append(f"Drop an **RTA** in <#{main_channel_id}> when you're ready!")
     else:
         lines.append("Drop an **RTA** in #26-mega-dynasty when you're ready!")
+    lines.append(f"📊 {DASHBOARD_URL}")
 
     return "\n".join(lines)
 

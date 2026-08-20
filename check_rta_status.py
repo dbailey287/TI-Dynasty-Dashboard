@@ -129,6 +129,8 @@ def reply_to_message(channel_id: str, message_id: str, token: str, content: str)
     resp.raise_for_status()
 
 
+DASHBOARD_URL = "https://ti-dynasty-dashboard-2027.streamlit.app/"
+
 DEFAULT_DIGEST_STATE = {"pending_runs": [], "last_digest_sent_at": None}
 
 
@@ -267,6 +269,8 @@ def run() -> str:
                 announcement = rl.pick_announcement()
                 announcement += f" We're now on **Week {week_label}**."
                 log.info("Advance detected -- posting to #announcements (week_sort=%s, label=%s).", new_week_sort, week_label)
+
+            announcement += f"\n📊 {DASHBOARD_URL}"
 
             all_ids = [r["user_id"] for r in roster]
             matchup_lines = rl.format_matchup_lines(all_ids, id_to_team, matchups) if matchups else []

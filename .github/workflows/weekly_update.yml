@@ -1,0 +1,39 @@
+name: Weekly Update Poster
+
+on:
+  workflow_dispatch:         # manual only -- run this once all of a week's
+    inputs:                  # data is in (schedule, bracket, recruiting)
+      season:
+        description: "Season year to report on. Leave blank to auto-default to the newest season on disk."
+        required: false
+        type: string
+
+permissions:
+  contents: read              # this script only reads existing CSVs and posts to Discord, never commits anything
+
+jobs:
+  post_update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install pandas requests
+
+      - name: Post weekly update
+        env:
+          DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
+          WEEKLY_UPDATE_CHANNEL_ID: ${{ secrets.WEEKLY_UPDATE_CHANNEL_ID }}
+        run: |
+          if [ -n "${{ inputs.season }}" ]; then
+            python weekly_update.py --season "${{ inputs.season }}"
+          else
+            python weekly_update.py
+          fi

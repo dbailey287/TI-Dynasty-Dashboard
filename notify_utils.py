@@ -1,8 +1,7 @@
 """
-Shared Discord notification helpers -- log capture + file posting, and a
-short success/failure alert. Used by check_rta_status.py and
-rta_reminder.py so both report consistently to #bot-admin-logs (full
-detail, every run) and #bot-admin-alerts (short status, every run).
+Shared Discord notification helpers -- log capture + file posting, short
+status alerts, and rich embed messages. Used by check_rta_status.py,
+rta_reminder.py, and weekly_update.py so all three report consistently.
 
 Uses raw REST calls (not discord.py), since these scripts don't maintain
 a live gateway connection -- they run, do one thing, and exit.
@@ -30,12 +29,17 @@ def setup_log_capture(level=logging.DEBUG):
     logging.getLogger().addHandler(handler)
 
 
-def _post(channel_id: str, token: str, content: str = None,
+def _post(channel_id: str, token: str, content: str = None, embeds: list = None,
           file_bytes: bytes = None, filename: str = None):
     headers = {"Authorization": f"Bot {token}"}
+    payload = {}
+    if content:
+        payload["content"] = content
+    if embeds:
+        payload["embeds"] = embeds
     if file_bytes is not None:
         files = {"file": (filename or "log.txt", file_bytes)}
-        data = {"payload_json": json.dumps({"content": content} if content else {})}
+        data = {"payload_json": json.dumps(payload)}
         resp = requests.post(
             f"{API_BASE}/channels/{channel_id}/messages",
             headers=headers, data=data, files=files, timeout=20,
@@ -44,7 +48,7 @@ def _post(channel_id: str, token: str, content: str = None,
         headers["Content-Type"] = "application/json"
         resp = requests.post(
             f"{API_BASE}/channels/{channel_id}/messages",
-            headers=headers, json={"content": content}, timeout=15,
+            headers=headers, json=payload, timeout=15,
         )
     resp.raise_for_status()
 
@@ -77,3 +81,24 @@ def post_alert(channel_id: str, token: str, message: str):
         _post(channel_id, token, content=message)
     except Exception as e:
         logging.getLogger(__name__).error("Failed to post alert: %s", e)
+
+
+def post_embeds(channel_id: str, token: str, embeds: list, content: str = None):
+    """Posts up to 10 rich embeds in a single message. Each embed dict
+    follows Discord's embed object shape -- title/description/color/etc.
+    (see https://discord.com/developers/docs/resources/message#embed-object).
+    Embeds get a much bigger character budget than plain content (up to
+    6000 combined vs. content's 2000), which is the whole reason to use
+    them for anything table-like. No-ops if channel_id isn't set."""
+    if not channel_id:
+        return
+    if not embeds:
+        logging.getLogger(__name__).warning("post_embeds called with no embeds -- nothing sent.")
+        return
+    if len(embeds) > 10:
+        logging.getLogger(__name__).warning("post_embeds got %d embeds, Discord allows max 10 -- truncating.", len(embeds))
+        embeds = embeds[:10]
+    try:
+        _post(channel_id, token, content=content, embeds=embeds)
+    except Exception as e:
+        logging.getLogger(__name__).error("Failed to post embeds: %s", e)
