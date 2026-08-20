@@ -1,14 +1,11 @@
 {
-  "ready_user_ids": [
-    "1123408868458889306",
-    "1254972344070311970"
-  ],
-  "last_message_id_main": "1537515704809422919",
-  "last_message_id_admin": "1537258997550289018",
-  "last_updated": "2026-08-13T17:39:02.447262+00:00",
-  "last_reset_at": "2026-08-13T00:45:23.766798+00:00",
-  "cycle_count": 9,
-  "current_week_sort": 10,
+  "ready_user_ids": [],
+  "last_message_id_main": "1539965525000458372",
+  "last_message_id_admin": "1539822112343334914",
+  "last_updated": "2026-08-20T12:02:46.601375+00:00",
+  "last_reset_at": "2026-08-20T02:23:48.487404+00:00",
+  "cycle_count": 12,
+  "current_week_sort": 13,
   "last_tagline_by_team": {
     "Kentucky": "\ud83d\udc3e We claw our way to 6-6 every year, and we're proud of it.",
     "Pittsburgh": "Let's Go, Pitt!",

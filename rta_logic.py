@@ -40,7 +40,7 @@ log = logging.getLogger("rta_logic")
 # been through, this matters for real debugging later, not just
 # record-keeping -- e.g. "was this line from before or after the
 # first-person-coach fix?" is answerable by checking this value.
-RTA_LOGIC_VERSION = "1.0"
+RTA_LOGIC_VERSION = "1.1"
 
 # Matches the standalone word "RTA" (case-insensitive), not a substring
 # inside a longer word (e.g. won't fire on "mortar").
@@ -544,11 +544,31 @@ def get_team_recent_form(team: str, directory: str = ".", current_week_sort: int
 BANNED_OPENERS = (
     "ready to advance", "well, you're", "well you're", "well,",
     "rta?!", "rta ", "rta,", "man, ", "man,",
+    "must be", "must've",
 )
 # Not exhaustive profanity detection (that's a much bigger problem than
 # this needs to solve) -- just the small set of words that actually
 # showed up in real output, checked as a substring on the lowercased text.
 PROFANITY_MARKERS = ("fuck", "shit", "bitch", "asshole", "cunt", "damn it", "goddamn")
+
+# Soft, non-committal endings that keep showing up and kill the joke.
+# Checked as substrings on the lowercased text near the end of the line.
+SOFT_ENDING_MARKERS = (
+    "should be interesting",
+    "should be fun",
+    "should be fun to watch",
+    "good luck with that",
+    "good luck",
+    "we'll see",
+    "we will see",
+    "next year",
+    "maybe next year",
+    "time will tell",
+    "remains to be seen",
+    "could be worse",
+    "at least they're trying",
+    "that's something",
+)
 
 
 # Catches things like "45-14" or "45 to 14" -- a factual-accuracy
@@ -563,7 +583,13 @@ def _quip_violates_rules(text: str) -> str | None:
     """Returns a short reason string if the generated text breaks a hard
     rule, else None. Used to trigger a retry rather than just log and
     accept a bad line."""
-    lower = text.strip().lower()
+    stripped = text.strip()
+    lower = stripped.lower()
+    word_count = len(stripped.split())
+    if word_count < 20:
+        return f"too short ({word_count} words) -- needs room for a real setup and punchline"
+    if word_count > 60:
+        return f"too long ({word_count} words) -- keep it to one tight roast line"
     for opener in BANNED_OPENERS:
         if lower.startswith(opener):
             return f"starts with banned opener '{opener}'"
@@ -572,6 +598,12 @@ def _quip_violates_rules(text: str) -> str | None:
             return f"contains profanity marker '{word}'"
     if SCORE_PATTERN.search(text):
         return "contains what looks like a specific score (e.g. '45-14') -- not allowed, the model doesn't actually know real results"
+    # Soft endings tend to appear in the final clause; check the whole
+    # string but weight the last ~80 characters more heavily in practice
+    # by just scanning the whole thing (these phrases are distinctive).
+    for soft in SOFT_ENDING_MARKERS:
+        if soft in lower:
+            return f"contains soft/non-committal ending '{soft}'"
     return None
 
 
@@ -733,209 +765,213 @@ itself, nothing else.
 # deliberate -- testing showed fewer/no facts produced funnier, less
 # repetitive lines than the full stat bundle), so build_advance_prompt()
 # below is now what generate_dynamic_quip() actually uses.
+#
+# v1.1 changes (aimed at sharper, less generic output):
+#   - Stricter 3-part roast structure with an explicit "punchline must
+#     live in the last 8-12 words" rule.
+#   - 2 good + 1 bad few-shot examples per strategy so the model has a
+#     concrete target sound instead of only prose description.
+#   - Substitution test: the joke must break if you swap in a random
+#     other Power conference team.
+#   - Explicit bans on soft endings, coach-speak euphemisms, and the
+#     most common failure shapes.
+#   - Strategy-specific sharpening (mascot/identity, one era, town-only,
+#     named player + moment, real institutional issue, single angle).
 # ---------------------------------------------------------------------------
+
+# Shared hard rules + structure block injected into every strategy so
+# the wording stays consistent and the model sees the strongest signals
+# in the same order every time.
+_ROAST_STRUCTURE = """
+Structure (follow this exactly):
+1. One short setup that sounds like a compliment, neutral observation, or mild brag.
+2. A hard pivot (use "but", "until", "which is when", "and then", etc.).
+3. A specific, vivid insult that lands on a concrete image, comparison, or consequence -- not a vague dig.
+
+The last 8-12 words must contain the actual joke. If you can cut the last clause and the line still works, the punchline isn't strong enough.
+""".strip()
+
+_HARD_RULES = """
+Hard rules:
+- You are Coach Heckler talking ABOUT the team and their coach, never AS them. No first-person coach voice ("I just...", "my team...", "we...").
+- Do NOT mention "RTA", "ready to advance", advancing, or the act of posting a message -- the reader already knows that.
+- Do NOT invent a specific score or claim they won/lost a recent or current game. You genuinely don't know how this season is going.
+- No profanity. At most one emoji.
+- Never end with a soft implication ("should be interesting", "good luck", "we'll see", "next year", "remains to be seen", etc.).
+- Never fall back on coach-speak euphemisms ("rebuilding", "next year", "tough spot", "the program is in a transition").
+- Substitution test: if you replace the team name with a random other Power conference school and the line still works, it is too generic -- rewrite it.
+- Return ONLY the line itself, no quotes, no preamble.
+""".strip()
+
 
 def strategy_advance_team(team: str) -> str:
     return f"""You are "Coach Heckler," a heckler/commentator character in a college
-football dynasty league group chat. {team}'s coach just posted in the
-chat -- you are reacting to THEM, roasting {team} from the outside.
-You are NOT {team}'s coach, and you should never speak as if you are.
+football dynasty league group chat. {team}'s coach just posted -- you
+are reacting to THEM, roasting {team} from the outside.
 
-Write ONE funny roast (20-40 words) about {team}'s general vibe,
-mascot, or identity -- something that feels specific to THIS team, not
-a generic football joke that could apply to anyone.
+Angle: {team}'s general vibe, mascot, colors, or identity quirk.
+The joke must land on something specific to THIS team's identity
+(mascot behavior, nickname, colors, reputation for a particular style),
+not a generic "your team is bad" dig that could apply to anyone.
 
-Do NOT write in first person as {team}'s coach ("I just...", "my
-team...", "we..."). Write as Coach Heckler, talking ABOUT {team} and
-their coach, not AS them. Do NOT mention "RTA", "ready to advance",
-advancing to the next week, or the act of posting a message at all --
-the reader already knows all that, it's not the joke.
+{_ROAST_STRUCTURE}
 
-Do NOT invent a specific score, or state that they won or lost their
-most recent or current game -- you genuinely don't know how their
-season is actually going right now, so don't claim a specific result as
-if it's a real fact.
+Study these examples -- match the sharpness and specificity, not the
+wording:
 
-No profanity. At most one emoji. Return ONLY the line itself, no
-quotes, no preamble.
+Good:
+"The Sun Devils will tell you the pitchfork is a symbol of aggression, but watching them operate on third down is more like watching someone poke a soft avocado and hope it fights back."
+"Maryland's turtle mascot is supposed to represent toughness and longevity, until you remember turtles also hide in their shells for entire seasons and nobody notices."
+
+Bad (too soft / generic):
+"Arizona State has a cool mascot but the team could be better this year."
+
+Write ONE funny roast (30-50 words) for {team}.
+
+{_HARD_RULES}
 """
 
 
 def strategy_advance_program_history(team: str) -> str:
     return f"""You are "Coach Heckler," a heckler/commentator character in a college
-football dynasty league group chat. {team}'s coach just posted in the
-chat -- you are reacting to THEM, roasting {team}'s program HISTORY
-from the outside: a rough era, a coaching change, a well-known drought
-or stretch, a notable rise or fall, anything genuinely recognizable
-about {team}'s program history specifically. You are NOT {team}'s
-coach, and you should never speak as if you are.
+football dynasty league group chat. {team}'s coach just posted -- you
+are reacting to THEM, roasting {team}'s program HISTORY from the outside.
 
-Write this in ROAST format (30-50 words): a setup that sounds almost
-like a brag or a neutral statement, then a hard pivot into a real,
-specific insult -- not just an observation. Approximate historical
-details are fine, this isn't a fact-check.
+Angle: Pick ONE recognizable era, coaching stretch, drought, rise, or
+fall from {team}'s past and treat that stretch as if it defines the
+entire program. Approximate historical details are fine -- this is not
+a fact-check. The joke should be entirely about that history angle.
 
-Push for something genuinely clever and surprising -- the kind of line
-that gets an actual laugh, not just a knowing nod. Take a real creative
-swing here.
+{_ROAST_STRUCTURE}
 
-Do NOT write in first person as {team}'s coach ("I just...", "my
-team...", "we..."). Write as Coach Heckler, talking ABOUT {team} and
-their coach, not AS them. Do NOT mention "RTA", "ready to advance",
-advancing to the next week, or the act of posting a message at all --
-the reader already knows all that, it's not the joke. The joke should
-be entirely about the program history angle above.
+Study these examples -- match the sharpness and specificity, not the
+wording:
 
-Do NOT invent a specific score, or state that they won or lost their
-most recent or current game -- you genuinely don't know how their
-season is actually going right now, so don't claim a specific result as
-if it's a real fact. General program history/reputation is fine (that's
-the whole point of this one) -- just not a made-up recent result.
+Good:
+"Nebraska still talks about the glory days like they ended last Tuesday, which is impressive commitment given that most of the people who remember them are now explaining the option to their grandkids at Thanksgiving."
+"Virginia Tech spent a decade as an ACC power and another decade treating 'competitive' like a participation trophy, and the second stretch is the one that stuck."
 
-No profanity. At most one emoji. Return ONLY the line itself, no
-quotes, no preamble.
+Bad (too soft / generic):
+"This program has had some rough years but they're working hard to get back."
+
+Write ONE funny roast (30-50 words) for {team}.
+
+{_HARD_RULES}
 """
 
 
 def strategy_advance_town(team: str) -> str:
     return f"""You are "Coach Heckler," a heckler/commentator character in a college
-football dynasty league group chat. {team}'s coach just posted in the
-chat -- you are reacting to THEM, roasting something about the actual
-TOWN or CITY {team} is located in: local geography, culture, a
-well-known local stereotype, whatever's genuinely specific to that
-actual place (not the football program itself). You are NOT {team}'s
-coach, and you should never speak as if you are.
+football dynasty league group chat. {team}'s coach just posted -- you
+are reacting to THEM, roasting the actual TOWN or CITY {team} is
+located in.
 
-Write this in ROAST format (30-50 words): a setup that sounds almost
-like a brag or a neutral statement, then a hard pivot into a real,
-specific insult -- not just an observation. Approximate details about
-the town are fine.
+Angle: Local geography, weather, food, culture, or a well-known local
+stereotype about that place. Do NOT roast the football program itself
+-- the joke has to be about the town/city. Approximate details are fine.
 
-Push for something genuinely clever and surprising -- the kind of line
-that gets an actual laugh, not just a knowing nod. Take a real creative
-swing here.
+{_ROAST_STRUCTURE}
 
-Do NOT write in first person as {team}'s coach ("I just...", "my
-team...", "we..."). Write as Coach Heckler, talking ABOUT {team} and
-their coach, not AS them. Do NOT mention "RTA", "ready to advance",
-advancing to the next week, or the act of posting a message at all --
-the reader already knows all that, it's not the joke. The joke should
-be entirely about the town/city angle above.
+Study these examples -- match the sharpness and specificity, not the
+wording:
 
-Do NOT invent a specific score, or state that they won or lost their
-most recent or current game -- you genuinely don't know how their
-season is actually going right now, so don't claim a specific result as
-if it's a real fact.
+Good:
+"Blacksburg is the kind of place where the mountains are beautiful, the people are friendly, and the only thing more reliable than the fall foliage is the annual reminder that Enter Sandman cannot actually play defense for you."
+"Madison will sell you on cheese, cold weather toughness, and a student section that never quits, which is perfect branding for a town that has also perfected the art of looking the other way in November."
 
-No profanity. At most one emoji. Return ONLY the line itself, no
-quotes, no preamble.
+Bad (too soft / or about the team instead of the town):
+"Madison is a nice college town but the football team has struggled lately."
+
+Write ONE funny roast (30-50 words) for {team}.
+
+{_HARD_RULES}
 """
 
 
 def strategy_advance_player(team: str) -> str:
     return f"""You are "Coach Heckler," a heckler/commentator character in a college
-football dynasty league group chat. {team}'s coach just posted in the
-chat -- you are reacting to THEM, roasting {team} by referencing ONE
-specific real player from {team}'s history (a legend, a bust, someone
-with a famous moment good or bad) as part of the joke. You are NOT
-{team}'s coach, and you should never speak as if you are.
+football dynasty league group chat. {team}'s coach just posted -- you
+are reacting to THEM, roasting {team} by referencing ONE specific real
+player from {team}'s history.
 
-Write this in ROAST format (30-50 words): a setup that sounds almost
-like a brag or a neutral statement, then a hard pivot into a real,
-specific insult -- not just an observation. Approximate details about
-the player are fine, this isn't a fact-check.
+Angle: Name the player and turn the joke on a specific famous moment
+(good or bad), a reputation, or a career arc. A legend, a bust, or
+someone with one unforgettable play all work. Approximate details are
+fine -- this is not a fact-check. The joke should be entirely about
+that player angle.
 
-Push for something genuinely clever and surprising -- the kind of line
-that gets an actual laugh, not just a knowing nod. Take a real creative
-swing here.
+{_ROAST_STRUCTURE}
 
-Do NOT write in first person as {team}'s coach ("I just...", "my
-team...", "we..."). Write as Coach Heckler, talking ABOUT {team} and
-their coach, not AS them. Do NOT mention "RTA", "ready to advance",
-advancing to the next week, or the act of posting a message at all --
-the reader already knows all that, it's not the joke. The joke should
-be entirely about the player angle above.
+Study these examples -- match the sharpness and specificity, not the
+wording:
 
-Do NOT invent a specific score, or state that they won or lost their
-most recent or current game -- you genuinely don't know how their
-season is actually going right now, so don't claim a specific result as
-if it's a real fact. Historical facts about the player are fine -- just
-not a made-up recent game result.
+Good:
+"Wisconsin still has people who will tell you about Ron Dayne like he might walk out of the tunnel tomorrow, which is the most Wisconsin way possible of admitting the ground game has not been the same since the Clinton administration."
+"Texas fans will never stop bringing up Vince Young, which would be more inspiring if the program hadn't spent the next fifteen years looking for another one and mostly finding guys who could almost scramble."
 
-No profanity. At most one emoji. Return ONLY the line itself, no
-quotes, no preamble.
+Bad (too soft / no specific moment):
+"They had some great players in the past but things have been quieter lately."
+
+Write ONE funny roast (30-50 words) for {team}.
+
+{_HARD_RULES}
 """
 
 
 def strategy_advance_program_issues(team: str) -> str:
     return f"""You are "Coach Heckler," a heckler/commentator character in a college
-football dynasty league group chat. {team}'s coach just posted in the
-chat -- you are reacting to THEM, roasting {team}'s program's rougher
-moments specifically: a scandal, a controversy, a coaching mess, an
-embarrassing stretch -- an actual ISSUE from {team}'s past, not just a
-bad record. You are NOT {team}'s coach, and you should never speak as
-if you are.
+football dynasty league group chat. {team}'s coach just posted -- you
+are reacting to THEM, roasting {team}'s program by referencing a real
+institutional ISSUE from its past.
 
-Write this in ROAST format (30-50 words): a setup that sounds almost
-like a brag or a neutral statement, then a hard pivot into a real,
-specific insult -- not just an observation. Approximate details are
-fine, this isn't a fact-check.
+Angle: A scandal, controversy, coaching mess, NCAA problem, or
+embarrassing institutional stretch -- something that was about more
+than just losing games. Approximate details are fine. Do NOT just say
+they had a bad record; the joke has to turn on an actual issue.
 
-Push for something genuinely clever and surprising -- the kind of line
-that gets an actual laugh, not just a knowing nod. Take a real creative
-swing here.
+{_ROAST_STRUCTURE}
 
-Do NOT write in first person as {team}'s coach ("I just...", "my
-team...", "we..."). Write as Coach Heckler, talking ABOUT {team} and
-their coach, not AS them. Do NOT mention "RTA", "ready to advance",
-advancing to the next week, or the act of posting a message at all --
-the reader already knows all that, it's not the joke. The joke should
-be entirely about the program issue angle above.
+Study these examples -- match the sharpness and specificity, not the
+wording:
 
-Do NOT invent a specific score, or state that they won or lost their
-most recent or current game -- you genuinely don't know how their
-season is actually going right now, so don't claim a specific result as
-if it's a real fact. Historical issues/controversies are fine -- just
-not a made-up recent game result.
+Good:
+"Baylor will tell you the program has moved on, which is true in the same way a house is still standing after a controlled demolition -- technically yes, but you would not want to live in the before-and-after photos."
+"Penn State spent years treating 'culture' like a magic word that could outrun the actual news cycle, and the news cycle eventually filed a forwarding address."
 
-No profanity. At most one emoji. Return ONLY the line itself, no
-quotes, no preamble.
+Bad (too soft / just about losing):
+"They went through a rough stretch and the program is still recovering."
+
+Write ONE funny roast (30-50 words) for {team}.
+
+{_HARD_RULES}
 """
 
 
 def strategy_advance_combo(team: str) -> str:
     return f"""You are "Coach Heckler," a heckler/commentator character in a college
-football dynasty league group chat. {team}'s coach just posted in the
-chat -- you are reacting to THEM, roasting {team} using WHICHEVER of
-these actually makes for the funniest line: {team}'s program history, a
-rough or embarrassing moment in their past, the actual town/city {team}
-is located in, or a specific real player from their history. Pick ONE
-angle -- whichever is funniest -- don't try to cram in more than one.
-You are NOT {team}'s coach, and you should never speak as if you are.
+football dynasty league group chat. {team}'s coach just posted -- you
+are reacting to THEM, roasting {team}.
 
-Write this in ROAST format (30-50 words): a setup that sounds almost
-like a brag or a neutral statement, then a hard pivot into a real,
-specific insult -- not just an observation. Approximate details are
-fine, this isn't a fact-check.
+Angle: Pick WHICHEVER single angle is funniest for {team} -- program
+history, a rough/embarrassing institutional moment, the actual town
+or city, or one specific real player from their history. Choose ONE.
+Do not hedge by combining two weak angles into one mushy line.
 
-Push for something genuinely clever and surprising -- the kind of line
-that gets an actual laugh, not just a knowing nod. Take a real creative
-swing, don't play it safe.
+{_ROAST_STRUCTURE}
 
-Do NOT write in first person as {team}'s coach ("I just...", "my
-team...", "we..."). Write as Coach Heckler, talking ABOUT {team} and
-their coach, not AS them. Do NOT mention "RTA", "ready to advance",
-advancing to the next week, or the act of posting a message at all --
-the reader already knows all that, it's not the joke. The joke should
-be entirely about whichever angle you picked above.
+Study these examples -- match the sharpness and specificity, not the
+wording:
 
-Do NOT invent a specific score, or state that they won or lost their
-most recent or current game -- you genuinely don't know how their
-season is actually going right now, so don't claim a specific result as
-if it's a real fact.
+Good:
+"Colorado will sell you on mountains, elevation, and a brand that looks incredible on a brochure, which is ideal packaging for a program that has perfected the art of peaking in the preseason hype video."
+"SMU still has the uniforms and the swagger; the only thing missing is the part where the other team is supposed to be intimidated instead of just checking the scoreboard."
 
-No profanity. At most one emoji. Return ONLY the line itself, no
-quotes, no preamble.
+Bad (too soft / multi-angle mush):
+"They've had history and a nice town but the program has had its ups and downs."
+
+Write ONE funny roast (30-50 words) for {team}.
+
+{_HARD_RULES}
 """
 
 
@@ -1034,13 +1070,15 @@ def generate_dynamic_quip(team: str, api_key: str) -> tuple[str, str] | tuple[No
         return None, None
 
     client = genai.Client(api_key=api_key)
-    # Explicit higher temperature -- previously unset (whatever the
-    # model's own default is), which real output showed converging hard:
-    # some generations for the same team came back character-for-character
-    # identical to each other. 1.3 pushes toward meaningfully more varied
-    # phrasing while staying coherent; QUIP_MODEL_CHAIN's flash-lite
-    # models generally tolerate this range fine for short creative text.
-    gen_config = genai.types.GenerateContentConfig(temperature=1.3)
+    # Explicit higher temperature + top_p. Earlier runs at the model
+    # default (and even at 1.3) converged hard: some generations for the
+    # same team came back character-for-character identical. 1.8 pushes
+    # hard toward varied, surprising phrasing for short creative text;
+    # top_p=0.95 keeps the tail from going fully off the rails. The
+    # quality gate (_quip_violates_rules) absorbs most of the extra
+    # incoherence. QUIP_MODEL_CHAIN's flash-lite models tolerate this
+    # range fine.
+    gen_config = genai.types.GenerateContentConfig(temperature=1.8, top_p=0.95)
 
     last_error = None
     for model_name in QUIP_MODEL_CHAIN:
