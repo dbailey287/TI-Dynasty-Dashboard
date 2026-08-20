@@ -705,20 +705,31 @@ if page == "🏈 Home":
         top25_df = get_top25_data(int(season)) if season != "—" else pd.DataFrame()
         if not top25_df.empty:
             st.subheader("🏈 Top 25 Rankings")
-            top25_sorted = top25_df.sort_values("Rank")
+            top25_sorted = top25_df.sort_values("Rank").reset_index(drop=True)
             rows_html = []
             for _, r in top25_sorted.iterrows():
                 logo = team_logo_tag(r["Team"], 24)
+                is_user_team = r["Team"] in TEAMS
+                row_style = (
+                    "background:rgba(212,175,55,0.12); border-left:3px solid #d4af37; "
+                    "padding-left:6px; border-radius:4px;"
+                    if is_user_team else "padding-left:9px;"
+                )
                 rows_html.append(
-                    '<div style="display:flex; align-items:center; padding:4px 0; '
-                    'border-bottom:1px solid #2a2f3a;">'
+                    f'<div style="display:flex; align-items:center; padding-top:4px; padding-bottom:4px; '
+                    f'border-bottom:1px solid #2a2f3a; break-inside:avoid; {row_style}">'
                     f'<span style="width:26px; font-weight:700;">{int(r["Rank"])}</span>'
                     f'{logo}{team_link(r["Team"])}'
                     f'<span class="stat-label" style="margin-left:auto;">{r["Record"]}</span>'
                     '</div>'
                 )
+            # Two columns via CSS multi-column flow -- break-inside:avoid on
+            # each row (above) keeps a row from getting visually split
+            # across the column break. Fills column 1 top-to-bottom then
+            # continues in column 2, so all 25 rows are visible without
+            # scrolling instead of one long scrollable list.
             st.markdown(
-                f'<div style="max-height:520px; overflow-y:auto;">{"".join(rows_html)}</div>',
+                f'<div style="column-count:2; column-gap:16px;">{"".join(rows_html)}</div>',
                 unsafe_allow_html=True,
             )
             st.divider()
