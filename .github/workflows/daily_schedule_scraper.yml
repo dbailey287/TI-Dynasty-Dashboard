@@ -41,10 +41,26 @@ jobs:
         # to 2026; manual runs use whatever you typed (or the button's default).
         run: python schedule_scraper.py --season ${{ github.event.inputs.season || '2026' }}
 
+      - name: Check for new schedule data
+        id: check_new_data
+        run: |
+          if git status --porcelain -- 'dynasty_data_*.csv' | grep -q .; then
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          fi
+
+      # Only worth recomputing when the schedule scraper actually found
+      # something new -- and only for the season that just ran, since a
+      # full historical rebuild isn't needed on every daily cron tick.
+      - name: Recompute conference records
+        if: steps.check_new_data.outputs.changed == 'true'
+        run: python compute_conference_record.py --season ${{ github.event.inputs.season || '2026' }}
+
       - name: Commit updated data (only if something changed)
         run: |
           git config user.name "schedule-scraper-bot"
           git config user.email "actions@github.com"
-          git add dynasty_data_*.csv processed_images_*.json failed_images_*.json
+          git add dynasty_data_*.csv processed_images_*.json failed_images_*.json conference_record_*.csv
           git diff --cached --quiet || git commit -m "Update schedule data [skip ci]"
           git push

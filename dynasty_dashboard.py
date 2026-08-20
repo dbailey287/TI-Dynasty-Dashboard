@@ -211,6 +211,29 @@ def get_roster_construction_data() -> pd.DataFrame:
     return _load_roster_construction_combined(specs)
 
 
+@st.cache_data(show_spinner="Loading conference record data...")
+def _load_conference_record_combined(file_specs: tuple) -> pd.DataFrame:
+    frames = []
+    for path, _mtime in file_specs:
+        try:
+            frames.append(pd.read_csv(path))
+        except (pd.errors.EmptyDataError, OSError):
+            continue
+    if not frames:
+        return pd.DataFrame()
+    return pd.concat(frames, ignore_index=True)
+
+
+def get_conference_record_data() -> pd.DataFrame:
+    """Every conference_record_<season>.csv found in this folder,
+    combined. Written by compute_conference_record.py, not scraped
+    directly -- see that script's docstring. Same empty-DataFrame-not-
+    error contract as get_recruiting_data()."""
+    local_files = sorted(glob.glob(os.path.join(SCRIPT_DIR, "conference_record_*.csv")))
+    specs = tuple((f, os.path.getmtime(f)) for f in local_files)
+    return _load_conference_record_combined(specs)
+
+
 def not_enough_data_message(what: str = "this chart") -> None:
     """Consistent 'not enough data yet' state, matching the existing
     Fun Stats page's phrasing/styling rather than inventing a new look."""
@@ -373,6 +396,25 @@ PRIMARY_RANK_BASIS = "at_game" if HAS_AT_GAME_DATA else "live"
 team_stats = dl.compute_team_stats(df, TEAMS, rank_basis=PRIMARY_RANK_BASIS)
 team_stats = dl.add_strength_of_schedule(df, team_stats, rank_basis=PRIMARY_RANK_BASIS)
 rated = dl.compute_rating_trend(df, TEAMS, weights, rank_basis=PRIMARY_RANK_BASIS)
+
+# Conference + conference record, scoped to the selected season -- written by
+# compute_conference_record.py, not computed here (see that script's
+# docstring for why: it needs team_conference_<season>.csv, which this
+# dashboard doesn't build). Left-joined so teams with no conference data yet
+# just show blank rather than dropping out of team_stats entirely.
+_conference_record_all = get_conference_record_data()
+_conference_record_season = (
+    _conference_record_all[_conference_record_all["Season"] == selected_season]
+    if not _conference_record_all.empty else pd.DataFrame()
+)
+if not _conference_record_season.empty:
+    team_stats = team_stats.join(
+        _conference_record_season.set_index("Team")[["Conference", "Conf_W", "Conf_L", "Conf_Record"]],
+        how="left",
+    )
+else:
+    for col in ["Conference", "Conf_W", "Conf_L", "Conf_Record"]:
+        team_stats[col] = pd.NA
 
 team_stats_live = dl.compute_team_stats(df, TEAMS, rank_basis="live")
 team_stats_live = dl.add_strength_of_schedule(df, team_stats_live, rank_basis="live")
@@ -756,12 +798,16 @@ elif page == "📊 Standings":
     display["Away"] = display["Away_W"].astype(int).astype(str) + "-" + display["Away_L"].astype(int).astype(str)
     display["vs User"] = display["User_W"].astype(int).astype(str) + "-" + display["User_L"].astype(int).astype(str)
     display["vs CPU"] = display["CPU_W"].astype(int).astype(str) + "-" + display["CPU_L"].astype(int).astype(str)
+    # Conf Record blanks out (rather than showing "nan-nan") for teams with
+    # no conference data yet -- see compute_conference_record.py.
+    display["Conf Record"] = display["Conf_Record"].fillna("—")
+    display["Conference"] = display["Conference"].fillna("—")
     display["PF"] = display["PF"].round(1)
     display["PA"] = display["PA"].round(1)
     display["MOV"] = display["MOV"].round(1)
     display["SOS"] = display["SOS"].round(3)
 
-    show_cols = ["User", "Overall", "Home", "Away", "vs User", "vs CPU", "PF", "PA", "MOV", "SOS"]
+    show_cols = ["User", "Conference", "Overall", "Conf Record", "Home", "Away", "vs User", "vs CPU", "PF", "PA", "MOV", "SOS"]
     display = display.reset_index()[["Team"] + show_cols].sort_values(
         ["Team"], key=lambda s: s.map(lambda t: -team_stats.loc[t, "Win_Pct"] if pd.notna(team_stats.loc[t, "Win_Pct"]) else 999)
     )
@@ -1049,6 +1095,13 @@ elif page == "👤 Teams":
         c10.metric("Avg PA", f"{row['PA']:.1f}" if pd.notna(row["PA"]) else "—")
         c11.metric("Avg Margin", f"{row['MOV']:+.1f}" if pd.notna(row["MOV"]) else "—")
         c12.metric("SOS", f"{row['SOS']:.3f}" if pd.notna(row["SOS"]) else "—")
+
+        # Conference + Conf Record blank out gracefully (rather than "nan")
+        # until team_conference_<season>.csv has this team's conference on
+        # record -- see compute_conference_record.py.
+        c13, c14 = st.columns(2)
+        c13.metric("Conference", row["Conference"] if pd.notna(row["Conference"]) else "—")
+        c14.metric("Conference Record", row["Conf_Record"] if pd.notna(row["Conf_Record"]) else "—")
 
         colored_divider(primary)
         st.subheader("Game Log")
@@ -1575,8 +1628,27 @@ elif page == "📜 Career":
     else:
         career_display["Best Season"] = "—"
 
+    # Conference record is tracked per Team/Season (a team's own history),
+    # so it's rolled up to per-coach here by joining through df_all's
+    # Team+Season->User mapping -- a coach's career conference record is
+    # the sum of every team they controlled's conference record, across
+    # every season loaded. Blank for coaches/seasons with no conference
+    # data yet rather than 0-0, so it reads as "unknown" not "winless".
+    _conference_record_all = get_conference_record_data()
+    if not _conference_record_all.empty:
+        _team_season_user = df_all[["Team", "Season", "User"]].drop_duplicates()
+        _cr_with_user = _conference_record_all.merge(_team_season_user, on=["Team", "Season"], how="left")
+        _career_conf = _cr_with_user.groupby("User")[["Conf_W", "Conf_L"]].sum()
+        career_display = career_display.merge(_career_conf, left_on="User", right_index=True, how="left")
+        career_display["Career Conf Record"] = career_display.apply(
+            lambda r: f"{int(r['Conf_W'])}-{int(r['Conf_L'])}" if pd.notna(r.get("Conf_W")) else "—",
+            axis=1,
+        )
+    else:
+        career_display["Career Conf Record"] = "—"
+
     show_cols = ["User", "Seasons_Played", "Teams_By_Season", "Record", "Win %",
-                 "Ranked_Wins", "UU Record", "Best Season"]
+                 "Ranked_Wins", "UU Record", "Career Conf Record", "Best Season"]
     career_display = career_display[show_cols].rename(columns={
         "Seasons_Played": "Seasons", "Teams_By_Season": "Teams By Season", "Ranked_Wins": "Ranked Wins",
     })

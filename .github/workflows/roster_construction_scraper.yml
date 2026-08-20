@@ -43,7 +43,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           shopt -s nullglob
-          FILES_TO_ADD=(roster_construction_*.csv)
+          FILES_TO_ADD=(roster_construction_*.csv team_conference_*.csv)
           if [ -f processed_roster_images.json ]; then FILES_TO_ADD+=(processed_roster_images.json); fi
           if [ -f failed_roster_images.json ]; then FILES_TO_ADD+=(failed_roster_images.json); fi
           if [ ${#FILES_TO_ADD[@]} -gt 0 ]; then

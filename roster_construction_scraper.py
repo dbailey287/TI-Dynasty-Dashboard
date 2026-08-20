@@ -57,6 +57,7 @@ from PIL import Image
 
 import notify_utils as notify
 import roster
+import conference_utils
 
 logging.basicConfig(level=logging.INFO, format="[%(asctime)s] [%(levelname)-5s] %(message)s", datefmt="%Y-%m-%d %H:%M:%S")
 log = logging.getLogger("roster_construction_scraper")
@@ -282,6 +283,7 @@ async def on_ready():
 
         newly_processed = 0
         all_kept_rows = []
+        all_conference_rows = []  # every team in the screenshot, CPU included -- see conference_utils.py
         for msg in messages:
             for attachment in msg.attachments:
                 if not attachment.content_type or "image" not in attachment.content_type:
@@ -298,6 +300,8 @@ async def on_ready():
                 conference = data.get("conference", "")
                 for team_row in data.get("teams", []):
                     team_name = team_row.get("team", "").strip()
+                    if team_name and conference:
+                        all_conference_rows.append({"Team": team_name, "Conference": conference})
                     if team_name not in user_teams:
                         continue
                     all_kept_rows.append({
@@ -324,6 +328,16 @@ async def on_ready():
             total_in_file = upsert_rows(season, all_kept_rows)
             _run_result["path"] = f"roster_construction_{season}.csv"
             _run_result["total_rows_in_file"] = total_in_file
+
+        if all_conference_rows:
+            total_conf_rows, conflicts = conference_utils.upsert_team_conference_rows(season, all_conference_rows)
+            _run_result["conference_rows_in_file"] = total_conf_rows
+            for c in conflicts:
+                log.warning(
+                    "Conference conflict for %s: was %s, now %s (team_conference_%d.csv) -- "
+                    "likely a vision misread, review if this wasn't an intentional realignment.",
+                    c["Team"], c["Old_Conference"], c["New_Conference"], season,
+                )
 
         _run_result["processed"] = newly_processed
         _run_result["kept_rows"] = len(all_kept_rows)
