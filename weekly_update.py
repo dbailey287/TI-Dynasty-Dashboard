@@ -3,14 +3,29 @@ Weekly Update Poster
 ======================
 Manually triggered (workflow_dispatch only, no schedule -- run this once
 you've confirmed all of a week's data is in: schedule screenshots,
-playoff bracket, recruiting rankings). Posts one Discord message
-containing three rich embeds -- Power Rankings, CFP Rankings, and
-Recruiting Rankings -- to WEEKLY_UPDATE_CHANNEL_ID.
+playoff bracket, recruiting rankings). Posts THREE separate plain-text
+messages to WEEKLY_UPDATE_CHANNEL_ID -- Power Rankings, CFP Rankings,
+and Recruiting Rankings.
 
-Embeds, not plain content, because a single plain-text message caps at
-2000 characters and three ~18-row tables plus headers gets close to that
-fast. Each embed gets its own much larger budget (up to 4096 chars in
-its description alone), so nothing needs trimming to fit.
+Three separate messages, not one message with embeds (an earlier version
+of this script used embeds -- see git history if that's ever wanted
+back). Two reasons for the change:
+  1. Discord doesn't parse markdown -- @mentions included -- inside a
+     backtick code block, whether that block lives in plain content or
+     an embed description. CFP Rankings needs real, clickable/pingable
+     @mentions for user-controlled teams, so that section can't be a
+     code-block table at all.
+  2. Once CFP Rankings drops the aligned table format, there's no longer
+     a strong reason to keep the other two sections bundled into a
+     single message either -- three separate messages are simpler and
+     each stands alone in channel history.
+
+Power Rankings and Recruiting Rankings stay as monospace code-block
+tables (no mentions needed there), so they keep the clean aligned look.
+CFP Rankings is a plain markdown list instead, with real <@user_id>
+mentions for user-controlled teams via roster.py -- rendered as a
+visible tag, but NOT pinging by default (see notify.post_message's
+allow_pings) since this is a recurring recap, not an urgent alert.
 
 Uses dynasty_logic.py directly (unlike the scrapers, which deliberately
 stay standalone) -- this script's whole job is reporting numbers the
@@ -20,7 +35,7 @@ shown on the dashboard.
 
 Any section with no data yet (e.g. no Top 25 poll posted this season, no
 recruiting screenshots processed) is silently skipped rather than
-posting an empty/broken embed -- you'll just get fewer than 3 embeds.
+posting a broken message -- you'll just get fewer than 3 messages.
 
 Required environment variables:
     DISCORD_TOKEN                Bot token (same one everything else uses)
@@ -49,9 +64,9 @@ notify.setup_log_capture()
 DISCORD_TOKEN = os.environ.get("DISCORD_TOKEN")
 CHANNEL_ID = os.environ.get("WEEKLY_UPDATE_CHANNEL_ID")
 
-COLOR_POWER = 0xD4AF37   # gold, matches the dashboard's user-highlight accent
-COLOR_CFP = 0xC0392B     # red
-COLOR_RECRUITING = 0x2E86C1  # blue
+# Whether CFP Rankings' user mentions actually notify people, or just
+# show as a clickable tag. True = real ping/notification.
+CFP_MENTIONS_PING = True
 
 
 def get_current_season(directory: str = ".") -> int | None:
@@ -78,7 +93,7 @@ def resolve_season() -> int | None:
     return get_current_season(".")
 
 
-def build_power_rankings_embed(season: int, directory: str = ".") -> dict | None:
+def build_power_rankings_message(season: int, directory: str = ".") -> str | None:
     path = os.path.join(directory, f"dynasty_data_{season}.csv")
     if not os.path.exists(path):
         log.warning("No dynasty_data_%d.csv found -- skipping Power Rankings.", season)
@@ -101,18 +116,12 @@ def build_power_rankings_embed(season: int, directory: str = ".") -> dict | None
         latest_week_sort = completed["Week_Sort"].max()
         week_label = completed.loc[completed["Week_Sort"] == latest_week_sort, "Week"].iloc[0]
 
-    lines = []
-    for team, row in rated.iterrows():
-        lines.append(f"{int(row['Rank']):>2}. {team:<18} {row['Dynasty_Rating']:>5.1f}")
+    lines = [f"{int(row['Rank']):>2}. {team:<18} {row['Dynasty_Rating']:>5.1f}" for team, row in rated.iterrows()]
 
-    return {
-        "title": f"🏆 Power Rankings — Week {week_label}",
-        "description": "```\n" + "\n".join(lines) + "\n```",
-        "color": COLOR_POWER,
-    }
+    return f"🏆 **Power Rankings — Week {week_label}**\n```\n" + "\n".join(lines) + "\n```"
 
 
-def build_cfp_rankings_embed(season: int, team_to_display: dict, directory: str = ".") -> dict | None:
+def build_cfp_rankings_message(season: int, team_to_user_id: dict, directory: str = ".") -> str | None:
     path = os.path.join(directory, f"top25_rankings_{season}.csv")
     if not os.path.exists(path):
         log.warning("No top25_rankings_%d.csv found -- skipping CFP Rankings.", season)
@@ -126,29 +135,16 @@ def build_cfp_rankings_embed(season: int, team_to_display: dict, directory: str 
         return None
 
     top25 = top25.sort_values("Rank")
-    # User-controlled teams get their display name tagged on; a CPU-only
-    # team (not in team_to_display) just shows the team name, same as
-    # before -- this is what actually distinguishes "one of our teams" at
-    # a glance instead of every row looking identical.
-    team_and_user = []
+    lines = ["🏈 **CFP Rankings**"]
     for _, r in top25.iterrows():
-        display_name = team_to_display.get(r["Team"], "")
-        team_and_user.append(f"{r['Team']} {display_name}".rstrip() if display_name else r["Team"])
-    col_width = max((len(s) for s in team_and_user), default=18)
+        user_id = team_to_user_id.get(r["Team"])
+        tag = f" ({roster.mention(user_id)})" if user_id else ""
+        lines.append(f"**{int(r['Rank'])}.** {r['Team']}{tag} — {r['Record']}")
 
-    lines = [
-        f"{int(r['Rank']):>2}. {label:<{col_width}} {r['Record']:>6}"
-        for (_, r), label in zip(top25.iterrows(), team_and_user)
-    ]
-
-    return {
-        "title": "🏈 CFP Rankings",
-        "description": "```\n" + "\n".join(lines) + "\n```",
-        "color": COLOR_CFP,
-    }
+    return "\n".join(lines)
 
 
-def build_recruiting_embed(season: int, directory: str = ".") -> dict | None:
+def build_recruiting_message(season: int, directory: str = ".") -> str | None:
     path = os.path.join(directory, f"recruiting_ranks_{season}.csv")
     if not os.path.exists(path):
         log.warning("No recruiting_ranks_%d.csv found -- skipping Recruiting Rankings.", season)
@@ -167,11 +163,7 @@ def build_recruiting_embed(season: int, directory: str = ".") -> dict | None:
         for _, r in rec.iterrows()
     ]
 
-    return {
-        "title": f"🎯 Recruiting Rankings — {season} Class",
-        "description": "```\n" + "\n".join(lines) + "\n```",
-        "color": COLOR_RECRUITING,
-    }
+    return f"🎯 **Recruiting Rankings — {season} Class**\n```\n" + "\n".join(lines) + "\n```"
 
 
 def main():
@@ -186,29 +178,28 @@ def main():
         sys.exit(1)
     log.info("Building weekly update for season %d.", season)
 
-    embeds = []
-
-    power_embed = build_power_rankings_embed(season)
-    if power_embed:
-        embeds.append(power_embed)
-
     roster_entries = roster.load_roster(roster.find_roster_csv(".")) if roster.find_roster_csv(".") else []
-    team_to_display = roster.team_to_display_name(roster_entries)
-    cfp_embed = build_cfp_rankings_embed(season, team_to_display)
-    if cfp_embed:
-        embeds.append(cfp_embed)
+    team_to_user_id = roster.team_to_user_id(roster_entries)
 
-    recruiting_embed = build_recruiting_embed(season)
-    if recruiting_embed:
-        embeds.append(recruiting_embed)
+    messages = []
+    power_msg = build_power_rankings_message(season)
+    if power_msg:
+        messages.append(power_msg)
+    cfp_msg = build_cfp_rankings_message(season, team_to_user_id)
+    if cfp_msg:
+        messages.append(cfp_msg)
+    recruiting_msg = build_recruiting_message(season)
+    if recruiting_msg:
+        messages.append(recruiting_msg)
 
-    if not embeds:
+    if not messages:
         log.warning("Nothing to post -- no section had usable data.")
         notify.post_alert(CHANNEL_ID, DISCORD_TOKEN, "⚠️ Weekly update: no data available for any section, nothing posted.")
         sys.exit(0)
 
-    notify.post_embeds(CHANNEL_ID, DISCORD_TOKEN, embeds)
-    log.info("Posted %d embed(s) to channel %s.", len(embeds), CHANNEL_ID)
+    for msg in messages:
+        notify.post_message(CHANNEL_ID, DISCORD_TOKEN, msg, allow_pings=CFP_MENTIONS_PING)
+    log.info("Posted %d message(s) to channel %s.", len(messages), CHANNEL_ID)
 
 
 if __name__ == "__main__":

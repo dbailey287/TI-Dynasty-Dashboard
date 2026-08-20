@@ -30,13 +30,15 @@ def setup_log_capture(level=logging.DEBUG):
 
 
 def _post(channel_id: str, token: str, content: str = None, embeds: list = None,
-          file_bytes: bytes = None, filename: str = None):
+          allowed_mentions: dict = None, file_bytes: bytes = None, filename: str = None):
     headers = {"Authorization": f"Bot {token}"}
     payload = {}
     if content:
         payload["content"] = content
     if embeds:
         payload["embeds"] = embeds
+    if allowed_mentions is not None:
+        payload["allowed_mentions"] = allowed_mentions
     if file_bytes is not None:
         files = {"file": (filename or "log.txt", file_bytes)}
         data = {"payload_json": json.dumps(payload)}
@@ -81,6 +83,26 @@ def post_alert(channel_id: str, token: str, message: str):
         _post(channel_id, token, content=message)
     except Exception as e:
         logging.getLogger(__name__).error("Failed to post alert: %s", e)
+
+
+def post_message(channel_id: str, token: str, content: str, allow_pings: bool = False):
+    """Posts a plain-content message (no embed) -- unlike post_alert(),
+    this is meant for content that may include real @mentions (e.g.
+    <@user_id>), which only render as a clickable tag OUTSIDE a code
+    block/backticks (Discord doesn't parse markdown -- mentions included
+    -- inside backtick-fenced text, embed or not).
+
+    allow_pings controls whether those mentions actually notify the
+    tagged user: False (default) shows the tag/pill but suppresses the
+    notification via Discord's allowed_mentions -- appropriate for a
+    recurring recap post. Set True if you want a real ping."""
+    if not channel_id:
+        return
+    allowed_mentions = {"parse": []} if not allow_pings else {"parse": ["users"]}
+    try:
+        _post(channel_id, token, content=content, allowed_mentions=allowed_mentions)
+    except Exception as e:
+        logging.getLogger(__name__).error("Failed to post message: %s", e)
 
 
 def post_embeds(channel_id: str, token: str, embeds: list, content: str = None):
