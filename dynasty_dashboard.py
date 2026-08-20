@@ -162,6 +162,67 @@ def get_all_seasons_data():
     return _load_combined(specs, is_upload=False), labels, False
 
 
+@st.cache_data(show_spinner="Loading recruiting data...")
+def _load_recruiting_combined(file_specs: tuple) -> pd.DataFrame:
+    """file_specs: tuple of (path, mtime), same mtime-in-cache-key
+    reasoning as _load_combined -- an edited-in-place CSV busts the cache
+    instead of silently serving a stale version."""
+    frames = []
+    for path, _mtime in file_specs:
+        try:
+            frames.append(pd.read_csv(path))
+        except (pd.errors.EmptyDataError, OSError):
+            continue
+    if not frames:
+        return pd.DataFrame()
+    return pd.concat(frames, ignore_index=True)
+
+
+def get_recruiting_data() -> pd.DataFrame:
+    """Every recruiting_ranks_<season>.csv found in this folder, combined.
+    User teams only -- recruiting_scraper.py already filters to that at
+    scrape time, this just loads whatever's there. Empty DataFrame (not
+    None/an error) if no files exist yet -- callers show a "not enough
+    data yet" message rather than crash."""
+    local_files = sorted(glob.glob(os.path.join(SCRIPT_DIR, "recruiting_ranks_*.csv")))
+    specs = tuple((f, os.path.getmtime(f)) for f in local_files)
+    return _load_recruiting_combined(specs)
+
+
+@st.cache_data(show_spinner="Loading roster construction data...")
+def _load_roster_construction_combined(file_specs: tuple) -> pd.DataFrame:
+    frames = []
+    for path, _mtime in file_specs:
+        try:
+            frames.append(pd.read_csv(path))
+        except (pd.errors.EmptyDataError, OSError):
+            continue
+    if not frames:
+        return pd.DataFrame()
+    return pd.concat(frames, ignore_index=True)
+
+
+def get_roster_construction_data() -> pd.DataFrame:
+    """Every roster_construction_<season>.csv found in this folder,
+    combined. Same empty-DataFrame-not-error contract as
+    get_recruiting_data()."""
+    local_files = sorted(glob.glob(os.path.join(SCRIPT_DIR, "roster_construction_*.csv")))
+    specs = tuple((f, os.path.getmtime(f)) for f in local_files)
+    return _load_roster_construction_combined(specs)
+
+
+def not_enough_data_message(what: str = "this chart") -> None:
+    """Consistent 'not enough data yet' state, matching the existing
+    Fun Stats page's phrasing/styling rather than inventing a new look."""
+    st.markdown(
+        f'<div class="stat-label" style="padding:24px; text-align:center; '
+        f'border:1px dashed #2a2f3a; border-radius:10px;">'
+        f'Not enough data yet to fill in {what}. This fills in automatically '
+        f'as more seasons get uploaded.</div>',
+        unsafe_allow_html=True,
+    )
+
+
 def trend_arrow(change: int) -> str:
     if change > 0:
         return f'<span class="rank-up">▲{change}</span>'
@@ -213,6 +274,8 @@ PAGES = [
     "🎲 Fun Stats",
     "📜 Career",
     "🏆 Playoff History",
+    "🎯 Recruiting",
+    "💰 Roster Construction",
     "⚙️ Settings",
 ]
 page = st.sidebar.radio("Navigate", PAGES, label_visibility="collapsed", key="nav_radio")
@@ -1556,6 +1619,251 @@ elif page == "📜 Career":
 elif page == "🏆 Playoff History":
     st.title("🏆 Playoff History")
     st.info("Playoff history isn't available until after your league's first playoff.")
+
+
+# ============================================================================
+# PAGE: RECRUITING
+# ============================================================================
+elif page == "🎯 Recruiting":
+    st.title("🎯 Recruiting")
+
+    recruiting_df = get_recruiting_data()
+
+    if recruiting_df.empty:
+        not_enough_data_message("the Recruiting page")
+    else:
+        seasons_available = sorted(recruiting_df["Season"].unique())
+        latest_season = max(seasons_available)
+
+        # --- Current class snapshot ---
+        st.subheader("Class Snapshot")
+        rec_season = st.selectbox("Season", seasons_available, index=len(seasons_available) - 1, key="recruiting_season_select")
+        snap = recruiting_df[recruiting_df["Season"] == rec_season].copy()
+        snap = snap.sort_values("National_Rank").reset_index(drop=True)
+        snap.insert(0, "User Rank", range(1, len(snap) + 1))
+        snap_display = snap.rename(columns={
+            "National_Rank": "National Rank", "Total_Commits": "Commits", "NIL_Spent": "NIL Spent",
+            "Five_Star": "5★", "Four_Star": "4★", "Three_Star": "3★", "Two_Star": "2★", "One_Star": "1★",
+        })[["User Rank", "Team", "Conference", "National Rank", "Commits", "NIL Spent", "5★", "4★", "3★", "2★", "1★", "PTS"]]
+        st.caption("User Rank is your league's own ordering, derived by re-sorting user teams by National Rank -- not a separate in-game stat.")
+        st.dataframe(snap_display, hide_index=True, width="stretch")
+
+        st.divider()
+
+        # --- Recruiting rank trend line ---
+        st.subheader("Recruiting Rank Trend")
+        if len(seasons_available) < 2:
+            not_enough_data_message("a trend line (needs at least 2 seasons of recruiting data)")
+        else:
+            trend_fig = go.Figure()
+            for team in sorted(recruiting_df["Team"].unique()):
+                team_hist = recruiting_df[recruiting_df["Team"] == team].sort_values("Season")
+                colors = dl.TEAM_COLORS.get(team, ("888888", "FFFFFF"))
+                trend_fig.add_trace(go.Scatter(
+                    x=team_hist["Season"], y=team_hist["National_Rank"], mode="lines+markers",
+                    name=team, line=dict(color=f"#{colors[0]}"),
+                ))
+            trend_fig.update_yaxes(autorange="reversed", title="National Rank (lower is better)")
+            trend_fig.update_xaxes(title="Season", dtick=1)
+            trend_fig.update_layout(height=450, hovermode="x unified", legend=dict(orientation="h", yanchor="bottom", y=-0.3))
+            st.plotly_chart(trend_fig, width="stretch")
+
+        st.divider()
+
+        # --- Class composition, rolling N-season selector ---
+        st.subheader("Class Composition (Talent Still Eligible)")
+        st.caption("Sums star counts across the selected number of most recent classes -- 5 seasons matches the max eligibility window, so this approximates total talent currently on scholarship by star tier.")
+        n_seasons = st.select_slider("Seasons to include", options=[1, 2, 3, 4, 5], value=min(5, len(seasons_available)), key="recruiting_composition_n")
+        window_seasons = sorted(seasons_available)[-n_seasons:]
+        window_df = recruiting_df[recruiting_df["Season"].isin(window_seasons)]
+        star_cols = ["Five_Star", "Four_Star", "Three_Star", "Two_Star", "One_Star"]
+        composition = window_df.groupby("Team")[star_cols].sum().reset_index()
+        composition = composition.sort_values("Five_Star", ascending=False)
+
+        comp_fig = go.Figure()
+        star_labels = {"Five_Star": "5★", "Four_Star": "4★", "Three_Star": "3★", "Two_Star": "2★", "One_Star": "1★"}
+        star_shades = {"Five_Star": "#FFD700", "Four_Star": "#C0C0C0", "Three_Star": "#CD7F32", "Two_Star": "#5B6470", "One_Star": "#3A3F47"}
+        for col in star_cols:
+            comp_fig.add_trace(go.Bar(x=composition["Team"], y=composition[col], name=star_labels[col], marker_color=star_shades[col]))
+        comp_fig.update_layout(barmode="stack", height=450, xaxis_title="", yaxis_title="Total Commits", legend_title="")
+        st.plotly_chart(comp_fig, width="stretch")
+
+        st.divider()
+
+        # --- Wins per NIL dollar ---
+        st.subheader("Wins per NIL Dollar Spent")
+        st.caption("Two separate views, since these track different money -- recruiting NIL (this season's incoming class) vs. roster construction NIL (the whole active roster). Try both, use whichever tells the better story.")
+
+        wins_by_team_season = (
+            df_all[df_all["Status"] == "Completed"]
+            .groupby(["Season", "Team"])
+            .agg(Wins=("Outcome", lambda x: (x == "W").sum()))
+            .reset_index()
+        )
+
+        wpn_col1, wpn_col2 = st.columns(2)
+
+        with wpn_col1:
+            st.markdown("**Wins per Recruiting NIL Dollar**")
+            rec_wins = recruiting_df.merge(wins_by_team_season, on=["Season", "Team"], how="inner")
+            rec_wins = rec_wins[rec_wins["NIL_Spent"] > 0].copy()
+            if rec_wins.empty:
+                not_enough_data_message("this chart (needs a season with both recruiting NIL and completed games)")
+            else:
+                rec_wins["Wins per $1k NIL"] = rec_wins["Wins"] / (rec_wins["NIL_Spent"] / 1000)
+                rec_wins = rec_wins.sort_values("Wins per $1k NIL", ascending=True)
+                fig_rec_wpn = px.bar(rec_wins, x="Wins per $1k NIL", y="Team", orientation="h", color="Season")
+                fig_rec_wpn.update_layout(height=max(300, 28 * len(rec_wins)))
+                st.plotly_chart(fig_rec_wpn, width="stretch")
+
+        with wpn_col2:
+            st.markdown("**Wins per Roster Construction NIL Dollar**")
+            roster_df_for_wpn = get_roster_construction_data()
+            if roster_df_for_wpn.empty:
+                not_enough_data_message("this chart (no roster construction data uploaded yet)")
+            else:
+                roster_wins = roster_df_for_wpn.merge(wins_by_team_season, on=["Season", "Team"], how="inner")
+                roster_wins = roster_wins[roster_wins["NIL_Total"] > 0].copy()
+                if roster_wins.empty:
+                    not_enough_data_message("this chart (needs a season with both roster NIL and completed games)")
+                else:
+                    roster_wins["Wins per $1k NIL"] = roster_wins["Wins"] / (roster_wins["NIL_Total"] / 1000)
+                    roster_wins = roster_wins.sort_values("Wins per $1k NIL", ascending=True)
+                    fig_roster_wpn = px.bar(roster_wins, x="Wins per $1k NIL", y="Team", orientation="h", color="Season")
+                    fig_roster_wpn.update_layout(height=max(300, 28 * len(roster_wins)))
+                    st.plotly_chart(fig_roster_wpn, width="stretch")
+
+        st.divider()
+
+        # --- Most improved recruiter ---
+        st.subheader("Most Improved Recruiter")
+        if len(seasons_available) < 2:
+            not_enough_data_message("year-over-year comparison (needs at least 2 seasons of recruiting data)")
+        else:
+            prior_season = sorted(seasons_available)[-2]
+            cur = recruiting_df[recruiting_df["Season"] == latest_season].set_index("Team")["National_Rank"]
+            prior = recruiting_df[recruiting_df["Season"] == prior_season].set_index("Team")["National_Rank"]
+            common_teams = cur.index.intersection(prior.index)
+            if len(common_teams) == 0:
+                not_enough_data_message("this comparison (no team has recruiting data in both seasons)")
+            else:
+                deltas = (prior[common_teams] - cur[common_teams]).sort_values(ascending=False)  # positive = improved (rank number went down)
+                rows_html = []
+                for team, delta in deltas.items():
+                    prior_r, cur_r = int(prior[team]), int(cur[team])
+                    if delta > 0:
+                        arrow_html = f'<span style="color:#2ecc71; font-weight:700;">▲ +{int(delta)}</span>'
+                    elif delta < 0:
+                        arrow_html = f'<span style="color:#e74c3c; font-weight:700;">▼ {int(delta)}</span>'
+                    else:
+                        arrow_html = '<span style="color:#888;">— 0</span>'
+                    rows_html.append(
+                        '<div style="display:flex; justify-content:space-between; align-items:center; '
+                        'padding:8px 12px; border-bottom:1px solid #2a2f3a;">'
+                        f'<div>{team_logo_tag(team, 22)}<b>{team}</b> '
+                        f'<span class="stat-label">{prior_r} → {cur_r}</span></div>'
+                        f'<div>{arrow_html}</div></div>'
+                    )
+                st.markdown(f'<div>{"".join(rows_html)}</div>', unsafe_allow_html=True)
+
+
+# ============================================================================
+# PAGE: ROSTER CONSTRUCTION
+# ============================================================================
+elif page == "💰 Roster Construction":
+    st.title("💰 Roster Construction")
+
+    roster_df = get_roster_construction_data()
+
+    if roster_df.empty:
+        not_enough_data_message("the Roster Construction page")
+    else:
+        rc_seasons_available = sorted(roster_df["Season"].unique())
+        rc_season = st.selectbox("Season", rc_seasons_available, index=len(rc_seasons_available) - 1, key="roster_construction_season_select")
+        rc_snap = roster_df[roster_df["Season"] == rc_season].copy()
+
+        POSITION_COLS = ["NIL_QB", "NIL_RB", "NIL_WR", "NIL_TE", "NIL_OL", "NIL_DL", "NIL_LB", "NIL_DB", "NIL_KP"]
+        POSITION_LABELS = {"NIL_QB": "QB", "NIL_RB": "RB", "NIL_WR": "WR", "NIL_TE": "TE", "NIL_OL": "OL", "NIL_DL": "DL", "NIL_LB": "LB", "NIL_DB": "DB", "NIL_KP": "K/P"}
+        POSITION_COLORS = {
+            "NIL_QB": "#4C72B0", "NIL_RB": "#55A868", "NIL_WR": "#C44E52", "NIL_TE": "#8172B2", "NIL_OL": "#CCB974",
+            "NIL_DL": "#64B5CD", "NIL_LB": "#937860", "NIL_DB": "#DA8BC3", "NIL_KP": "#8C8C8C",
+        }
+
+        # --- Positional fingerprint, $/% toggle ---
+        st.subheader("Positional Investment Fingerprint")
+        fp_mode = st.radio("Show as", ["Dollars", "Percent of Total"], horizontal=True, key="roster_fingerprint_mode")
+        fp_df = rc_snap.set_index("Team")[POSITION_COLS].copy()
+        fp_df = fp_df.loc[rc_snap.sort_values("NIL_Total", ascending=False)["Team"]]  # order by total spend
+        if fp_mode == "Percent of Total":
+            row_totals = fp_df.sum(axis=1).replace(0, pd.NA)
+            fp_df = fp_df.div(row_totals, axis=0) * 100
+
+        fp_fig = go.Figure()
+        for col in POSITION_COLS:
+            fp_fig.add_trace(go.Bar(x=fp_df.index, y=fp_df[col], name=POSITION_LABELS[col], marker_color=POSITION_COLORS[col]))
+        fp_fig.update_layout(
+            barmode="stack", height=450, xaxis_title="", legend_title="",
+            yaxis_title=("% of Total NIL" if fp_mode == "Percent of Total" else "NIL Spent ($)"),
+        )
+        st.plotly_chart(fp_fig, width="stretch")
+
+        st.divider()
+
+        # --- Offense vs Defense vs Special Teams ---
+        st.subheader("Offense vs. Defense vs. Special Teams")
+        OFFENSE_COLS = ["NIL_QB", "NIL_RB", "NIL_WR", "NIL_TE", "NIL_OL"]
+        DEFENSE_COLS = ["NIL_DL", "NIL_LB", "NIL_DB"]
+        ST_COLS = ["NIL_KP"]
+        odst = rc_snap[["Team"]].copy()
+        odst["Offense"] = rc_snap[OFFENSE_COLS].sum(axis=1)
+        odst["Defense"] = rc_snap[DEFENSE_COLS].sum(axis=1)
+        odst["Special Teams"] = rc_snap[ST_COLS].sum(axis=1)
+        odst = odst.sort_values("Offense", ascending=False)
+        odst_fig = go.Figure()
+        odst_fig.add_trace(go.Bar(x=odst["Team"], y=odst["Offense"], name="Offense", marker_color="#4C72B0"))
+        odst_fig.add_trace(go.Bar(x=odst["Team"], y=odst["Defense"], name="Defense", marker_color="#C44E52"))
+        odst_fig.add_trace(go.Bar(x=odst["Team"], y=odst["Special Teams"], name="Special Teams", marker_color="#8C8C8C"))
+        odst_fig.update_layout(barmode="group", height=420, xaxis_title="", yaxis_title="NIL Spent ($)", legend_title="")
+        st.plotly_chart(odst_fig, width="stretch")
+        st.caption("Special teams NIL is genuinely small for most programs in this league -- that's real, not a data gap.")
+
+        st.divider()
+
+        # --- Analytical: NIL spend vs real results ---
+        st.subheader("Does the Spending Show Up on the Field?")
+        st.caption("Offensive NIL vs. points scored, defensive NIL vs. points allowed -- one dot per team-season across all uploaded years, not just the season selected above.")
+
+        season_stats = (
+            df_all[df_all["Status"] == "Completed"]
+            .groupby(["Season", "Team"])
+            .agg(PPG=("Team_Score", "mean"), PA=("Opponent_Score", "mean"))
+            .reset_index()
+        )
+        roster_od = roster_df.copy()
+        roster_od["Offense_NIL"] = roster_od[OFFENSE_COLS].sum(axis=1)
+        roster_od["Defense_NIL"] = roster_od[DEFENSE_COLS].sum(axis=1)
+        analytical = roster_od.merge(season_stats, on=["Season", "Team"], how="inner")
+
+        if analytical.empty:
+            not_enough_data_message("this chart (needs seasons with both roster construction and completed games)")
+        else:
+            an_col1, an_col2 = st.columns(2)
+            with an_col1:
+                fig_off = px.scatter(
+                    analytical, x="Offense_NIL", y="PPG", color="Team", hover_data=["Season"],
+                    labels={"Offense_NIL": "Offensive NIL Spend ($)", "PPG": "Points Scored per Game"},
+                )
+                fig_off.update_layout(height=420, showlegend=False)
+                st.plotly_chart(fig_off, width="stretch")
+                st.caption("Offensive NIL vs. points scored")
+            with an_col2:
+                fig_def = px.scatter(
+                    analytical, x="Defense_NIL", y="PA", color="Team", hover_data=["Season"],
+                    labels={"Defense_NIL": "Defensive NIL Spend ($)", "PA": "Points Allowed per Game"},
+                )
+                fig_def.update_layout(height=420, showlegend=False)
+                st.plotly_chart(fig_def, width="stretch")
+                st.caption("Defensive NIL vs. points allowed (lower is better defense)")
 
 
 # ============================================================================
