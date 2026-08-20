@@ -1762,51 +1762,6 @@ elif page == "🎯 Recruiting":
 
         st.divider()
 
-        # --- Wins per NIL dollar ---
-        st.subheader("Wins per NIL Dollar Spent")
-        st.caption("Two separate views, since these track different money -- recruiting NIL (this season's incoming class) vs. roster construction NIL (the whole active roster). Try both, use whichever tells the better story.")
-
-        wins_by_team_season = (
-            df_all[df_all["Status"] == "Completed"]
-            .groupby(["Season", "Team"])
-            .agg(Wins=("Outcome", lambda x: (x == "W").sum()))
-            .reset_index()
-        )
-
-        wpn_col1, wpn_col2 = st.columns(2)
-
-        with wpn_col1:
-            st.markdown("**Wins per Recruiting NIL Dollar**")
-            rec_wins = recruiting_df.merge(wins_by_team_season, on=["Season", "Team"], how="inner")
-            rec_wins = rec_wins[rec_wins["NIL_Spent"] > 0].copy()
-            if rec_wins.empty:
-                not_enough_data_message("this chart (needs a season with both recruiting NIL and completed games)")
-            else:
-                rec_wins["Wins per $1k NIL"] = rec_wins["Wins"] / (rec_wins["NIL_Spent"] / 1000)
-                rec_wins = rec_wins.sort_values("Wins per $1k NIL", ascending=True)
-                fig_rec_wpn = px.bar(rec_wins, x="Wins per $1k NIL", y="Team", orientation="h", color="Season")
-                fig_rec_wpn.update_layout(height=max(300, 28 * len(rec_wins)))
-                st.plotly_chart(fig_rec_wpn, width="stretch")
-
-        with wpn_col2:
-            st.markdown("**Wins per Roster Construction NIL Dollar**")
-            roster_df_for_wpn = get_roster_construction_data()
-            if roster_df_for_wpn.empty:
-                not_enough_data_message("this chart (no roster construction data uploaded yet)")
-            else:
-                roster_wins = roster_df_for_wpn.merge(wins_by_team_season, on=["Season", "Team"], how="inner")
-                roster_wins = roster_wins[roster_wins["NIL_Total"] > 0].copy()
-                if roster_wins.empty:
-                    not_enough_data_message("this chart (needs a season with both roster NIL and completed games)")
-                else:
-                    roster_wins["Wins per $1k NIL"] = roster_wins["Wins"] / (roster_wins["NIL_Total"] / 1000)
-                    roster_wins = roster_wins.sort_values("Wins per $1k NIL", ascending=True)
-                    fig_roster_wpn = px.bar(roster_wins, x="Wins per $1k NIL", y="Team", orientation="h", color="Season")
-                    fig_roster_wpn.update_layout(height=max(300, 28 * len(roster_wins)))
-                    st.plotly_chart(fig_roster_wpn, width="stretch")
-
-        st.divider()
-
         # --- Most improved recruiter ---
         st.subheader("Most Improved Recruiter")
         if len(seasons_available) < 2:
