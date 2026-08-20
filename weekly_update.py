@@ -40,6 +40,7 @@ import pandas as pd
 
 import dynasty_logic as dl
 import notify_utils as notify
+import roster
 
 logging.basicConfig(level=logging.INFO, format="[%(asctime)s] [%(levelname)-5s] %(message)s", datefmt="%Y-%m-%d %H:%M:%S")
 log = logging.getLogger("weekly_update")
@@ -111,7 +112,7 @@ def build_power_rankings_embed(season: int, directory: str = ".") -> dict | None
     }
 
 
-def build_cfp_rankings_embed(season: int, directory: str = ".") -> dict | None:
+def build_cfp_rankings_embed(season: int, team_to_display: dict, directory: str = ".") -> dict | None:
     path = os.path.join(directory, f"top25_rankings_{season}.csv")
     if not os.path.exists(path):
         log.warning("No top25_rankings_%d.csv found -- skipping CFP Rankings.", season)
@@ -125,7 +126,20 @@ def build_cfp_rankings_embed(season: int, directory: str = ".") -> dict | None:
         return None
 
     top25 = top25.sort_values("Rank")
-    lines = [f"{int(r['Rank']):>2}. {r['Team']:<18} {r['Record']:>6}" for _, r in top25.iterrows()]
+    # User-controlled teams get their display name tagged on; a CPU-only
+    # team (not in team_to_display) just shows the team name, same as
+    # before -- this is what actually distinguishes "one of our teams" at
+    # a glance instead of every row looking identical.
+    team_and_user = []
+    for _, r in top25.iterrows():
+        display_name = team_to_display.get(r["Team"], "")
+        team_and_user.append(f"{r['Team']} {display_name}".rstrip() if display_name else r["Team"])
+    col_width = max((len(s) for s in team_and_user), default=18)
+
+    lines = [
+        f"{int(r['Rank']):>2}. {label:<{col_width}} {r['Record']:>6}"
+        for (_, r), label in zip(top25.iterrows(), team_and_user)
+    ]
 
     return {
         "title": "🏈 CFP Rankings",
@@ -173,10 +187,20 @@ def main():
     log.info("Building weekly update for season %d.", season)
 
     embeds = []
-    for builder in (build_power_rankings_embed, build_cfp_rankings_embed, build_recruiting_embed):
-        embed = builder(season)
-        if embed:
-            embeds.append(embed)
+
+    power_embed = build_power_rankings_embed(season)
+    if power_embed:
+        embeds.append(power_embed)
+
+    roster_entries = roster.load_roster(roster.find_roster_csv(".")) if roster.find_roster_csv(".") else []
+    team_to_display = roster.team_to_display_name(roster_entries)
+    cfp_embed = build_cfp_rankings_embed(season, team_to_display)
+    if cfp_embed:
+        embeds.append(cfp_embed)
+
+    recruiting_embed = build_recruiting_embed(season)
+    if recruiting_embed:
+        embeds.append(recruiting_embed)
 
     if not embeds:
         log.warning("Nothing to post -- no section had usable data.")
