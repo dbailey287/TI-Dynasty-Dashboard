@@ -57,10 +57,17 @@ jobs:
         if: steps.check_new_data.outputs.changed == 'true'
         run: python compute_conference_record.py --season ${{ github.event.inputs.season || '2026' }}
 
+      # Unconditional (not gated on check_new_data) -- unlike conference
+      # records this doesn't depend on dynasty_data_*.csv at all, only on
+      # top25_rankings_history_<season>.csv, and it's cheap (pure pandas,
+      # no API calls) so there's no cost to just always running it.
+      - name: Recompute Top 25 weeks-ranked
+        run: python compute_top25_weeks.py --season ${{ github.event.inputs.season || '2026' }}
+
       - name: Commit updated data (only if something changed)
         run: |
           git config user.name "schedule-scraper-bot"
           git config user.email "actions@github.com"
-          git add dynasty_data_*.csv processed_images_*.json failed_images_*.json conference_record_*.csv top25_rankings_*.csv
+          git add dynasty_data_*.csv processed_images_*.json failed_images_*.json conference_record_*.csv top25_rankings_*.csv top25_weeks_*.csv
           git diff --cached --quiet || git commit -m "Update schedule data [skip ci]"
           git push

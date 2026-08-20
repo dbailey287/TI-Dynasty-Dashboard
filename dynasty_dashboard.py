@@ -234,6 +234,23 @@ def get_conference_record_data() -> pd.DataFrame:
     return _load_conference_record_combined(specs)
 
 
+def get_top25_weeks_data() -> pd.DataFrame:
+    """Every top25_weeks_<season>.csv found in this folder, combined.
+    Written by compute_top25_weeks.py, not scraped directly -- see that
+    script's docstring. Same empty-DataFrame-not-error contract as
+    get_recruiting_data()."""
+    local_files = sorted(glob.glob(os.path.join(SCRIPT_DIR, "top25_weeks_*.csv")))
+    frames = []
+    for f in local_files:
+        try:
+            frames.append(pd.read_csv(f))
+        except (pd.errors.EmptyDataError, OSError):
+            continue
+    if not frames:
+        return pd.DataFrame()
+    return pd.concat(frames, ignore_index=True)
+
+
 def get_top25_data(season) -> pd.DataFrame:
     """top25_rankings_<season>.csv, if it exists -- written by
     schedule_scraper.py when it detects a Top 25 rankings screenshot (see
@@ -429,6 +446,24 @@ if not _conference_record_season.empty:
     )
 else:
     for col in ["Conference", "Conf_W", "Conf_L", "Conf_Record"]:
+        team_stats[col] = pd.NA
+
+# Top 25 weeks-ranked, scoped to the selected season -- written by
+# compute_top25_weeks.py from top25_rankings_history_<season>.csv (see
+# schedule_scraper.py's append_top25_history()). Same left-join-and-blank
+# contract as conference record above.
+_top25_weeks_all = get_top25_weeks_data()
+_top25_weeks_season = (
+    _top25_weeks_all[_top25_weeks_all["Season"] == selected_season]
+    if not _top25_weeks_all.empty else pd.DataFrame()
+)
+if not _top25_weeks_season.empty:
+    team_stats = team_stats.join(
+        _top25_weeks_season.set_index("Team")[["Polls_Ranked_Top25", "Polls_Ranked_Top10", "Total_Polls_This_Season"]],
+        how="left",
+    )
+else:
+    for col in ["Polls_Ranked_Top25", "Polls_Ranked_Top10", "Total_Polls_This_Season"]:
         team_stats[col] = pd.NA
 
 team_stats_live = dl.compute_team_stats(df, TEAMS, rank_basis="live")
@@ -838,12 +873,16 @@ elif page == "📊 Standings":
     # no conference data yet -- see compute_conference_record.py.
     display["Conf Record"] = display["Conf_Record"].fillna("—")
     display["Conference"] = display["Conference"].fillna("—")
+    # Weeks Top25/Top10 blank out the same way -- see compute_top25_weeks.py.
+    display["Weeks Top25"] = display["Polls_Ranked_Top25"].apply(lambda v: str(int(v)) if pd.notna(v) else "—")
+    display["Weeks Top10"] = display["Polls_Ranked_Top10"].apply(lambda v: str(int(v)) if pd.notna(v) else "—")
     display["PF"] = display["PF"].round(1)
     display["PA"] = display["PA"].round(1)
     display["MOV"] = display["MOV"].round(1)
     display["SOS"] = display["SOS"].round(3)
 
-    show_cols = ["User", "Conference", "Overall", "Conf Record", "Home", "Away", "vs User", "vs CPU", "PF", "PA", "MOV", "SOS"]
+    show_cols = ["User", "Conference", "Overall", "Conf Record", "Weeks Top25", "Weeks Top10",
+                 "Home", "Away", "vs User", "vs CPU", "PF", "PA", "MOV", "SOS"]
     display = display.reset_index()[["Team"] + show_cols].sort_values(
         ["Team"], key=lambda s: s.map(lambda t: -team_stats.loc[t, "Win_Pct"] if pd.notna(team_stats.loc[t, "Win_Pct"]) else 999)
     )
@@ -1138,6 +1177,19 @@ elif page == "👤 Teams":
         c13, c14 = st.columns(2)
         c13.metric("Conference", row["Conference"] if pd.notna(row["Conference"]) else "—")
         c14.metric("Conference Record", row["Conf_Record"] if pd.notna(row["Conf_Record"]) else "—")
+
+        # Weeks Ranked blank out the same way until a Top 25 poll history
+        # exists for this season -- see compute_top25_weeks.py. Shown as
+        # "X of Y polls" so a low count reads as "early in the season" vs
+        # "never ranked" rather than looking identical.
+        c15, c16 = st.columns(2)
+        total_polls = row["Total_Polls_This_Season"]
+        if pd.notna(total_polls):
+            c15.metric("Weeks Ranked (Top 25)", f"{int(row['Polls_Ranked_Top25'])} of {int(total_polls)}")
+            c16.metric("Weeks Ranked (Top 10)", f"{int(row['Polls_Ranked_Top10'])} of {int(total_polls)}")
+        else:
+            c15.metric("Weeks Ranked (Top 25)", "—")
+            c16.metric("Weeks Ranked (Top 10)", "—")
 
         colored_divider(primary)
         st.subheader("Game Log")
@@ -1683,8 +1735,34 @@ elif page == "📜 Career":
     else:
         career_display["Career Conf Record"] = "—"
 
+    # Same rollup pattern for Top 25 weeks-ranked -- summed across every
+    # team/season a coach controlled, via the same Team+Season->User
+    # mapping. Total_Polls_This_Season is summed too so the display can
+    # show "X of Y" rather than a bare count with no denominator.
+    _top25_weeks_all = get_top25_weeks_data()
+    if not _top25_weeks_all.empty:
+        _tw_with_user = _top25_weeks_all.merge(_team_season_user, on=["Team", "Season"], how="left")
+        _career_top25 = _tw_with_user.groupby("User")[
+            ["Polls_Ranked_Top25", "Polls_Ranked_Top10", "Total_Polls_This_Season"]
+        ].sum()
+        career_display = career_display.merge(_career_top25, left_on="User", right_index=True, how="left")
+        career_display["Career Weeks Top25"] = career_display.apply(
+            lambda r: f"{int(r['Polls_Ranked_Top25'])} of {int(r['Total_Polls_This_Season'])}"
+            if pd.notna(r.get("Polls_Ranked_Top25")) else "—",
+            axis=1,
+        )
+        career_display["Career Weeks Top10"] = career_display.apply(
+            lambda r: f"{int(r['Polls_Ranked_Top10'])} of {int(r['Total_Polls_This_Season'])}"
+            if pd.notna(r.get("Polls_Ranked_Top10")) else "—",
+            axis=1,
+        )
+    else:
+        career_display["Career Weeks Top25"] = "—"
+        career_display["Career Weeks Top10"] = "—"
+
     show_cols = ["User", "Seasons_Played", "Teams_By_Season", "Record", "Win %",
-                 "Ranked_Wins", "UU Record", "Career Conf Record", "Best Season"]
+                 "Ranked_Wins", "UU Record", "Career Conf Record",
+                 "Career Weeks Top25", "Career Weeks Top10", "Best Season"]
     career_display = career_display[show_cols].rename(columns={
         "Seasons_Played": "Seasons", "Teams_By_Season": "Teams By Season", "Ranked_Wins": "Ranked Wins",
     })

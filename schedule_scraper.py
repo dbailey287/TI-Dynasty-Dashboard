@@ -540,7 +540,12 @@ def save_top25_rankings(season: int, rows: list[dict], directory: str = ".") -> 
     snapshot as of whenever this screenshot was posted (same idea as
     bracket_scraper.py's bracket state), not incremental per-team data like
     the rest of this file. Silently no-ops on an empty/unparseable list
-    rather than clobbering a good existing file with nothing."""
+    rather than clobbering a good existing file with nothing.
+
+    This is the "what does the poll look like right now" view (used by the
+    Home page). append_top25_history() below is the separate "every poll
+    that's ever come through" log used to count weeks-ranked -- the two
+    serve different purposes and are both written on every new poll."""
     if not rows:
         return
     path = os.path.join(directory, f"top25_rankings_{season}.csv")
@@ -551,6 +556,42 @@ def save_top25_rankings(season: int, rows: list[dict], directory: str = ".") -> 
         for row in rows_sorted:
             writer.writerow({"Season": season, "Rank": row["Rank"], "Team": row["Team"], "Record": row["Record"]})
     log.info("Wrote %d row(s) to %s.", len(rows_sorted), path)
+
+
+def append_top25_history(season: int, rows: list[dict], directory: str = ".") -> None:
+    """Appends one new poll snapshot (auto-numbered Poll_Number) to
+    top25_rankings_history_<season>.csv -- this is what
+    compute_top25_weeks.py counts "weeks ranked" from. Deliberately counts
+    POLLS, not schedule weeks: the Top 25 screenshot carries no week label
+    of its own, and inferring one from dynasty_data_<season>.csv would be
+    fragile (skipped weeks, multiple uploads same week, etc.). One poll per
+    upload, uploaded roughly weekly, is close enough and can't drift."""
+    if not rows:
+        return
+    path = os.path.join(directory, f"top25_rankings_history_{season}.csv")
+    next_poll_number = 1
+    if os.path.exists(path):
+        try:
+            with open(path, "r", newline="", encoding="utf-8") as f:
+                existing_polls = [int(r["Poll_Number"]) for r in csv.DictReader(f) if r.get("Poll_Number")]
+            if existing_polls:
+                next_poll_number = max(existing_polls) + 1
+        except (OSError, ValueError):
+            pass  # start fresh at 1 rather than blocking on a corrupt file
+
+    file_exists = os.path.exists(path)
+    scraped_date = datetime.datetime.now().strftime("%Y-%m-%d")
+    rows_sorted = sorted(rows, key=lambda r: (r["Rank"] is None, r["Rank"]))
+    with open(path, "a", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=["Season", "Poll_Number", "Scraped_Date", "Rank", "Team", "Record"])
+        if not file_exists:
+            writer.writeheader()
+        for row in rows_sorted:
+            writer.writerow({
+                "Season": season, "Poll_Number": next_poll_number, "Scraped_Date": scraped_date,
+                "Rank": row["Rank"], "Team": row["Team"], "Record": row["Record"],
+            })
+    log.info("Appended poll #%d (%d rows) to %s.", next_poll_number, len(rows_sorted), path)
 
 
 def get_sort_key(week_val) -> int:
@@ -890,10 +931,11 @@ async def on_ready():
                     continue
 
                 if top25_rows:
-                    # Full-overwrite, not merged into all_records/CSV_FILE --
-                    # a Top 25 poll isn't per-team schedule data, see
-                    # save_top25_rankings()'s docstring.
+                    # Full-overwrite "current" snapshot, plus an appended
+                    # history entry -- see save_top25_rankings() and
+                    # append_top25_history()'s docstrings for why both.
                     save_top25_rankings(SEASON, top25_rows)
+                    append_top25_history(SEASON, top25_rows)
                     newly_processed.append(attachment.id)
                     processed_ids.add(attachment.id)
                     save_processed_ids(processed_ids)
@@ -1038,6 +1080,7 @@ async def retry_failed(processed_ids: set, failed_images: dict) -> None:
             attachment_id, top25_rows = payload
             still_failed.pop(aid, None)
             save_top25_rankings(SEASON, top25_rows)
+            append_top25_history(SEASON, top25_rows)
             newly_processed.append(attachment_id)
             processed_ids.add(attachment_id)
             save_processed_ids(processed_ids)
