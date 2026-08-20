@@ -37,6 +37,7 @@ from zoneinfo import ZoneInfo
 import requests
 
 import notify_utils as notify
+import roster
 import rta_logic as rl
 
 DISCORD_TOKEN = os.environ.get("DISCORD_TOKEN")
@@ -73,7 +74,7 @@ def post_message(channel_id: str, token: str, content: str):
 
 
 def format_reminder_message(not_ready_ids: list, id_to_team: dict, week_label: str,
-                             matchups: dict, main_channel_id: str) -> str:
+                             matchups: dict, main_channel_id: str, team_emoji: dict = None) -> str:
     intro = rl.pick_nag_intro().rstrip(".")
     if week_label != "?":
         intro += f" on **Week {week_label}**."
@@ -81,7 +82,7 @@ def format_reminder_message(not_ready_ids: list, id_to_team: dict, week_label: s
         intro += "."
 
     lines = [intro, "", "Still waiting on:"]
-    lines.extend(rl.format_matchup_lines(not_ready_ids, id_to_team, matchups))
+    lines.extend(rl.format_matchup_lines(not_ready_ids, id_to_team, matchups, team_emoji))
 
     lines.append("")
     if main_channel_id:
@@ -110,11 +111,12 @@ def run() -> str:
     if missing:
         raise RuntimeError(f"Missing environment variable(s): {', '.join(missing)}")
 
-    roster = rl.load_active_roster(".")
-    if not roster:
+    roster_entries = rl.load_active_roster(".")
+    if not roster_entries:
         raise RuntimeError("Couldn't find/load Server_Members_Teams.csv (via roster.py).")
-    tracked_ids = {r["user_id"] for r in roster}
-    id_to_team = {r["user_id"]: r["team"] for r in roster}
+    tracked_ids = {r["user_id"] for r in roster_entries}
+    id_to_team = {r["user_id"]: r["team"] for r in roster_entries}
+    team_emoji = roster.load_team_emoji_map(".")
 
     state = rl.load_state(STATE_FILE)
     ready = set(state.get("ready_user_ids", []))
@@ -128,7 +130,7 @@ def run() -> str:
     week_label, matchups = rl.get_current_week_matchups(".")
     log.info("Week label: %s. Matchups found for %d team(s).", week_label, len(matchups))
 
-    message = format_reminder_message(not_ready, id_to_team, week_label, matchups, MAIN_CHANNEL_ID)
+    message = format_reminder_message(not_ready, id_to_team, week_label, matchups, MAIN_CHANNEL_ID, team_emoji)
     for cid in ANNOUNCE_CHANNEL_IDS:
         post_message(cid, DISCORD_TOKEN, message)
     log.info("Reminder posted (%d tagged).", len(not_ready))

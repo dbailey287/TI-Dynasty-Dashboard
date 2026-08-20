@@ -1222,15 +1222,26 @@ def process_rta_messages(messages: list, tracked_user_ids: set, id_to_team: dict
     return state, hits
 
 
-def format_matchup_lines(user_ids: list, id_to_team: dict, matchups: dict) -> list:
+def format_matchup_lines(user_ids: list, id_to_team: dict, matchups: dict, team_emoji: dict = None) -> list:
     """
     Builds one formatted line per user ID, showing their current-week
     matchup and flagging User vs User games specially. Shared between the
     RTA reminder ("who's not ready, and who are they playing") and the
     advance announcement ("here's everyone's new matchup").
+
+    team_emoji (from roster.load_team_emoji_map()) prefixes each team
+    name with its custom logo emoji when known -- optional and defaults
+    to None/plain text so existing callers that don't pass it keep
+    working unchanged.
     """
+    team_emoji = team_emoji or {}
+
     def sort_key(uid):
         return id_to_team.get(uid) or uid
+
+    def logo_prefix(team: str) -> str:
+        emoji = team_emoji.get(team)
+        return f"{emoji} " if emoji else ""
 
     lines = []
     for uid in sorted(user_ids, key=sort_key):
@@ -1238,15 +1249,15 @@ def format_matchup_lines(user_ids: list, id_to_team: dict, matchups: dict) -> li
         mention = f"<@{uid}>"
         matchup = matchups.get(team) if team else None
         if matchup and matchup.get("is_bye"):
-            lines.append(f"😴 {mention} — {team} — **BYE week**")
+            lines.append(f"😴 {mention} — {logo_prefix(team)}{team} — **BYE week**")
         elif matchup and matchup["opponent"] != "?":
             opp = matchup["opponent"]
             if matchup["opponent_is_user"]:
-                lines.append(f"🔥 {mention} — **{team}** vs **{opp}** — USER MATCHUP!")
+                lines.append(f"🔥 {mention} — {logo_prefix(team)}**{team}** vs {logo_prefix(opp)}**{opp}** — USER MATCHUP!")
             else:
-                lines.append(f"- {mention} — {team} vs {opp}")
+                lines.append(f"- {mention} — {logo_prefix(team)}{team} vs {logo_prefix(opp)}{opp}")
         elif team:
-            lines.append(f"- {mention} — {team}")
+            lines.append(f"- {mention} — {logo_prefix(team)}{team}")
         else:
             lines.append(f"- {mention}")
     return lines

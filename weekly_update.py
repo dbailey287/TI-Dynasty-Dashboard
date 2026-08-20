@@ -20,12 +20,18 @@ back). Two reasons for the change:
      single message either -- three separate messages are simpler and
      each stands alone in channel history.
 
-Power Rankings and Recruiting Rankings stay as monospace code-block
-tables (no mentions needed there), so they keep the clean aligned look.
-CFP Rankings is a plain markdown list instead, with real <@user_id>
-mentions for user-controlled teams via roster.py -- rendered as a
-visible tag, but NOT pinging by default (see notify.post_message's
-allow_pings) since this is a recurring recap, not an urgent alert.
+Power Rankings, CFP Rankings, and Recruiting Rankings are all plain
+markdown lists now (no code-block tables) -- both real <@user_id>
+mentions AND custom team-logo emoji only render inside plain message
+text, never inside a backtick code block, which Discord treats as
+literal unstyled text. CFP Rankings additionally tags user-controlled
+teams with a real mention via roster.py -- rendered as a visible tag,
+but NOT pinging by default (see notify.post_message's allow_pings)
+since this is a recurring recap, not an urgent alert.
+
+Team logos come from team_emoji_map.json (custom Discord server emoji,
+see upload_team_emoji.py) -- only your user-controlled teams have one
+uploaded, so CPU opponents in CFP Rankings just show plain text.
 
 Uses dynasty_logic.py directly (unlike the scrapers, which deliberately
 stay standalone) -- this script's whole job is reporting numbers the
@@ -93,7 +99,7 @@ def resolve_season() -> int | None:
     return get_current_season(".")
 
 
-def build_power_rankings_message(season: int, directory: str = ".") -> str | None:
+def build_power_rankings_message(season: int, team_emoji: dict, directory: str = ".") -> str | None:
     path = os.path.join(directory, f"dynasty_data_{season}.csv")
     if not os.path.exists(path):
         log.warning("No dynasty_data_%d.csv found -- skipping Power Rankings.", season)
@@ -116,12 +122,16 @@ def build_power_rankings_message(season: int, directory: str = ".") -> str | Non
         latest_week_sort = completed["Week_Sort"].max()
         week_label = completed.loc[completed["Week_Sort"] == latest_week_sort, "Week"].iloc[0]
 
-    lines = [f"{int(row['Rank']):>2}. {team:<18} {row['Dynasty_Rating']:>5.1f}" for team, row in rated.iterrows()]
+    lines = [f"🏆 **Power Rankings — Week {week_label}**"]
+    for team, row in rated.iterrows():
+        logo = team_emoji.get(team, "")
+        prefix = f"{logo} " if logo else ""
+        lines.append(f"**{int(row['Rank'])}.** {prefix}{team} — {row['Dynasty_Rating']:.1f}")
 
-    return f"🏆 **Power Rankings — Week {week_label}**\n```\n" + "\n".join(lines) + "\n```"
+    return "\n".join(lines)
 
 
-def build_cfp_rankings_message(season: int, team_to_user_id: dict, directory: str = ".") -> str | None:
+def build_cfp_rankings_message(season: int, team_to_user_id: dict, team_emoji: dict, directory: str = ".") -> str | None:
     path = os.path.join(directory, f"top25_rankings_{season}.csv")
     if not os.path.exists(path):
         log.warning("No top25_rankings_%d.csv found -- skipping CFP Rankings.", season)
@@ -137,14 +147,17 @@ def build_cfp_rankings_message(season: int, team_to_user_id: dict, directory: st
     top25 = top25.sort_values("Rank")
     lines = ["🏈 **CFP Rankings**"]
     for _, r in top25.iterrows():
-        user_id = team_to_user_id.get(r["Team"])
+        team = r["Team"]
+        logo = team_emoji.get(team, "")
+        prefix = f"{logo} " if logo else ""
+        user_id = team_to_user_id.get(team)
         tag = f" ({roster.mention(user_id)})" if user_id else ""
-        lines.append(f"**{int(r['Rank'])}.** {r['Team']}{tag} — {r['Record']}")
+        lines.append(f"**{int(r['Rank'])}.** {prefix}{team}{tag} — {r['Record']}")
 
     return "\n".join(lines)
 
 
-def build_recruiting_message(season: int, directory: str = ".") -> str | None:
+def build_recruiting_message(season: int, team_emoji: dict, directory: str = ".") -> str | None:
     path = os.path.join(directory, f"recruiting_ranks_{season}.csv")
     if not os.path.exists(path):
         log.warning("No recruiting_ranks_%d.csv found -- skipping Recruiting Rankings.", season)
@@ -158,12 +171,14 @@ def build_recruiting_message(season: int, directory: str = ".") -> str | None:
         return None
 
     rec = rec.sort_values("National_Rank")
-    lines = [
-        f"{int(r['National_Rank']):>3}. {r['Team']:<18} {int(r['Total_Commits']):>2} commits"
-        for _, r in rec.iterrows()
-    ]
+    lines = [f"🎯 **Recruiting Rankings — {season} Class**"]
+    for _, r in rec.iterrows():
+        team = r["Team"]
+        logo = team_emoji.get(team, "")
+        prefix = f"{logo} " if logo else ""
+        lines.append(f"**{int(r['National_Rank'])}.** {prefix}{team} — {int(r['Total_Commits'])} commits")
 
-    return f"🎯 **Recruiting Rankings — {season} Class**\n```\n" + "\n".join(lines) + "\n```"
+    return "\n".join(lines)
 
 
 def main():
@@ -180,15 +195,16 @@ def main():
 
     roster_entries = roster.load_roster(roster.find_roster_csv(".")) if roster.find_roster_csv(".") else []
     team_to_user_id = roster.team_to_user_id(roster_entries)
+    team_emoji = roster.load_team_emoji_map(".")
 
     messages = []
-    power_msg = build_power_rankings_message(season)
+    power_msg = build_power_rankings_message(season, team_emoji)
     if power_msg:
         messages.append(power_msg)
-    cfp_msg = build_cfp_rankings_message(season, team_to_user_id)
+    cfp_msg = build_cfp_rankings_message(season, team_to_user_id, team_emoji)
     if cfp_msg:
         messages.append(cfp_msg)
-    recruiting_msg = build_recruiting_message(season)
+    recruiting_msg = build_recruiting_message(season, team_emoji)
     if recruiting_msg:
         messages.append(recruiting_msg)
 

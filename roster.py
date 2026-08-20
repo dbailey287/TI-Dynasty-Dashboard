@@ -87,3 +87,23 @@ def username_to_team(roster: list) -> dict:
 def mention(user_id: str) -> str:
     """Builds a real Discord @mention from a numeric user ID."""
     return f"<@{user_id}>"
+
+
+def load_team_emoji_map(directory: str = ".") -> dict:
+    """Returns {team_name: '<:emoji_name:emoji_id>'} -- the full ready-to-
+    embed markup string, not just an ID, so every caller can drop it
+    straight into message text with an f-string. Written once by
+    upload_team_emoji.py (see that script's docstring); empty dict if
+    team_emoji_map.json doesn't exist yet, so callers just render without
+    logos rather than erroring. NOTE: like custom @mentions, these emoji
+    only render inside plain message text -- NOT inside a backtick code
+    block, which Discord treats as literal unstyled text."""
+    path = os.path.join(directory, "team_emoji_map.json")
+    if not os.path.exists(path):
+        return {}
+    try:
+        import json as _json
+        with open(path, "r", encoding="utf-8") as f:
+            return _json.load(f)
+    except (OSError, ValueError):
+        return {}

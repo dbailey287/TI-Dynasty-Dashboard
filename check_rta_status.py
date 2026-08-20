@@ -50,6 +50,7 @@ from zoneinfo import ZoneInfo
 import requests
 
 import notify_utils as notify
+import roster
 import rta_logic as rl
 
 DISCORD_TOKEN = os.environ.get("DISCORD_TOKEN")
@@ -206,11 +207,12 @@ def run() -> str:
     if missing:
         raise RuntimeError(f"Missing environment variable(s): {', '.join(missing)}")
 
-    roster = rl.load_active_roster(".")
-    if not roster:
+    roster_entries = rl.load_active_roster(".")
+    if not roster_entries:
         raise RuntimeError("Couldn't find/load Server_Members_Teams.csv (via roster.py).")
-    tracked_ids = {r["user_id"] for r in roster}
-    id_to_team = {r["user_id"]: r["team"] for r in roster}
+    tracked_ids = {r["user_id"] for r in roster_entries}
+    id_to_team = {r["user_id"]: r["team"] for r in roster_entries}
+    team_emoji = roster.load_team_emoji_map(".")
     log.info("Tracking %d active roster member(s).", len(tracked_ids))
 
     state = rl.load_state(STATE_FILE)
@@ -272,8 +274,8 @@ def run() -> str:
 
             announcement += f"\n📊 {DASHBOARD_URL}"
 
-            all_ids = [r["user_id"] for r in roster]
-            matchup_lines = rl.format_matchup_lines(all_ids, id_to_team, matchups) if matchups else []
+            all_ids = [r["user_id"] for r in roster_entries]
+            matchup_lines = rl.format_matchup_lines(all_ids, id_to_team, matchups, team_emoji) if matchups else []
 
             if matchup_lines:
                 for cid in ANNOUNCE_CHANNEL_IDS:

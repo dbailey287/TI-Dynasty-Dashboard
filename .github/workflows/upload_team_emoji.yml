@@ -1,0 +1,37 @@
+name: Upload Team Emoji
+
+on:
+  workflow_dispatch:   # one-time setup (but safely re-runnable if you add a team later)
+
+permissions:
+  contents: write      # needed to commit team_emoji_map.json back to the repo
+
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install requests pandas
+
+      - name: Upload team logos as custom emoji
+        env:
+          DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
+          DISCORD_GUILD_ID: ${{ secrets.DISCORD_GUILD_ID }}
+        run: python upload_team_emoji.py
+
+      - name: Commit team_emoji_map.json
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add team_emoji_map.json
+          git diff --staged --quiet || git commit -m "Add team emoji map"
+          git push
