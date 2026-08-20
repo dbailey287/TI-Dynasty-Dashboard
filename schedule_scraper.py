@@ -884,63 +884,85 @@ async def retry_failed(processed_ids: set, failed_images: dict) -> None:
         return
 
     log.info("Retrying %d previously-failed image(s)...", len(failed_images))
-    all_records: list[dict] = []
     newly_processed: list[int] = []
-    still_failed: dict = {}
+    # Start from the existing failure log and mutate it in place as each
+    # retry resolves, so still_failed is always an accurate, save-ready
+    # snapshot rather than something assembled only at the very end.
+    still_failed: dict = dict(failed_images)
     semaphore = asyncio.Semaphore(MAX_CONCURRENT_REQUESTS)
 
     async def retry_one(attachment_id_str: str, record: dict):
+        # Wrap the coroutine to return its own identifying info (aid) alongside
+        # the result -- asyncio.as_completed() doesn't preserve task identity,
+        # so this is how the loop below knows which record it's looking at.
         async with semaphore:
             channel = bot.get_channel(record["channel_id"])
             if not channel:
                 log.error("Channel %s no longer accessible for %s, skipping.", record["channel_id"], record["filename"])
-                return record
+                return attachment_id_str, "still_failed", record
+
             try:
                 message = await channel.fetch_message(record["message_id"])
             except discord.NotFound:
                 log.error("Original message for %s was deleted, dropping from retry queue.", record["filename"])
-                return None  # give up permanently — nothing left to retry
+                return attachment_id_str, "dropped", None
             except discord.HTTPException as e:
                 log.error("Could not fetch message for %s: %s", record["filename"], e)
-                return record
+                return attachment_id_str, "still_failed", record
 
             attachment = discord.utils.get(message.attachments, id=record["attachment_id"])
             if not attachment:
                 log.error("Attachment %s no longer on message, dropping from retry queue.", record["filename"])
-                return None
+                return attachment_id_str, "dropped", None
 
             image_bytes = await attachment.read()
             parsed_json = await parse_schedule_image_with_vision(image_bytes, attachment.filename)
             if parsed_json:
                 recs = process_vision_data(parsed_json)
-                all_records.extend(recs)
-                newly_processed.append(attachment.id)
                 log.info("[RETRY SUCCESS] %s parsed on retry.", attachment.filename)
-                return None  # cleared
+                return attachment_id_str, "success", (attachment.id, recs)
             record["last_attempt"] = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-            return record
+            return attachment_id_str, "still_failed", record
 
-    tasks = [retry_one(aid, rec) for aid, rec in failed_images.items()]
-    results = await asyncio.gather(*tasks)
-    for aid, result in zip(failed_images.keys(), results):
-        if result is not None:
-            still_failed[aid] = result
+    tasks = [asyncio.create_task(retry_one(aid, rec)) for aid, rec in failed_images.items()]
 
-    if all_records:
-        df_new = pd.DataFrame(all_records)
+    # as_completed (not gather), same reasoning as the main scan path: save
+    # each retry's outcome to disk as it resolves, not after the whole batch
+    # finishes. Otherwise a crash/timeout partway through the retry batch
+    # would lose every already-recovered image too, not just the ones still
+    # in flight -- defeating the point of a retry pass. No `await` between
+    # reading a task's result and writing it, so each iteration completes
+    # atomically before the next (no racing saves).
+    for task in asyncio.as_completed(tasks):
+        aid, outcome, payload = await task
+
+        if outcome == "dropped":
+            still_failed.pop(aid, None)
+            save_failed_images(still_failed)
+            continue
+
+        if outcome == "still_failed":
+            still_failed[aid] = payload
+            save_failed_images(still_failed)
+            continue
+
+        # outcome == "success"
+        attachment_id, recs = payload
+        still_failed.pop(aid, None)
+
+        df_new = pd.DataFrame(recs)
         df_existing = pd.read_csv(CSV_FILE) if os.path.exists(CSV_FILE) else None
         df_combined = merge_records(df_existing, df_new, SEASON)
-
         df_combined["Week_Sort"] = df_combined["Week"].apply(get_sort_key)
         df_combined = df_combined.sort_values(by=["Team", "Week_Sort"]).drop(columns=["Week_Sort"])
         df_combined.to_csv(CSV_FILE, index=False)
-        log.info("Saved %d record(s) recovered from retry.", len(df_new))
 
-    if newly_processed:
-        processed_ids.update(newly_processed)
+        newly_processed.append(attachment_id)
+        processed_ids.add(attachment_id)
         save_processed_ids(processed_ids)
+        save_failed_images(still_failed)
+        log.info("[SAVED] %s -> %d record(s) recovered and written to %s.", aid, len(recs), CSV_FILE)
 
-    save_failed_images(still_failed)
     log.info(
         "Retry complete: %d recovered, %d still failing.",
         len(newly_processed), len(still_failed),
