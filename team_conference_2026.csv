@@ -22,6 +22,8 @@ Season,Team,Conference
 2026,FIU,CUSA
 2026,FLA Atlantic,AMERICAN
 2026,Florida,SEC
+2026,Florida Atlantic,AMERICAN
+2026,Florida International,CUSA
 2026,Florida State,ACC
 2026,Fresno State,MWC
 2026,Georgia,SEC
@@ -32,10 +34,12 @@ Season,Team,Conference
 2026,Indiana,BIG TEN
 2026,Iowa,BIG TEN
 2026,Iowa State,BIG 12
+2026,Jacksonville State,CUSA
 2026,Jax State,CUSA
 2026,Kansas,BIG 12
 2026,Kansas State,BIG 12
 2026,Kennesaw St.,CUSA
+2026,Kennesaw State,CUSA
 2026,Kentucky,SEC
 2026,LSU,SEC
 2026,Liberty,CUSA
@@ -47,8 +51,10 @@ Season,Team,Conference
 2026,Michigan,BIG TEN
 2026,Michigan State,BIG TEN
 2026,Middle Tenn,CUSA
+2026,Middle Tennessee,CUSA
 2026,Minnesota,BIG TEN
 2026,Mississippi St,SEC
+2026,Mississippi State,SEC
 2026,Missouri,BIG 12
 2026,Missouri State,CUSA
 2026,NC State,ACC
@@ -58,7 +64,9 @@ Season,Team,Conference
 2026,Nevada,MWC
 2026,New Mexico,MWC
 2026,New Mexico St.,CUSA
+2026,New Mexico State,CUSA
 2026,North Carolina,ACC
+2026,North Dakota State,MWC
 2026,North Texas,AMERICAN
 2026,Northwestern,BIG TEN
 2026,Ohio State,BIG TEN
@@ -75,6 +83,7 @@ Season,Team,Conference
 2026,SMU,MWC
 2026,Sam Houston,CUSA
 2026,San Diego St.,MWC
+2026,San Diego State,MWC
 2026,San Jose State,MWC
 2026,South Carolina,SEC
 2026,Stanford,PAC-12
@@ -103,6 +112,8 @@ Season,Team,Conference
 2026,Wake Forest,ACC
 2026,Washington,PAC-12
 2026,Washington St.,PAC-12
+2026,Washington State,PAC-12
 2026,West Virginia,CUSA
+2026,Western Kentucky,CUSA
 2026,Wisconsin,BIG TEN
 2026,Wyoming,MWC
