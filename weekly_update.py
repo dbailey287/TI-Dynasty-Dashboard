@@ -3,38 +3,48 @@ Weekly Update Poster
 ======================
 Manually triggered (workflow_dispatch only, no schedule -- run this once
 you've confirmed all of a week's data is in: schedule screenshots,
-playoff bracket, recruiting rankings). Posts THREE separate plain-text
-messages to WEEKLY_UPDATE_CHANNEL_ID -- Power Rankings, CFP Rankings,
+playoff bracket, recruiting rankings). Posts THREE separate Components
+V2 messages to WEEKLY_UPDATE_CHANNEL_ID -- Power Rankings, CFP Rankings,
 and Recruiting Rankings.
 
-Three separate messages, not one message with embeds (an earlier version
-of this script used embeds -- see git history if that's ever wanted
-back). Two reasons for the change:
-  1. Discord doesn't parse markdown -- @mentions included -- inside a
-     backtick code block, whether that block lives in plain content or
-     an embed description. CFP Rankings needs real, clickable/pingable
-     @mentions for user-controlled teams, so that section can't be a
-     code-block table at all.
-  2. Once CFP Rankings drops the aligned table format, there's no longer
-     a strong reason to keep the other two sections bundled into a
-     single message either -- three separate messages are simpler and
-     each stands alone in channel history.
+HISTORY (see git log for the actual code at each stage):
+  1. Started as embeds -- looked bad, code-block tables inside embed
+     descriptions wrapped badly on Discord's narrower embed rendering.
+  2. Moved to plain-content messages with a monospace code-block table.
+     Fixed the wrapping, but Discord doesn't parse markdown -- mentions
+     AND custom emoji included -- inside a backtick code block, so
+     neither tags nor logos could render there.
+  3. Dropped the code block for a plain markdown list with real
+     @mentions per team and custom-emoji logos. Worked, but 18-25 rows
+     each with a colored mention pill read as a "wall of text."
+  4. Dropped per-team mentions entirely in favor of one @everyone ping
+     on the closing line -- much less visual noise.
+  5. THIS VERSION: switched to Components V2 (Container/Section/
+     Thumbnail), which renders a real logo image next to each row
+     instead of a tiny inline emoji character -- visually cleaner than
+     any of the plain-text versions. This is why upload_team_emoji.py's
+     custom emoji aren't used here anymore: a Components V2 Thumbnail
+     accepts any external image URL directly (dynasty_logic.py's
+     existing ESPN CDN logo_url()), no custom-emoji upload needed.
 
-Power Rankings, CFP Rankings, and Recruiting Rankings are all plain
-markdown lists (no code-block tables) -- custom team-logo emoji only
-render inside plain message text, never inside a backtick code block,
-which Discord treats as literal unstyled text.
+Component budget matters here -- community-reported guidance puts the
+ceiling around 40 total components in one message, and each row with
+its own Section+Thumbnail costs THREE (the Section, its nested Text
+Display, and its Thumbnail accessory -- I undercounted this at first
+pass and had to walk it back once I actually counted a real 18-25 row
+message: 57-59 components, well over budget). Giving every row a
+full logo is only safe up to about 8-10 rows.
 
-No per-team @mentions anymore (an earlier version tagged individual
-teams with their coach's mention in every section -- see git history if
-that's ever wanted back). Turned out to be visually noisy at 18-25 rows
-per message, every line with a colored mention pill. Replaced with a
-single "@everyone" ping on the closing line instead -- one clean
-notification for the whole report rather than a wall of individual tags.
+So: only the top TOP_N_WITH_LOGO teams in each section get full
+Section+Thumbnail treatment. Everyone past that (by rank, regardless of
+user vs. CPU) is bundled into one shared compact Text Display instead
+of costing a Section each -- keeps every message safely under budget
+regardless of how many teams happen to be ranked that week.
 
-Team logos come from team_emoji_map.json (custom Discord server emoji,
-see upload_team_emoji.py) -- only your user-controlled teams have one
-uploaded, so CPU opponents in CFP Rankings just show plain text.
+This is newer, less battle-tested API surface than a lot of this
+project -- built from Discord's documented schema, not verified
+end-to-end here (this dev environment can't reach discord.com to test a
+live post). The real test is running it for real.
 
 Uses dynasty_logic.py directly (unlike the scrapers, which deliberately
 stay standalone) -- this script's whole job is reporting numbers the
@@ -65,7 +75,6 @@ import pandas as pd
 
 import dynasty_logic as dl
 import notify_utils as notify
-import roster
 
 logging.basicConfig(level=logging.INFO, format="[%(asctime)s] [%(levelname)-5s] %(message)s", datefmt="%Y-%m-%d %H:%M:%S")
 log = logging.getLogger("weekly_update")
@@ -76,12 +85,6 @@ CHANNEL_ID = os.environ.get("WEEKLY_UPDATE_CHANNEL_ID")
 
 DASHBOARD_URL = "https://ti-dynasty-dashboard-2027.streamlit.app/"
 
-# Rotating closing line for the report -- appended once, to the LAST
-# message sent, not repeated on all three (this is one report, just
-# split across three Discord messages for length reasons -- see the
-# module docstring above). Always leads with @everyone -- this is the
-# ONE notification for the whole report, replacing what used to be a
-# pile of individual per-team @mentions throughout every section.
 DASHBOARD_FOOTERS = [
     "This week's updates are in! Full breakdown (and the stuff that didn't fit here) is always on the dashboard: {url}",
     "Curious how the sausage gets made? All the receipts live here: {url}",
@@ -93,6 +96,18 @@ DASHBOARD_FOOTERS = [
 
 def pick_dashboard_footer() -> str:
     return "@everyone " + random.choice(DASHBOARD_FOOTERS).format(url=DASHBOARD_URL)
+
+
+# Component type numbers, per Discord's component reference:
+# https://discord.com/developers/docs/components/reference
+TYPE_SECTION = 9
+TYPE_TEXT_DISPLAY = 10
+TYPE_THUMBNAIL = 11
+TYPE_SEPARATOR = 14
+TYPE_CONTAINER = 17
+
+CONTAINER_ACCENT_COLOR = 0xD4AF37  # gold, matches the dashboard's user-highlight accent
+TOP_N_WITH_LOGO = 8  # rows beyond this get bundled into compact text, not their own Section
 
 
 def get_current_season(directory: str = ".") -> int | None:
@@ -119,7 +134,48 @@ def resolve_season() -> int | None:
     return get_current_season(".")
 
 
-def build_power_rankings_message(season: int, team_emoji: dict, directory: str = ".") -> str | None:
+def _team_section(rank_label: str, team: str, value_label: str) -> dict:
+    """A single Section: rank/team/value as one Text Display, with the
+    team's real logo as a Thumbnail accessory (not a custom emoji --
+    Thumbnail takes any external image URL directly)."""
+    section = {
+        "type": TYPE_SECTION,
+        "components": [
+            {"type": TYPE_TEXT_DISPLAY, "content": f"**{rank_label}. {team}** — {value_label}"},
+        ],
+    }
+    logo_url = dl.logo_url(team)
+    if logo_url:
+        section["accessory"] = {"type": TYPE_THUMBNAIL, "media": {"url": logo_url}}
+    return section
+
+
+def _split_rows_by_logo_budget(rows: list) -> tuple[list, list]:
+    """rows is a list of (rank, team, value_label) tuples, already
+    sorted by rank. Returns (full_treatment_rows, compact_rows) split at
+    TOP_N_WITH_LOGO -- see module docstring for why."""
+    return rows[:TOP_N_WITH_LOGO], rows[TOP_N_WITH_LOGO:]
+
+
+def _build_container(title: str, rows: list) -> dict:
+    """rows: list of (rank, team, value_label) tuples, already sorted.
+    Shared by all three sections below -- same top-N-gets-a-logo split,
+    same header/separator/compact-block structure."""
+    full, compact = _split_rows_by_logo_budget(rows)
+
+    components = [{"type": TYPE_TEXT_DISPLAY, "content": f"## {title}"}, {"type": TYPE_SEPARATOR}]
+    for rank, team, value_label in full:
+        components.append(_team_section(str(rank), team, value_label))
+
+    if compact:
+        components.append({"type": TYPE_SEPARATOR})
+        lines = [f"**{rank}.** {team} — {value_label}" for rank, team, value_label in compact]
+        components.append({"type": TYPE_TEXT_DISPLAY, "content": "\n".join(lines)})
+
+    return {"type": TYPE_CONTAINER, "accent_color": CONTAINER_ACCENT_COLOR, "components": components}
+
+
+def build_power_rankings_container(season: int, directory: str = ".") -> dict | None:
     path = os.path.join(directory, f"dynasty_data_{season}.csv")
     if not os.path.exists(path):
         log.warning("No dynasty_data_%d.csv found -- skipping Power Rankings.", season)
@@ -142,16 +198,11 @@ def build_power_rankings_message(season: int, team_emoji: dict, directory: str =
         latest_week_sort = completed["Week_Sort"].max()
         week_label = completed.loc[completed["Week_Sort"] == latest_week_sort, "Week"].iloc[0]
 
-    lines = [f"🏆 **Power Rankings — Week {week_label}**"]
-    for team, row in rated.iterrows():
-        logo = team_emoji.get(team, "")
-        prefix = f"{logo} " if logo else ""
-        lines.append(f"**{int(row['Rank'])}.** {prefix}{team} — {row['Dynasty_Rating']:.1f}")
-
-    return "\n".join(lines)
+    rows = [(int(row["Rank"]), team, f"{row['Dynasty_Rating']:.1f}") for team, row in rated.iterrows()]
+    return _build_container(f"🏆 Power Rankings — Week {week_label}", rows)
 
 
-def build_cfp_rankings_message(season: int, team_emoji: dict, directory: str = ".") -> str | None:
+def build_cfp_rankings_container(season: int, directory: str = ".") -> dict | None:
     path = os.path.join(directory, f"top25_rankings_{season}.csv")
     if not os.path.exists(path):
         log.warning("No top25_rankings_%d.csv found -- skipping CFP Rankings.", season)
@@ -165,17 +216,11 @@ def build_cfp_rankings_message(season: int, team_emoji: dict, directory: str = "
         return None
 
     top25 = top25.sort_values("Rank")
-    lines = ["🏈 **CFP Rankings**"]
-    for _, r in top25.iterrows():
-        team = r["Team"]
-        logo = team_emoji.get(team, "")
-        prefix = f"{logo} " if logo else ""
-        lines.append(f"**{int(r['Rank'])}.** {prefix}{team} — {r['Record']}")
-
-    return "\n".join(lines)
+    rows = [(int(r["Rank"]), r["Team"], r["Record"]) for _, r in top25.iterrows()]
+    return _build_container("🏈 CFP Rankings", rows)
 
 
-def build_recruiting_message(season: int, team_emoji: dict, directory: str = ".") -> str | None:
+def build_recruiting_container(season: int, directory: str = ".") -> dict | None:
     path = os.path.join(directory, f"recruiting_ranks_{season}.csv")
     if not os.path.exists(path):
         log.warning("No recruiting_ranks_%d.csv found -- skipping Recruiting Rankings.", season)
@@ -189,14 +234,17 @@ def build_recruiting_message(season: int, team_emoji: dict, directory: str = "."
         return None
 
     rec = rec.sort_values("National_Rank")
-    lines = [f"🎯 **Recruiting Rankings — {season} Class**"]
-    for _, r in rec.iterrows():
-        team = r["Team"]
-        logo = team_emoji.get(team, "")
-        prefix = f"{logo} " if logo else ""
-        lines.append(f"**{int(r['National_Rank'])}.** {prefix}{team} — {int(r['Total_Commits'])} commits")
+    rows = [(int(r["National_Rank"]), r["Team"], f"{int(r['Total_Commits'])} commits") for _, r in rec.iterrows()]
+    return _build_container(f"🎯 Recruiting Rankings — {season} Class", rows)
 
-    return "\n".join(lines)
+
+def _append_footer(container: dict) -> None:
+    """Mutates container in place, adding the @everyone + dashboard line
+    as a closing Separator + Text Display -- same "one ping for the
+    whole report" idea as the earlier plain-text version, just expressed
+    as components instead of appended message text."""
+    container["components"].append({"type": TYPE_SEPARATOR})
+    container["components"].append({"type": TYPE_TEXT_DISPLAY, "content": pick_dashboard_footer()})
 
 
 def main():
@@ -211,33 +259,46 @@ def main():
         sys.exit(1)
     log.info("Building weekly update for season %d.", season)
 
-    team_emoji = roster.load_team_emoji_map(".")
+    containers = []
+    power = build_power_rankings_container(season)
+    if power:
+        containers.append(power)
+    cfp = build_cfp_rankings_container(season)
+    if cfp:
+        containers.append(cfp)
+    recruiting = build_recruiting_container(season)
+    if recruiting:
+        containers.append(recruiting)
 
-    messages = []
-    power_msg = build_power_rankings_message(season, team_emoji)
-    if power_msg:
-        messages.append(power_msg)
-    cfp_msg = build_cfp_rankings_message(season, team_emoji)
-    if cfp_msg:
-        messages.append(cfp_msg)
-    recruiting_msg = build_recruiting_message(season, team_emoji)
-    if recruiting_msg:
-        messages.append(recruiting_msg)
-
-    if not messages:
+    if not containers:
         log.warning("Nothing to post -- no section had usable data.")
         notify.post_alert(CHANNEL_ID, DISCORD_TOKEN, "⚠️ Weekly update: no data available for any section, nothing posted.")
         sys.exit(0)
 
-    # @everyone + footer go on the LAST message only -- one ping for the
-    # whole report, not a barrage of individual team tags throughout (see
-    # module docstring for why that got dropped).
-    messages[-1] = messages[-1] + "\n\n" + pick_dashboard_footer()
+    _append_footer(containers[-1])
 
-    for i, msg in enumerate(messages):
-        is_last = i == len(messages) - 1
-        notify.post_message(CHANNEL_ID, DISCORD_TOKEN, msg, allow_everyone_ping=is_last)
-    log.info("Posted %d message(s) to channel %s.", len(messages), CHANNEL_ID)
+    for i, container in enumerate(containers):
+        is_last = i == len(containers) - 1
+        component_count = _count_components(container)
+        log.info("Posting message %d/%d (%d component(s))...", i + 1, len(containers), component_count)
+        if component_count > 40:
+            log.warning("Message %d has %d components, over the ~40 community-reported ceiling -- may be rejected by Discord.", i + 1, component_count)
+        notify.post_components_v2(CHANNEL_ID, DISCORD_TOKEN, [container], allow_everyone_ping=is_last)
+    log.info("Posted %d message(s) to channel %s.", len(containers), CHANNEL_ID)
+
+
+def _count_components(node) -> int:
+    """Recursively counts every component in the tree (for the ~40
+    ceiling warning above) -- includes the node itself plus anything
+    nested in "components" or "accessory"."""
+    if not isinstance(node, dict):
+        return 0
+    count = 1
+    for child in node.get("components", []):
+        count += _count_components(child)
+    if "accessory" in node:
+        count += _count_components(node["accessory"])
+    return count
 
 
 if __name__ == "__main__":

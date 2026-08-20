@@ -137,7 +137,7 @@ def post_embeds(channel_id: str, token: str, embeds: list, content: str = None):
 COMPONENTS_V2_FLAG = 1 << 15  # IS_COMPONENTS_V2, per Discord's message flag reference
 
 
-def post_components_v2(channel_id: str, token: str, components: list):
+def post_components_v2(channel_id: str, token: str, components: list, allow_everyone_ping: bool = False):
     """Posts a message using Discord's newer Components V2 layout system
     (Container/Section/TextDisplay/Thumbnail/Separator, etc.) instead of
     the classic content+embeds fields -- those two fields are NOT usable
@@ -146,9 +146,13 @@ def post_components_v2(channel_id: str, token: str, components: list):
 
     components is the raw list of top-level component objects (dicts)
     matching Discord's schema -- this function doesn't build them, just
-    sends them with the required IS_COMPONENTS_V2 flag set. See
-    test_components_v2.py for an example of building a Container with
-    Sections + Thumbnail accessories.
+    sends them with the required IS_COMPONENTS_V2 flag set.
+
+    allow_everyone_ping works the same as in post_message() -- there's no
+    separate "content" field in a Components V2 message, so a literal
+    "@everyone" has to live inside a TextDisplay component's content
+    string instead, but the allowed_mentions gate that controls whether
+    it actually notifies works identically either way.
 
     This is genuinely newer/less battle-tested than the rest of this
     module -- built from Discord's documented schema, not verified
@@ -164,9 +168,10 @@ def post_components_v2(channel_id: str, token: str, components: list):
     if not components:
         logging.getLogger(__name__).warning("post_components_v2 called with no components -- nothing sent.")
         return
+    allowed_mentions = {"parse": ["everyone"]} if allow_everyone_ping else {"parse": []}
     try:
         _post(channel_id, token, components=components, flags=COMPONENTS_V2_FLAG,
-              allowed_mentions={"parse": []})
+              allowed_mentions=allowed_mentions)
     except Exception as e:
         logging.getLogger(__name__).error("Failed to post Components V2 message: %s", e)
         raise
