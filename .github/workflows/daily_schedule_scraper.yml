@@ -61,6 +61,6 @@ jobs:
         run: |
           git config user.name "schedule-scraper-bot"
           git config user.email "actions@github.com"
-          git add dynasty_data_*.csv processed_images_*.json failed_images_*.json conference_record_*.csv
+          git add dynasty_data_*.csv processed_images_*.json failed_images_*.json conference_record_*.csv top25_rankings_*.csv
           git diff --cached --quiet || git commit -m "Update schedule data [skip ci]"
           git push

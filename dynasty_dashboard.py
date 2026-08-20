@@ -234,6 +234,21 @@ def get_conference_record_data() -> pd.DataFrame:
     return _load_conference_record_combined(specs)
 
 
+def get_top25_data(season) -> pd.DataFrame:
+    """top25_rankings_<season>.csv, if it exists -- written by
+    schedule_scraper.py when it detects a Top 25 rankings screenshot (see
+    that file's VISION_PROMPT). A full-overwrite snapshot, not incremental,
+    so this always reflects whatever poll was most recently posted for
+    that season. Empty DataFrame (not None/an error) if none exists yet."""
+    path = os.path.join(SCRIPT_DIR, f"top25_rankings_{season}.csv")
+    if not os.path.exists(path):
+        return pd.DataFrame()
+    try:
+        return pd.read_csv(path)
+    except (pd.errors.EmptyDataError, OSError):
+        return pd.DataFrame()
+
+
 def not_enough_data_message(what: str = "this chart") -> None:
     """Consistent 'not enough data yet' state, matching the existing
     Fun Stats page's phrasing/styling rather than inventing a new look."""
@@ -652,6 +667,27 @@ if page == "🏈 Home":
     col1, col2 = st.columns([1, 1.4])
 
     with col1:
+        top25_df = get_top25_data(int(season)) if season != "—" else pd.DataFrame()
+        if not top25_df.empty:
+            st.subheader("🏈 Top 25 Rankings")
+            top25_sorted = top25_df.sort_values("Rank")
+            rows_html = []
+            for _, r in top25_sorted.iterrows():
+                logo = team_logo_tag(r["Team"], 24)
+                rows_html.append(
+                    '<div style="display:flex; align-items:center; padding:4px 0; '
+                    'border-bottom:1px solid #2a2f3a;">'
+                    f'<span style="width:26px; font-weight:700;">{int(r["Rank"])}</span>'
+                    f'{logo}{team_link(r["Team"])}'
+                    f'<span class="stat-label" style="margin-left:auto;">{r["Record"]}</span>'
+                    '</div>'
+                )
+            st.markdown(
+                f'<div style="max-height:520px; overflow-y:auto;">{"".join(rows_html)}</div>',
+                unsafe_allow_html=True,
+            )
+            st.divider()
+
         st.subheader("⭐ Current #1")
         if not rated.empty:
             top = rated.iloc[0]

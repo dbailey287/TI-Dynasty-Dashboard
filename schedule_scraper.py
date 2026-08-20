@@ -29,6 +29,7 @@ import random
 import asyncio
 import logging
 import sys
+import csv
 from PIL import Image
 from google import genai
 from google.genai.errors import APIError
@@ -221,23 +222,31 @@ def resolve_user_teams(season: int) -> dict:
     return mapping
 
 VISION_PROMPT = """
-Analyze this College Football Team Schedule screenshot.
-Extract the schedule in strict JSON format with keys "featured_team" and "schedule".
-Rules:
-1. "featured_team": Read this from the SMALL white/light selector box near the
-   top-left of the screen, next to a small controller-button icon labeled "LT"
-   (NOT the large team name/logo in the main header card above it). That header
-   card shows the user's own coached team, which is NOT necessarily the team
-   whose schedule this screenshot displays -- the small "LT" selector box is
-   the reliable indicator of which team's schedule is actually shown here.
-2. "schedule": List of objects with keys:
+Analyze this screenshot from a college football video game. It is ONE of two
+possible types -- decide which one first, then return ONLY the JSON shape for
+that type. Do not mix the two shapes.
+
+TYPE A -- Team Schedule screenshot (one team's full season schedule):
+Return JSON with keys "screenshot_type", "featured_team", and "schedule":
+{
+  "screenshot_type": "schedule",
+  "featured_team": ...,
+  "schedule": [...]
+}
+Rules for "featured_team": Read this from the SMALL white/light selector box
+near the top-left of the screen, next to a small controller-button icon
+labeled "LT" (NOT the large team name/logo in the main header card above it).
+That header card shows the user's own coached team, which is NOT necessarily
+the team whose schedule this screenshot displays -- the small "LT" selector
+box is the reliable indicator of which team's schedule is actually shown here.
+Rules for "schedule": List of objects with keys:
    - "week": Week string/number (e.g. "0", "1", "6", "12", "Conf Champ").
    - "date": Date string (e.g., "Sat, Sep 5") or "" if BYE.
    - "location": "Home" if "vs", "Away" if "at", or "-" if BYE.
    - "opponent_rank": Rank number string if present (e.g. "20", "19", "4"), or "-" if unranked/BYE.
    - "opponent": Exact opponent team name (e.g. "Tennessee", "Oregon State", "BYU", "Ohio State"). If BYE, use "BYE".
    - "outcome": "W" or "L" if game completed, or "-" if unplayed/BYE.
-   - "team_score": Integer score of the featured team (the team identified in rule 1 above), or null if unplayed.
+   - "team_score": Integer score of the featured team (the team identified above), or null if unplayed.
    - "opponent_score": Integer score of the opponent, or null if unplayed.
    IMPORTANT on scores: the on-screen result text (e.g. "W 42-39" or "L 31-0") is
    NOT always "featured team's score" first -- it shows the WINNING team's score
@@ -246,7 +255,23 @@ Rules:
    opponent_score is the SECOND. If outcome is "L", team_score is the SECOND
    number and opponent_score is the FIRST number (the featured team lost, so
    their own score is the smaller/losing one, even though it's listed second).
-Return ONLY raw JSON. No markdown formatting or code blocks.
+
+TYPE B -- Top 25 Rankings screenshot (an ordered national poll of the top 25
+teams, each with a record like "11-0"):
+Return JSON with keys "screenshot_type" and "rankings":
+{
+  "screenshot_type": "top25",
+  "rankings": [
+    {"rank": 1, "team": "Arkansas", "record": "11-0"},
+    ...
+  ]
+}
+Rules for "rankings": Include every row visible (up to 25), in the order
+shown. "rank" is the integer poll position. "team" is the exact team name.
+"record" is the W-L string exactly as displayed (e.g. "11-0").
+
+Return ONLY raw JSON matching exactly one of the two shapes above. No
+markdown formatting or code blocks.
 """
 
 
@@ -350,10 +375,16 @@ async def parse_schedule_image_with_vision(image_bytes: bytes, filename: str) ->
 
                 team_found = data.get("featured_team", "Unknown")
                 rows_count = len(data.get("schedule", []))
-                log.info(
-                    "[SUCCESS] %s parsed via %s (%d schedule rows).",
-                    team_found, model_name, rows_count,
-                )
+                if data.get("screenshot_type") == "top25":
+                    log.info(
+                        "[SUCCESS] Top 25 rankings parsed via %s (%d rows).",
+                        model_name, len(data.get("rankings", [])),
+                    )
+                else:
+                    log.info(
+                        "[SUCCESS] %s parsed via %s (%d schedule rows).",
+                        team_found, model_name, rows_count,
+                    )
                 return data
 
             except APIError as e:
@@ -483,6 +514,43 @@ def process_vision_data(data: dict) -> list[dict]:
             "Last_Updated": now_str,
         })
     return records
+
+
+def process_top25_vision_data(data: dict) -> list[dict]:
+    """Returns [] if data isn't a top25-shaped screenshot -- same
+    tolerant-empty contract as process_vision_data(), so callers can try
+    both without needing to check screenshot_type themselves first."""
+    if not data or data.get("screenshot_type") != "top25":
+        return []
+    rows = []
+    for item in data.get("rankings", []):
+        team = str(item.get("team", "")).strip()
+        if not team:
+            continue
+        rows.append({
+            "Rank": item.get("rank"),
+            "Team": team,
+            "Record": str(item.get("record", "")).strip(),
+        })
+    return rows
+
+
+def save_top25_rankings(season: int, rows: list[dict], directory: str = ".") -> None:
+    """Full overwrite, not an upsert -- a Top 25 poll is a single ordered
+    snapshot as of whenever this screenshot was posted (same idea as
+    bracket_scraper.py's bracket state), not incremental per-team data like
+    the rest of this file. Silently no-ops on an empty/unparseable list
+    rather than clobbering a good existing file with nothing."""
+    if not rows:
+        return
+    path = os.path.join(directory, f"top25_rankings_{season}.csv")
+    rows_sorted = sorted(rows, key=lambda r: (r["Rank"] is None, r["Rank"]))
+    with open(path, "w", newline="", encoding="utf-8") as f:
+        writer = csv.DictWriter(f, fieldnames=["Season", "Rank", "Team", "Record"])
+        writer.writeheader()
+        for row in rows_sorted:
+            writer.writerow({"Season": season, "Rank": row["Rank"], "Team": row["Team"], "Record": row["Record"]})
+    log.info("Wrote %d row(s) to %s.", len(rows_sorted), path)
 
 
 def get_sort_key(week_val) -> int:
@@ -707,13 +775,18 @@ async def post_log_file():
 
 
 async def process_one_attachment(attachment, semaphore: asyncio.Semaphore, channel_id: int, message_id: int):
-    """Returns (records, failure_record_or_None)."""
+    """Returns (records, failure_record_or_None, top25_rows). top25_rows is
+    [] for an ordinary schedule screenshot -- only non-empty when this
+    attachment turned out to be a Top 25 rankings screenshot instead."""
     async with semaphore:
         log.info("Processing %s (id=%s)...", attachment.filename, attachment.id)
         image_bytes = await attachment.read()
         parsed_json = await parse_schedule_image_with_vision(image_bytes, attachment.filename)
         if parsed_json:
-            return process_vision_data(parsed_json), None
+            top25_rows = process_top25_vision_data(parsed_json)
+            if top25_rows:
+                return [], None, top25_rows
+            return process_vision_data(parsed_json), None, []
 
         failure_record = {
             "attachment_id": attachment.id,
@@ -723,7 +796,7 @@ async def process_one_attachment(attachment, semaphore: asyncio.Semaphore, chann
             "last_attempt": datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             "reason": "All models in MODEL_CHAIN exhausted retries (see log for details).",
         }
-        return [], failure_record
+        return [], failure_record, []
 
 
 @bot.event
@@ -779,10 +852,10 @@ async def on_ready():
                 (confirmed by direct testing, not assumed) -- self-tagging
                 the return value sidesteps that entirely."""
                 try:
-                    records, failure_record = await process_one_attachment(attachment, semaphore, channel_id, msg_id)
-                    return attachment, msg_id, records, failure_record, None
+                    records, failure_record, top25_rows = await process_one_attachment(attachment, semaphore, channel_id, msg_id)
+                    return attachment, msg_id, records, failure_record, top25_rows, None
                 except Exception as e:
-                    return attachment, msg_id, None, None, e
+                    return attachment, msg_id, None, None, [], e
 
             tasks = [
                 asyncio.create_task(_process_and_tag(a, msg_id))
@@ -802,7 +875,7 @@ async def on_ready():
             # before the next task's result is handled (asyncio is
             # single-threaded/cooperative) -- no risk of two saves racing.
             for task in asyncio.as_completed(tasks):
-                attachment, msg_id, records, failure_record, exc = await task
+                attachment, msg_id, records, failure_record, top25_rows, exc = await task
                 if exc is not None:
                     log.error("Attachment %s failed with %s: %s", attachment.filename, type(exc).__name__, exc)
                     failed_images[str(attachment.id)] = {
@@ -816,7 +889,18 @@ async def on_ready():
                     save_failed_images(failed_images)
                     continue
 
-                if records:
+                if top25_rows:
+                    # Full-overwrite, not merged into all_records/CSV_FILE --
+                    # a Top 25 poll isn't per-team schedule data, see
+                    # save_top25_rankings()'s docstring.
+                    save_top25_rankings(SEASON, top25_rows)
+                    newly_processed.append(attachment.id)
+                    processed_ids.add(attachment.id)
+                    save_processed_ids(processed_ids)
+                    failed_images.pop(str(attachment.id), None)
+                    save_failed_images(failed_images)
+                    log.info("[SAVED] %s -> Top 25 rankings updated.", attachment.filename)
+                elif records:
                     all_records.extend(records)
                     newly_processed.append(attachment.id)
                     failed_images.pop(str(attachment.id), None)
@@ -918,6 +1002,10 @@ async def retry_failed(processed_ids: set, failed_images: dict) -> None:
             image_bytes = await attachment.read()
             parsed_json = await parse_schedule_image_with_vision(image_bytes, attachment.filename)
             if parsed_json:
+                top25_rows = process_top25_vision_data(parsed_json)
+                if top25_rows:
+                    log.info("[RETRY SUCCESS] %s parsed on retry (Top 25 rankings).", attachment.filename)
+                    return attachment_id_str, "success_top25", (attachment.id, top25_rows)
                 recs = process_vision_data(parsed_json)
                 log.info("[RETRY SUCCESS] %s parsed on retry.", attachment.filename)
                 return attachment_id_str, "success", (attachment.id, recs)
@@ -944,6 +1032,17 @@ async def retry_failed(processed_ids: set, failed_images: dict) -> None:
         if outcome == "still_failed":
             still_failed[aid] = payload
             save_failed_images(still_failed)
+            continue
+
+        if outcome == "success_top25":
+            attachment_id, top25_rows = payload
+            still_failed.pop(aid, None)
+            save_top25_rankings(SEASON, top25_rows)
+            newly_processed.append(attachment_id)
+            processed_ids.add(attachment_id)
+            save_processed_ids(processed_ids)
+            save_failed_images(still_failed)
+            log.info("[SAVED] %s -> Top 25 rankings recovered and updated.", aid)
             continue
 
         # outcome == "success"
