@@ -30,7 +30,8 @@ def setup_log_capture(level=logging.DEBUG):
 
 
 def _post(channel_id: str, token: str, content: str = None, embeds: list = None,
-          allowed_mentions: dict = None, file_bytes: bytes = None, filename: str = None):
+          allowed_mentions: dict = None, components: list = None, flags: int = None,
+          file_bytes: bytes = None, filename: str = None):
     headers = {"Authorization": f"Bot {token}"}
     payload = {}
     if content:
@@ -39,6 +40,10 @@ def _post(channel_id: str, token: str, content: str = None, embeds: list = None,
         payload["embeds"] = embeds
     if allowed_mentions is not None:
         payload["allowed_mentions"] = allowed_mentions
+    if components is not None:
+        payload["components"] = components
+    if flags is not None:
+        payload["flags"] = flags
     if file_bytes is not None:
         files = {"file": (filename or "log.txt", file_bytes)}
         data = {"payload_json": json.dumps(payload)}
@@ -85,20 +90,23 @@ def post_alert(channel_id: str, token: str, message: str):
         logging.getLogger(__name__).error("Failed to post alert: %s", e)
 
 
-def post_message(channel_id: str, token: str, content: str, allow_pings: bool = False):
+def post_message(channel_id: str, token: str, content: str, allow_everyone_ping: bool = False):
     """Posts a plain-content message (no embed) -- unlike post_alert(),
-    this is meant for content that may include real @mentions (e.g.
-    <@user_id>), which only render as a clickable tag OUTSIDE a code
-    block/backticks (Discord doesn't parse markdown -- mentions included
-    -- inside backtick-fenced text, embed or not).
+    this is meant for content that may include real markdown (mentions,
+    custom emoji), which only renders OUTSIDE a code block/backticks
+    (Discord doesn't parse markdown inside backtick-fenced text, embed or
+    not).
 
-    allow_pings controls whether those mentions actually notify the
-    tagged user: False (default) shows the tag/pill but suppresses the
-    notification via Discord's allowed_mentions -- appropriate for a
-    recurring recap post. Set True if you want a real ping."""
+    allow_everyone_ping controls whether a literal "@everyone" in content
+    actually notifies the channel: False (default) suppresses it via
+    Discord's allowed_mentions even if the text is present. Only pass
+    True on the one message that's actually meant to ping everyone --
+    NOTE the bot's role also needs the "Mention @everyone, @here, and All
+    Roles" permission in that channel, or the ping silently won't fire
+    regardless of this flag."""
     if not channel_id:
         return
-    allowed_mentions = {"parse": []} if not allow_pings else {"parse": ["users"]}
+    allowed_mentions = {"parse": ["everyone"]} if allow_everyone_ping else {"parse": []}
     try:
         _post(channel_id, token, content=content, allowed_mentions=allowed_mentions)
     except Exception as e:
@@ -124,3 +132,41 @@ def post_embeds(channel_id: str, token: str, embeds: list, content: str = None):
         _post(channel_id, token, content=content, embeds=embeds)
     except Exception as e:
         logging.getLogger(__name__).error("Failed to post embeds: %s", e)
+
+
+COMPONENTS_V2_FLAG = 1 << 15  # IS_COMPONENTS_V2, per Discord's message flag reference
+
+
+def post_components_v2(channel_id: str, token: str, components: list):
+    """Posts a message using Discord's newer Components V2 layout system
+    (Container/Section/TextDisplay/Thumbnail/Separator, etc.) instead of
+    the classic content+embeds fields -- those two fields are NOT usable
+    together with Components V2, per Discord's docs, hence the separate
+    function rather than extending post_message()/post_embeds().
+
+    components is the raw list of top-level component objects (dicts)
+    matching Discord's schema -- this function doesn't build them, just
+    sends them with the required IS_COMPONENTS_V2 flag set. See
+    test_components_v2.py for an example of building a Container with
+    Sections + Thumbnail accessories.
+
+    This is genuinely newer/less battle-tested than the rest of this
+    module -- built from Discord's documented schema, not verified
+    end-to-end here (this project's dev environment can't reach
+    discord.com to test a live post). Treat the first real run as the
+    actual test.
+
+    Unlike the other post_* helpers here, this one RE-RAISES on failure
+    instead of swallowing it -- for a prototype you're actively
+    evaluating, a silent no-op on error is worse than a visible one."""
+    if not channel_id:
+        return
+    if not components:
+        logging.getLogger(__name__).warning("post_components_v2 called with no components -- nothing sent.")
+        return
+    try:
+        _post(channel_id, token, components=components, flags=COMPONENTS_V2_FLAG,
+              allowed_mentions={"parse": []})
+    except Exception as e:
+        logging.getLogger(__name__).error("Failed to post Components V2 message: %s", e)
+        raise

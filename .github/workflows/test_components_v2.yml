@@ -1,0 +1,39 @@
+name: Test Components V2 Message
+
+on:
+  workflow_dispatch:   # experimental prototype -- run manually to eyeball the result
+    inputs:
+      season:
+        description: "Season year. Leave blank to auto-default to the newest season on disk."
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  post_test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out repo
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        run: pip install pandas requests
+
+      - name: Post Components V2 test message
+        env:
+          DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
+          WEEKLY_UPDATE_CHANNEL_ID: ${{ secrets.WEEKLY_UPDATE_CHANNEL_ID }}
+        run: |
+          if [ -n "${{ inputs.season }}" ]; then
+            python test_components_v2.py --season "${{ inputs.season }}"
+          else
+            python test_components_v2.py
+          fi
