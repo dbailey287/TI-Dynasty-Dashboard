@@ -54,6 +54,7 @@ Optional:
 import glob
 import logging
 import os
+import random
 import re
 import sys
 
@@ -69,6 +70,25 @@ notify.setup_log_capture()
 
 DISCORD_TOKEN = os.environ.get("DISCORD_TOKEN")
 CHANNEL_ID = os.environ.get("WEEKLY_UPDATE_CHANNEL_ID")
+
+DASHBOARD_URL = "https://ti-dynasty-dashboard-2027.streamlit.app/"
+
+# Rotating closing line for the report -- appended once, to the LAST
+# message sent, not repeated on all three (this is one report, just
+# split across three Discord messages for length reasons -- see the
+# module docstring above).
+DASHBOARD_FOOTERS = [
+    "📊 Full breakdown (and the stuff that didn't fit here) is always on the dashboard: {url}",
+    "🕵️ Curious how the sausage gets made? All the receipts live here: {url}",
+    "📈 Want the deeper cut? Standings, records, and more await: {url}",
+    "🔎 There's more where that came from — dig in at the dashboard: {url}",
+    "🏈 That's the highlight reel. Full stats on the dashboard: {url}",
+]
+
+
+def pick_dashboard_footer() -> str:
+    return random.choice(DASHBOARD_FOOTERS).format(url=DASHBOARD_URL)
+
 
 # Whether CFP Rankings' user mentions actually notify people, or just
 # show as a clickable tag. True = real ping/notification.
@@ -216,6 +236,10 @@ def main():
         log.warning("Nothing to post -- no section had usable data.")
         notify.post_alert(CHANNEL_ID, DISCORD_TOKEN, "⚠️ Weekly update: no data available for any section, nothing posted.")
         sys.exit(0)
+
+    # Footer goes on the LAST message only -- this is one report, just
+    # split across multiple Discord messages.
+    messages[-1] = messages[-1] + "\n\n" + pick_dashboard_footer()
 
     for msg in messages:
         notify.post_message(CHANNEL_ID, DISCORD_TOKEN, msg, allow_pings=CFP_MENTIONS_PING)
