@@ -57,7 +57,20 @@ def _post(channel_id: str, token: str, content: str = None, embeds: list = None,
             f"{API_BASE}/channels/{channel_id}/messages",
             headers=headers, json=payload, timeout=15,
         )
-    resp.raise_for_status()
+    if not resp.ok:
+        # requests' default raise_for_status() only includes the status
+        # code, not Discord's actual explanation of what was wrong with
+        # the payload -- and for a 400 that explanation (which field,
+        # which validation rule) is the only way to actually fix
+        # anything. Surface it explicitly rather than a bare "400
+        # Client Error".
+        try:
+            detail = resp.json()
+        except ValueError:
+            detail = resp.text
+        raise requests.exceptions.HTTPError(
+            f"{resp.status_code} {resp.reason} for url {resp.url}: {detail}", response=resp,
+        )
 
 
 def post_text_file(channel_id: str, token: str, script_name: str, text: str, content: str = None):
