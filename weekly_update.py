@@ -3,9 +3,10 @@ Weekly Update Poster
 ======================
 Manually triggered (workflow_dispatch only, no schedule -- run this once
 you've confirmed all of a week's data is in: schedule screenshots,
-playoff bracket, recruiting rankings). Posts THREE separate Components
-V2 messages to WEEKLY_UPDATE_CHANNEL_ID -- Power Rankings, CFP Rankings,
-and Recruiting Rankings.
+playoff bracket, recruiting rankings). Posts ONE Components V2 message
+to WEEKLY_UPDATE_CHANNEL_ID, with Power Rankings, CFP Rankings, and
+Recruiting Rankings each as their own Container stacked in that same
+message -- not three separate messages like earlier versions.
 
 HISTORY (see git log for the actual code at each stage):
   1. Started as embeds -- looked bad, code-block tables inside embed
@@ -38,6 +39,12 @@ Since a row no longer costs a Section+Thumbnail (3 components), just
 one line of text inside a shared Text Display, there's no longer any
 real component-budget pressure -- every row in every section gets its
 logo, no top-N cutoff needed like the Thumbnail version required.
+
+  7. Combined all three Containers into ONE message instead of three
+     separate ones, once a message's component budget was clearly no
+     longer a concern -- a top-level components array can hold up to 10
+     items per Discord's own docs, and three lean 3-component Containers
+     plus a closing separator+footer is nowhere close to that.
 
 This is newer, less battle-tested API surface than a lot of this
 project -- built from Discord's documented schema, not verified
@@ -213,15 +220,6 @@ def build_recruiting_container(season: int, team_emoji: dict, directory: str = "
     return _build_container(f"🎯 Recruiting Rankings — {season} Class", rows, team_emoji)
 
 
-def _append_footer(container: dict) -> None:
-    """Mutates container in place, adding the @everyone + dashboard line
-    as a closing Separator + Text Display -- same "one ping for the
-    whole report" idea as the earlier plain-text version, just expressed
-    as components instead of appended message text."""
-    container["components"].append({"type": TYPE_SEPARATOR})
-    container["components"].append({"type": TYPE_TEXT_DISPLAY, "content": pick_dashboard_footer()})
-
-
 def main():
     missing = [name for name, val in [("DISCORD_TOKEN", DISCORD_TOKEN), ("WEEKLY_UPDATE_CHANNEL_ID", CHANNEL_ID)] if not val]
     if missing:
@@ -252,13 +250,23 @@ def main():
         notify.post_alert(CHANNEL_ID, DISCORD_TOKEN, "⚠️ Weekly update: no data available for any section, nothing posted.")
         sys.exit(0)
 
-    _append_footer(containers[-1])
-
+    # ONE message, all sections stacked as separate top-level Containers --
+    # each already has its own accent-color border for visual separation,
+    # so a spacing-only Separator (no visible line) between them is enough
+    # rather than another divider. A message's top-level components array
+    # can hold up to 10 items (Discord's own docs); 3 containers plus a
+    # closing separator+footer is nowhere close to that.
+    components = []
     for i, container in enumerate(containers):
-        is_last = i == len(containers) - 1
-        log.info("Posting message %d/%d...", i + 1, len(containers))
-        notify.post_components_v2(CHANNEL_ID, DISCORD_TOKEN, [container], allow_everyone_ping=is_last)
-    log.info("Posted %d message(s) to channel %s.", len(containers), CHANNEL_ID)
+        if i > 0:
+            components.append({"type": TYPE_SEPARATOR, "divider": False, "spacing": 2})
+        components.append(container)
+    components.append({"type": TYPE_SEPARATOR})
+    components.append({"type": TYPE_TEXT_DISPLAY, "content": pick_dashboard_footer()})
+
+    log.info("Posting combined weekly update (%d section(s)) as one message...", len(containers))
+    notify.post_components_v2(CHANNEL_ID, DISCORD_TOKEN, components, allow_everyone_ping=True)
+    log.info("Posted to channel %s.", CHANNEL_ID)
 
 
 if __name__ == "__main__":
