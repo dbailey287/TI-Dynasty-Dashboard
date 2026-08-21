@@ -1376,9 +1376,32 @@ def next_in_season_sequence(current_week_sort: int) -> int:
 # have real data behind them at all (no games happen during them), which
 # is why they need a completely separate mechanism -- see
 # OFFSEASON_PHASES and check_rta_status.py's advance handling.
-WEEK_SORT_REMINDERS = {
-    900: "🔥 **Conference Championship week!** This is your ONLY window to fire or extend coaches this season -- use it or lose it.",
-    901: "🎓 **Bowl Week 1!** The coaching carousel opens -- this is when you can HIRE new coaches. Also: Heisman Trophy ceremony happens this week.",
+# Full, self-contained announcements for the postseason weeks (900-904).
+# These REPLACE the normal "flavor line + We're now on Week X" format
+# entirely, rather than appending an extra reminder line after it --
+# the week name only gets stated once. Also deliberately NOT derived
+# from get_week_label_for_sort()'s CSV lookup: that only works once a
+# real "Bowl 1"-labeled screenshot has actually been scraped for that
+# week, so early in a game's postseason (or if scraping lags) it falls
+# back to a meaningless raw internal number like "Week 901" -- these
+# fixed canonical names are always right regardless of scrape timing.
+POSTSEASON_ANNOUNCEMENTS = {
+    900: "🔥 **Conference Championship Week!** This is your ONLY window to fire or extend coaches this season -- use it or lose it.",
+    901: "🏈 **Bowl Week 1!** Playoff First Round, plus the rest of the non-playoff bowl games. The coaching carousel also opens now -- this is when you can HIRE new coaches. Heisman Trophy ceremony happens this week too.",
+    902: "🏈 **Bowl Week 2!** Playoff Quarterfinals, plus more non-playoff bowl games.",
+    903: "🏈 **Bowl Week 3!** Playoff Semifinals -- no other bowl games this week.",
+    904: "🏆 **Bowl Week 4 — National Championship!** This is Championship Week.",
+}
+
+# Short canonical labels for the same weeks, used only for admin log
+# lines (never posted to Discord) -- keeps log output readable without
+# needing the full announcement text.
+POSTSEASON_WEEK_LABELS = {
+    900: "Conference Championship Week",
+    901: "Bowl Week 1",
+    902: "Bowl Week 2",
+    903: "Bowl Week 3",
+    904: "Bowl Week 4",
 }
 
 # The full offseason sequence, walked through ONE PHASE PER ADVANCE once

@@ -313,13 +313,19 @@ def run() -> str:
                     else:
                         new_week_sort = rl.next_in_season_sequence(prior_week_sort)
                     state["current_week_sort"] = new_week_sort
-                    week_label = rl.get_week_label_for_sort(".", new_week_sort)
                     matchups = rl.get_matchups_for_week_sort(".", new_week_sort)
-                    announcement = rl.pick_announcement()
-                    announcement += f" We're now on **Week {week_label}**."
-                    reminder = rl.WEEK_SORT_REMINDERS.get(new_week_sort)
-                    if reminder:
-                        announcement += f"\n{reminder}"
+
+                    postseason_announcement = rl.POSTSEASON_ANNOUNCEMENTS.get(new_week_sort)
+                    if postseason_announcement:
+                        # Self-contained -- names the week itself, so no
+                        # separate "We're now on Week X" line gets
+                        # prepended (that would just repeat the name).
+                        announcement = postseason_announcement
+                        week_label = rl.POSTSEASON_WEEK_LABELS.get(new_week_sort, str(new_week_sort))
+                    else:
+                        week_label = rl.get_week_label_for_sort(".", new_week_sort)
+                        announcement = rl.pick_announcement()
+                        announcement += f" We're now on **Week {week_label}**."
                     log.info("Advance detected -- posting to #announcements (week_sort=%s, label=%s).", new_week_sort, week_label)
 
             announcement += f"\n📊 {DASHBOARD_URL}"
