@@ -27,7 +27,7 @@ Arkansas,dbailey287,7,"Sat, Oct 17",Home,-,Vanderbilt,CPU,User vs CPU,Completed,
 Arkansas,dbailey287,8,,-,-,BYE,-,BYE,BYE,-,,,,2026-08-20 11:35:24,2026,
 Arkansas,dbailey287,9,"Sat, Oct 31",Home,-,Alabama,CPU,User vs CPU,Completed,W,46.0,3.0,43.0,2026-08-20 11:35:24,2026,-
 Arkansas,dbailey287,10,"Sat, Nov 7",Home,-,Kentucky,travisdunn070896,User vs User,Completed,W,34.0,23.0,11.0,2026-08-20 11:35:24,2026,-
-Arkansas,dbailey287,11,"Sat, Nov 14",Away,2,South Carolina,clemson256_67951,User vs User,Completed,W,31.0,24.0,7.0,2026-08-20 11:35:24,2026,1
+Arkansas,dbailey287,11,"Sat, Nov 14",Away,2,South Carolina,clemson256,User vs User,Completed,W,31.0,24.0,7.0,2026-08-20 11:35:24,2026,1
 Arkansas,dbailey287,12,"Sat, Nov 21",Home,14,Texas,CPU,User vs CPU,Completed,W,38.0,28.0,10.0,2026-08-20 11:35:24,2026,4
 Arkansas,dbailey287,13,"Sat, Nov 28",Away,8,LSU,CPU,User vs CPU,Upcoming,-,,,,2026-08-20 11:35:24,2026,
 Arkansas,dbailey287,14,,-,-,BYE,-,BYE,BYE,-,,,,2026-08-20 11:35:24,2026,
@@ -203,23 +203,23 @@ SMU,cfuller23,13,"Sat, Nov 28",Away,17,Notre Dame,CPU,User vs CPU,Completed,W,66
 SMU,cfuller23,14,,-,-,BYE,-,BYE,BYE,-,,,,2026-08-20 11:35:21,2026,
 SMU,cfuller23,Conf Champ,,-,-,BYE,-,BYE,BYE,-,,,,2026-08-20 11:35:21,2026,
 SMU,cfuller23,16,,-,-,BYE,-,BYE,BYE,-,,,,2026-08-20 11:35:21,2026,
-South Carolina,clemson256_67951,0,,-,-,BYE,-,BYE,BYE,-,,,,2026-08-08 12:18:28,2026,
-South Carolina,clemson256_67951,1,"Sat, Sep 5",Home,-,UConn,CPU,User vs CPU,Completed,W,56.0,0.0,56.0,2026-08-08 12:18:28,2026,-
-South Carolina,clemson256_67951,2,"Sat, Sep 12",Away,-,Vanderbilt,CPU,User vs CPU,Completed,W,27.0,13.0,14.0,2026-08-08 12:18:28,2026,-
-South Carolina,clemson256_67951,3,"Sat, Sep 19",Home,-,Mississippi State,CPU,User vs CPU,Completed,W,17.0,14.0,3.0,2026-08-08 12:18:28,2026,-
-South Carolina,clemson256_67951,4,"Sat, Sep 26",Away,-,Alabama,CPU,User vs CPU,Completed,W,35.0,17.0,18.0,2026-08-08 12:18:28,2026,19
-South Carolina,clemson256_67951,5,,-,-,BYE,-,BYE,BYE,-,,,,2026-08-17 02:00:50,2026,
-South Carolina,clemson256_67951,6,"Sat, Oct 10",Home,-,Florida,CPU,User vs CPU,Completed,W,14.0,12.0,2.0,2026-08-17 02:00:50,2026,-
-South Carolina,clemson256_67951,7,"Sat, Oct 17",Away,-,Auburn,CPU,User vs CPU,Completed,W,38.0,10.0,28.0,2026-08-17 02:00:50,2026,-
-South Carolina,clemson256_67951,8,"Sat, Oct 24",Away,-,Tennessee,CPU,User vs CPU,Completed,W,34.0,19.0,15.0,2026-08-20 11:34:53,2026,-
-South Carolina,clemson256_67951,9,"Sat, Oct 31",Home,-,Virginia Tech,rooke1221,User vs User,Completed,W,66.0,31.0,35.0,2026-08-20 11:34:53,2026,-
-South Carolina,clemson256_67951,10,"Sat, Nov 7",Home,-,Texas A&M,CPU,User vs CPU,Completed,W,25.0,17.0,8.0,2026-08-20 11:34:53,2026,-
-South Carolina,clemson256_67951,11,"Sat, Nov 14",Home,1,Arkansas,dbailey287,User vs User,Completed,L,24.0,31.0,-7.0,2026-08-20 11:34:53,2026,4
-South Carolina,clemson256_67951,12,"Sat, Nov 21",Home,-,Georgia,CPU,User vs CPU,Completed,W,28.0,17.0,11.0,2026-08-20 11:34:53,2026,-
-South Carolina,clemson256_67951,13,"Sat, Nov 28",Away,-,Clemson,CPU,User vs CPU,Upcoming,-,,,,2026-08-20 11:34:53,2026,
-South Carolina,clemson256_67951,14,,-,-,BYE,-,BYE,BYE,-,,,,2026-08-20 11:34:53,2026,
-South Carolina,clemson256_67951,Conf Champ,,-,-,BYE,-,BYE,BYE,-,,,,2026-08-20 11:34:53,2026,
-South Carolina,clemson256_67951,16,,-,-,BYE,-,BYE,BYE,-,,,,2026-08-20 11:34:53,2026,
+South Carolina,clemson256,0,,-,-,BYE,-,BYE,BYE,-,,,,2026-08-08 12:18:28,2026,
+South Carolina,clemson256,1,"Sat, Sep 5",Home,-,UConn,CPU,User vs CPU,Completed,W,56.0,0.0,56.0,2026-08-08 12:18:28,2026,-
+South Carolina,clemson256,2,"Sat, Sep 12",Away,-,Vanderbilt,CPU,User vs CPU,Completed,W,27.0,13.0,14.0,2026-08-08 12:18:28,2026,-
+South Carolina,clemson256,3,"Sat, Sep 19",Home,-,Mississippi State,CPU,User vs CPU,Completed,W,17.0,14.0,3.0,2026-08-08 12:18:28,2026,-
+South Carolina,clemson256,4,"Sat, Sep 26",Away,-,Alabama,CPU,User vs CPU,Completed,W,35.0,17.0,18.0,2026-08-08 12:18:28,2026,19
+South Carolina,clemson256,5,,-,-,BYE,-,BYE,BYE,-,,,,2026-08-17 02:00:50,2026,
+South Carolina,clemson256,6,"Sat, Oct 10",Home,-,Florida,CPU,User vs CPU,Completed,W,14.0,12.0,2.0,2026-08-17 02:00:50,2026,-
+South Carolina,clemson256,7,"Sat, Oct 17",Away,-,Auburn,CPU,User vs CPU,Completed,W,38.0,10.0,28.0,2026-08-17 02:00:50,2026,-
+South Carolina,clemson256,8,"Sat, Oct 24",Away,-,Tennessee,CPU,User vs CPU,Completed,W,34.0,19.0,15.0,2026-08-20 11:34:53,2026,-
+South Carolina,clemson256,9,"Sat, Oct 31",Home,-,Virginia Tech,rooke1221,User vs User,Completed,W,66.0,31.0,35.0,2026-08-20 11:34:53,2026,-
+South Carolina,clemson256,10,"Sat, Nov 7",Home,-,Texas A&M,CPU,User vs CPU,Completed,W,25.0,17.0,8.0,2026-08-20 11:34:53,2026,-
+South Carolina,clemson256,11,"Sat, Nov 14",Home,1,Arkansas,dbailey287,User vs User,Completed,L,24.0,31.0,-7.0,2026-08-20 11:34:53,2026,4
+South Carolina,clemson256,12,"Sat, Nov 21",Home,-,Georgia,CPU,User vs CPU,Completed,W,28.0,17.0,11.0,2026-08-20 11:34:53,2026,-
+South Carolina,clemson256,13,"Sat, Nov 28",Away,-,Clemson,CPU,User vs CPU,Upcoming,-,,,,2026-08-20 11:34:53,2026,
+South Carolina,clemson256,14,,-,-,BYE,-,BYE,BYE,-,,,,2026-08-20 11:34:53,2026,
+South Carolina,clemson256,Conf Champ,,-,-,BYE,-,BYE,BYE,-,,,,2026-08-20 11:34:53,2026,
+South Carolina,clemson256,16,,-,-,BYE,-,BYE,BYE,-,,,,2026-08-20 11:34:53,2026,
 Stanford,bearofswag,0,,-,-,BYE,-,BYE,BYE,-,,,,2026-08-08 12:18:31,2026,
 Stanford,bearofswag,1,"Fri, Sep 4",Home,14,Miami,CPU,User vs CPU,Completed,W,30.0,27.0,3.0,2026-08-08 12:18:31,2026,6
 Stanford,bearofswag,2,,-,-,BYE,-,BYE,BYE,-,,,,2026-08-08 12:18:31,2026,
@@ -280,7 +280,7 @@ Virginia Tech,rooke1221,5,"Sat, Oct 3",Away,7,Pittsburgh,aalexbailey,User vs Use
 Virginia Tech,rooke1221,6,"Sat, Oct 10",Home,-,Maryland,coys35,User vs User,Completed,W,38.0,7.0,31.0,2026-08-17 02:00:57,2026,-
 Virginia Tech,rooke1221,7,"Sat, Oct 17",Home,-,Georgia Tech,CPU,User vs CPU,Completed,W,49.0,23.0,26.0,2026-08-17 02:00:57,2026,-
 Virginia Tech,rooke1221,8,"Sat, Oct 24",Away,-,NC State,CPU,User vs CPU,Completed,L,24.0,44.0,-20.0,2026-08-20 11:35:00,2026,-
-Virginia Tech,rooke1221,9,"Sat, Oct 31",Away,2,South Carolina,clemson256_67951,User vs User,Completed,L,31.0,66.0,-35.0,2026-08-20 11:35:00,2026,2
+Virginia Tech,rooke1221,9,"Sat, Oct 31",Away,2,South Carolina,clemson256,User vs User,Completed,L,31.0,66.0,-35.0,2026-08-20 11:35:00,2026,2
 Virginia Tech,rooke1221,10,,-,-,BYE,-,BYE,BYE,-,,,,2026-08-20 11:35:00,2026,
 Virginia Tech,rooke1221,11,"Sat, Nov 14",Home,-,Oregon State,CPU,User vs CPU,Completed,W,21.0,17.0,4.0,2026-08-20 11:35:00,2026,-
 Virginia Tech,rooke1221,12,"Sat, Nov 21",Away,12,Miami,CPU,User vs CPU,Completed,L,16.0,35.0,-19.0,2026-08-20 11:35:00,2026,15
