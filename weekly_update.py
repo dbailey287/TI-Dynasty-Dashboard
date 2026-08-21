@@ -216,7 +216,13 @@ def build_recruiting_container(season: int, team_emoji: dict, directory: str = "
         return None
 
     rec = rec.sort_values("National_Rank")
-    rows = [(int(r["National_Rank"]), r["Team"], f"{int(r['Total_Commits'])} commits") for _, r in rec.iterrows()]
+    rows = []
+    for _, r in rec.iterrows():
+        commits = int(r["Total_Commits"])
+        nil = int(r["NIL_Spent"])
+        stars = f"5★{int(r['Five_Star'])} 4★{int(r['Four_Star'])} 3★{int(r['Three_Star'])} 2★{int(r['Two_Star'])} 1★{int(r['One_Star'])}"
+        value_label = f"{commits} commits • ${nil:,} NIL • {stars}"
+        rows.append((int(r["National_Rank"]), r["Team"], value_label))
     return _build_container(f"🎯 Recruiting Rankings — {season} Class", rows, team_emoji)
 
 
