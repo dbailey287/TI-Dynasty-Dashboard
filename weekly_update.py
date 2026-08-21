@@ -146,6 +146,20 @@ def resolve_season() -> int | None:
     return get_current_season(".")
 
 
+def resolve_sections() -> dict:
+    """Which of the 3 sections to build/send, driven by --skip-power/
+    --skip-cfp/--skip-recruiting (all default to sending). Matches the
+    3 checkboxes on the workflow's manual trigger form -- Recruiting in
+    particular tends to be updated far less often than the others (maybe
+    2-3 times a season), so there's no reason to re-send it every week
+    just because Power/CFP changed."""
+    return {
+        "power": "--skip-power" not in sys.argv,
+        "cfp": "--skip-cfp" not in sys.argv,
+        "recruiting": "--skip-recruiting" not in sys.argv,
+    }
+
+
 def _row_line(rank: int, team: str, value_label: str, team_emoji: dict) -> str:
     emoji = team_emoji.get(team, "")
     prefix = f"{emoji} " if emoji else ""
@@ -257,23 +271,41 @@ def main():
     if season is None:
         log.error("No dynasty_data_<season>.csv found anywhere -- nothing to report.")
         sys.exit(1)
-    log.info("Building weekly update for season %d.", season)
+    sections = resolve_sections()
+    log.info(
+        "Building weekly update for season %d. Sections: power=%s cfp=%s recruiting=%s",
+        season, sections["power"], sections["cfp"], sections["recruiting"],
+    )
+    if not any(sections.values()):
+        log.warning("All 3 sections unchecked on the workflow trigger -- nothing to post.")
+        sys.exit(0)
 
     team_emoji = roster.load_team_emoji_map(".")
 
     containers = []
-    power = build_power_rankings_container(season, team_emoji)
-    if power:
-        containers.append(power)
-    cfp = build_cfp_rankings_container(season, team_emoji)
-    if cfp:
-        containers.append(cfp)
-    recruiting = build_recruiting_container(season, team_emoji)
-    if recruiting:
-        containers.append(recruiting)
+    if sections["power"]:
+        power = build_power_rankings_container(season, team_emoji)
+        if power:
+            containers.append(power)
+    else:
+        log.info("Skipping Power Rankings (unchecked).")
+
+    if sections["cfp"]:
+        cfp = build_cfp_rankings_container(season, team_emoji)
+        if cfp:
+            containers.append(cfp)
+    else:
+        log.info("Skipping CFP Rankings (unchecked).")
+
+    if sections["recruiting"]:
+        recruiting = build_recruiting_container(season, team_emoji)
+        if recruiting:
+            containers.append(recruiting)
+    else:
+        log.info("Skipping Recruiting Rankings (unchecked).")
 
     if not containers:
-        log.warning("Nothing to post -- no section had usable data.")
+        log.warning("Nothing to post -- no selected section had usable data.")
         notify.post_alert(CHANNEL_ID, DISCORD_TOKEN, "⚠️ Weekly update: no data available for any section, nothing posted.")
         sys.exit(0)
 

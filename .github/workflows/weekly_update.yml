@@ -7,6 +7,21 @@ on:
         description: "Season year to report on. Leave blank to auto-default to the newest season on disk."
         required: false
         type: string
+      send_power_rankings:
+        description: "Send Power Rankings"
+        required: false
+        type: boolean
+        default: true
+      send_cfp_rankings:
+        description: "Send CFP Rankings"
+        required: false
+        type: boolean
+        default: true
+      send_recruiting_rankings:
+        description: "Send Recruiting Rankings (uncheck if it hasn't changed since last time)"
+        required: false
+        type: boolean
+        default: true
 
 permissions:
   contents: read              # this script only reads existing CSVs and posts to Discord, never commits anything
@@ -32,8 +47,9 @@ jobs:
           DISCORD_TOKEN: ${{ secrets.DISCORD_TOKEN }}
           WEEKLY_UPDATE_CHANNEL_ID: ${{ secrets.WEEKLY_UPDATE_CHANNEL_ID }}
         run: |
-          if [ -n "${{ inputs.season }}" ]; then
-            python weekly_update.py --season "${{ inputs.season }}"
-          else
-            python weekly_update.py
-          fi
+          ARGS=""
+          if [ -n "${{ inputs.season }}" ]; then ARGS="$ARGS --season ${{ inputs.season }}"; fi
+          if [ "${{ inputs.send_power_rankings }}" = "false" ]; then ARGS="$ARGS --skip-power"; fi
+          if [ "${{ inputs.send_cfp_rankings }}" = "false" ]; then ARGS="$ARGS --skip-cfp"; fi
+          if [ "${{ inputs.send_recruiting_rankings }}" = "false" ]; then ARGS="$ARGS --skip-recruiting"; fi
+          python weekly_update.py $ARGS
