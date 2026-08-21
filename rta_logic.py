@@ -1331,8 +1331,42 @@ def week_sort_key(week_val) -> int:
     if bowl_match:
         return 900 + int(bowl_match.group(1))  # Bowl 1 -> 901, Bowl 2 -> 902, etc.
     if "champ" in lower and "conf" not in lower:
-        return 950  # National Championship (confirmed label: "Nat'l Champ")
+        # National Championship happens IN Bowl Week 4, not as a separate
+        # week (confirmed) -- so a team's row labeled "Champ"/"Nat'l Champ"
+        # gets the SAME sort value as "Bowl 4" (904), not a distinct one.
+        # A different value here would make get_matchups_for_week_sort(904)
+        # silently miss whichever team(s) are actually playing in the
+        # title game that week, since their row wouldn't match.
+        return 904
     return 999
+
+
+# Full ordered progression of week_sort values for ONE season, regular
+# season through the postseason's last week (Bowl Week 4 -- also when
+# the National Championship happens, confirmed the same real
+# week/advance, not a separate one, hence no distinct value for it
+# here). Regular season is a confirmed fixed 15 weeks (0-14) -- every
+# team gets the same number of advances even on a bye week. Walking this
+# list explicitly (rather than blindly adding 1 every advance, which
+# would never actually land on 900 after week 14, or correctly detect
+# the end of Bowl Week 4) is what check_rta_status.py uses to progress
+# the tracked week_sort.
+SEASON_SEQUENCE = list(range(15)) + [900, 901, 902, 903, 904]
+
+
+def next_in_season_sequence(current_week_sort: int) -> int:
+    """Returns the next week_sort in SEASON_SEQUENCE after
+    current_week_sort. Falls back to a bare +1 if current_week_sort is
+    Bowl Week 4 (904, the last entry) or otherwise not found in the
+    sequence -- that combination should only come up if an advance
+    happens at 904 before a champion's been confirmed (see
+    check_rta_status.py's season_transition check), which is worth
+    noticing and investigating rather than silently papering over."""
+    if current_week_sort in SEASON_SEQUENCE:
+        idx = SEASON_SEQUENCE.index(current_week_sort)
+        if idx + 1 < len(SEASON_SEQUENCE):
+            return SEASON_SEQUENCE[idx + 1]
+    return current_week_sort + 1
 
 
 # Reminders attached to specific SCHEDULE-DRIVEN week_sort values (i.e.

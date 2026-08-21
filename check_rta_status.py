@@ -256,35 +256,35 @@ def run() -> str:
                     announcement += f"\n{rl.WEEK_ZERO_REMINDER}"
                     log.info("Offseason walk complete -- new season begins at Week %s.", week_label)
             else:
+                was_bootstrap = state.get("current_week_sort") is None
                 prior_week_sort = state.get("current_week_sort")
                 if prior_week_sort is None:
                     # Bootstrap ONLY: no tracked week yet (e.g. very first
                     # advance ever), so fall back to the CSV's best guess this
-                    # one time. Every advance after this increments from what
-                    # we already know instead of re-deriving from the CSV,
-                    # which is what avoids the staleness bug going forward.
+                    # one time. Every advance after this walks SEASON_SEQUENCE
+                    # from what we already know instead of re-deriving from
+                    # the CSV, which is what avoids the staleness bug going
+                    # forward.
                     prior_week_sort = rl.find_earliest_upcoming_week_sort(".")
                     if prior_week_sort is None:
                         prior_week_sort = 0
-                    new_week_sort = prior_week_sort
-                else:
-                    new_week_sort = prior_week_sort + 1
 
-                # Season transition: if we were just on the National
-                # Championship (950) and the REAL bracket (never the
-                # predicted one) shows a decided champion, this advance
-                # starts the offseason phase walk (End of Season Recap
-                # through Pre Season) instead of jumping straight back to
-                # week 0 -- see the offseason_idx branch above for what
-                # happens once that walk finishes. Checking the bracket
-                # file rather than dynasty_data is deliberate:
-                # dynasty_data only has games for user-controlled teams,
-                # and it's entirely possible none of them reach the
-                # National Championship, in which case dynasty_data would
-                # never show it as complete even though it genuinely
-                # happened.
+                # Season transition: if we were just on Bowl Week 4 (904 --
+                # this is also when the National Championship happens,
+                # confirmed the same real week/advance, not a separate one)
+                # and the REAL bracket (never the predicted one) shows a
+                # decided champion, this advance starts the offseason phase
+                # walk (End of Season Recap through Pre Season) instead of
+                # continuing the schedule-driven week numbering -- see the
+                # offseason_idx branch above for what happens once that walk
+                # finishes. Checking the bracket file rather than
+                # dynasty_data is deliberate: dynasty_data only has games
+                # for user-controlled teams, and it's entirely possible none
+                # of them reach the National Championship, in which case
+                # dynasty_data would never show it as complete even though
+                # it genuinely happened.
                 season_transition = False
-                if prior_week_sort == 950:
+                if prior_week_sort == 904:
                     current_season = rl.get_current_season(".")
                     if current_season is not None:
                         champion = rl.get_national_champion(current_season, ".")
@@ -300,6 +300,18 @@ def run() -> str:
                     matchups = {}
                     log.info("Season transition detected (champion=%s) -- starting offseason phase walk.", champion)
                 else:
+                    # Walks the explicit known sequence (regular season
+                    # weeks 0-14, then Conf Champ, then Bowl 1-4) rather
+                    # than blindly adding 1 -- a bare +1 would produce "15"
+                    # after week 14 instead of jumping to Conf Champ (900),
+                    # and would never land on any of the postseason's
+                    # special values at all. Bootstrap is the one
+                    # exception: that's a first-time SYNC to whatever week
+                    # the CSV shows as current, not an advance past it.
+                    if was_bootstrap:
+                        new_week_sort = prior_week_sort
+                    else:
+                        new_week_sort = rl.next_in_season_sequence(prior_week_sort)
                     state["current_week_sort"] = new_week_sort
                     week_label = rl.get_week_label_for_sort(".", new_week_sort)
                     matchups = rl.get_matchups_for_week_sort(".", new_week_sort)
