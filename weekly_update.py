@@ -19,27 +19,25 @@ HISTORY (see git log for the actual code at each stage):
      each with a colored mention pill read as a "wall of text."
   4. Dropped per-team mentions entirely in favor of one @everyone ping
      on the closing line -- much less visual noise.
-  5. THIS VERSION: switched to Components V2 (Container/Section/
-     Thumbnail), which renders a real logo image next to each row
-     instead of a tiny inline emoji character -- visually cleaner than
-     any of the plain-text versions. This is why upload_team_emoji.py's
-     custom emoji aren't used here anymore: a Components V2 Thumbnail
-     accepts any external image URL directly (dynasty_logic.py's
-     existing ESPN CDN logo_url()), no custom-emoji upload needed.
+  5. Switched to Components V2 (Container/Section/Thumbnail) for a real
+     logo IMAGE next to each row instead of a tiny inline emoji
+     character. Looked good, but the Thumbnail accessory has no size
+     control at all (confirmed against Discord's own component
+     reference docs) -- it renders at Discord's fixed ~80px accessory
+     size, no matter what, and that read as too large.
+  6. THIS VERSION: kept the Components V2 Container/Text Display
+     structure (still gets the clean header + separator layout), but
+     swapped Section+Thumbnail cards back out for inline custom emoji
+     (team_emoji_map.json, from upload_team_emoji.py) inside plain Text
+     Display markdown -- same small ~20px icon size as the very first
+     version, since a Text Display isn't a code block and custom emoji
+     tokens render fine there. Trade-off: back to "icon inline with
+     text" instead of the "text left, image right" card look.
 
-Component budget matters here -- community-reported guidance puts the
-ceiling around 40 total components in one message, and each row with
-its own Section+Thumbnail costs THREE (the Section, its nested Text
-Display, and its Thumbnail accessory -- I undercounted this at first
-pass and had to walk it back once I actually counted a real 18-25 row
-message: 57-59 components, well over budget). Giving every row a
-full logo is only safe up to about 8-10 rows.
-
-So: only the top TOP_N_WITH_LOGO teams in each section get full
-Section+Thumbnail treatment. Everyone past that (by rank, regardless of
-user vs. CPU) is bundled into one shared compact Text Display instead
-of costing a Section each -- keeps every message safely under budget
-regardless of how many teams happen to be ranked that week.
+Since a row no longer costs a Section+Thumbnail (3 components), just
+one line of text inside a shared Text Display, there's no longer any
+real component-budget pressure -- every row in every section gets its
+logo, no top-N cutoff needed like the Thumbnail version required.
 
 This is newer, less battle-tested API surface than a lot of this
 project -- built from Discord's documented schema, not verified
@@ -75,6 +73,7 @@ import pandas as pd
 
 import dynasty_logic as dl
 import notify_utils as notify
+import roster
 
 logging.basicConfig(level=logging.INFO, format="[%(asctime)s] [%(levelname)-5s] %(message)s", datefmt="%Y-%m-%d %H:%M:%S")
 log = logging.getLogger("weekly_update")
@@ -100,14 +99,11 @@ def pick_dashboard_footer() -> str:
 
 # Component type numbers, per Discord's component reference:
 # https://discord.com/developers/docs/components/reference
-TYPE_SECTION = 9
 TYPE_TEXT_DISPLAY = 10
-TYPE_THUMBNAIL = 11
 TYPE_SEPARATOR = 14
 TYPE_CONTAINER = 17
 
 CONTAINER_ACCENT_COLOR = 0xD4AF37  # gold, matches the dashboard's user-highlight accent
-TOP_N_WITH_LOGO = 8  # rows beyond this get bundled into compact text, not their own Section
 
 
 def get_current_season(directory: str = ".") -> int | None:
@@ -134,48 +130,27 @@ def resolve_season() -> int | None:
     return get_current_season(".")
 
 
-def _team_section(rank_label: str, team: str, value_label: str) -> dict:
-    """A single Section: rank/team/value as one Text Display, with the
-    team's real logo as a Thumbnail accessory (not a custom emoji --
-    Thumbnail takes any external image URL directly)."""
-    section = {
-        "type": TYPE_SECTION,
-        "components": [
-            {"type": TYPE_TEXT_DISPLAY, "content": f"**{rank_label}. {team}** — {value_label}"},
-        ],
-    }
-    logo_url = dl.logo_url(team)
-    if logo_url:
-        section["accessory"] = {"type": TYPE_THUMBNAIL, "media": {"url": logo_url}}
-    return section
+def _row_line(rank: int, team: str, value_label: str, team_emoji: dict) -> str:
+    emoji = team_emoji.get(team, "")
+    prefix = f"{emoji} " if emoji else ""
+    return f"**{rank}.** {prefix}{team} — {value_label}"
 
 
-def _split_rows_by_logo_budget(rows: list) -> tuple[list, list]:
-    """rows is a list of (rank, team, value_label) tuples, already
-    sorted by rank. Returns (full_treatment_rows, compact_rows) split at
-    TOP_N_WITH_LOGO -- see module docstring for why."""
-    return rows[:TOP_N_WITH_LOGO], rows[TOP_N_WITH_LOGO:]
-
-
-def _build_container(title: str, rows: list) -> dict:
+def _build_container(title: str, rows: list, team_emoji: dict) -> dict:
     """rows: list of (rank, team, value_label) tuples, already sorted.
-    Shared by all three sections below -- same top-N-gets-a-logo split,
-    same header/separator/compact-block structure."""
-    full, compact = _split_rows_by_logo_budget(rows)
-
-    components = [{"type": TYPE_TEXT_DISPLAY, "content": f"## {title}"}, {"type": TYPE_SEPARATOR}]
-    for rank, team, value_label in full:
-        components.append(_team_section(str(rank), team, value_label))
-
-    if compact:
-        components.append({"type": TYPE_SEPARATOR})
-        lines = [f"**{rank}.** {team} — {value_label}" for rank, team, value_label in compact]
-        components.append({"type": TYPE_TEXT_DISPLAY, "content": "\n".join(lines)})
-
+    Every row is one line inside a single shared Text Display -- no
+    per-row Section/Thumbnail anymore (see module docstring for why),
+    so there's no component-budget concern regardless of row count."""
+    lines = [_row_line(rank, team, value_label, team_emoji) for rank, team, value_label in rows]
+    components = [
+        {"type": TYPE_TEXT_DISPLAY, "content": f"## {title}"},
+        {"type": TYPE_SEPARATOR},
+        {"type": TYPE_TEXT_DISPLAY, "content": "\n".join(lines)},
+    ]
     return {"type": TYPE_CONTAINER, "accent_color": CONTAINER_ACCENT_COLOR, "components": components}
 
 
-def build_power_rankings_container(season: int, directory: str = ".") -> dict | None:
+def build_power_rankings_container(season: int, team_emoji: dict, directory: str = ".") -> dict | None:
     path = os.path.join(directory, f"dynasty_data_{season}.csv")
     if not os.path.exists(path):
         log.warning("No dynasty_data_%d.csv found -- skipping Power Rankings.", season)
@@ -199,10 +174,10 @@ def build_power_rankings_container(season: int, directory: str = ".") -> dict | 
         week_label = completed.loc[completed["Week_Sort"] == latest_week_sort, "Week"].iloc[0]
 
     rows = [(int(row["Rank"]), team, f"{row['Dynasty_Rating']:.1f}") for team, row in rated.iterrows()]
-    return _build_container(f"🏆 Power Rankings — Week {week_label}", rows)
+    return _build_container(f"🏆 Power Rankings — Week {week_label}", rows, team_emoji)
 
 
-def build_cfp_rankings_container(season: int, directory: str = ".") -> dict | None:
+def build_cfp_rankings_container(season: int, team_emoji: dict, directory: str = ".") -> dict | None:
     path = os.path.join(directory, f"top25_rankings_{season}.csv")
     if not os.path.exists(path):
         log.warning("No top25_rankings_%d.csv found -- skipping CFP Rankings.", season)
@@ -217,10 +192,10 @@ def build_cfp_rankings_container(season: int, directory: str = ".") -> dict | No
 
     top25 = top25.sort_values("Rank")
     rows = [(int(r["Rank"]), r["Team"], r["Record"]) for _, r in top25.iterrows()]
-    return _build_container("🏈 CFP Rankings", rows)
+    return _build_container("🏈 CFP Rankings", rows, team_emoji)
 
 
-def build_recruiting_container(season: int, directory: str = ".") -> dict | None:
+def build_recruiting_container(season: int, team_emoji: dict, directory: str = ".") -> dict | None:
     path = os.path.join(directory, f"recruiting_ranks_{season}.csv")
     if not os.path.exists(path):
         log.warning("No recruiting_ranks_%d.csv found -- skipping Recruiting Rankings.", season)
@@ -235,7 +210,7 @@ def build_recruiting_container(season: int, directory: str = ".") -> dict | None
 
     rec = rec.sort_values("National_Rank")
     rows = [(int(r["National_Rank"]), r["Team"], f"{int(r['Total_Commits'])} commits") for _, r in rec.iterrows()]
-    return _build_container(f"🎯 Recruiting Rankings — {season} Class", rows)
+    return _build_container(f"🎯 Recruiting Rankings — {season} Class", rows, team_emoji)
 
 
 def _append_footer(container: dict) -> None:
@@ -259,14 +234,16 @@ def main():
         sys.exit(1)
     log.info("Building weekly update for season %d.", season)
 
+    team_emoji = roster.load_team_emoji_map(".")
+
     containers = []
-    power = build_power_rankings_container(season)
+    power = build_power_rankings_container(season, team_emoji)
     if power:
         containers.append(power)
-    cfp = build_cfp_rankings_container(season)
+    cfp = build_cfp_rankings_container(season, team_emoji)
     if cfp:
         containers.append(cfp)
-    recruiting = build_recruiting_container(season)
+    recruiting = build_recruiting_container(season, team_emoji)
     if recruiting:
         containers.append(recruiting)
 
@@ -279,26 +256,9 @@ def main():
 
     for i, container in enumerate(containers):
         is_last = i == len(containers) - 1
-        component_count = _count_components(container)
-        log.info("Posting message %d/%d (%d component(s))...", i + 1, len(containers), component_count)
-        if component_count > 40:
-            log.warning("Message %d has %d components, over the ~40 community-reported ceiling -- may be rejected by Discord.", i + 1, component_count)
+        log.info("Posting message %d/%d...", i + 1, len(containers))
         notify.post_components_v2(CHANNEL_ID, DISCORD_TOKEN, [container], allow_everyone_ping=is_last)
     log.info("Posted %d message(s) to channel %s.", len(containers), CHANNEL_ID)
-
-
-def _count_components(node) -> int:
-    """Recursively counts every component in the tree (for the ~40
-    ceiling warning above) -- includes the node itself plus anything
-    nested in "components" or "accessory"."""
-    if not isinstance(node, dict):
-        return 0
-    count = 1
-    for child in node.get("components", []):
-        count += _count_components(child)
-    if "accessory" in node:
-        count += _count_components(node["accessory"])
-    return count
 
 
 if __name__ == "__main__":
