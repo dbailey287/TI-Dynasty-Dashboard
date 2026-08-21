@@ -1151,6 +1151,7 @@ DEFAULT_STATE = {
     "last_reset_at": None,
     "cycle_count": 0,
     "current_week_sort": None,  # explicitly tracked, incremented on each advance -- see check_rta_status.py
+    "offseason_phase_index": None,  # None = normal season; 0..len(OFFSEASON_PHASES)-1 while walking the offseason sequence
     "last_tagline_by_team": {},  # {team: last tagline sent} -- used only for the cycle-boundary check
     "tagline_queue_by_team": {},  # {team: [remaining taglines in the current shuffled cycle]}
 }
@@ -1332,6 +1333,41 @@ def week_sort_key(week_val) -> int:
     if "champ" in lower and "conf" not in lower:
         return 950  # National Championship (confirmed label: "Nat'l Champ")
     return 999
+
+
+# Reminders attached to specific SCHEDULE-DRIVEN week_sort values (i.e.
+# weeks that DO have real game/screenshot data behind them, per
+# week_sort_key above) -- shown as an extra line appended to the normal
+# advance announcement for that week. None of the offseason phases below
+# have real data behind them at all (no games happen during them), which
+# is why they need a completely separate mechanism -- see
+# OFFSEASON_PHASES and check_rta_status.py's advance handling.
+WEEK_SORT_REMINDERS = {
+    900: "🔥 **Conference Championship week!** This is your ONLY window to fire or extend coaches this season -- use it or lose it.",
+    901: "🎓 **Bowl Week 1!** The coaching carousel opens -- this is when you can HIRE new coaches. Also: Heisman Trophy ceremony happens this week.",
+}
+
+# The full offseason sequence, walked through ONE PHASE PER ADVANCE once
+# a National Championship is confirmed (see check_rta_status.py) and
+# BEFORE the new season's Week 0 begins. None of these correspond to any
+# real schedule/game data -- they're purely sequential, tracked by
+# state["offseason_phase_index"] rather than the schedule-driven
+# week_sort numbering above. Each entry is (label, reminder_or_None).
+OFFSEASON_PHASES = [
+    ("End of Season Recap", "🛠️ Time to purchase facility upgrades and set next season's roster NIL."),
+    ("Transfer Portal (Week 1 of 4)", "🔄 The Transfer Portal is OPEN -- stays open for 4 advances."),
+    ("Transfer Portal (Week 2 of 4)", None),
+    ("Transfer Portal (Week 3 of 4)", None),
+    ("Transfer Portal (Week 4 of 4)", "🔄 Last week of the Transfer Portal -- it closes right after this advance."),
+    ("Position Changes", "🔀 Position Changes week."),
+    ("Train Players", "🏋️ Train Players week. Reminder: any unused upgrade points get auto-applied by the game if you don't spend them yourself."),
+    ("Cut Players", "✂️ Cut Players week."),
+    ("Pre Season", "🔍 Preseason! Scout players and set your dynasty blueprint. Commissioner: this is when schedules for the new season get set."),
+]
+
+# Shown once, appended to the announcement for the new season's Week 0 --
+# the first advance AFTER the offseason walk above finishes.
+WEEK_ZERO_REMINDER = "🎓 Reminder: Week 0 is when scholarships get awarded, and games may start -- first week schedule screenshots can be posted for scraping!"
 
 
 def find_earliest_upcoming_week_sort(directory: str = ".") -> int:

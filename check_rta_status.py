@@ -227,50 +227,88 @@ def run() -> str:
         if triggered:
             advance_triggered = True
 
-            prior_week_sort = state.get("current_week_sort")
-            if prior_week_sort is None:
-                # Bootstrap ONLY: no tracked week yet (e.g. very first
-                # advance ever), so fall back to the CSV's best guess this
-                # one time. Every advance after this increments from what
-                # we already know instead of re-deriving from the CSV,
-                # which is what avoids the staleness bug going forward.
-                prior_week_sort = rl.find_earliest_upcoming_week_sort(".")
+            offseason_idx = state.get("offseason_phase_index")
+
+            if offseason_idx is not None:
+                # Already mid-walk through the offseason phase sequence
+                # (End of Season Recap -> ... -> Pre Season) -- none of
+                # these correspond to real schedule/game data, so they're
+                # tracked purely by this index, not the CSV-driven
+                # week_sort numbering used the rest of the year.
+                next_idx = offseason_idx + 1
+                if next_idx < len(rl.OFFSEASON_PHASES):
+                    state["offseason_phase_index"] = next_idx
+                    label, reminder = rl.OFFSEASON_PHASES[next_idx]
+                    announcement = f"📋 **{label}**"
+                    if reminder:
+                        announcement += f"\n{reminder}"
+                    matchups = {}  # no games happen during the offseason walk
+                    log.info("Offseason phase advance: '%s' (%d/%d).", label, next_idx + 1, len(rl.OFFSEASON_PHASES))
+                else:
+                    # Walked through every offseason phase -- the new
+                    # season's Week 0 starts now.
+                    state["offseason_phase_index"] = None
+                    new_week_sort = 0
+                    state["current_week_sort"] = new_week_sort
+                    week_label = rl.get_week_label_for_sort(".", new_week_sort)
+                    matchups = rl.get_matchups_for_week_sort(".", new_week_sort)
+                    announcement = rl.pick_announcement() + f" We're now on **Week {week_label}**."
+                    announcement += f"\n{rl.WEEK_ZERO_REMINDER}"
+                    log.info("Offseason walk complete -- new season begins at Week %s.", week_label)
+            else:
+                prior_week_sort = state.get("current_week_sort")
                 if prior_week_sort is None:
-                    prior_week_sort = 0
-                new_week_sort = prior_week_sort
-            else:
-                new_week_sort = prior_week_sort + 1
+                    # Bootstrap ONLY: no tracked week yet (e.g. very first
+                    # advance ever), so fall back to the CSV's best guess this
+                    # one time. Every advance after this increments from what
+                    # we already know instead of re-deriving from the CSV,
+                    # which is what avoids the staleness bug going forward.
+                    prior_week_sort = rl.find_earliest_upcoming_week_sort(".")
+                    if prior_week_sort is None:
+                        prior_week_sort = 0
+                    new_week_sort = prior_week_sort
+                else:
+                    new_week_sort = prior_week_sort + 1
 
-            # Season transition: if we were just on the National
-            # Championship (950) and the REAL bracket (never the
-            # predicted one) shows a decided champion, this advance
-            # starts a brand new season -- reset back to week 0 instead
-            # of continuing to climb past the championship forever.
-            # Checking the bracket file rather than dynasty_data is
-            # deliberate: dynasty_data only has games for user-controlled
-            # teams, and it's entirely possible none of them reach the
-            # National Championship, in which case dynasty_data would
-            # never show it as complete even though it genuinely happened.
-            season_transition = False
-            if prior_week_sort == 950:
-                current_season = rl.get_current_season(".")
-                if current_season is not None:
-                    champion = rl.get_national_champion(current_season, ".")
-                    if champion:
-                        season_transition = True
-                        new_week_sort = 0
+                # Season transition: if we were just on the National
+                # Championship (950) and the REAL bracket (never the
+                # predicted one) shows a decided champion, this advance
+                # starts the offseason phase walk (End of Season Recap
+                # through Pre Season) instead of jumping straight back to
+                # week 0 -- see the offseason_idx branch above for what
+                # happens once that walk finishes. Checking the bracket
+                # file rather than dynasty_data is deliberate:
+                # dynasty_data only has games for user-controlled teams,
+                # and it's entirely possible none of them reach the
+                # National Championship, in which case dynasty_data would
+                # never show it as complete even though it genuinely
+                # happened.
+                season_transition = False
+                if prior_week_sort == 950:
+                    current_season = rl.get_current_season(".")
+                    if current_season is not None:
+                        champion = rl.get_national_champion(current_season, ".")
+                        if champion:
+                            season_transition = True
 
-            state["current_week_sort"] = new_week_sort
-            week_label = rl.get_week_label_for_sort(".", new_week_sort)
-            matchups = rl.get_matchups_for_week_sort(".", new_week_sort)
-
-            if season_transition:
-                announcement = f"🎉 {champion} are your National Champions! The dynasty marches on -- welcome to a brand new season."
-                log.info("Season transition detected (champion=%s) -- resetting week counter to 0.", champion)
-            else:
-                announcement = rl.pick_announcement()
-                announcement += f" We're now on **Week {week_label}**."
-                log.info("Advance detected -- posting to #announcements (week_sort=%s, label=%s).", new_week_sort, week_label)
+                if season_transition:
+                    state["offseason_phase_index"] = 0
+                    label, reminder = rl.OFFSEASON_PHASES[0]
+                    announcement = f"🎉 {champion} are your National Champions! The dynasty marches on.\n\n📋 **{label}**"
+                    if reminder:
+                        announcement += f"\n{reminder}"
+                    matchups = {}
+                    log.info("Season transition detected (champion=%s) -- starting offseason phase walk.", champion)
+                else:
+                    state["current_week_sort"] = new_week_sort
+                    week_label = rl.get_week_label_for_sort(".", new_week_sort)
+                    matchups = rl.get_matchups_for_week_sort(".", new_week_sort)
+                    announcement = rl.pick_announcement()
+                    announcement += f" We're now on **Week {week_label}**."
+                    reminder = rl.WEEK_SORT_REMINDERS.get(new_week_sort)
+                    if reminder:
+                        announcement += f"\n{reminder}"
+                    log.info("Advance detected -- posting to #announcements (week_sort=%s, label=%s).", new_week_sort, week_label)
 
             announcement += f"\n📊 {DASHBOARD_URL}"
 
