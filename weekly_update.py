@@ -143,12 +143,14 @@ def _row_line(rank: int, team: str, value_label: str, team_emoji: dict) -> str:
     return f"**{rank}.** {prefix}{team} — {value_label}"
 
 
-def _build_container(title: str, rows: list, team_emoji: dict) -> dict:
-    """rows: list of (rank, team, value_label) tuples, already sorted.
-    Every row is one line inside a single shared Text Display -- no
-    per-row Section/Thumbnail anymore (see module docstring for why),
-    so there's no component-budget concern regardless of row count."""
-    lines = [_row_line(rank, team, value_label, team_emoji) for rank, team, value_label in rows]
+def _build_container(title: str, lines: list) -> dict:
+    """lines: fully-formatted text lines, already in display order.
+    Callers build their own lines (single-line-per-team for Power/CFP,
+    two-line-per-team for Recruiting) since the right shape differs by
+    section -- this just wraps whatever's handed to it into the
+    header/separator/Text-Display Container structure, all in one shared
+    Text Display so there's no component-budget concern regardless of
+    row count."""
     components = [
         {"type": TYPE_TEXT_DISPLAY, "content": f"## {title}"},
         {"type": TYPE_SEPARATOR},
@@ -180,8 +182,8 @@ def build_power_rankings_container(season: int, team_emoji: dict, directory: str
         latest_week_sort = completed["Week_Sort"].max()
         week_label = completed.loc[completed["Week_Sort"] == latest_week_sort, "Week"].iloc[0]
 
-    rows = [(int(row["Rank"]), team, f"{row['Dynasty_Rating']:.1f}") for team, row in rated.iterrows()]
-    return _build_container(f"🏆 Power Rankings — Week {week_label}", rows, team_emoji)
+    lines = [_row_line(int(row["Rank"]), team, f"{row['Dynasty_Rating']:.1f}", team_emoji) for team, row in rated.iterrows()]
+    return _build_container(f"🏆 Power Rankings — Week {week_label}", lines)
 
 
 def build_cfp_rankings_container(season: int, team_emoji: dict, directory: str = ".") -> dict | None:
@@ -198,8 +200,8 @@ def build_cfp_rankings_container(season: int, team_emoji: dict, directory: str =
         return None
 
     top25 = top25.sort_values("Rank")
-    rows = [(int(r["Rank"]), r["Team"], r["Record"]) for _, r in top25.iterrows()]
-    return _build_container("🏈 CFP Rankings", rows, team_emoji)
+    lines = [_row_line(int(r["Rank"]), r["Team"], r["Record"], team_emoji) for _, r in top25.iterrows()]
+    return _build_container("🏈 CFP Rankings", lines)
 
 
 def build_recruiting_container(season: int, team_emoji: dict, directory: str = ".") -> dict | None:
@@ -216,14 +218,24 @@ def build_recruiting_container(season: int, team_emoji: dict, directory: str = "
         return None
 
     rec = rec.sort_values("National_Rank")
-    rows = []
-    for _, r in rec.iterrows():
-        commits = int(r["Total_Commits"])
-        nil = int(r["NIL_Spent"])
-        stars = f"5★{int(r['Five_Star'])} 4★{int(r['Four_Star'])} 3★{int(r['Three_Star'])} 2★{int(r['Two_Star'])} 1★{int(r['One_Star'])}"
-        value_label = f"{commits} commits • ${nil:,} NIL • {stars}"
-        rows.append((int(r["National_Rank"]), r["Team"], value_label))
-    return _build_container(f"🎯 Recruiting Rankings — {season} Class", rows, team_emoji)
+    lines = []
+    for i, (_, r) in enumerate(rec.iterrows()):
+        rank, team = int(r["National_Rank"]), r["Team"]
+        commits, nil = int(r["Total_Commits"]), int(r["NIL_Spent"])
+        lines.append(_row_line(rank, team, f"{commits} commits • ${nil:,} NIL", team_emoji))
+        # -# = small subtext, per Discord's markdown -- de-emphasizes the
+        # star breakdown as a secondary detail under the main line
+        # instead of competing with it for attention. "  ·  " spacing
+        # between tiers so e.g. "3★15" (count touching the next star)
+        # can't be misread as a single number.
+        stars = "  ·  ".join(
+            f"{n}★ {int(r[col])}" for n, col in [(5, "Five_Star"), (4, "Four_Star"), (3, "Three_Star"), (2, "Two_Star"), (1, "One_Star")]
+        )
+        lines.append(f"-# {stars}")
+        if i < len(rec) - 1:
+            lines.append("")  # blank line between teams for breathing room
+
+    return _build_container(f"🎯 Recruiting Rankings — {season} Class", lines)
 
 
 def main():
