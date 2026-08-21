@@ -11,9 +11,9 @@
     "476855101353623582",
     "796043766695067719"
   ],
-  "last_message_id_main": "1540421561788661760",
+  "last_message_id_main": "1540424426489643058",
   "last_message_id_admin": "1539822112343334914",
-  "last_updated": "2026-08-21T18:16:19.292439+00:00",
+  "last_updated": "2026-08-21T18:42:35.592246+00:00",
   "last_reset_at": "2026-08-20T02:23:48.487404+00:00",
   "cycle_count": 12,
   "current_week_sort": 13,
@@ -153,5 +153,6 @@
       "We left the ACC. The ACC did not notice.",
       "Fear the Turtle! \ud83d\udc22"
     ]
-  }
+  },
+  "offseason_phase_index": null
 }
