@@ -1426,6 +1426,24 @@ OFFSEASON_PHASES = [
 # the first advance AFTER the offseason walk above finishes.
 WEEK_ZERO_REMINDER = "🎓 Reminder: Week 0 is when scholarships get awarded, and games may start -- first week schedule screenshots can be posted for scraping!"
 
+# Admin-channel-only reminders (never posted to the public announce
+# channel) -- these are commissioner checklist items tied to specific
+# points in the advance cycle, not player-facing quips.
+ADMIN_REMINDER_RECRUITING = "🎯 **Admin reminder:** capture recruiting ranking screenshots for #recruiting-rankings."
+ADMIN_REMINDER_BRACKET = "🏆 **Admin reminder:** post a CFP Bracket screenshot to #playoff-screenshots."
+
+
+def build_new_season_admin_reminder(next_season) -> str:
+    """next_season: the season number to call out explicitly, since
+    forgetting to bump the year when re-running the schedule scraper for
+    a new season would silently mix two seasons' games into one CSV."""
+    season_note = f"season **{next_season}**" if next_season is not None else "the new season's year"
+    return (
+        "📋 **New season checklist:**\n"
+        f"- Post this season's schedule screenshots to #schedule-screenshots -- make sure it's {season_note}, not last season's.\n"
+        "- Post NIL/roster screenshots for every team's current roster to #nil-roster-team-stats."
+    )
+
 
 def find_earliest_upcoming_week_sort(directory: str = ".") -> int:
     """

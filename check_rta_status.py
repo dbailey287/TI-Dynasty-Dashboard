@@ -226,6 +226,7 @@ def run() -> str:
         changed = True
         if triggered:
             advance_triggered = True
+            admin_reminder = None  # set at specific points below; posted to ADMIN_CHANNEL_ID separately from the public announcement
 
             offseason_idx = state.get("offseason_phase_index")
 
@@ -244,6 +245,8 @@ def run() -> str:
                         announcement += f"\n{reminder}"
                     matchups = {}  # no games happen during the offseason walk
                     log.info("Offseason phase advance: '%s' (%d/%d).", label, next_idx + 1, len(rl.OFFSEASON_PHASES))
+                    if next_idx == 5:  # arriving at "Position Changes" == the Transfer Portal just closed
+                        admin_reminder = rl.ADMIN_REMINDER_RECRUITING
                 else:
                     # Walked through every offseason phase -- the new
                     # season's Week 0 starts now.
@@ -255,6 +258,9 @@ def run() -> str:
                     announcement = rl.pick_announcement() + f" We're now on **Week {week_label}**."
                     announcement += f"\n{rl.WEEK_ZERO_REMINDER}"
                     log.info("Offseason walk complete -- new season begins at Week %s.", week_label)
+                    current_season = rl.get_current_season(".")
+                    next_season = current_season + 1 if current_season is not None else None
+                    admin_reminder = rl.build_new_season_admin_reminder(next_season)
             else:
                 was_bootstrap = state.get("current_week_sort") is None
                 prior_week_sort = state.get("current_week_sort")
@@ -326,6 +332,10 @@ def run() -> str:
                         week_label = rl.get_week_label_for_sort(".", new_week_sort)
                         announcement = rl.pick_announcement()
                         announcement += f" We're now on **Week {week_label}**."
+                        if new_week_sort in (6, 12):
+                            admin_reminder = rl.ADMIN_REMINDER_RECRUITING
+                        elif new_week_sort == 11:  # "after Week 10" == arriving at Week 11
+                            admin_reminder = rl.ADMIN_REMINDER_BRACKET
                     log.info("Advance detected -- posting to #announcements (week_sort=%s, label=%s).", new_week_sort, week_label)
 
             announcement += f"\n📊 {DASHBOARD_URL}"
@@ -342,6 +352,9 @@ def run() -> str:
             else:
                 for cid in ANNOUNCE_CHANNEL_IDS:
                     post_message(cid, DISCORD_TOKEN, announcement)
+
+            if admin_reminder:
+                post_message(ADMIN_CHANNEL_ID, DISCORD_TOKEN, admin_reminder)
 
     main_messages = fetch_new_messages(MAIN_CHANNEL_ID, DISCORD_TOKEN, state.get("last_message_id_main"))
     log.info("Main channel: %d new message(s).", len(main_messages))
