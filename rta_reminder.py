@@ -127,7 +127,7 @@ def run() -> str:
         log.info("Everyone's ready -- nothing to nag about.")
         return "skipped_ready"
 
-    week_label, matchups = rl.get_current_week_matchups(".")
+    week_label, matchups = rl.get_tracked_week_matchups(".", state)
     log.info("Week label: %s. Matchups found for %d team(s).", week_label, len(matchups))
 
     message = format_reminder_message(not_ready, id_to_team, week_label, matchups, MAIN_CHANNEL_ID, team_emoji)

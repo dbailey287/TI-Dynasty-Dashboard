@@ -1512,16 +1512,25 @@ def get_matchups_for_week_sort(directory: str, week_sort: int) -> dict:
 
 def get_current_week_matchups(directory: str = ".") -> tuple:
     """
-    Best-effort "what week is it, and who's playing whom" -- used by the
-    RTA reminder, which re-derives this fresh every time it runs (fine
-    there, since it's read-only display info that self-corrects). Returns
-    (week_label, {team: {...}}), or ("?", {}) if nothing can be determined.
+    Best-effort "what week is it, and who's playing whom" -- used ONLY as
+    a fallback when there's no tracked current_week_sort at all yet (see
+    get_tracked_week_matchups() below, which is what should normally be
+    used instead). Returns (week_label, {team: {...}}), or ("?", {}) if
+    nothing can be determined.
 
     NOTE: the advance announcement does NOT use this function -- it tracks
     its own week number explicitly (see check_rta_status.py) specifically
     to avoid the staleness problem this function is inherently subject to
     (if even one team's data hasn't been scraped yet, this can report an
-    already-finished week as "current").
+    already-finished week as "current"). Confirmed in practice: teams
+    don't all progress in lockstep (game results get scraped
+    asynchronously per-team), so the GLOBAL minimum "still upcoming" week
+    across every team can jump ahead of the real, commissioner-declared
+    current week the moment even a few teams' next scraped game happens
+    to be further along (e.g. teams already in their Conference
+    Championship matchup while most of the league is still mid-regular-
+    season) -- this produced a real, confirmed bug where the RTA reminder
+    disagreed with the advance announcement about what week it was.
     """
     week_sort = find_earliest_upcoming_week_sort(directory)
     if week_sort is None:
@@ -1529,6 +1538,40 @@ def get_current_week_matchups(directory: str = ".") -> tuple:
     week_label = get_week_label_for_sort(directory, week_sort)
     matchups = get_matchups_for_week_sort(directory, week_sort)
     return week_label, matchups
+
+
+def get_tracked_week_matchups(directory: str = ".", state: dict = None) -> tuple:
+    """
+    The AUTHORITATIVE "what week is it" -- reads the SAME state
+    (current_week_sort / offseason_phase_index) the advance announcement
+    itself tracks, so anything using this can never disagree with the
+    advance announcement about what week it currently is. This is what
+    the RTA reminder should use instead of get_current_week_matchups()
+    above, which independently re-derives from raw schedule data and can
+    drift out of sync (see that function's docstring for the confirmed
+    bug this caused).
+
+    Falls back to get_current_week_matchups()'s best-effort CSV scan only
+    if there's no tracked state yet at all (e.g. the very first time this
+    runs, before any advance has ever happened).
+    """
+    if state is None:
+        state = load_state(os.path.join(directory, "rta_status.json"))
+
+    offseason_idx = state.get("offseason_phase_index")
+    if offseason_idx is not None and 0 <= offseason_idx < len(OFFSEASON_PHASES):
+        label, _ = OFFSEASON_PHASES[offseason_idx]
+        return label, {}  # no games happen during the offseason walk
+
+    current_week_sort = state.get("current_week_sort")
+    if current_week_sort is not None:
+        week_label = POSTSEASON_WEEK_LABELS.get(current_week_sort) or get_week_label_for_sort(directory, current_week_sort)
+        matchups = get_matchups_for_week_sort(directory, current_week_sort)
+        return week_label, matchups
+
+    # No tracked state at all yet -- this should only happen before the
+    # very first advance has ever been triggered.
+    return get_current_week_matchups(directory)
 
 
 def parse_channel_ids(raw: str) -> list:
