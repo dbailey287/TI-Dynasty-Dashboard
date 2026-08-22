@@ -4,8 +4,11 @@ Weekly Update Poster
 Manually triggered (workflow_dispatch only, no schedule -- run this once
 you've confirmed all of a week's data is in: schedule screenshots,
 playoff bracket, recruiting rankings). Posts THREE separate Components
-V2 messages to WEEKLY_UPDATE_CHANNEL_ID -- Power Rankings, CFP Rankings,
-and Recruiting Rankings.
+V2 messages to every channel in WEEKLY_UPDATE_CHANNEL_ID -- Power
+Rankings, CFP Rankings, and Recruiting Rankings. WEEKLY_UPDATE_CHANNEL_ID
+accepts a comma-separated list (e.g. "111,222") to post to more than one
+channel -- an announcements channel and a main channel, for instance --
+or a single ID to post to just one, same as before.
 
 HISTORY (see git log for the actual code at each stage):
   1. Started as embeds -- looked bad, code-block tables inside embed
@@ -96,7 +99,21 @@ log = logging.getLogger("weekly_update")
 notify.setup_log_capture()
 
 DISCORD_TOKEN = os.environ.get("DISCORD_TOKEN")
-CHANNEL_ID = os.environ.get("WEEKLY_UPDATE_CHANNEL_ID")
+
+
+def parse_channel_ids(raw: str) -> list:
+    """Splits a comma-separated (whitespace-tolerant) list of channel
+    IDs, e.g. "111,222" or "111, 222" -> ["111", "222"]. A single ID
+    with no comma just returns a one-item list, so WEEKLY_UPDATE_CHANNEL_ID
+    keeps working unchanged for anyone only posting to one channel.
+    Deliberately duplicated (not imported from rta_logic.py) -- same
+    standalone-script reasoning as elsewhere in this project."""
+    if not raw:
+        return []
+    return [part.strip() for part in raw.split(",") if part.strip()]
+
+
+CHANNEL_IDS = parse_channel_ids(os.environ.get("WEEKLY_UPDATE_CHANNEL_ID", ""))
 
 DASHBOARD_URL = "https://ti-dynasty-dashboard-2027.streamlit.app/"
 
@@ -262,7 +279,9 @@ def build_recruiting_container(season: int, team_emoji: dict, directory: str = "
 
 
 def main():
-    missing = [name for name, val in [("DISCORD_TOKEN", DISCORD_TOKEN), ("WEEKLY_UPDATE_CHANNEL_ID", CHANNEL_ID)] if not val]
+    missing = [name for name, val in [("DISCORD_TOKEN", DISCORD_TOKEN)] if not val]
+    if not CHANNEL_IDS:
+        missing.append("WEEKLY_UPDATE_CHANNEL_ID")
     if missing:
         log.error("Missing environment variable(s): %s", ", ".join(missing))
         sys.exit(1)
@@ -306,7 +325,8 @@ def main():
 
     if not containers:
         log.warning("Nothing to post -- no selected section had usable data.")
-        notify.post_alert(CHANNEL_ID, DISCORD_TOKEN, "⚠️ Weekly update: no data available for any section, nothing posted.")
+        for channel_id in CHANNEL_IDS:
+            notify.post_alert(channel_id, DISCORD_TOKEN, "⚠️ Weekly update: no data available for any section, nothing posted.")
         sys.exit(0)
 
     # THREE separate messages, not one combined -- reverted after a real
@@ -319,16 +339,24 @@ def main():
     # (~32 chars vs ~19), which is almost certainly what pushed a
     # combined message over the line. Each section alone has comfortable
     # margin under 4000 -- see module docstring for the full history.
+    #
+    # Posted to every channel in CHANNEL_IDS (WEEKLY_UPDATE_CHANNEL_ID
+    # supports a comma-separated list, e.g. "111,222" for announcements
+    # + main) -- the SAME footer/@everyone-ping behavior applies
+    # per-channel, not just once overall, since @everyone in one channel
+    # doesn't notify anyone in a different channel.
     footer_text = pick_dashboard_footer()
-    for i, container in enumerate(containers):
-        is_last = i == len(containers) - 1
-        components = [container]
-        if is_last:
-            components.append({"type": TYPE_SEPARATOR})
-            components.append({"type": TYPE_TEXT_DISPLAY, "content": footer_text})
-        log.info("Posting message %d/%d...", i + 1, len(containers))
-        notify.post_components_v2(CHANNEL_ID, DISCORD_TOKEN, components, allow_everyone_ping=is_last)
-    log.info("Posted %d message(s) to channel %s.", len(containers), CHANNEL_ID)
+    for channel_id in CHANNEL_IDS:
+        for i, container in enumerate(containers):
+            is_last = i == len(containers) - 1
+            components = [container]
+            if is_last:
+                components.append({"type": TYPE_SEPARATOR})
+                components.append({"type": TYPE_TEXT_DISPLAY, "content": footer_text})
+            log.info("Posting message %d/%d to channel %s...", i + 1, len(containers), channel_id)
+            notify.post_components_v2(channel_id, DISCORD_TOKEN, components, allow_everyone_ping=is_last)
+    log.info("Posted %d message(s) to %d channel(s).", len(containers), len(CHANNEL_IDS))
+
 
 
 if __name__ == "__main__":
